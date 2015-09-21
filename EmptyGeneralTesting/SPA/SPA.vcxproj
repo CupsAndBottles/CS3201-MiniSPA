@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DesignExtractor.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="ParserException.cpp" />
     <ClCompile Include="ParserForPQL.cpp" />
     <ClCompile Include="ParserForSelect.cpp" />
@@ -20,6 +21,7 @@
     <ClCompile Include="ParserKeyword.cpp" />
     <ClCompile Include="ParserOfTypeForSuchThat.cpp" />
     <ClCompile Include="ParserTypeWithSyn.cpp" />
+    <ClCompile Include="PKB.cpp" />
     <ClCompile Include="PQLController.cpp" />
     <ClCompile Include="Procedure.cpp" />
     <ClCompile Include="ProcTable.cpp" />
@@ -43,6 +45,7 @@
     <ClInclude Include="ParserKeyword.h" />
     <ClInclude Include="ParserOfTypeForSuchThat.h" />
     <ClInclude Include="ParserTypeWithSyn.h" />
+    <ClInclude Include="PKB.h" />
     <ClInclude Include="PQLController.h" />
     <ClInclude Include="Procedure.h" />
     <ClInclude Include="ProcTable.h" />
