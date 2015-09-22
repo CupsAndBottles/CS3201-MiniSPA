@@ -335,12 +335,12 @@ void Parser::processModifyAndUses(int i, string stmt) {
 //need to insert into tables, but interferes with testing
 void Parser::processParentChild() {
 	/*while (!parentLink.empty()) {
-		pair<int, int> parentChild = parentLink.back();
+		pair<int, int> parentChild = parentLink.front();
 		int parent = parentChild.first;
 		int child = parentChild.second;
 
 	if (!parentLink.empty()) {
-			parentLink.pop_back();
+			parentLink.pop_front();
 		}
 	}*/
 
@@ -349,12 +349,12 @@ void Parser::processParentChild() {
 string Parser::getParentChild() {
 	string output;
 	while (!parentLink.empty()) {
-		pair<int, int> parentChild = parentLink.back();
+		pair<int, int> parentChild = parentLink.front();
 		int parent = parentChild.first;
 		int child = parentChild.second;
 		output.append(" Parent: " + to_string(parent) + " Child: " + to_string(child));
 		if (!parentLink.empty()) {
-			parentLink.pop_back();
+			parentLink.pop_front();
 		}
 	}
 	return output;

@@ -24,7 +24,7 @@ namespace UnitTesting
 //issues with parent method. Bug - parent is incorrect in multi nesting
 		TEST_METHOD(TestParent) {
 			string parentChild = parser.getParentChild();
-			Assert::AreEqual(parentChild,string(" Parent: 5 Child: 7 Parent: 5 Child: 6 Parent: 3 Child: 4"));
+			Assert::AreEqual(parentChild,string(" Parent: 3 Child: 4 Parent: 5 Child: 6 Parent: 5 Child: 7"));
 		}
 
 		TEST_METHOD(TestExpression) {

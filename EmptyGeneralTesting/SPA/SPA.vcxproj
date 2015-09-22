@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp" />
+    <ClCompile Include="..\source\PairSeparator.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\ParserException.cpp" />
     <ClCompile Include="..\source\ParserForPQL.cpp" />
@@ -38,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
+    <ClInclude Include="..\source\PairSeparator.h" />
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\ParserException.h" />
     <ClInclude Include="..\source\ParserForPQL.h" />
