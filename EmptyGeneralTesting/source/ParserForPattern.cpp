@@ -46,13 +46,15 @@ void ParserForPattern::parsePattern(vector<vector<string>> type, vector<vector<s
 	}
 
 	patternSynonym = removeUnwanted(patternSynonym);
-	validatePattern();
+	//validatePattern();
 	
 }
 
 void ParserForPattern::validatePattern() {
 	if (patternSynonym.at(0).compare("if") == 0 && patternSynonym.at(2).compare("_") != 0 && patternSynonym.at(3).compare("_") != 0) {
-		
+		throw ParserException("Pattern for if must be in if(variable, _, _)");
+	} else if (patternSynonym.at(0).compare("if") == 0 && patternSynonym.at(2).compare("_") != 0 && patternSynonym.at(3).compare("_") != 0) {
+		throw ParserException("Pattern for if must be in if(variable, _, _)");
 	}
 }
 

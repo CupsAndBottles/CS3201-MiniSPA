@@ -84,7 +84,10 @@
     <ClCompile Include="..\source\VarTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Synonym.cpp">
+    <ClCompile Include="..\source\PairSeparator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Synonym.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\Details.cpp">
@@ -167,7 +170,10 @@
     <ClInclude Include="..\source\VarTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Synonym.h">
+    <ClInclude Include="..\source\PairSeparator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Synonym.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Details.h">
