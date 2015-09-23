@@ -2,13 +2,9 @@ procedure main{
 y=5;
 z=7;
 while s{
-h=o+p;
-while k{
-while j{
-a=x+y*u+(y+9);
-}
-x=y+z;
-}
-x=j+k;
-}
-}
+	while k{
+		k=o+p;
+		j=o+p;}
+	p=o+i;}
+j=i+p;
+z=k+l;}
