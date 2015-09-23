@@ -8,6 +8,7 @@ class Details
 public:
 	Details();
 	~Details();
+			//  0             1         2          3           4
 	enum Type { underscore, variable, assignment, procedure, calls, equation, statement, constant, While, If };
 
 	int intValue;

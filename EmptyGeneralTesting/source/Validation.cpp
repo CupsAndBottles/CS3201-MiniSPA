@@ -24,7 +24,7 @@ void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 	bool isSyn = false;
 	for (int i = 0; i < suchThatSynAndType[1].size(); i++) {
 
-		if (suchThatSynAndType[1].at(i).compare("relationshipName") == 0) {
+		if (suchThatSynAndType[1].at(i).compare("") == 0) {
 			relName = suchThatSynAndType[0].at(0);
 			RelTable relTableClass(relName);
 			ag1 = relTableClass.getAg1Synonym();

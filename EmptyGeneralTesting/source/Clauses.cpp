@@ -41,6 +41,16 @@ void Clauses::setParentType(string type)
 	parent.setType(type);
 }
 
+string Clauses::getParentStringVal()
+{
+	return parent.getStringValue();
+}
+
+Details::Type Clauses::getParentType()
+{
+	return parent.getType();
+}
+
 void Clauses::setRightCIsExpression(bool isExpression)
 {
 	rightChild.setIsExpression(isExpression);
@@ -61,6 +71,26 @@ void Clauses::setRightCType(string type)
 	rightChild.setType(type);
 }
 
+bool Clauses::getRightCIsExpression()
+{
+	return rightChild.getIsExpression();
+}
+
+string Clauses::getRightCStringValue()
+{
+	return rightChild.getStringValue();
+}
+
+int Clauses::getRightCIntValue()
+{
+	return rightChild.getIntValue();
+}
+
+Details::Type Clauses::getRightCType()
+{
+	return rightChild.getType();
+}
+
 void Clauses::setLeftCIsExpression(bool isExpression)
 {
 	leftChild.setIsExpression(isExpression);
@@ -79,6 +109,26 @@ void Clauses::setLeftCIntValue(int intVal)
 void Clauses::setLeftCType(string type)
 {
 	leftChild.setType(type);
+}
+
+bool Clauses::getLeftCIsExpression()
+{
+	return leftChild.getIsExpression();
+}
+
+string Clauses::getLeftCStringValue()
+{
+	return leftChild.getStringValue();
+}
+
+int Clauses::getLeftCIntValue()
+{
+	return leftChild.getIntValue();
+}
+
+Details::Type Clauses::getLeftCType()
+{
+	return leftChild.getType();
 }
 
 Details Clauses::getRightChild()

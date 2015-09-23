@@ -25,8 +25,8 @@ void ParserForPattern::parsePattern(vector<vector<string>> type, vector<vector<s
 	std::string toBeSplit = synonym[0].at(pos);
 	//std::cout << "synonym = " << synonym[0].at(pos) << '\n';
 	patternSubset = split(toBeSplit, '(');
-	checkType(patternSubset.at(0));
 	toBeSplit = getToBeSplit(patternSubset, 0);
+	//std::cout << "im patternParser's toBeSplit = " << toBeSplit << '\n';
 
 	for (std::size_t i = 0; i < 2; i++) {
 		char charSplitWith = toBeSplitWith[i];
@@ -34,7 +34,7 @@ void ParserForPattern::parsePattern(vector<vector<string>> type, vector<vector<s
 		if (found != std::string::npos || toBeSplit.compare("ERROR") == 0) {
 			patternSubset = split(toBeSplit, charSplitWith);
 			toBeSplit = getToBeSplit(patternSubset, i);
-			//	std::cout << "i = " << toBeSplit <<'\n'; 
+			//	std::cout << "im patternParser's toBeSplit = " << toBeSplit <<'\n'; 
 		}
 		else {
 			throw ParserException("Wrong synax for writting pattern.");
@@ -46,14 +46,13 @@ void ParserForPattern::parsePattern(vector<vector<string>> type, vector<vector<s
 	}
 
 	patternSynonym = removeUnwanted(patternSynonym);
-
+	validatePattern();
 	
 }
 
-void ParserForPattern::checkType(string syn)
-{
-	if (syn.compare("assign") != 0 && syn.compare("while") != 0 && syn.compare("if") == 0) {
-		throw ParserException("Pattern must be while or if or assign");
+void ParserForPattern::validatePattern() {
+	if (patternSynonym.at(0).compare("if") == 0 && patternSynonym.at(2).compare("_") != 0 && patternSynonym.at(3).compare("_") != 0) {
+		
 	}
 }
 
@@ -73,11 +72,12 @@ vector<string> ParserForPattern::removeUnwanted(vector<string> PatternSynonym)
 string ParserForPattern::getToBeSplit(vector<string> PatternSubset, int i)
 {
 	string toBeSplit;
+	std::cout << "im patternParser's added = " << i << '\n';
 	if (PatternSubset.size() == 2) {
 		toBeSplit = PatternSubset.at(1);
 		patternSynonym.push_back(PatternSubset.at(0));
 	}
-	else if (i == 2) {
+	else if (i == 1) {
 		toBeSplit = "";
 		patternSynonym.push_back(PatternSubset.at(0));
 	}
