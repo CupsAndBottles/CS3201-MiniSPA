@@ -24,9 +24,10 @@ QueryTree & QueryTree::return_created_Object()
 
 void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<string>> suchThatData, vector<vector<string>> patternData)
 {
+	std::cout << "Enter1st = " << '\n';
 	addResultTree(resultData[0], resultData[1]);
-//	addSuchThatTree(suchThatData[0], suchThatData[1], suchThatData[2]);
-	//addPatternTree(patternData[0], patternData[1], patternData[2], patternData[3]);
+	addSuchThatTree(suchThatData[0], suchThatData[1], suchThatData[2]);
+	addPatternTree(patternData[0], patternData[1], patternData[2], patternData[3]);
 
 	/*
 	std::cout << "ResultTree = " << resultRoot->stringValue << '\n';
@@ -40,7 +41,7 @@ void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<s
 	*/
 }
 
-/*
+
 vector<Clauses> QueryTree::getSuchThatTree()
 {
 	return suchThatTree;
@@ -55,7 +56,6 @@ vector<Clauses> QueryTree::getResultTree()
 {
 	return resultTree;
 }
-*/
 
 bool QueryTree::getIsValid()
 {
@@ -64,17 +64,17 @@ bool QueryTree::getIsValid()
 
 void QueryTree::addResultTree(vector<string> syn, vector<string> type)
 {
-	//	std::cout << "Enter = "  << '\n';
-
+	//vector<Clauses> resultTree;
 	for (std::size_t i = 0; i < syn.size(); i++) {
-		Clauses clause = clause.return_created_Object();
-	//	resultTree.push_back(clause);
-		//resultTree.at(i).setParentStringVal(syn.at(i));
-		//resultTree.at(i).setParentType(type.at(i));
+		resultTree.push_back(Clauses());
+		resultTree.at(i).setParentStringVal(syn.at(i));
+		resultTree.at(i).setParentType(type.at(i));
+		std::cout << "result(stringVal) = " << resultTree.at(i).getParent().getStringValue() << '\n';
+		std::cout << "result(type) = " << resultTree.at(i).getParent().getType() << '\n';
 	}
 }
 
-/*
+
 void QueryTree::addSuchThatTree(vector<string> stringVal, vector<string> type, vector<string> intVal)
 {
 	int z = 0;
@@ -118,7 +118,7 @@ void QueryTree::addPatternTree(vector<string> stringVal, vector<string> type, ve
 	}
 		
 }
-*/
+
 bool QueryTree::isItExpression(string expression) {
 	if (expression.compare("1") == 0) {
 		return true;

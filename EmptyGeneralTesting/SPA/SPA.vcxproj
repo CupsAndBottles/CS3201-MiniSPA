@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\Clauses.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\PairSeparator.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\ParserException.cpp" />
+    <ClCompile Include="..\source\ParserForPattern.cpp" />
     <ClCompile Include="..\source\ParserForPQL.cpp" />
     <ClCompile Include="..\source\ParserForSelect.cpp" />
     <ClCompile Include="..\source\ParserForSuchThat.cpp" />
@@ -29,6 +31,7 @@
     <ClCompile Include="..\source\QueryEvaluator.cpp" />
     <ClCompile Include="..\source\QueryTree.cpp" />
     <ClCompile Include="..\source\RelTable.cpp" />
+    <ClCompile Include="..\source\Details.cpp" />
     <ClCompile Include="..\source\Stmt.cpp" />
     <ClCompile Include="..\source\StmtTable.cpp" />
     <ClCompile Include="..\source\Synonym.cpp" />
@@ -39,7 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
+<<<<<<< .merge_file_a04520
+    <ClInclude Include="..\source\Details.h" />
+    <ClInclude Include="..\source\Clauses.h" />
+    <ClInclude Include="..\source\ParserForPattern.h" />
+=======
     <ClInclude Include="..\source\PairSeparator.h" />
+>>>>>>> .merge_file_a14508
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\ParserException.h" />
     <ClInclude Include="..\source\ParserForPQL.h" />

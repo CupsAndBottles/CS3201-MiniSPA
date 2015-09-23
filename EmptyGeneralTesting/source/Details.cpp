@@ -80,4 +80,7 @@ Details::Type Details::convertToType(string typeInString)
 	else if (typeInString.compare("if") == 0) {
 		return Type::If;
 	}
+	else if (typeInString.compare("stmt") == 0 || typeInString.compare("prog_line") == 0) {
+		return Type::statement;
+	}
 }
