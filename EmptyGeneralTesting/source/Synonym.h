@@ -12,10 +12,10 @@ public:
 	string getSyn();
 	set<int> getResult();
 	void addResult(int index);
+	void setSyn(string syn);
 
 private:
 	string syn;
 	set<int> result;
 
 };
-

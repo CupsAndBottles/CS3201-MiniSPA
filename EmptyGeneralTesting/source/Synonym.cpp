@@ -23,3 +23,7 @@ void Synonym::addResult(int index)
 {
 	result.insert(index);
 }
+
+void Synonym::setSyn(string syn) {
+	this->syn = syn;
+}

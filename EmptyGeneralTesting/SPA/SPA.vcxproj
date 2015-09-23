@@ -31,11 +31,11 @@
     <ClCompile Include="..\source\RelTable.cpp" />
     <ClCompile Include="..\source\Stmt.cpp" />
     <ClCompile Include="..\source\StmtTable.cpp" />
+    <ClCompile Include="..\source\Synonym.cpp" />
     <ClCompile Include="..\source\TNode.cpp" />
     <ClCompile Include="..\source\Validation.cpp" />
     <ClCompile Include="..\source\Variable.cpp" />
     <ClCompile Include="..\source\VarTable.cpp" />
-    <ClCompile Include="Synonym.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
@@ -58,11 +58,11 @@
     <ClInclude Include="..\source\RelTable.h" />
     <ClInclude Include="..\source\Stmt.h" />
     <ClInclude Include="..\source\StmtTable.h" />
+    <ClInclude Include="..\source\Synonym.h" />
     <ClInclude Include="..\source\TNode.h" />
     <ClInclude Include="..\source\Validation.h" />
     <ClInclude Include="..\source\Variable.h" />
     <ClInclude Include="..\source\VarTable.h" />
-    <ClInclude Include="Synonym.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
