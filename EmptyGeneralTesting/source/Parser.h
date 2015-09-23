@@ -25,11 +25,9 @@ public:
 	string toLowerCase(string s);
 	void processProcedure(int index, string statment);
 	void processWhile(int index, string statment);
-	void processModifyAndUses(int i, string stmt);
-	void processParentChild();
+	void handleModifyAndUses(int i, string stmt);
 	string getParentChild();
 	string getExpression();
-	void processFollow();
 	string getFollow();
 	void insertIntoStmtTable(int typeOfStat, int i, int stmtNum, int var);
 	void setExprInStmtTable(int index, list<char> exprOutput);
