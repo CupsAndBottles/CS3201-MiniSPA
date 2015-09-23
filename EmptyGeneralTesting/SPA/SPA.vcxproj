@@ -42,13 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
-<<<<<<< .merge_file_a04520
     <ClInclude Include="..\source\Details.h" />
     <ClInclude Include="..\source\Clauses.h" />
     <ClInclude Include="..\source\ParserForPattern.h" />
-=======
     <ClInclude Include="..\source\PairSeparator.h" />
->>>>>>> .merge_file_a14508
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\ParserException.h" />
     <ClInclude Include="..\source\ParserForPQL.h" />
