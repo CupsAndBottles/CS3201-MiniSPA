@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include "PKB.h"
 using namespace std;
 
 #include "PKB.h"
@@ -16,6 +16,41 @@ PKB* PKB::getInstanceOf()
 	if (m_Instance)
 		m_Instance = new PKB;
 	return m_Instance;
+}
+
+int PKB::setProcNameInProcTable(string procedure)
+{
+//	int index;
+//	procedure = procTable.getProcName(); 
+	
+//		if (procedure != NULL) {
+//			index = procTable.getProcIndexNameNo();
+//			return index;
+//		}
+//		else {
+			return -1;
+//		}
+}
+
+void PKB::setStartNum(int, int)
+{
+
+}
+
+void PKB::setEndNum(int, int)
+{
+}
+
+void PKB::setProcModified(int, string)
+{
+}
+
+void PKB::setProcUses(int, string)
+{
+}
+
+void PKB::setProcCalls(int, string)
+{
 }
 
 
@@ -48,6 +83,11 @@ std::vector<pair<int, int>> PKB::getParent(TYPE, int)
 	return std::vector<pair<int, int>>();
 }
 
+std::vector<pair<int, int>> PKB::getModifies(TYPE, int)
+{
+	return std::vector<pair<int, int>>();
+}
+
 std::vector<pair<int, int>> PKB::getFollows(TYPE, int)
 {
 	return std::vector<pair<int, int>>();
@@ -75,6 +115,54 @@ void PKB::getUsedByStmtNum(int, int)
 void PKB::getModifiedByStmtNum(int, int)
 {
 }
+
+int PKB::setVarName(string)
+{
+	return 0;
+}
+
+void PKB::setType(int, int)
+{
+}
+
+void PKB::setParent(int, int)
+{
+}
+
+void PKB::setParentT(int, vector<int>)
+{
+}
+
+void PKB::setChildren(vector<int, int>)
+{
+}
+
+void PKB::setChildrenT(int, vector<int>)
+{
+}
+
+void PKB::setFollowedBy(vector<int, int>)
+{
+}
+
+void PKB::setModifies(int, vector<int>)
+{
+}
+
+void PKB::setRightExpr(int, string)
+{
+}
+
+string PKB::getRightExpr(int)
+{
+	return string();
+}
+
+int PKB::getNumStmt()
+{
+	return 0;
+}
+
 
 void PKB::extractParent(int)
 {

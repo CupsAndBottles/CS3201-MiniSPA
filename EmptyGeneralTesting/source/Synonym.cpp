@@ -4,9 +4,12 @@ Synonym::Synonym()
 {
 }
 
-Synonym::Synonym(TYPE type, string syn) {
+Synonym::Synonym(TYPE type, string syn, vector<int>& resultsToStore) {
 	this->type = type;
 	this->syn = syn;
+	for (int i = 0; i < resultsToStore.size(); i++) {
+		addResult(resultsToStore[i]);
+	}
 }
 
 Synonym::~Synonym()
