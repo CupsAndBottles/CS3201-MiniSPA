@@ -3,6 +3,7 @@
 
 const string EMPTY_STRING = "";
 const int WILDCARD = -1;
+const int NOT_FOUND = -1;
 
 QueryEvaluator::QueryEvaluator()
 {
@@ -80,20 +81,55 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		if (clause.getRightChild().getType == TYPE::UNDERSCORE) {
 			return true;
 		}
-		else{ 
-			// pattern a(_, x ) 
-			if (clause.getRightChild().getIsExpression) {
+		else{ 			
+			string expr = convertToShuntingYard(clause.getRightCStringValue());
+			if (!clause.getRightChild().getIsExpression) {		// pattern a(_, x ) 
 				for (int i = 1; i < this->pkb->getNumStmt(); i++) {
-					string expr = convertToShuntingYard(clause.getRightCStringValue());
-					if (pkb->getRightExpr(i) == expr)
+					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);
 				}
-				storeResults(intermediateResult, clause.getParentStringVal, TYPE::ASSIGN);
 			}
-			else { // pattern a(_, _x_)
-
+			else {		// pattern a(_, _x_)
+				for (int i = 1; i < this->pkb->getNumStmt(); i++) {
+					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
+						intermediateResult.push_back(i);
+					}
+				}
 			}
 		}
+	}
+	else { //left child is a variable
+		vector<pair<int,int>> stmtLst = this->pkb.getModifies(TYPE::ASSIGN, WILDCARD , TYPE::VARIABLE, clause.getLeftChild().getIntValue());
+		if (clause.getRightCType() == TYPE::UNDERSCORE) { // a(v, _)
+			for (int i = 0; i < stmtLst.size(); i++) {
+				intermediateResult.push_back(stmtLst[i].first);
+			}
+		}
+		else {
+			string expr = convertToShuntingYard(clause.getRightCStringValue());
+			if (!clause.getRightCIsExpression()) { // a(v, x + y)
+				for (int i = 0; i < stmtLst.size(); i++) {  
+					if (this->pkb->getRightExpr(stmtLst[i].first) == expr) {
+						intermediateResult.push_back(stmtLst[i].first);
+					}
+				}
+			}
+			else { // a(v, _x+y_)
+				for (int i = 0; i < stmtLst.size(); i++) {
+					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
+						intermediateResult.push_back(stmtLst[i].first);
+					}
+				}
+			}
+		}
+	}
+	
+	if (intermediateResult.size() != 0) {
+		storeResults(intermediateResult, clause.getParentStringVal, TYPE::ASSIGN);
+		return true;
+	}
+	else {
+		return false;
 	}
 }
 
@@ -119,11 +155,12 @@ void QueryEvaluator::storeResults(vector<int>& intermediateResult, string syn, T
 
 }
 
-void QueryEvaluator::convertToShuntingYard(string statement) {
+string QueryEvaluator::convertToShuntingYard(string statement) {
 	//modify and uses - modify => a = b+c, a is modified. Uses= b and c
 	list<char> output;
 	stack<char> stack;
 	output.clear();
+	string outputString;
 
 	for (char c : statement) {
 		char charac = c;
@@ -186,9 +223,9 @@ void QueryEvaluator::convertToShuntingYard(string statement) {
 			cout << "error with brackets";
 		}
 		output.push_back(stackTop);
+		outputString = outputString + stackTop;
 		stack.pop();
 	}
-
 }
 //end of method
 
