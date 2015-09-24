@@ -61,9 +61,8 @@ vector<string> ParserKeyword::removeUnwanted(vector<string> commaSubset)
 	for (int i = 0; i < commaSubset.size(); i++) {
 		commaSubset.at(i) = std::regex_replace(commaSubset.at(i), toBeRemove, "");
 		if (commaSubset.at(i).compare("") == 0) {
-			throw ParserException("Input less declaration");
+			throw ParserException("Some synonym has not be declared");
 		}
-		//	std::cout << "keywordParser = " << commaSubset.at(i) << '\n';
 	}
 	return commaSubset;
 }
