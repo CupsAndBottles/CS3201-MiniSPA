@@ -3,6 +3,15 @@
 
 const string EMPTY_STRING = "";
 const int WILDCARD = -1;
+const int UNDERSCORE = -2;
+
+const string RELATIONSHIP_CALLS = "Calls";
+const string RELATIONSHIP_FOLLOWS = "Follows";
+const string RELATIONSHIP_FOLLOWST = "Follows*";
+const string RELATIONSHIP_MODIFIES = "Modifies";
+const string RELATIONSHIP_PARENT = "Parent";
+const string RELATIONSHIP_PARENTT = "Parent*";
+const string RELATIONSHIP_USES = "Uses";
 
 QueryEvaluator::QueryEvaluator()
 {
@@ -53,7 +62,55 @@ vector<Synonym> QueryEvaluator::getResults(){
 }
 
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
+	vector<pair<int, int>> results;
+	string relationship = clause.getParentStringVal();
+	Details firstParam = clause.getLeftChild();
+	Details secondParam = clause.getRightChild();
 
+	int indexForFirstParam = firstParam.getIntValue();
+	int indexForSecondParam = secondParam.getIntValue();
+
+	if (indexForFirstParam == UNDERSCORE) {
+		indexForFirstParam = WILDCARD;
+	}
+
+	if (indexForSecondParam == UNDERSCORE) {
+		indexForSecondParam = WILDCARD;
+	}
+
+	if (relationship == RELATIONSHIP_CALLS) {
+		results = this->pkb->getCalls(indexForFirstParam, indexForSecondParam);
+	}
+	else if (relationship == RELATIONSHIP_FOLLOWS) {
+		results = this->pkb->getFollows(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}
+	else if (relationship == RELATIONSHIP_FOLLOWST) {
+		results = this->pkb->getFollowsT(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}
+	else if (relationship == RELATIONSHIP_MODIFIES) {
+		results = this->pkb->getModifies(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}
+	else if (relationship == RELATIONSHIP_PARENT) {
+		results = this->pkb->getParent(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}
+	else if (relationship == RELATIONSHIP_PARENTT) {
+		results = this->pkb->getParentT(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}
+	else if (relationship == RELATIONSHIP_USES) {
+		results = this->pkb->getUses(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}
+	else {
+
+	}
+
+	storeResultsForSyn(clause, results);
+
+	if (!results.empty()) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 bool QueryEvaluator::evaluatePattern(Clauses clause) {
@@ -94,6 +151,28 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 
 			}
 		}
+	}
+}
+
+void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> results) {
+	vector<int> firstSynResults;
+	vector<int> secondSynResults;
+
+	Details firstParam = clause.getLeftChild();
+	Details secondParam = clause.getRightChild();
+
+	if (firstParam.getIntValue == WILDCARD) {
+		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
+			firstSynResults.push_back(it->first);
+		}
+		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
+	}
+
+	if (secondParam.getIntValue == WILDCARD) {
+		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
+			secondSynResults.push_back(it->second);
+		}
+		storeResults(secondSynResults, secondParam.getStringValue(), secondParam.getType());
 	}
 }
 
