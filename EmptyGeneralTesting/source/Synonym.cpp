@@ -13,16 +13,6 @@ Synonym::~Synonym()
 {
 }
 
-string Synonym::getSyn()
-{
-	return this->syn;
-}
-
-set<int> Synonym::getResult()
-{
-	return this->result;
-}
-
 void Synonym::addResult(int index)
 {
 	result.insert(index);
@@ -36,3 +26,16 @@ void Synonym::setType(TYPE type) {
 	this->type = type;
 }
 
+set<int> Synonym::getResult()
+{
+	return this->result;
+}
+
+string Synonym::getSyn()
+{
+	return this->syn;
+}
+
+TYPE Synonym::getType() {
+	return this->type;
+}

@@ -15,8 +15,8 @@ public:
 	set<int> getResult();
 	void addResult(int index);
 	void setSyn(string syn);
-
 	void setType(TYPE type);
+	TYPE getType();
 
 private:
 	string syn;
