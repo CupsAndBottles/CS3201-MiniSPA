@@ -1,8 +1,10 @@
 #pragma once
 #include "QueryTree.h"
+#include "PKB.h"
 #include <list>
 #include <string>
 #include <vector>
+#include <stack>
 #include "Synonym.h"
 
 enum class TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
@@ -22,6 +24,11 @@ private:
 	vector<Synonym> results;
 	bool evaluateSuchThat(Clauses clause);
 	bool evaluatePattern(Clauses clause);
-
+	bool evaluateAssign(Clauses clause);
+	void storeResults(vector<int>& intermediateResult, string syn, TYPE type);
+	void convertToShuntingYard(string statement);
+	bool isOperator(char o);
+	int isPriority(const char & c);
+	PKB *pkb = PKB::getInstanceOf();
 
 };
