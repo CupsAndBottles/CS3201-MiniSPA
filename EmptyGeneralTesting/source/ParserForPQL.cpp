@@ -70,8 +70,10 @@ void ParserForPQL::getPosition(string input, int typeNo)
 	for (std::sregex_iterator i = std::sregex_iterator(input.begin(), input.end(), regexForBoth.at(typeNo));
 	i != std::sregex_iterator(); ++i) {
 		std::smatch match = *i;
+		if (match.position() + match.length() < input.size() && input[match.position() + match.length()] == ' ') {
 			j = addNumOfPos(j, match, typeNo);
 			type[typeNo].push_back(match[0]);
+		}
 	}
 
 	addInFinalSyn(typeNo, input);

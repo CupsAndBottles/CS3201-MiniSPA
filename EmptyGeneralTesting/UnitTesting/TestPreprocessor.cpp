@@ -185,11 +185,11 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -2);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), false);
 
-			input = "while w1, w2, w3; assign a, n; variable v; if ifstat; Select <w1,w2, w3> with n = 10 pattern ifstat(v, _, _) such that Follows(n, a)";
+			input = "while w1, w2, w3; assign a, n; variable v; if if; Select <w1,w2, w3> with n = 10 pattern if(v, _, _) such that Follows(n, a)";
 			ParserForPQL parser13(input);
 			queryTree = parser13.getQueryTree();
 
-			Assert::AreEqual(queryTree.getPatternTree().at(0).getParentStringVal(), string("ifstat"));
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getParentStringVal(), string("if"));
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getParentType()), 5);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCStringValue(), string("v"));
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCType()), 6);
