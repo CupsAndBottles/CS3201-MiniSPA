@@ -26,6 +26,7 @@ private:
 	bool evaluateSuchThat(Clauses clause);
 	bool evaluatePattern(Clauses clause);
 	bool evaluateAssign(Clauses clause);
+	void storeResultsForSyn(Clauses clause, vector<pair<int, int>> results);
 	void storeResults(vector<int>& intermediateResult, string syn, TYPE type);
 	string convertToShuntingYard(string statement);
 	bool isOperator(char o);
