@@ -23,31 +23,24 @@ void ParserForPattern::parsePattern(vector<vector<string>> type, vector<vector<s
 
 	vector<string> patternSubset;
 	std::string toBeSplit = synonym[0].at(pos);
-	//std::cout << "synonym = " << synonym[0].at(pos) << '\n';
+	
 	patternSubset = split(toBeSplit, '(');
 	toBeSplit = getToBeSplit(patternSubset, 0);
-	//std::cout << "im patternParser's toBeSplit = " << toBeSplit << '\n';
-
+	
 	for (std::size_t i = 0; i < 2; i++) {
 		char charSplitWith = toBeSplitWith[i];
 		std::size_t found = synonym[0].at(pos).find(charSplitWith);
-		if (found != std::string::npos || toBeSplit.compare("ERROR") == 0) {
+		if (found != std::string::npos || toBeSplit.compare("ERROR") != 0) {
 			patternSubset = split(toBeSplit, charSplitWith);
 			toBeSplit = getToBeSplit(patternSubset, i);
-			//	std::cout << "im patternParser's toBeSplit = " << toBeSplit <<'\n'; 
 		}
 		else {
 			throw ParserException("Wrong synax for writting pattern.");
 		}
-
-		if (i == 0 && patternSynonym.at(0).compare("if") == 0) {
-			i--;
-		}
 	}
 
 	patternSynonym = removeUnwanted(patternSynonym);
-	//validatePattern();
-	
+
 }
 
 void ParserForPattern::validatePattern() {
@@ -71,17 +64,21 @@ vector<string> ParserForPattern::removeUnwanted(vector<string> PatternSynonym)
 	return PatternSynonym;
 }
 
-string ParserForPattern::getToBeSplit(vector<string> PatternSubset, int i)
+string ParserForPattern::getToBeSplit(vector<string> patternSubset, int i)
 {
 	string toBeSplit;
-	std::cout << "im patternParser's added = " << i << '\n';
-	if (PatternSubset.size() == 2) {
-		toBeSplit = PatternSubset.at(1);
-		patternSynonym.push_back(PatternSubset.at(0));
+	if (patternSubset.size() == 2) {
+		toBeSplit = patternSubset.at(1);
+		patternSynonym.push_back(patternSubset.at(0));
+	}
+	else if (patternSubset.size() == 3) {
+		toBeSplit = patternSubset.at(2);
+		patternSynonym.push_back(patternSubset.at(0));
+		patternSynonym.push_back(patternSubset.at(1));
 	}
 	else if (i == 1) {
 		toBeSplit = "";
-		patternSynonym.push_back(PatternSubset.at(0));
+		patternSynonym.push_back(patternSubset.at(0));
 	}
 	else {
 		toBeSplit = "ERROR";
