@@ -8,12 +8,12 @@
 #include "Procedure.h"
 #include "StmtTable.h"
 #include "Stmt.h"
-#include "VarTable.h"
 #include "Variable.h"
 
 enum class TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
 typedef short PROC;
+
 class TNode;
 
 class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
@@ -24,52 +24,20 @@ private:
 	PKB(const PKB&) {};
 	PKB& operator = (PKB const&) {};
 	static PKB* m_Instance;
-	ProcTable* procTable;
-	VarTable* varTable;
-	StmtTable* stmtTable;
 public:
-
-//	PKB() {
-//		procTable = new ProcTable();
-//	}
-	PKB() {
-		varTable = new VarTable();
-	}
-	PKB() {
-		stmtTable = new StmtTable();
-	}
 	static VarTable* varTable;
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST(PROC p);
 	~PKB();
 	static PKB* getInstanceOf();
+	//	VarTable varTable;
+	//	ProcTable procTable;
+	//	StmtTable stmtTable;
 	//PARSER->PKB
-	//From ProcTable
-	int setProcNameInProcTable(string);
-	void setStartNum(int, int);
-	void setEndNum(int, int);
-	void setProcModified(int, string);
-	void setProcUses(int, string);
-	void setProcCalls(int, string);
 	//From VarTable
 	void getProcNameInVarTable(int, string);
 	void getUsedByStmtNum(int, int);
 	void getModifiedByStmtNum(int, int);
-	int setVarName(string);
-	//From StmtTable
-
-	void setType(int, int);
-	void setParent(int, int);
-	void setParentT(int, vector<int>);
-	void setChildren(vector<int, int>);
-	void setChildrenT(int, vector<int>);
-
-	void setFollowedBy(vector<int, int>);
-	void setModifies(int, vector<int>);
-	void setRightExpr(int, string);
-	string getRightExpr(int);
-	int getNumStmt();
-
 	//DESIGNEXT->PKB
 	void extractParent(int);
 	void extractChildren(int);
@@ -79,7 +47,6 @@ public:
 	std::vector<pair<int, int>> getCalls(TYPE, int);
 	std::vector<pair<int, int>> getUses(TYPE, int);
 	std::vector<pair<int, int>> getParent(TYPE, int);
-	std::vector<pair<int, int>> getModifies(TYPE, int);
 	std::vector<pair<int, int>> getFollows(TYPE, int);
 	std::vector<pair<int, int>> getParentT(TYPE, int);
 	std::vector<pair<int, int>> getFollowsT(TYPE, int);
