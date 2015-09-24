@@ -6,7 +6,6 @@
 #include "DesignExtractor.h"
 #include "ProcTable.h"
 #include "Procedure.h"
-#include "TNode.h"
 #include "StmtTable.h"
 #include "Stmt.h"
 #include "Variable.h"
