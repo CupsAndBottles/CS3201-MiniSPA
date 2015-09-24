@@ -107,7 +107,7 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCIntValue(), -1);
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getRightCType()), 6);
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCIntValue(), 2);
-			//Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), true);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("2"));
 		}
 
 		TEST_METHOD(testPatternTree) {

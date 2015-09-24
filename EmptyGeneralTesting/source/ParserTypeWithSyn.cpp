@@ -4,6 +4,7 @@
 #include <iostream>
 #include <locale> 
 #include "QueryTree.h"
+#include "PKB.h"
 #include "ParserException.h"
 
 
@@ -101,7 +102,7 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			if (ifDigit(suchThatSynonym[i].at(k))) {
 				//	std::cout << "isDigit = " << '\n';
 				if (suchThatSynonym[i].at(k)[0] == '\"' && suchThatSynonym[i].at(k)[suchThatSynonym[i].at(k).length() - 1] == '\"') {
-					suchThatSynonym[i].at(k) = suchThatSynonym[i].at(k).substr(1, suchThatSynonym[i].at(k).length() - 1);
+					suchThatSynonym[i].at(k) = suchThatSynonym[i].at(k).substr(1, suchThatSynonym[i].at(k).length() - 2);
 				}
 
 				suchThatSynAndType[0].push_back(suchThatSynonym[i].at(k));
@@ -207,7 +208,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 		}
 		else if (ifDigit(patternSynonym[i].at(1))) {
 			if (patternSynonym[i].at(1)[0] == '\"' && patternSynonym[i].at(1)[patternSynonym[i].at(1).length() - 1] == '\"') {
-				patternSynonym[i].at(1) = patternSynonym[i].at(1).substr(1, patternSynonym[i].at(1).length() - 1);
+				patternSynonym[i].at(1) = patternSynonym[i].at(1).substr(1, patternSynonym[i].at(1).length() - 2);
 			}
 			patternSynAndType[0].push_back(patternSynonym[i].at(1));
 			patternSynAndType[1].push_back("constant");
@@ -251,7 +252,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 		}
 		else if (ifDigit(patternSynonym[i].at(2))) {
 			if (patternSynonym[i].at(2)[0] == '\"' && patternSynonym[i].at(2)[patternSynonym[i].at(2).length() - 1] == '\"') {
-				patternSynonym[i].at(2) = patternSynonym[i].at(2).substr(1, patternSynonym[i].at(2).length() - 1);
+				patternSynonym[i].at(2) = patternSynonym[i].at(2).substr(1, patternSynonym[i].at(2).length() - 2);
 			}
 			patternSynAndType[0].push_back(patternSynonym[i].at(2));
 			patternSynAndType[1].push_back("constant");
