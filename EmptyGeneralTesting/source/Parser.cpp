@@ -67,7 +67,7 @@ string Parser::linesSplitted(list<pair<int, string>> linesToTest) {
 	string output;
 	while (!linesToTest.empty()) {
 		pair<int, string> indexAndLines = linesToTest.front();
-		int index = indexAndLines.first-1;
+		int index = indexAndLines.first;
 		string line = indexAndLines.second;
 		output.append(to_string(index) + ": " + line);
 		if (!linesToTest.empty()) {
@@ -118,17 +118,17 @@ void Parser::Procedure() {
 	for (i = (lines).begin(); i != (lines).end(); ++i) {
 		string stmt = (*i).second;
 		if (stmt.find("procedure") != std::string::npos) {
-		//	cout << "Proc: " << stmt << "\n";
 			processProcedure((*i).first, (*i).second);
 		}
 		else if (stmt.find("while") != std::string::npos) {
-			//cout << "While: " << stmt << "\n";
 			processWhile((*i).first, (*i).second);
 		}
+		else if (stmt.find("if") != std::string::npos) {
+			//processIf();
+		}
 		else {
-			//cout << "Expr: " << stmt << "\n";
 			processExpressions((*i).first, (*i).second);
-			//handleModifyAndUses((*i).first, (*i).second);
+			handleModifyAndUses((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
 		}
 	}
@@ -148,7 +148,6 @@ void Parser::addToParent(int child) {
 				pairs.second = newChild;
 				parentLink.push_back(pairs);
 			}
-		
 	}
 
 }
@@ -199,10 +198,8 @@ void Parser::processExpressions(int index, string statement) {
 	list<char> output;
 	stack<char> stack;
 	output.clear();
-	cout << to_string(index) + ": " << statement;
 	for (char c : statement) {
 		char charac = c;
-		cout << "char: " << c;
 		if (c == ';') {
 			addToParent(index);
 			//break;
@@ -320,7 +317,7 @@ string Parser::getParentChild() {
 		pair<int, int> parentChild = parentLink.front();
 		int parent = parentChild.first;
 		int child = parentChild.second;
-		output.append("Parent: " + to_string(parent) + " Child: " + to_string(child)+", ");
+		output.append("Parent: " + to_string(parent) + " Child: " + to_string(child)+"| ");
 		if (!parentLink.empty()) {
 			parentLink.pop_front();
 		}
@@ -335,7 +332,6 @@ string Parser::getExpression() {
 		counter++;
 		output.append(to_string(counter)+": "+ (*i).second+" ");
 	}
-	cout << output;
 	return output;
 }
 
@@ -345,7 +341,7 @@ string Parser::getFollow() {
 		pair<int, int> followPair = followLink.front();
 		int firstNum = followPair.first;
 		int secondNum = followPair.second;
-		output.append("|" + to_string(firstNum) + "->" + to_string(secondNum) + "|");
+		output.append(to_string(firstNum) + "->" + to_string(secondNum) + "|");
 		if (!followLink.empty()) {
 			followLink.pop_front();
 		}
@@ -463,46 +459,38 @@ bool Parser::isConstant(char c) {
 void Parser::handleFollows(int index, string stmt) {
 	string currStmt = stmt;
 	pair<int, int> paired;
-
+	cout << stmt + "\n";
 	if (prevStmt.empty()) {
 		prevStmt = stmt;
-		currFollows.push_back(index);
+		currFollows.push_back(index-numOfProc);
 	}
-	else {
-		if (currStmt.find("{") != std::string::npos) {
-			paired.first = currFollows.back() - numOfProc;
-			paired.second = index - numOfProc;
-			//currFollows.pop_back();
-			currFollows.push_back(index + 1);
-
-			followLink.push_back(paired);
-
+	else
+	{	
+		if (prevStmt.find("{") != std::string::npos) {
+			currFollows.push_back(index-numOfProc);
 			prevStmt = currStmt;
 		}
-		else if (currStmt.find("}") != std::string::npos) {
-			if (currStmt != "}") {
-				paired.first = currFollows.back() - numOfProc;
-				paired.second = index - numOfProc;
-				if (!currFollows.empty()) {
-					currFollows.pop_back();
-				}
-				prevStmt = currStmt;
-				followLink.push_back(paired);
-			}
-			else {
+		else if (prevStmt.find("}") != std::string::npos) {
+			size_t n = std::count(prevStmt.begin(), prevStmt.end(), '}');
+			for (int i = 0; i < n;i++) {
 				if (!currFollows.empty()) {
 					currFollows.pop_back();
 				}
 			}
-
+			paired.first = currFollows.back();
+			paired.second = index - numOfProc;
+			currFollows.pop_back();
+			currFollows.push_back(index - numOfProc);
+			followLink.push_back(paired);
+			prevStmt = currStmt;
 		}
 		else {
-			paired.first = currFollows.back() - numOfProc;
-			paired.second = index - closeBracket.size() - numOfProc;
+			paired.first = currFollows.back();
+			paired.second = index-numOfProc;
+			currFollows.pop_back();
+			currFollows.push_back(index-numOfProc);
+			followLink.push_back(paired);
 			prevStmt = currStmt;
-			if (paired.first != paired.second) {
-				followLink.push_back(paired);
-			}
 		}
 	}
 }

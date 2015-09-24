@@ -35,20 +35,16 @@
     <ClCompile Include="..\source\Stmt.cpp" />
     <ClCompile Include="..\source\StmtTable.cpp" />
     <ClCompile Include="..\source\Synonym.cpp" />
-    <ClCompile Include="..\source\TNode.cpp" />
     <ClCompile Include="..\source\Validation.cpp" />
     <ClCompile Include="..\source\Variable.cpp" />
     <ClCompile Include="..\source\VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
-<<<<<<< .merge_file_a04520
     <ClInclude Include="..\source\Details.h" />
     <ClInclude Include="..\source\Clauses.h" />
     <ClInclude Include="..\source\ParserForPattern.h" />
-=======
     <ClInclude Include="..\source\PairSeparator.h" />
->>>>>>> .merge_file_a14508
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\ParserException.h" />
     <ClInclude Include="..\source\ParserForPQL.h" />
@@ -68,7 +64,6 @@
     <ClInclude Include="..\source\Stmt.h" />
     <ClInclude Include="..\source\StmtTable.h" />
     <ClInclude Include="..\source\Synonym.h" />
-    <ClInclude Include="..\source\TNode.h" />
     <ClInclude Include="..\source\Validation.h" />
     <ClInclude Include="..\source\Variable.h" />
     <ClInclude Include="..\source\VarTable.h" />
