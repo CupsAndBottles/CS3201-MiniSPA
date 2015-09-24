@@ -54,33 +54,33 @@ void Details::setType(string typeInString)
 Details::Type Details::convertToType(string typeInString)
 {
 	if (typeInString.compare("_") == 0) {
-		return Type::underscore;
+		return Type::UNDERSCORE;
 	}
 	else if (typeInString.compare("variable") == 0) {
-		return Type::variable;
+		return Type::VARIABLE;
 	}
 	else if (typeInString.compare("assign") == 0) {
-		return Type::assignment;
+		return Type::ASSIGN;
 	}
 	else if (typeInString.compare("procedure") == 0) {
-		return Type::procedure;
+		return Type::PROCEDURE;
 	}
 	else if (typeInString.compare("call") == 0) {
-		return Type::calls;
+		return Type::CALLS;
 	}
 	else if (typeInString.compare("equation") == 0) {
-		return Type::equation;
+		return Type::EQUATION;
 	}
 	else if (typeInString.compare("constant") == 0) {
-		return Type::constant;
+		return Type::CONSTANT;
 	}
 	else if (typeInString.compare("while") == 0) {
-		return Type::While;
+		return Type::WHILE;
 	}
 	else if (typeInString.compare("if") == 0) {
-		return Type::If;
+		return Type::IF;
 	}
 	else if (typeInString.compare("stmt") == 0 || typeInString.compare("prog_line") == 0) {
-		return Type::statement;
+		return Type::STATEMENT;
 	}
 }
