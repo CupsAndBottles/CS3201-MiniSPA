@@ -11,11 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-=======
     <ClCompile Include="..\source\Clauses.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
->>>>>>> 64ab473fd11c00576be6c961746bc81bd85b8a7b
     <ClCompile Include="..\source\PairSeparator.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\ParserException.cpp" />
