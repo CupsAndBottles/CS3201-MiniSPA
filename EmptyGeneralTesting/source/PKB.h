@@ -9,6 +9,7 @@
 #include "StmtTable.h"
 #include "Stmt.h"
 #include "Variable.h"
+#include "VarTable.h"
 
 enum class TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
@@ -16,7 +17,7 @@ typedef short PROC;
 
 class TNode;
 
-class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
+//class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
 
 class PKB {
 private:
@@ -25,14 +26,29 @@ private:
 	PKB& operator = (PKB const&) {};
 	static PKB* m_Instance;
 public:
-	static VarTable* varTable;
+	string procNum;
+	int index;
+	int startIndex;
+	int startNum;
+	int varIndex;
+	int stmtNum;
+	int modify;
+	string procedure;
+	vector<int>parentT;
+	vector<int> childrenT;
+
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST(PROC p);
 	~PKB();
 	static PKB* getInstanceOf();
-	//	VarTable varTable;
-	//	ProcTable procTable;
-	//	StmtTable stmtTable;
+	VarTable varTable;
+	ProcTable procTable;
+	StmtTable stmtTable;
+	Procedure proc;
+	Stmt stmts;
+	Variable var;
+
+
 	//PARSER->PKB
 	//From ProcTable
 	int setProcNameInProcTable(string);
@@ -61,11 +77,17 @@ public:
 	string getRightExpr(int);
 	int getNumStmt();
 
-	//DESIGNEXT->PKB
+	//PKB->DESIGNEXT
 	void extractParent(int);
 	void extractChildren(int);
 	void extractFollowsT(int);
 	void extractFollowedByT(int);
+	//DESIGNEXT->PKB
+	int getParent(int);
+	int getChildren(int);
+	int getFollows(int);
+	int getFollowedBy(int);
+
 	//PQL-PKB
 	std::vector<pair<int, int>> getModifies(TYPE, int, TYPE, int);
 	std::vector<pair<int, int>> getCalls(TYPE, int, TYPE, int);

@@ -8,7 +8,7 @@
 using namespace std;
 
 #include "PKB.h"
-
+#include "DesignExtractor.h"
 PKB* PKB::m_Instance = NULL;
 
 PKB* PKB::getInstanceOf()
@@ -17,21 +17,39 @@ PKB* PKB::getInstanceOf()
 		m_Instance = new PKB;
 	return m_Instance;
 }
-int PKB::setProcNameInProcTable(string)
+int PKB::setProcNameInProcTable(string procedure)
 {
-	return 0;
+	procedure = getProcName(index);
+	if (procedure.size() == NULL) {
+		return -1;
+	}
+	else {
+		index = setProcNameInProcTable(procedure);
+	}
 }
 
-void PKB::setStartNum(int, int)
+void PKB::setStartNum(int index, int num)
 {
+	index = setProcNameInProcTable(procedure);
+	startIndex = index;
+	num = procTable.getStartStmtNo(procedure);
+	startNum = num;
 }
 
-void PKB::setEndNum(int, int)
+void PKB::setEndNum(int index, int endNum)
 {
+	if (index != 0) {
+		index = setProcNameInProcTable(procedure);
+	}
+	if (endNum != 0) {
+		endNum = procTable.getEndStmtNo(procedure);
+	}
+
 }
 
-void PKB::setProcModified(int, string)
+void PKB::setProcModified(int index, string modifiedVar)
 {
+
 }
 
 void PKB::setProcUses(int, string)
@@ -65,6 +83,7 @@ void PKB::setParent(int, int)
 
 void PKB::setParentT(int, vector<int>)
 {
+	stmtTable.setParentT(stmtNum, parentT);
 }
 
 void PKB::setChildren(vector<pair<int, int>>)
@@ -73,6 +92,7 @@ void PKB::setChildren(vector<pair<int, int>>)
 
 void PKB::setChildrenT(int, vector<int>)
 {
+	stmtTable.setChildrenT(stmtNum, childrenT);
 }
 
 void PKB::setFollows(vector<pair<int, int>>)
@@ -181,27 +201,50 @@ void PKB::extractFollowedByT(int)
 {
 }
 
+int PKB::getParent(int stmtNum)
+{
+	return stmtTable.getParent(stmtNum);
+}
+
+int PKB::getChildren(int stmtNum)
+{
+	return 0;
+}
+
+int PKB::getFollows(int)
+{
+	return stmtTable.getFollows(stmtNum);
+}
+
+int PKB::getFollowedBy(int)
+{
+	return stmtTable.getFollowedBy(stmtNum);
+}
+
 
 int PKB::getProcIndex(string)
 {
 	return 0;
 }
 
-string PKB::getProcName(int)
+string PKB::getProcName(int procIndex)
 {
-	return string();
+	procIndex = proc.getIndexNum(procNum);
+	index = procIndex;
+	return procTable.getProcName(index);
 }
 
 int PKB::getVarIndex(string varName)
 {
-
-	return 0;
+	varName = getVarName(index);
+	varIndex = getVarIndex(varName);
+	return varIndex;
 }
 
 string PKB::getVarName(int index)
 {
-
-	return 0;
+	index = var.getindex();
+	return varTable.getVarName(index);
 
 }
 
