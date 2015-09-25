@@ -25,44 +25,60 @@ int PKB::setProcNameInProcTable(string procedure)
 	}
 	else {
 		index = setProcNameInProcTable(procedure);
+		return index;
 	}
 }
 
-void PKB::setStartNum(int index, int num)
+void PKB::setStartNum(int index, int startNum)
 {
-	index = setProcNameInProcTable(procedure);
-	startIndex = index;
-	num = procTable.getStartStmtNo(procedure);
-	startNum = num;
+	if (index != 0) {
+		index = setProcNameInProcTable(procedure);
+		startNum = procTable.getStartStmtNo(procedure);
+	}
+
+
 }
 
 void PKB::setEndNum(int index, int endNum)
 {
+
 	if (index != 0) {
 		index = setProcNameInProcTable(procedure);
-	}
-	if (endNum != 0) {
 		endNum = procTable.getEndStmtNo(procedure);
 	}
+
+
 
 }
 
 void PKB::setProcModified(int index, string modifiedVar)
 {
+	if (varTable.getNoOfVar() != 0) {
+		index = getProcIndex(varName);
+		modifiedVar = getVarName(index);
+	}
+	procTable.getVarModified(modifiedVar);
 
 }
 
-void PKB::setProcUses(int, string)
+void PKB::setProcUses(int index, string usesVar)
 {
+	if (varTable.getNoOfVar() != 0) {
+		index = getProcIndex(procName);
+		usesVar = getVarName(index);
+	}
+	procTable.getVarUsed(usesVar);
 }
 
 
 void PKB::setProcCalls(int, string)
 {
+	//not implemented yet
 }
 
-void PKB::setVarName(string)
+void PKB::setVarName(string varName)
 {
+	varName = getVarName(index);
 }
 
 
@@ -73,12 +89,14 @@ void PKB::setVarName(string)
 PKB::~PKB()
 {
 }
-void PKB::setType(int, int)
+void PKB::setType(int index, int type)
 {
+	stmts.getType();
 }
 
-void PKB::setParent(int, int)
+void PKB::setParent(int index, int parent)
 {
+	stmtTable.getParent(index);
 }
 
 void PKB::setParentT(int, vector<int>)
@@ -88,6 +106,7 @@ void PKB::setParentT(int, vector<int>)
 
 void PKB::setChildren(vector<pair<int, int>>)
 {
+
 }
 
 void PKB::setChildrenT(int, vector<int>)
@@ -115,17 +134,20 @@ void PKB::setUses(int, vector<int>)
 {
 }
 
-void PKB::setRightExpr(int, string)
+void PKB::setRightExpr(int index, string expr)
 {
+	setRightExpr(index, (getRightExpr(index)));
 }
 
-string PKB::getRightExpr(int)
+string PKB::getRightExpr(int index)
 {
-	return string();
+	return (stmtTable.getRightExpression(index));
+
 }
 
 int PKB::getNumStmt()
 {
+	stmtTable.getNoOfStmts();
 	return 0;
 }
 
@@ -137,68 +159,109 @@ TNode* PKB::getRootAST(PROC p) {
 	return NULL;
 }
 
-std::vector<pair<int, int>> PKB::getModifies(TYPE, int, TYPE, int)
+std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex)
+{
+	if (type1 == ASSIGN) {
+		return std::vector<pair<int, int>>();
+	}
+	else if (type1 == STATEMENT) {
+
+	}
+	else if (type1 == PROCEDURE) {
+
+	}
+
+	if (type2 == ASSIGN) {
+
+	}
+	else if (type2 == STATEMENT) {
+
+	}
+	else if (type2 == PROCEDURE) {
+
+	}
+	else if (type2 == CONSTANT) {
+
+	}
+	return std::vector<pair<int, int>>();
+}
+
+std::vector<pair<int, int>> PKB::getCalls(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+{
+	return std::vector<pair<int, int>>();
+}
+std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+{
+	return std::vector<pair<int, int>>();
+}
+std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	return std::vector<pair<int, int>>();
 }
 
-std::vector<pair<int, int>> PKB::getCalls(TYPE, int, TYPE, int)
-{
-	return std::vector<pair<int, int>>();
-}
-std::vector<pair<int, int>> PKB::getUses(TYPE, int, TYPE, int)
-{
-	return std::vector<pair<int, int>>();
-}
-std::vector<pair<int, int>> PKB::getParent(TYPE, int, TYPE, int)
+std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	return std::vector<pair<int, int>>();
 }
 
-std::vector<pair<int, int>> PKB::getFollows(TYPE, int, TYPE, int)
+std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	return std::vector<pair<int, int>>();
 }
 
-std::vector<pair<int, int>> PKB::getParentT(TYPE, int, TYPE, int)
-{
-	return std::vector<pair<int, int>>();
-}
-
-std::vector<pair<int, int>> PKB::getFollowsT(TYPE, int, TYPE, int)
+std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	return std::vector<pair<int, int>>();
 }
 
 
 
-void PKB::getProcNameInVarTable(int, string)
+void PKB::getProcNameInVarTable(int index, string procName)
 {
+	if (varTable.getNoOfVar() != 0) {
+		if (varTable.isVariableName(varName) == true) {
+			index = getVarIndex(varName);
+			procName = getProcName(index);
+		}
+	}
 }
 
-void PKB::getUsedByStmtNum(int, int)
+void PKB::getUsedByStmtNum(int index, int stmtNum)
 {
+	if (procTable.getNoOfProc() != 0) {
+		if (getVarIndex(varName) != 0) {
+			stmtNum = procTable.getStartStmtNo(procName);
+		}
+	}
 }
 
-void PKB::getModifiedByStmtNum(int, int)
+void PKB::getModifiedByStmtNum(int index, int stmtNum)
 {
+	if (procTable.getNoOfProc() != 0) {
+		if (getVarIndex(varName) != 0) {
+			stmtNum = procTable.getStartStmtNo(procName);
+		}
+	}
 }
 
-void PKB::extractParent(int)
+void PKB::extractParentT(int stmtNum)
 {
-
+	design.extractParentT(stmtNum);
 }
 
-void PKB::extractChildren(int)
+void PKB::extractChildrenT(int stmtNum)
 {
+	design.extractChildrenT(stmtNum);
 }
 
-void PKB::extractFollowsT(int)
+void PKB::extractFollowsT(int stmtNum)
 {
+	design.extractFollowsT(stmtNum) ;
 }
 
-void PKB::extractFollowedByT(int)
+void PKB::extractFollowedByT(int stmtNum)
 {
+	design.extractFollowedByT(stmtNum);
 }
 
 int PKB::getParent(int stmtNum)
@@ -222,14 +285,16 @@ int PKB::getFollowedBy(int)
 }
 
 
-int PKB::getProcIndex(string)
+int PKB::getProcIndex(string procName)
 {
-	return 0;
+	procName = proc.getName();
+	procIndex = proc.getIndexNum(procName);
+	return procIndex;
 }
 
 string PKB::getProcName(int procIndex)
 {
-	procIndex = proc.getIndexNum(procNum);
+	procIndex = getProcIndex(procName);
 	index = procIndex;
 	return procTable.getProcName(index);
 }
@@ -239,6 +304,7 @@ int PKB::getVarIndex(string varName)
 	varName = getVarName(index);
 	varIndex = getVarIndex(varName);
 	return varIndex;
+
 }
 
 string PKB::getVarName(int index)
@@ -248,11 +314,13 @@ string PKB::getVarName(int index)
 
 }
 
-int PKB::getWholeStmt(int, int)
+int PKB::getWholeStmt(int startNum, int controlVar)
 {
-	return 0;
+	startNum = procTable.getStartStmtNo(procedure);
+	return startNum;
 }
 
-void PKB::getIfStmt(int, int)
+void PKB::getIfStmt(int startNum, int controlVar)
 {
+	startNum = procTable.getStartStmtNo(procedure);
 }

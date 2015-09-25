@@ -11,7 +11,7 @@
 #include "Variable.h"
 #include "VarTable.h"
 
-enum class TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
+enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
 typedef short PROC;
 
@@ -26,14 +26,17 @@ private:
 	PKB& operator = (PKB const&) {};
 	static PKB* m_Instance;
 public:
-	string procNum;
+	//	string procNum;
+	string procName;
+	string varName;
+	int procIndex;
 	int index;
-	int startIndex;
 	int startNum;
 	int varIndex;
 	int stmtNum;
 	int modify;
 	string procedure;
+	vector<int> varModifiedList;
 	vector<int>parentT;
 	vector<int> childrenT;
 
@@ -47,7 +50,7 @@ public:
 	Procedure proc;
 	Stmt stmts;
 	Variable var;
-
+	DesignExtractor design;
 
 	//PARSER->PKB
 	//From ProcTable
@@ -78,8 +81,8 @@ public:
 	int getNumStmt();
 
 	//PKB->DESIGNEXT
-	void extractParent(int);
-	void extractChildren(int);
+	void extractParentT(int);
+	void extractChildrenT(int);
 	void extractFollowsT(int);
 	void extractFollowedByT(int);
 	//DESIGNEXT->PKB
