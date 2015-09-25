@@ -12,15 +12,15 @@ public:
 	QueryTree & return_created_Object();
 	void startPlotting(vector<vector<string>> synAndTypeForResult, vector<vector<string>> synAndTypeForSuchThat, vector<vector<string>> synAndTypeForPattern);
 
-//	vector<Clauses> getSuchThatTree();
-	//vector<Clauses> getPatternTree();
-	//vector<Clauses> getResultTree();
+	vector<Clauses> getSuchThatTree();
+	vector<Clauses> getPatternTree();
+	vector<Clauses> getResultTree();
 	bool getIsValid();
 
 private:
-//	vector<Clauses> suchThatTree;
-	//vector<Clauses> patternTree;
-	vector<Clauses> resultTree;
+	vector<Clauses> suchThatTree;
+	vector<Clauses> patternTree;
+	vector <Clauses> resultTree;
 	bool isValid;
 
 	void addResultTree(vector<string> syn, vector<string> type);
