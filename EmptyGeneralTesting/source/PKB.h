@@ -34,48 +34,24 @@ public:
 	//	ProcTable procTable;
 	//	StmtTable stmtTable;
 	//PARSER->PKB
-	//From ProcTable
-	int setProcNameInProcTable(string);
-	void setStartNum(int, int);
-	void setEndNum(int, int);
-	void setProcModified(int, string);
-	void setProcUses(int, string);
-	void setProcCalls(int, string);
 	//From VarTable
 	void getProcNameInVarTable(int, string);
 	void getUsedByStmtNum(int, int);
 	void getModifiedByStmtNum(int, int);
-	void setVarName(string);
-	//From StmtTable
-	void setType(int, int);
-	void setParent(int, int);
-	void setParentT(int, vector<int>);
-	void setChildren(vector<pair<int, int>>);
-	void setChildrenT(int, vector<int>);
-	void setFollows(vector<pair<int, int>>);
-	void setFollowsT(int, vector<int>);
-	void setFollowedByT(int, vector<int>);
-	void setModifies(int, vector<int>);
-	void setUses(int, vector<int>);
-	void setRightExpr(int, string);
-	string getRightExpr(int);
-	int getNumStmt();
-
 	//DESIGNEXT->PKB
 	void extractParent(int);
 	void extractChildren(int);
 	void extractFollowsT(int);
 	void extractFollowedByT(int);
 	//PQL-PKB
-	std::vector<pair<int, int>> getModifies(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getCalls(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getUses(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getParent(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getFollows(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getParentT(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getFollowsT(TYPE, int, TYPE, int);
-	
-    //From ProcTable
+	std::vector<pair<int, int>> getCalls(TYPE, int);
+	std::vector<pair<int, int>> getUses(TYPE, int);
+	std::vector<pair<int, int>> getParent(TYPE, int);
+	std::vector<pair<int, int>> getFollows(TYPE, int);
+	std::vector<pair<int, int>> getParentT(TYPE, int);
+	std::vector<pair<int, int>> getFollowsT(TYPE, int);
+
+	//From ProcTable
 	int getProcIndex(string);
 	string getProcName(int);
 
@@ -94,11 +70,4 @@ public:
 
 
 };
-
-
-
-
-
-
-
 
