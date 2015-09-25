@@ -70,14 +70,15 @@ void ParserForPQL::getPosition(string input, int typeNo)
 	for (std::sregex_iterator i = std::sregex_iterator(input.begin(), input.end(), regexForBoth.at(typeNo));
 	i != std::sregex_iterator(); ++i) {
 		std::smatch match = *i;
-		if (match.position() + match.length() < input.size() && input[match.position() + match.length()] == ' ') {
-			j = addNumOfPos(j, match, typeNo);
-			type[typeNo].push_back(match[0]);
-		}
+		j = addNumOfPos(j, match, typeNo);
+		type[typeNo].push_back(match[0]);
+		//	std::cout << "type = " << type[typeNo].at(z++) << '\n';
+
 	}
 
 	addInFinalSyn(typeNo, input);
 	numberOfPos.push_back(j + 1);
+	//std::cout << "number = " << numberOfPos[typeNo] << '\n';
 }
 
 int ParserForPQL::addNumOfPos(int number, smatch match, int typeNo)
@@ -115,8 +116,11 @@ void ParserForPQL::getSyn(string input, int typeNo)
 		if (i + 1 >= numberOfPos[typeNo]) {
 			break;
 		}
+		//	std::cout << "position = " << position[typeNo].at(i) << '\n';
+		//std::cout << "position1 = " << position[typeNo].at(i + 1) << '\n';
 		synonym[typeNo].push_back(input.substr(position[typeNo].at(i), position[typeNo].at(i + 1)
 			- position[typeNo].at(i)));
+		//std::cout << "synonym = " << synonym[typeNo].at(k++) << '\n';
 	}
 
 }
@@ -129,7 +133,16 @@ void ParserForPQL::parseTypeWithSyn(vector<string> selectSynonym, vector<vector<
 		withSynonym, patternSynonym, type[1], synonym[1]);
 	selectSynAndType = parserTypeWithSyn.getSelectSynAndType();
 	suchThatSynAndType = parserTypeWithSyn.getSuchThatSynAndType();
+	//std::cout << "suchThatSynAndType = " << suchThatSynAndType[0].at(0) << '\n';
+	//std::cout << "suchThatSynAndType = " << suchThatSynAndType[0].at(1) << '\n';
+	//std::cout << "suchThatSynAndType = " << suchThatSynAndType[1].at(1) << '\n';
 	patternSynAndType = parserTypeWithSyn.getPatternSynAndType();
+	//std::cout << "patternSynAndType = " << patternSynAndType[0].at(0) << '\n';
+	//std::cout << "patternSynAndType = " << patternSynAndType[0].at(1) << '\n';
+	//std::cout << "patternSynAndType = " << patternSynAndType[1].at(1) << '\n';
+	//std::cout << "patternSynAndType = " << patternSynAndType[0].at(2) << '\n';
+	//std::cout << "patternSynAndType = " << patternSynAndType[1].at(2) << '\n';
+	//std::cout << "patternSynAndType = " << patternSynAndType[2].at(2) << '\n';
 }
 
 void ParserForPQL::validateType()
@@ -154,13 +167,16 @@ void ParserForPQL::parseRespectively()
 		string oneType = *col;
 		size_t index = std::distance(row->begin(), col);
 		if (oneType.compare("Select") == 0) {
-
+			std::cout << "Select";
 			ParserForSelect parserForSelect(type, synonym, index);
 			selectSynonym = parserForSelect.getSelectSynonym();
+			std::cout << "Select = " << selectSynonym.at(0) << '\n';
 		}
 		else if (oneType.compare("such that") == 0 || oneType.compare("and") == 0) {
 			ParserForSuchThat parserForSuchThat(type, synonym, index);
 			suchThatSynonym.push_back(parserForSuchThat.getSuchThatSynonym());
+			//std::cout << "SuchThat's syn = " << suchThatSynonym[0].at(1) << '\n';
+			//std::cout << "SuchThat's syn = " << suchThatSynonym[0].at(2) << '\n';
 		}
 		else if (oneType.compare("with") == 0) {
 			ParserForWith parserForWith(type, synonym, index);
@@ -169,6 +185,8 @@ void ParserForPQL::parseRespectively()
 		else if (oneType.compare("pattern") == 0) {
 			ParserForPattern parserForPattern(type, synonym, index);
 			patternSynonym.push_back(parserForPattern.getPatternSynonym());
+			std::cout << "pattern's syn = " << patternSynonym[0].at(1) << '\n';
+			std::cout << "pattern's syn = " << patternSynonym[0].at(2) << '\n';
 
 		}
 	}
