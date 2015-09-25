@@ -168,6 +168,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+<<<<<<< HEAD
+    <ClCompile Include="TestAST.cpp" />
+    <ClCompile Include="TestDesignExtractor.cpp" />
+=======
+>>>>>>> 64ab473fd11c00576be6c961746bc81bd85b8a7b
     <ClCompile Include="TestParser.cpp" />
     <ClCompile Include="TestPreprocessor.cpp" />
   </ItemGroup>
