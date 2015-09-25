@@ -17,6 +17,35 @@ PKB* PKB::getInstanceOf()
 		m_Instance = new PKB;
 	return m_Instance;
 }
+int PKB::setProcNameInProcTable(string)
+{
+	return 0;
+}
+
+void PKB::setStartNum(int, int)
+{
+}
+
+void PKB::setEndNum(int, int)
+{
+}
+
+void PKB::setProcModified(int, string)
+{
+}
+
+void PKB::setProcUses(int, string)
+{
+}
+
+
+void PKB::setProcCalls(int, string)
+{
+}
+
+void PKB::setVarName(string)
+{
+}
 
 
 //PKB::PKB()
@@ -25,6 +54,59 @@ PKB* PKB::getInstanceOf()
 
 PKB::~PKB()
 {
+}
+void PKB::setType(int, int)
+{
+}
+
+void PKB::setParent(int, int)
+{
+}
+
+void PKB::setParentT(int, vector<int>)
+{
+}
+
+void PKB::setChildren(vector<pair<int, int>>)
+{
+}
+
+void PKB::setChildrenT(int, vector<int>)
+{
+}
+
+void PKB::setFollows(vector<pair<int, int>>)
+{
+}
+
+void PKB::setFollowsT(int, vector<int>)
+{
+}
+
+void PKB::setFollowedByT(int, vector<int>)
+{
+}
+
+void PKB::setModifies(int, vector<int>)
+{
+}
+
+void PKB::setUses(int, vector<int>)
+{
+}
+
+void PKB::setRightExpr(int, string)
+{
+}
+
+string PKB::getRightExpr(int)
+{
+	return string();
+}
+
+int PKB::getNumStmt()
+{
+	return 0;
 }
 
 int PKB::setProcToAST(PROC p, TNode* r) {
@@ -35,33 +117,39 @@ TNode* PKB::getRootAST(PROC p) {
 	return NULL;
 }
 
-std::vector<pair<int, int>> PKB::getCalls(TYPE, int)
-{
-	return std::vector<pair<int, int>>();
-}
-std::vector<pair<int, int>> PKB::getUses(TYPE, int)
-{
-	return std::vector<pair<int, int>>();
-}
-std::vector<pair<int, int>> PKB::getParent(TYPE, int)
+std::vector<pair<int, int>> PKB::getModifies(TYPE, int, TYPE, int)
 {
 	return std::vector<pair<int, int>>();
 }
 
-std::vector<pair<int, int>> PKB::getFollows(TYPE, int)
+std::vector<pair<int, int>> PKB::getCalls(TYPE, int, TYPE, int)
+{
+	return std::vector<pair<int, int>>();
+}
+std::vector<pair<int, int>> PKB::getUses(TYPE, int, TYPE, int)
+{
+	return std::vector<pair<int, int>>();
+}
+std::vector<pair<int, int>> PKB::getParent(TYPE, int, TYPE, int)
 {
 	return std::vector<pair<int, int>>();
 }
 
-std::vector<pair<int, int>> PKB::getParentT(TYPE, int)
+std::vector<pair<int, int>> PKB::getFollows(TYPE, int, TYPE, int)
 {
 	return std::vector<pair<int, int>>();
 }
 
-std::vector<pair<int, int>> PKB::getFollowsT(TYPE, int)
+std::vector<pair<int, int>> PKB::getParentT(TYPE, int, TYPE, int)
 {
 	return std::vector<pair<int, int>>();
 }
+
+std::vector<pair<int, int>> PKB::getFollowsT(TYPE, int, TYPE, int)
+{
+	return std::vector<pair<int, int>>();
+}
+
 
 
 void PKB::getProcNameInVarTable(int, string)
@@ -125,7 +213,3 @@ int PKB::getWholeStmt(int, int)
 void PKB::getIfStmt(int, int)
 {
 }
-
-
-
-
