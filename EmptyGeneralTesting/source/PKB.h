@@ -57,21 +57,22 @@ public:
 	int setProcNameInProcTable(string procName);
 	void setStartNum(int index, int startNum);
 	void setEndNum(int index, int endNum);
-	void setProcModified(int index, string modifiedVar);
-	void setProcUses(int index, string usesVar);
+	void setProcModified(int index, vector<int> modifiedVar);
+	void setProcUses(int index, vector<int> usesVar);
 	void setProcCalls(int index, string callProc);
 
 	//From StmtTable
 	void setType(int index, int type);
 	void setParent(int index, int parentStmt);
 	void setParentT(int index, vector<int> parentStmts);
-	void setChildren(vector<pair<int, int>> parentChildStmts);
+	void setChildren(int index, vector<int> parentChildStmts);
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(vector<pair<int, int>> followStmt);
+	void setFollows(int index, int follows);
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts);
 	void setModifies(int index, vector<int> modifiesStmts);
-	void setUses(int index, vector<int> usesStmts);
+	void setConstant(int index, vector<int> usesStmts);
+	void setUsedVar(int index, vector<int> usesStmts);
 	void setRightExpr(int index, string rightExpression);
 	string getRightExpr(int index);
 	int getNoOfStmt();
