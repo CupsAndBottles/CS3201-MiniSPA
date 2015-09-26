@@ -99,39 +99,44 @@ void PKB::setParent(int index, int parent)
 	stmtTable.getParent(index);
 }
 
-void PKB::setParentT(int, vector<int>)
+void PKB::setParentT(int index, vector<int> parentT)
 {
 	stmtTable.setParentT(stmtNum, parentT);
 }
 
-void PKB::setChildren(vector<pair<int, int>>)
+void PKB::setChildren(vector<pair<int, int>> parentChild)
 {
-
+	stmtTable.getChildren(stmtNum);
 }
 
-void PKB::setChildrenT(int, vector<int>)
+void PKB::setChildrenT(int index, vector<int>childrenT)
 {
 	stmtTable.setChildrenT(stmtNum, childrenT);
 }
 
 void PKB::setFollows(vector<pair<int, int>>)
 {
+	stmtTable.getFollows(index);
 }
 
-void PKB::setFollowsT(int, vector<int>)
+void PKB::setFollowsT(int index, vector<int>follows)
 {
+	stmtTable.setFollowsT(stmtNum, follows);
 }
 
-void PKB::setFollowedByT(int, vector<int>)
+void PKB::setFollowedByT(int index, vector<int> followedByT)
 {
+	stmtTable.getFollowedByT(index);
 }
 
-void PKB::setModifies(int, vector<int>)
+void PKB::setModifies(int index, vector<int> modify)
 {
+	stmtTable.getModifies(index);
 }
 
-void PKB::setUses(int, vector<int>)
+void PKB::setUses(int index, vector<int> uses)
 {
+	stmtTable.getUses(index);
 }
 
 void PKB::setRightExpr(int index, string expr)
@@ -256,7 +261,7 @@ void PKB::extractChildrenT(int stmtNum)
 
 void PKB::extractFollowsT(int stmtNum)
 {
-	design.extractFollowsT(stmtNum) ;
+	design.extractFollowsT(stmtNum);
 }
 
 void PKB::extractFollowedByT(int stmtNum)
