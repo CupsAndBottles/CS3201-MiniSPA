@@ -35,10 +35,10 @@ public:
 	int varIndex;
 	int stmtNum;
 	int modify;
+	int child;
 	string procedure;
 	vector<int> varModifiedList;
-	vector<int>parentT;
-	vector<int> childrenT;
+
 
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST(PROC p);
