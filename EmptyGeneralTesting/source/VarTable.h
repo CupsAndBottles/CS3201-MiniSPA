@@ -16,9 +16,9 @@ public:
 	int getNoOfVar();
 	vector<string> getAllVar();
 	string getVarName(int index);
-	vector<int> getStmtNumUsingVar(string var);
-	vector<int> getStmtForModified(string var);
-	vector<int> getProcNames(string var);
+	vector<int> getStmtNumUsingVar(int varIndex);
+	vector<int> getStmtForModified(int varIndex);
+	vector<int> getProcNames(int varIndex);
 	bool isVariableName(string varName);
 };
 
