@@ -40,8 +40,7 @@ public:
 	vector<int>parentT;
 	vector<int> childrenT;
 
-	static int setProcToAST(PROC p, TNode* r);
-	static TNode* getRootAST(PROC p);
+	
 	~PKB();
 	static PKB* getInstanceOf();
 	VarTable varTable;
@@ -109,8 +108,12 @@ public:
 	int getUsedByStmtNum(int index);
 	int getModifiedByStmtNum(int index);
 	 
-	//From VarTable --> SOMEONE PLS ADD IN SET METHOD
-	void setVarName(string varName);
+	//From VarTable 
+	int setVarName(string varName);
+	void setProcNames(int index,int procIndex);
+	void setUsedBy(int index,int stmtNum);
+	void setModifiedBy(int index, int stmtNum);
+	
 
 	//While table
 	int getWholeStmt(int, int);

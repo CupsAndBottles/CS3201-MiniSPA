@@ -141,16 +141,6 @@ int PKB::getNoOfStmt()
 	return stmtTable.getNoOfStmts();;
 }
 
-/* 
-int PKB::setProcToAST(PROC p, TNode* r) {
-	return NULL;
-}
-
-TNode* PKB::getRootAST(PROC p) {
-	return NULL;
-}
-*/
-
 std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex)
 {
 	if (type1 == ASSIGN) {
