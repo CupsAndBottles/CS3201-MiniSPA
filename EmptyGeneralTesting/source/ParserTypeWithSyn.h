@@ -25,7 +25,8 @@ public:
 	void parseSuchThatTypeWithSyn(vector<vector<string>> suchThatSynonym, vector<string> type, vector<string> synonym);
 	void parseWithTypeWithSyn(vector<vector<string>> withSynonym, vector<string> type, vector<string> synonym);
 	void parsePatternTypeWithSyn(vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
-	void checkType(string syn);
+	void checkType(string syn, vector<string> arguments, vector<string> typeSyn, vector<string> type);
+	bool checkIsVariableSyn(vector<string> typeSyn, vector<string> arguments, vector<string> type);
 	bool isContainsPunc(string args);
 	string checkExpression(string arg2);
 	bool checkIfVariable(string syn);

@@ -11,8 +11,6 @@ public:
 
 	void parsePattern(vector<vector<string>> type, vector<vector<string>> synonym, int pos);
 
-	void validatePattern();
-
 	void checkType(string syn);
 
 	vector<string> removeUnwanted(vector<string> PatternSynonym);

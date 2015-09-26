@@ -48,65 +48,68 @@ public:
 	ProcTable procTable;
 	StmtTable stmtTable;
 	Procedure proc;
-	Stmt stmts;
-	Variable var;
 	DesignExtractor design;
+	//Stmt stmts;
+	//Variable var;
 
 	//PARSER->PKB
 	//From ProcTable
-	int setProcNameInProcTable(string);
-	void setStartNum(int, int);
-	void setEndNum(int, int);
-	void setProcModified(int, string);
-	void setProcUses(int, string);
-	void setProcCalls(int, string);
-	//From VarTable
-	void getProcNameInVarTable(int, string);
-	void getUsedByStmtNum(int, int);
-	void getModifiedByStmtNum(int, int);
-	void setVarName(string);
+	int setProcNameInProcTable(string procName);
+	void setStartNum(int index, int startNum);
+	void setEndNum(int index, int endNum);
+	void setProcModified(int index, string modifiedVar);
+	void setProcUses(int index, string usesVar);
+	void setProcCalls(int index, string callProc);
+
 	//From StmtTable
-	void setType(int, int);
-	void setParent(int, int);
-	void setParentT(int, vector<int>);
-	void setChildren(vector<pair<int, int>>);
-	void setChildrenT(int, vector<int>);
-	void setFollows(vector<pair<int, int>>);
-	void setFollowsT(int, vector<int>);
-	void setFollowedByT(int, vector<int>);
-	void setModifies(int, vector<int>);
-	void setUses(int, vector<int>);
-	void setRightExpr(int, string);
-	string getRightExpr(int);
-	int getNumStmt();
+	void setType(int index, int type);
+	void setParent(int index, int parentStmt);
+	void setParentT(int index, vector<int> parentStmts);
+	void setChildren(vector<pair<int, int>> parentChildStmts);
+	void setChildrenT(int index, vector<int> childrenStmts);
+	void setFollows(vector<pair<int, int>> followStmt);
+	void setFollowsT(int index, vector<int> followsTStmts);
+	void setFollowedByT(int index, vector<int> followsByStmts);
+	void setModifies(int index, vector<int> modifiesStmts);
+	void setUses(int index, vector<int> usesStmts);
+	void setRightExpr(int index, string rightExpression);
+	string getRightExpr(int index);
+	int getNoOfStmt();
 
 	//PKB->DESIGNEXT
-	void extractParentT(int);
-	void extractChildrenT(int);
-	void extractFollowsT(int);
-	void extractFollowedByT(int);
+	vector<int> extractParentT(int index);
+	vector<int> extractChildrenT(int index);
+	vector<int> extractFollowsT(int index);
+	vector<int> extractFollowedByT(int index);
+
 	//DESIGNEXT->PKB
-	int getParent(int);
-	int getChildren(int);
-	int getFollows(int);
-	int getFollowedBy(int);
+	int getParent(int index);
+	vector<int> getChildren(int index);
+	int getFollows(int index);
+	int getFollowedBy(int index);
 
 	//PQL-PKB
-	std::vector<pair<int, int>> getModifies(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getCalls(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getUses(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getParent(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getFollows(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getParentT(TYPE, int, TYPE, int);
-	std::vector<pair<int, int>> getFollowsT(TYPE, int, TYPE, int);
+	std::vector<pair<int, int>> getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex);
+	std::vector<pair<int, int>> getCalls(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getUses(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getParent(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getFollows(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getParentT(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getFollowsT(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
 
 	//From ProcTable
-	int getProcIndex(string);
-	string getProcName(int);
+	int getProcIndex(string procName);
+	string getProcName(int procIndex);
 
 	//From VarTable
-	int getVarIndex(string);
-	string getVarName(int);
+	int getVarIndex(string varName);
+	string getVarName(int index);
+	string getProcNameInVarTable(int index);
+	int getUsedByStmtNum(int index);
+	int getModifiedByStmtNum(int index);
+	 
+	//From VarTable --> SOMEONE PLS ADD IN SET METHOD
+	void setVarName(string varName);
 
 	//While table
 	int getWholeStmt(int, int);
