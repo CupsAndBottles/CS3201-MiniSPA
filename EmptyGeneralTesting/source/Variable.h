@@ -11,7 +11,6 @@ class Variable
 {
 public:
 	Variable();
-	Variable(string VarName, int procName, int usedBy, int modifiedBy);
 	~Variable();
 	int getindex();
 	string getVarName();
@@ -20,10 +19,13 @@ public:
 	vector<int> getProcNames();
 
 	void insertIntoModify(int modify);
-
 	void insertIntoUses(int use);
-
 	void insertIntoProc(int procName);
+	void setVarName(string varName);
+	void setProcNames(int proc);
+	void setUsedBy(int stmtLst);
+	void setModifiedBy(int stmtLst);
+	void sortVectors(vector<int> list);
 
 private:
 	int index;
@@ -31,11 +33,6 @@ private:
 	vector<int> procNamesList;
 	vector<int> usedByList;
 	vector<int> modifiedByList;
-	void setVarName(string varName);
-	void setProcNames(int proc);
-	void setUsedBy(int stmtLst);
-	void setModifiedBy(int stmtLst);
-	void sortVectors(vector<int> list);
 	vector<int> setProcNames();
 
 

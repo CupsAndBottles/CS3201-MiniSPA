@@ -8,7 +8,10 @@ private:
 public:
 	VarTable();
 	~VarTable();
-	int insertVar(int index, string VarName, int procNames, int usedBy, int modifiedBy);
+	int setVarName(string varName);
+	void setProcNames(int index, int procIndex);
+	void setUsedBy(int index, int stmtNum);
+	void setModifiedBy(int index, int stmtNum);
 	int getIndex(string varName);
 	int getNoOfVar();
 	vector<string> getAllVar();

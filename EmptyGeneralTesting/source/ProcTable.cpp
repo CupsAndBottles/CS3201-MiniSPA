@@ -12,23 +12,16 @@ ProcTable::~ProcTable()
 {
 }
 
-//insert new procedure with index number
-int ProcTable::insertProc(string pName, int startNum, int endNum, int modify, int use)
+int ProcTable::setProcName(string pName)
 {
-	int index = getProcIndexNo(pName);
-	if (index == -1) {
-		procTable.push_back(Procedure(pName, startNum, endNum, modify, use));
-		index = procTable.size() + 1;
+	int index;
+	if (procTable.empty()) {
+		index = 0;
 	}
 	else {
-		for (unsigned int i = 0; i < procTable.size();i++) {
-			if (procTable[i].getName() == pName) {
-				procTable[i].insertIntoModify(modify);
-				procTable[i].insertIntoUses(use);
-
-			}
-		}
+		index = procTable.size() + 1;
 	}
+	procTable[index].setProcName(pName);
 	return index;
 }
 
@@ -111,22 +104,29 @@ vector<int> ProcTable::getVarModified(string procName)
 	return varModified;
 }
 
-void ProcTable::setStartStmtNo(int stmtNum, string procName)
+//-------------------------------setter methods-------------------------------
+
+void ProcTable::setModify(int procIndex, vector<int> modifiedVar)
 {
-	for (unsigned int i = 0; i < procTable.size();i++) {
-		if (procTable[i].getName() == procName) {
-			procTable[i].setStartNo(stmtNum);
-		}
-	}
+	procTable[procIndex].setModifiedVar(modifiedVar);
 }
 
-void ProcTable::setEndStmtNo(int stmtNum, string procName)
+void ProcTable::setUses(int procIndex, vector<int> usedVar)
 {
-	for (unsigned int i = 0; i < procTable.size();i++) {
-		if (procTable[i].getName() == procName) {
-			procTable[i].setEndNo(stmtNum);
-		}
-	}
+	procTable[procIndex].setUsedVar(usedVar);
+
+}
+
+void ProcTable::setStartStmtNo(int procIndex, int stmtNum)
+{
+			procTable[procIndex].setStartNo(stmtNum);
+		
+}
+
+void ProcTable::setEndStmtNo(int procIndex, int stmtNum)
+{
+	procTable[procIndex].setEndNo(stmtNum);
+		
 }
 
 bool ProcTable::isProcName(string procName) {

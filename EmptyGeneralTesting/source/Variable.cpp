@@ -10,13 +10,6 @@ Variable::Variable()
 {
 }
 
-Variable::Variable(string VarName, int procNames, int usedBy, int modifiedBy) {
-	setVarName(VarName);
-	setProcNames(procNames);
-	setUsedBy(usedBy);
-	setModifiedBy(modifiedBy);
-}
-
 
 Variable::~Variable()
 {

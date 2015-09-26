@@ -7,12 +7,16 @@ private:
 public:
 	StmtTable();
 	~StmtTable();
-	void insertStmt(int t, int p, int c, int fBy, int f, vector<int> pT, vector<int> cT, vector<int> fT, vector<int> fByT, int u, int m, string rExpr);
-	void insertChildren(int index, int child);
-	void insertUses(int index, int uses);
-	void insertParent(int index, int parent);
-	void insertFollows(int index, int follows);
-	void insertFollowedBy(int index, int followedBy);
+	void setStmtType(int index,int type);
+	void setChildren(int index, vector<int> children);
+	void setUsedVar(int index, vector<int> uses);
+	void setParent(int index, int parent);
+	void setFollows(int index, int follows);
+	void setFollowedBy(int index, int followedBy);
+	void setRightExpr(int index, string rightExpr);
+	void setModified(int index, vector<int> modifiedVar);
+	void setUsedConstant(int index, vector<int> usedConstant);
+
 	int getType(int index);
 	int getNoOfStmts();
 	int getParent(int index);
@@ -24,7 +28,7 @@ public:
 	vector<int> getFollowedByT(int index);
 	vector<int> getFollowsT(int index);
 	vector<int> getUses(int index);
-	int getModifies(int index);
+	vector<int> getModifies(int index);
 	string getRightExpression(int index);
 	void setFollowsT(int index, vector<int> followsT);
 	void setFollowedByT(int index, vector<int> followedByT);
