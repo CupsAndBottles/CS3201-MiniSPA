@@ -12,8 +12,8 @@ class Procedure
 {
 public:
 	Procedure();
-	Procedure(string pName, int startNum, int endNum, int modify, int use);
 	~Procedure();
+	void setProcName(string pName);
 	string getName();
 	int getIndexNum(string procNum);
 	int getStartNo();
@@ -25,9 +25,10 @@ public:
 
 	void sortVectors(vector<int> list);
 
-	void insertIntoModify(int modify);
+	void setModifiedVar(vector<int> modify);
 
-	void insertIntoUses(int use);
+	void setUsedVar(vector<int> use);
+
 
 private:
 	int index;

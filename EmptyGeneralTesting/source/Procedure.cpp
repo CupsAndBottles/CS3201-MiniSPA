@@ -7,18 +7,7 @@
 using namespace std;
 
 
-Procedure::Procedure(string pName, int startNum, int endNum, int modify, int use)
-{
-	procName = pName;
-	if (startNum != 0) {
-		startStmtNum = startNum;
-	}
-	if (endNum != 0) {
-		endStmtNum = endNum;
-	}
-	varModified = modify;
-	varUsed = use;
-}
+
 
 Procedure::Procedure()
 {
@@ -28,6 +17,10 @@ Procedure::~Procedure()
 {
 }
 
+void Procedure::setProcName(string pName)
+{
+	procName = pName;
+}
 
 string Procedure::getName() {
 	return procName;
@@ -71,16 +64,10 @@ void Procedure::sortVectors(vector<int> list) {
 	sort(list.begin(), list.end());
 }
 
-void Procedure::insertIntoModify(int modify) {
-	sortVectors(varModifiedList);
-	if (modify != 0 && modify != -1 && !binary_search(varModifiedList.begin(), varModifiedList.end(), modify)) {
-		varModifiedList.push_back(modify);
-	}
+void Procedure::setModifiedVar(vector<int> modify) {
+	varModifiedList = modify;
 }
 
-void Procedure::insertIntoUses(int use) {
-	sortVectors(varModifiedList);
-	if (use != 0 && use != -1 && !binary_search(varModifiedList.begin(), varModifiedList.end(), use)) {
-		varModifiedList.push_back(use);
-	}
+void Procedure::setUsedVar(vector<int> use) {
+	varUsedList = use;
 }

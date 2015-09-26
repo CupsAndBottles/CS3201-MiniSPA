@@ -13,24 +13,39 @@ VarTable::VarTable()
 VarTable::~VarTable()
 {
 }
-int VarTable::insertVar(int index, string VarName, int procNames, int usedBy, int modifiedBy) {
-	index = getIndex(VarName);
-	if (index == -1) {
-		varTable.push_back(Variable(VarName, procNames, usedBy, modifiedBy));
-		index = varTable.size() + 1;
+
+int VarTable::setVarName(string varName)
+{
+	int index;
+	if (varTable.empty()) {
+		index = 0;
 	}
 	else {
-		for (unsigned int i = 0; i < varTable.size();i++) {
-			if (varTable[i].getVarName() == VarName) {
-				varTable[i].insertIntoModify(procNames);
-				varTable[i].insertIntoUses(usedBy);
-				varTable[i].insertIntoProc(modifiedBy);
-			}
-		}
-
+		index = varTable.size()+1;
 	}
+
+	varTable[index].setVarName(varName);
+
 	return index;
 }
+
+void VarTable::setProcNames(int index, int procIndex)
+{
+	varTable[index].setProcNames(procIndex);
+}
+
+void VarTable::setUsedBy(int index, int stmtNum)
+{
+	varTable[index].setUsedBy(stmtNum);
+}
+
+void VarTable::setModifiedBy(int index, int stmtNum)
+{
+	varTable[index].setModifiedBy(stmtNum);
+}
+
+
+
 
 //return -1 if does not exist
 int VarTable::getIndex(string varName) {

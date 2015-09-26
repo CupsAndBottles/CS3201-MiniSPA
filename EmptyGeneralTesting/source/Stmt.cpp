@@ -4,53 +4,46 @@
 Stmt::Stmt()
 {
 }
-//get var index from varTable
-Stmt::Stmt(int t, int p, int c, int fBy, int f, vector<int> pT, vector<int> cT, vector<int> fT, vector<int> fByT, int u, int m, string rExpr)
-{
-	type = t;
-
-	if (p != 0) {
-		insertParent(p);
-	}
-	if (c != 0) {
-		insertChildList(c);
-	}
-	if (u != 0) {
-		insertUsesList(u);
-	}
-	followedBy = fBy;
-	follows = f;
-
-	parentT = pT;
-	childrenT = cT;
-	followsT = fT;
-	followedByT = fByT;
-
-	modifies = m;
-	rightExpression = rExpr;
-
-}
-
 
 Stmt::~Stmt()
 {
 }
 
-void Stmt::insertChildList(int child) {
-	if (child != 0) {
-		childrenList.push_back(child);
-	}
-}
-void Stmt::insertUsesList(int uses) {
-	if (uses != 0) {
-		usesList.push_back(uses);
-	}
+void Stmt::setStmtType(int t)
+{
+	type = t;
 }
 
-void Stmt::insertParent(int p)
+void Stmt::setParent(int p)
 {
 	parent = p;
 }
+
+void Stmt::setChildren(vector<int> children)
+{
+	childrenList = children;
+}
+
+void Stmt::setUsedVar(vector<int> usedList)
+{
+	usedVarList = usedList;
+}
+
+void Stmt::setUsedConstant(vector<int> usedConstant)
+{
+	usedConstantList = usedConstant;
+}
+
+void Stmt::setModifiedVar(vector<int> modifiedList)
+{
+	modifiedVarList = modifiedList;
+}
+
+void Stmt::setRightExpr(string rightExpr)
+{
+	rightExpression = rightExpr;
+}
+
 
 void Stmt::setFollows(int followStmt)
 {
@@ -111,11 +104,11 @@ int Stmt::getFollowedBy() {
 
 
 vector<int> Stmt::getUses() {
-	return usesList;
+	return usedVarList;
 }
 
-int Stmt::getModifies() {
-	return modifies;
+vector<int> Stmt::getModifies() {
+	return modifiedVarList;
 }
 
 vector<int> Stmt::getFollowsT() {
@@ -124,6 +117,10 @@ vector<int> Stmt::getFollowsT() {
 
 vector<int> Stmt::getFollowedByT() {
 	return followedByT;
+}
+
+vector<int> Stmt::setUsedConstant() {
+	return usedConstantList;
 }
 
 string Stmt::getRightExpression() {

@@ -10,34 +10,45 @@ StmtTable::~StmtTable()
 {
 }
 
-void StmtTable::insertStmt(int t, int p, int c, int fBy, int f, vector<int> pT, vector<int> cT, vector<int> fT, vector<int> fByT, int u, int m, string rExpr)
+void StmtTable::setStmtType(int index, int type)
 {
-	if (!stmtTable.empty()) {
-		vector<int> empty;
-		stmtTable.push_back((Stmt(0, 0, 0, 0, 0, empty, empty, empty, empty, 0, 0, "")));
-	}
-	stmtTable.push_back(Stmt(t, p, c, fBy, f, pT, cT, fT, fByT, u, m, rExpr));
+	stmtTable[index].setStmtType(type);
 }
 
-void StmtTable::insertChildren(int index, int child) {
-	stmtTable[index].insertChildList(child);
+void StmtTable::setChildren(int index, vector<int> children) {
+	stmtTable[index].setChildren(children);
 }
 
-void StmtTable::insertUses(int index, int uses) {
-	stmtTable[index].insertUsesList(uses);
+void StmtTable::setUsedVar(int index, vector<int> usesList) {
+	stmtTable[index].setUsedVar(usesList);
 }
 
-void StmtTable::insertParent(int index, int parent)
+void StmtTable::setParent(int index, int parent)
 {
-	stmtTable[index].insertParent(parent);
+	stmtTable[index].setParent(parent);
 }
 
-void StmtTable::insertFollows(int index, int follows) {
+void StmtTable::setFollows(int index, int follows) {
 	stmtTable[index].setFollows(follows);
 }
 
-void StmtTable::insertFollowedBy(int index, int followedBy) {
+void StmtTable::setFollowedBy(int index, int followedBy) {
 	stmtTable[index].setFollowedBy(followedBy);
+}
+
+void StmtTable::setRightExpr(int index, string rightExpr)
+{
+	stmtTable[index].setRightExpr(rightExpr);
+}
+
+void StmtTable::setModified(int index, vector<int> modifiedVar)
+{
+	stmtTable[index].setModifiedVar(modifiedVar);
+}
+
+void StmtTable::setUsedConstant(int index, vector<int> usedConstant)
+{
+	stmtTable[index].setUsedConstant(usedConstant);
 }
 
 int StmtTable::getType(int index)
@@ -107,10 +118,9 @@ vector<int> StmtTable::getUses(int index)
 	vector<int> varUsed = stmtTable[index].getUses();
 	return varUsed;
 }
-
-int StmtTable::getModifies(int index)
+ vector<int> StmtTable::getModifies(int index)
 {
-	int varModified = stmtTable[index].getModifies();;
+	vector<int> varModified = stmtTable[index].getModifies();;
 	return varModified;
 }
 
