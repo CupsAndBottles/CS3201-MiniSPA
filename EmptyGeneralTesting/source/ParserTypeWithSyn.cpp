@@ -4,7 +4,6 @@
 #include <iostream>
 #include <locale> 
 #include "QueryTree.h"
-#include "PKB.h"
 #include "ParserException.h"
 
 
@@ -44,18 +43,14 @@ vector<vector<string>> ParserTypeWithSyn::getPatternSynAndType()
 void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vector<string> type, vector<string> synonym)
 {
 
-		std::cout << "enterParserTypeSelect" << '\n';
-
 	selectSynAndType.push_back(vector <string>());
 	selectSynAndType.push_back(vector <string>());
 
 	bool ifSame = false;
 	for (std::size_t i = 0; i < selectSynonym.size(); i++) {
 		for (std::size_t j = 0; j < synonym.size(); j++) {
-				std::cout << "selectSynonym.at(i) = " << selectSynonym.at(i) << '\n';
-			  std::cout << "select222) = " << synonym.at(j) << '\n';
+		
 			if (selectSynonym.at(i).compare(synonym.at(j)) == 0) {
-					std::cout << "ININININININININININ" << '\n';
 				selectSynAndType[0].push_back(selectSynonym.at(i));
 				selectSynAndType[1].push_back(type.at(j));
 
@@ -89,22 +84,17 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 		if (suchThatSynonym[i].size() != 3) {
 			throw ParserException("unidentified such that synonym");
 		}
-	//	std::cout << "suchthatmodifies = " << suchThatSynonym[i].at(0) << '\n';
 
 		suchThatSynAndType[0].push_back(suchThatSynonym[i].at(0));
 		suchThatSynAndType[1].push_back("");
 		suchThatSynAndType[2].push_back("");
 		for (std::size_t k = 1; k < 3; k++) {
-
-			std::cout << "selectSynonym.at(k) = " << suchThatSynonym[i].at(k) << '\n';
-
 			std::size_t found = suchThatSynonym[i].at(k).find("\"");
+
 			if (ifDigit(suchThatSynonym[i].at(k))) {
-				//	std::cout << "isDigit = " << '\n';
 				if (suchThatSynonym[i].at(k)[0] == '\"' && suchThatSynonym[i].at(k)[suchThatSynonym[i].at(k).length() - 1] == '\"') {
 					suchThatSynonym[i].at(k) = suchThatSynonym[i].at(k).substr(1, suchThatSynonym[i].at(k).length() - 2);
 				}
-
 				suchThatSynAndType[0].push_back(suchThatSynonym[i].at(k));
 				suchThatSynAndType[1].push_back("prog_line");
 				suchThatSynAndType[2].push_back(suchThatSynonym[i].at(k));
@@ -137,7 +127,6 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			else {
 				ifSame = matchWithKeyword(suchThatSynonym[i].at(k), type, synonym);
 				suchThatSynAndType[2].push_back("-1");
-				//std::cout << "pos = " << k <<'\n';
 			}
 			if (!ifSame) {
 				//"type in unidentify synonym"
@@ -148,13 +137,6 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			}
 		}
 	}
-	/*
-	std::cout << "1 suchThatSynAndType = " << suchThatSynAndType[0].at(0) << '\n';
-	std::cout << "suchThatSynAndType = " << suchThatSynAndType[0].at(1) << '\n';
-	std::cout << "suchThatSynAndType = " << suchThatSynAndType[1].at(1) << '\n';
-	std::cout << "suchThatSynAndType = " << suchThatSynAndType[0].at(2) << '\n';
-	std::cout << "suchThatSynAndType = " << suchThatSynAndType[1].at(2) << '\n';
-	*/
 }
 
 void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym, vector<string> type, vector<string> synonym)
@@ -175,7 +157,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 		for (std::size_t j = 0; j < synonym.size(); j++) {
 			if (patternSynonym[i].at(0).compare(synonym.at(j)) == 0) {
 				//std::cout << "selectSynonym.at(i) = " << selectSynonym.at(i) << '\n';
-				checkType(type.at(j));
+				checkType(type.at(j), patternSynonym[i], synonym, type);
 				patternSynAndType[0].push_back(patternSynonym[i].at(0));
 				patternSynAndType[1].push_back(type.at(j));
 				patternSynAndType[2].push_back("-1");
@@ -239,7 +221,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 			patternSynAndType[0].push_back(patternSynonym[i].at(2));
 			patternSynAndType[1].push_back("_");
 			patternSynAndType[2].push_back("-2");
-			
+
 			ifSame = true;
 		}
 		else if (checkIfVariable(patternSynonym[i].at(2))) {
@@ -281,22 +263,40 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 			throw ParserException("Pattern synonym unidentified");
 		}
 		ifSame = false;
-		//std::cout << "pattern in type = " << patternSynAndType[3].at(1) << '\n';
-
 	}
 
 }
 
-void ParserTypeWithSyn::checkType(string syn)
+void ParserTypeWithSyn::checkType(string syn, vector<string> arguments, vector<string> typeSyn, vector<string> type)
 {
 
 	std::size_t found = syn.find("while");
 	std::size_t found1 = syn.find("if");
 	std::size_t found2 = syn.find("assign");
 
+	std::cout << "if = " << !(checkIsVariableSyn(typeSyn, arguments, type)) << '\n';
+
 	if (found == std::string::npos && found1 == std::string::npos && found2 == std::string::npos) {
 		throw ParserException("Pattern must be while or if or assign");
 	}
+	else if (found1 != std::string::npos && (arguments.size() != 4 || (!checkIfVariable(arguments.at(1)) && !checkIsVariableSyn(typeSyn, arguments, type)) || arguments.at(2).compare("_") != 0 || arguments.at(3).compare("_") != 0)) {
+		throw ParserException("Pattern if must be in format of if(v, _, _)"); 
+	}
+	else if (found != std::string::npos && (arguments.size() != 3 || arguments.at(2).compare("_") != 0 || (!checkIfVariable(arguments.at(1)) && !checkIsVariableSyn(typeSyn, arguments, type)))) {
+		throw ParserException("Pattern while must be in format of while(v, _)");
+	}
+	else if (found2 != std::string::npos && arguments.size() != 3) {
+		throw ParserException("Pattern while must be in format of with synonym and 2 arguments");
+	}
+}
+
+bool ParserTypeWithSyn::checkIsVariableSyn(vector<string>typeSyn, vector<string> arguments, vector<string> type) {
+	for (std::size_t j = 0; j < typeSyn.size(); j++) {
+		if (arguments.at(1).compare(typeSyn.at(j)) == 0 && type.at(j).find("variable") != std::string::npos) {
+			return true;
+		}
+	}
+	return false;
 }
 
 bool ParserTypeWithSyn::isContainsPunc(string args) {
@@ -309,11 +309,11 @@ bool ParserTypeWithSyn::isContainsPunc(string args) {
 	}
 	return true;
 }
+
 string ParserTypeWithSyn::checkExpression(string arg2) {
 	if (arg2.at(0) == ('_') && arg2.at(arg2.length() - 1) == ('_') && arg2.length() > 2) {
 		patternSynAndType[3].push_back("1");
-		arg2 = arg2.substr(1, arg2.length()-2);
-	
+		arg2 = arg2.substr(1, arg2.length() - 2);
 	}
 	else if (arg2.at(0) == ('_') && arg2.at(arg2.length() - 1) != ('_')  && arg2.length() > 2) {
 		throw ParserException("Pattern arguments of subexpression must be _..._");
@@ -338,7 +338,6 @@ bool ParserTypeWithSyn::checkIfVariable(string syn)
 	std::locale loc;
 	for (std::size_t i = 0; i < syn.length(); i++) {
 		if ((i == 0 && syn[i] != '\"') || (i == syn.length() - 1 && syn[i] != '\"') || (!isalpha(syn[i], loc) && i != 0 && i != syn.length() - 1)) {
-			//std::cout << "syn[i] in = " << syn[i] << '\n';
 			ifVariable = false;
 			break;
 		}

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Variable.h"
 
 using namespace std;
 
@@ -71,7 +72,7 @@ void PKB::setProcUses(int index, string usesVar)
 }
 
 
-void PKB::setProcCalls(int, string)
+void PKB::setProcCalls(int index, string callProc)
 {
 	//not implemented yet
 }
@@ -91,57 +92,52 @@ PKB::~PKB()
 }
 void PKB::setType(int index, int type)
 {
-	stmts.getType();
+	//stmts.getType();
 }
 
-void PKB::setParent(int index, int parent)
+void PKB::setParent(int index, int parentStmt)
 {
 	stmtTable.getParent(index);
 }
 
-void PKB::setParentT(int index, vector<int> parentT)
+void PKB::setParentT(int index, vector<int> parentStmts)
 {
 	stmtTable.setParentT(stmtNum, parentT);
 }
 
-void PKB::setChildren(vector<pair<int, int>> parentChild)
+void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 {
-	stmtTable.getChildren(stmtNum);
+
 }
 
-void PKB::setChildrenT(int index, vector<int>childrenT)
+void PKB::setChildrenT(int index, vector<int> childrenStmts)
 {
-	stmtTable.setChildrenT(stmtNum, childrenT);
+	//stmtTable.setChildrenT(stmtNum, childrenT);
 }
 
-void PKB::setFollows(vector<pair<int, int>>)
+void PKB::setFollows(vector<pair<int, int>> followStmt)
 {
-	stmtTable.getFollows(index);
 }
 
-void PKB::setFollowsT(int index, vector<int>follows)
+void PKB::setFollowsT(int index, vector<int> followsTStmts)
 {
-	stmtTable.setFollowsT(stmtNum, follows);
 }
 
-void PKB::setFollowedByT(int index, vector<int> followedByT)
+void PKB::setFollowedByT(int index, vector<int> followsByStmts)
 {
-	stmtTable.getFollowedByT(index);
 }
 
-void PKB::setModifies(int index, vector<int> modify)
+void PKB::setModifies(int index, vector<int> modifiesStmts)
 {
-	stmtTable.getModifies(index);
 }
 
-void PKB::setUses(int index, vector<int> uses)
+void PKB::setUses(int index, vector<int> usesStmts)
 {
-	stmtTable.getUses(index);
 }
 
 void PKB::setRightExpr(int index, string expr)
 {
-	setRightExpr(index, (getRightExpr(index)));
+	//setRightExpr(index, (getRightExpr(index)));
 }
 
 string PKB::getRightExpr(int index)
@@ -150,10 +146,9 @@ string PKB::getRightExpr(int index)
 
 }
 
-int PKB::getNumStmt()
+int PKB::getNoOfStmt()
 {
-	stmtTable.getNoOfStmts();
-	return 0;
+	return stmtTable.getNoOfStmts();;
 }
 
 int PKB::setProcToAST(PROC p, TNode* r) {
@@ -221,17 +216,15 @@ std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type
 
 
 
-void PKB::getProcNameInVarTable(int index, string procName)
+string PKB::getProcNameInVarTable(int index)
 {
-	if (varTable.getNoOfVar() != 0) {
-		if (varTable.isVariableName(varName) == true) {
-			index = getVarIndex(varName);
-			procName = getProcName(index);
-		}
-	}
 }
 
-void PKB::getUsedByStmtNum(int index, int stmtNum)
+int PKB::getUsedByStmtNum(int index)
+{
+}
+
+int PKB::getModifiedByStmtNum(int index)
 {
 	if (procTable.getNoOfProc() != 0) {
 		if (getVarIndex(varName) != 0) {
@@ -240,31 +233,22 @@ void PKB::getUsedByStmtNum(int index, int stmtNum)
 	}
 }
 
-void PKB::getModifiedByStmtNum(int index, int stmtNum)
+vector<int> PKB::extractParentT(int stmtNum)
 {
-	if (procTable.getNoOfProc() != 0) {
-		if (getVarIndex(varName) != 0) {
-			stmtNum = procTable.getStartStmtNo(procName);
-		}
-	}
+	return design.extractParentT(stmtNum);
 }
 
-void PKB::extractParentT(int stmtNum)
+vector<int> PKB::extractChildrenT(int stmtNum)
 {
-	design.extractParentT(stmtNum);
+	return design.extractChildrenT(stmtNum);
 }
 
-void PKB::extractChildrenT(int stmtNum)
+vector<int> PKB::extractFollowsT(int stmtNum)
 {
-	design.extractChildrenT(stmtNum);
+	return design.extractFollowsT(stmtNum) ;
 }
 
-void PKB::extractFollowsT(int stmtNum)
-{
-	design.extractFollowsT(stmtNum);
-}
-
-void PKB::extractFollowedByT(int stmtNum)
+vector<int> PKB::extractFollowedByT(int stmtNum)
 {
 	design.extractFollowedByT(stmtNum);
 }
@@ -274,17 +258,17 @@ int PKB::getParent(int stmtNum)
 	return stmtTable.getParent(stmtNum);
 }
 
-int PKB::getChildren(int stmtNum)
+std::vector<int> PKB::getChildren(int stmtNum)
 {
-	return 0;
+	return stmtTable.getChildren(stmtNum);
 }
 
-int PKB::getFollows(int)
+int PKB::getFollows(int stmtNum)
 {
 	return stmtTable.getFollows(stmtNum);
 }
 
-int PKB::getFollowedBy(int)
+int PKB::getFollowedBy(int stmtNum)
 {
 	return stmtTable.getFollowedBy(stmtNum);
 }
@@ -292,40 +276,37 @@ int PKB::getFollowedBy(int)
 
 int PKB::getProcIndex(string procName)
 {
-	procName = proc.getName();
-	procIndex = proc.getIndexNum(procName);
+	int procIndex = procTable.getProcIndexNo(procName);
 	return procIndex;
 }
 
 string PKB::getProcName(int procIndex)
 {
-	procIndex = getProcIndex(procName);
-	index = procIndex;
-	return procTable.getProcName(index);
+	string procName = procTable.getProcName(procIndex);
+	return procName;
 }
 
 int PKB::getVarIndex(string varName)
 {
-	varName = getVarName(index);
-	varIndex = getVarIndex(varName);
+	int varIndex = varTable.getIndex(varName);
 	return varIndex;
 
 }
 
 string PKB::getVarName(int index)
 {
-	index = var.getindex();
-	return varTable.getVarName(index);
-
+	string varName = varTable.getVarName(index);
+	return varName;
 }
 
+//someone pls edit this whole crap
 int PKB::getWholeStmt(int startNum, int controlVar)
 {
-	startNum = procTable.getStartStmtNo(procedure);
-	return startNum;
+//	startNum = procTable.getStartStmtNo(procedure);
+	//return startNum;
 }
 
 void PKB::getIfStmt(int startNum, int controlVar)
 {
-	startNum = procTable.getStartStmtNo(procedure);
+	//startNum = procTable.getStartStmtNo(procedure);
 }

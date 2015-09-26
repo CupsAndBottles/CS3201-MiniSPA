@@ -171,6 +171,21 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), true);
 
+
+			input = "while w1, w2, w3; assign a, n; variable v; Select <w1,w2, w3> with n = 10 pattern w1(v, _) such that Follows(n, a)";
+			ParserForPQL parser12(input);
+			queryTree = parser12.getQueryTree();
+
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getParentStringVal(), string("w1"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getParentType()), 0);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCStringValue(), string("v"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCType()), 6);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCStringValue(), string("_"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCType()), 9);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -2);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), false);
 		
 		}
 	};
