@@ -19,9 +19,9 @@ void Stmt::setParent(int p)
 	parent = p;
 }
 
-void Stmt::setChildren(vector<int> children)
+void Stmt::setChildren(int child)
 {
-	childrenList = children;
+	childrenList.push_back(child);
 }
 
 void Stmt::setUsedVar(vector<int> usedList)

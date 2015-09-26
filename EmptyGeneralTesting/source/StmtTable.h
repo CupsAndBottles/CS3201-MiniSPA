@@ -7,8 +7,8 @@ private:
 public:
 	StmtTable();
 	~StmtTable();
-	void setStmtType(int index,int type);
-	void setChildren(int index, vector<int> children);
+	void setStmtType(int type);
+	void setChildren(int index, int child);
 	void setUsedVar(int index, vector<int> uses);
 	void setParent(int index, int parent);
 	void setFollows(int index, int follows);

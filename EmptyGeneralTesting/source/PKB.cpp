@@ -18,16 +18,29 @@ PKB* PKB::getInstanceOf()
 		m_Instance = new PKB;
 	return m_Instance;
 }
+
+//-----------------------------------------------------------------------------
+//ProcTable Setters:
+
+//G: check for existence, return index if there is the procName. Parser stops if not -1.
 int PKB::setProcNameInProcTable(string procedure)
 {
-	procedure = getProcName(index);
+	int index = procTable.getProcIndexNo(procedure);
+	if (index == -1) {
+		procTable.setProcName(procedure);
+		index = procTable.getProcIndexNo(procedure);
+	}
+
+	return index;
+	
+	/*procedure = getProcName(index);
 	if (procedure.size() == NULL) {
 		return -1;
 	}
 	else {
 		index = setProcNameInProcTable(procedure);
 		return index;
-	}
+	}*/
 }
 
 void PKB::setStartNum(int index, int startNum)
@@ -37,7 +50,7 @@ void PKB::setStartNum(int index, int startNum)
 
 void PKB::setEndNum(int index, int endNum)
 {
-	procTable.setStartStmtNo(index, endNum);
+	procTable.setEndStmtNo(index, endNum);
 }
 
 void PKB::setProcModified(int index, vector<int> modifiedVar)
@@ -51,17 +64,45 @@ void PKB::setProcUses(int index, vector<int> usesVar)
 	procTable.setUses(index, usesVar);
 }
 
-
+//G: Yet to implement in table.
 void PKB::setProcCalls(int index, string callProc)
 {
 	//not implemented yet
 }
 
-void PKB::setVarName(string varName)
+//----------------------------------------------------------------------------------------------
+//Vartable Setters:
+
+//G: check for existence, return index if exists else, set varname and return new index
+int PKB::setVarName(string varName)
 {
-	varTable.setVarName(varName);
+	int index = varTable.getIndex(varName);
+	if (index = -1) {
+		varTable.setVarName(varName);
+		index = varTable.getIndex(varName);
+	}
+	return index;
 }
 
+//G: get proc index from procTable and set in varTable
+void PKB::setProcNames(int index, string procName)
+{
+	int procIndex = procTable.getProcIndexNo(procName);
+	varTable.setProcNames(index,procIndex);
+
+}
+
+void PKB::setUsedBy(int index, int stmtNum)
+{
+	varTable.setUsedBy(index,stmtNum);
+}
+
+void PKB::setModifiedBy(int index, int stmtNum)
+{
+	varTable.setModifiedBy(index,stmtNum);
+}
+
+//----------------------------------------------------------------------------------------------------------------
 
 //PKB::PKB()
 //{
@@ -70,11 +111,13 @@ void PKB::setVarName(string varName)
 PKB::~PKB()
 {
 }
-void PKB::setType(int index, int type)
+//G: index not necessary. 
+void PKB::setType(int type)
 {
-	stmtTable.setStmtType(index, type);
+	stmtTable.setStmtType(type);
 }
 
+//G: parent set from setChildren method.
 void PKB::setParent(int index, int parentStmt)
 {
 	stmtTable.setParent(index, parentStmt);
@@ -85,9 +128,17 @@ void PKB::setParentT(int index, vector<int> parentStmts)
 	stmtTable.setParentT(index, parentStmts);
 }
 
-void PKB::setChildren(int index, vector<int> children)
+//G: children and parent together as pair
+void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 {
-	stmtTable.setChildren(index, children);
+	while (!parentChildStmts.empty()) {
+		pair<int, int> paired = parentChildStmts.back();
+		int index = paired.first;
+		int child = paired.second;
+		parentChildStmts.pop_back();
+		stmtTable.setChildren(index, child);
+		setParent(child,index);
+	}
 }
 
 void PKB::setChildrenT(int index, vector<int> childrenT)
@@ -95,10 +146,24 @@ void PKB::setChildrenT(int index, vector<int> childrenT)
 	stmtTable.setChildrenT(stmtNum, childrenT);
 }
 
-void PKB::setFollows(int index, int follows)
+//G: set Follows and FollowedBy in same method
+void PKB::setFollows(int index, vector<int,int> follows)
 {
-	stmtTable.setFollows(index, follows);
+	while (!follows.empty()) {
+		pair<int, int> paired = follows.back();
+		int firstStmt = paired.first;
+		int secondStmt = paired.second;
+		follows.pop_back();
+		stmtTable.setFollows(secondStmt,firstStmt);
+		setFollowedBy(firstStmt,secondStmt);
+	}
 }
+
+void PKB::setFollowedBy(int index, int followedBy)
+{
+	stmtTable.setFollowedBy(index,followedBy);
+}
+
 
 void PKB::setFollowsT(int index, vector<int> followsTStmts)
 {
@@ -110,19 +175,37 @@ void PKB::setFollowedByT(int index, vector<int> followsByStmts)
 	stmtTable.setFollowedByT(index, followsByStmts);
 }
 
-void PKB::setModifies(int index, vector<int> modifiesStmts)
+//G: change variable passed as string to int and set stmttable.
+void PKB::setModifies(int index, vector<string> modifiedVar)
 {
-	stmtTable.setModified(index, modifiesStmts);
+	vector<int> modifiedVarIndex;
+	while (!modifiedVar.empty()) {
+		int i = varTable.getIndex(modifiedVar.back());
+		modifiedVar.pop_back();
+		modifiedVarIndex.push_back(i);
+	}
+
+	stmtTable.setModified(index, modifiedVarIndex);
 }
 
+/* G: Constants here or in another table?
 void PKB::setConstant(int index, vector<int> usedConstant)
 {
 	stmtTable.setUsedConstant(index, usedConstant);
 }
+*/
 
-void PKB::setUsedVar(int index, vector<int> usedVar)
+//G: change variable passed as string to int and set stmttable.
+void PKB::setUsedVar(int index, vector<string> usedVar)
 {
-	stmtTable.setUsedVar(index, usedVar);
+	vector<int> usedVarIndex;
+	while (!usedVar.empty()) {
+		int i = varTable.getIndex(usedVar.back());
+		usedVar.pop_back();
+		usedVarIndex.push_back(i);
+	}
+
+	stmtTable.setUsedVar(index, usedVarIndex);
 }
 
 void PKB::setRightExpr(int index, string expr)

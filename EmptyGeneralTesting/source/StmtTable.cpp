@@ -10,13 +10,14 @@ StmtTable::~StmtTable()
 {
 }
 
-void StmtTable::setStmtType(int index, int type)
+void StmtTable::setStmtType(int type)
 {
+	int index = stmtTable.size()+1;
 	stmtTable[index].setStmtType(type);
 }
 
-void StmtTable::setChildren(int index, vector<int> children) {
-	stmtTable[index].setChildren(children);
+void StmtTable::setChildren(int index, int child) {
+	stmtTable[index].setChildren(child);
 }
 
 void StmtTable::setUsedVar(int index, vector<int> usesList) {

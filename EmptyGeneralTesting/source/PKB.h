@@ -10,7 +10,6 @@
 #include "Stmt.h"
 #include "Variable.h"
 #include "VarTable.h"
-
 enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
 typedef short PROC;
@@ -61,17 +60,18 @@ public:
 	void setProcCalls(int index, string callProc);
 
 	//From StmtTable
-	void setType(int index, int type);
+	void setType(int type);
 	void setParent(int index, int parentStmt);
 	void setParentT(int index, vector<int> parentStmts);
-	void setChildren(int index, vector<int> parentChildStmts);
+	void setChildren(vector<pair<int,int>> parentChildStmts);
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(int index, int follows);
+	void setFollows(int index, vector<int, int> follows);
+	void setFollowedBy(int index, int followedBy);
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts);
-	void setModifies(int index, vector<int> modifiesStmts);
-	void setConstant(int index, vector<int> usesStmts);
-	void setUsedVar(int index, vector<int> usesStmts);
+	void setModifies(int index, vector<string> modifiedVar);
+	//void setConstant(int index, vector<int> usesStmts);
+	void setUsedVar(int index, vector<string> usedVar);
 	void setRightExpr(int index, string rightExpression);
 	string getRightExpr(int index);
 	int getNoOfStmt();
@@ -110,7 +110,7 @@ public:
 	 
 	//From VarTable 
 	int setVarName(string varName);
-	void setProcNames(int index,int procIndex);
+	void setProcNames(int index,string procName);
 	void setUsedBy(int index,int stmtNum);
 	void setModifiedBy(int index, int stmtNum);
 	

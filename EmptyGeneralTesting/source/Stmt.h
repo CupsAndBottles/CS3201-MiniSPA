@@ -10,7 +10,7 @@ public:
 
 	void setStmtType(int t);
 	void setParent(int p);
-	void setChildren(vector<int> children);
+	void setChildren(int child);
 	void setUsedVar(vector<int> usedList);
 	void setUsedConstant(vector<int> usedConstant);
 	void setModifiedVar(vector<int> modifiedList);
