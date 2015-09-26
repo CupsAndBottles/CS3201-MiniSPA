@@ -75,33 +75,20 @@ string VarTable::getVarName(int index) {
 	return varTable[index].getVarName();
 }
 
-vector<int> VarTable::getStmtNumUsingVar(string var) {
-	vector<int> stmts;
-	for (unsigned int i = 0; i < varTable.size();i++) {
-		if (varTable[i].getVarName() == var) {
-			stmts = varTable[i].getUsedBy();
-		}
-	}
+vector<int> VarTable::getStmtNumUsingVar(int varIndex) {
+	vector<int> stmts = varTable[varIndex].getUsedBy();
+	
 	return stmts;
 }
 
-vector<int> VarTable::getStmtForModified(string var) {
-	vector<int> stmts;
-	for (unsigned int i = 0; i < varTable.size();i++) {
-		if (varTable[i].getVarName() == var) {
-			stmts = varTable[i].getModifiedBy();
-		}
-	}
+vector<int> VarTable::getStmtForModified(int varIndex) {
+	vector<int>	stmts = varTable[varIndex].getModifiedBy();
+		
 	return stmts;
 }
 
-vector<int> VarTable::getProcNames(string var) {
-	vector<int> procNames;
-	for (unsigned int i = 0; i < varTable.size();i++) {
-		if (varTable[i].getVarName() == var) {
-			procNames = varTable[i].getProcNames();
-		}
-	}
+vector<int> VarTable::getProcNames(int varIndex) {
+	vector<int> procNames= varTable[varIndex].getProcNames();
 	return procNames;
 }
 
