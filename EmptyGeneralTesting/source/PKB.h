@@ -65,7 +65,7 @@ public:
 	void setParentT(int index, vector<int> parentStmts);
 	void setChildren(vector<pair<int,int>> parentChildStmts);
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(int index, vector<int, int> follows);
+	void setFollows(int index, vector<pair<int, int>> follows);
 	void setFollowedBy(int index, int followedBy);
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts);

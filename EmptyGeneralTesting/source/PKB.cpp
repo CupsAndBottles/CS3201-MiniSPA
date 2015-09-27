@@ -32,16 +32,7 @@ int PKB::setProcNameInProcTable(string procedure)
 	}
 
 	return index;
-	
-	/*procedure = getProcName(index);
-	if (procedure.size() == NULL) {
-		return -1;
 	}
-	else {
-		index = setProcNameInProcTable(procedure);
-		return index;
-	}*/
-}
 
 void PKB::setStartNum(int index, int startNum)
 {
@@ -147,7 +138,7 @@ void PKB::setChildrenT(int index, vector<int> childrenT)
 }
 
 //G: set Follows and FollowedBy in same method
-void PKB::setFollows(int index, vector<int,int> follows)
+void PKB::setFollows(int index, vector<pair<int,int>> follows)
 {
 	while (!follows.empty()) {
 		pair<int, int> paired = follows.back();
