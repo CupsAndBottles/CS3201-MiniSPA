@@ -1,4 +1,5 @@
 #include "ParserForPQL.h"
+#include "ParserOfType.h"
 #include "Validation.h"
 #include <regex>
 #include <string>
@@ -72,7 +73,6 @@ void ParserForPQL::getPosition(string input, int typeNo)
 		std::smatch match = *i;
 		
 		if (match.position() + match.length() < input.size() && input[match.position() + match.length()] == ' ') {
-			std::cout << "size: " << input[match.position() + match.length()];
 			j = addNumOfPos(j, match, typeNo);
 			type[typeNo].push_back(match[0]);
 		}
@@ -160,15 +160,15 @@ void ParserForPQL::parseRespectively()
 			ParserForSelect parserForSelect(type, synonym, index);
 			selectSynonym = parserForSelect.getSelectSynonym();
 		}
-		else if (oneType.compare("such that") == 0 || oneType.compare("and") == 0) {
+		else if (oneType.compare("such that") == 0 || oneType.compare("and") == 0 || oneType.compare("and such that") == 0) {
 			ParserForSuchThat parserForSuchThat(type, synonym, index);
 			suchThatSynonym.push_back(parserForSuchThat.getSuchThatSynonym());
 		}
-		else if (oneType.compare("with") == 0) {
+		else if (oneType.compare("with") == 0 || oneType.compare("and with") == 0) {
 			ParserForWith parserForWith(type, synonym, index);
 			withSynonym.push_back(parserForWith.getWithSynonym());
 		}
-		else if (oneType.compare("pattern") == 0) {
+		else if (oneType.compare("pattern") == 0 || oneType.compare("and pattern") == 0) {
 			ParserForPattern parserForPattern(type, synonym, index);
 			patternSynonym.push_back(parserForPattern.getPatternSynonym());
 
@@ -189,7 +189,7 @@ void ParserForPQL::parseKeyword()
 
 void ParserForPQL::startValidate()
 {
-	Validation validation(suchThatSynAndType);
+	Validation validation(suchThatSynAndType, patternSynAndType);
 }
 
 

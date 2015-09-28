@@ -21,6 +21,7 @@ RelTable::~RelTable()
 
 void RelTable::getRelationship(string relName)
 {
+	//std::cout << "relname = " << relName << '\n';
 	std::map<string, Relationship>::iterator relationshipRule = RelTable::relTable.find(relName);
 
 	if (relationshipRule == relTable.end()) {
@@ -60,7 +61,26 @@ int RelTable::getAg2Synonym()
 void RelTable::addRelIntoTable()
 {
 
-	Relationship follow, parent, modifies, use, followT, parentT, useT;
+	Relationship follow, parent, modifies, use, followT, parentT, useT, While, If, assign, call, next, affect;
+
+	call.noArgs = 2;
+	call.ag1Synonym = 8;
+	call.ag2Synonym = 8;
+	relTable.insert(std::pair<string, Relationship>("Calls", call));
+	relTable.insert(std::pair<string, Relationship>("Calls*", call));
+
+	next.noArgs = 2;
+	next.ag1Synonym = 2;
+	next.ag2Synonym = 2;
+	relTable.insert(std::pair<string, Relationship>("Next", next));
+	relTable.insert(std::pair<string, Relationship>("Next*", next));
+
+	affect.noArgs = 2;
+	affect.ag1Synonym = 9;
+	affect.ag2Synonym = 9;
+	relTable.insert(std::pair<string, Relationship>("Affect", affect));
+	relTable.insert(std::pair<string, Relationship>("Affect*", affect));
+	
 	follow.noArgs = 2;
 	follow.ag1Synonym = 2;
 	follow.ag2Synonym = 2;
@@ -88,6 +108,20 @@ void RelTable::addRelIntoTable()
 	use.ag2Synonym = 4;
 	relTable.insert(std::pair<string, Relationship>("Uses", use));
 
+	assign.noArgs = 2;
+	assign.ag1Synonym = 4;
+	assign.ag2Synonym = 7;
+	relTable.insert(std::pair<string, Relationship>("Patternassign", assign));
+
+	While.noArgs = 2;
+	While.ag1Synonym = 5;
+	While.ag2Synonym = 6;
+	relTable.insert(std::pair<string, Relationship>("Patternwhile", While));
+
+	If.noArgs = 3;
+	If.ag1Synonym = 5;
+	If.ag2Synonym = 6;
+	relTable.insert(std::pair<string, Relationship>("Patternif", If));
 
 }
 
