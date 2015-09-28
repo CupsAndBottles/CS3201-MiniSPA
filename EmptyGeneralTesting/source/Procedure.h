@@ -18,16 +18,17 @@ public:
 	int getIndexNum(string procNum);
 	int getStartNo();
 	int getEndNo();
+	vector<int> getCalls(int procIndex);
+	vector<int> getCalledBy(int procIndex);
 	void setStartNo(int stmtNum);
 	void setEndNo(int stmtNum);
 	vector<int> getUsed();
 	vector<int> getModified();
-
 	void sortVectors(vector<int> list);
-
 	void setModifiedVar(vector<int> modify);
-
 	void setUsedVar(vector<int> use);
+	void setCalls(int procIndex);
+	void setCalledBy(int procIndex);
 
 
 private:
@@ -39,6 +40,7 @@ private:
 	int varUsed;
 	vector<int> varModifiedList;
 	vector<int> varUsedList;
-
+	vector<int> callsList;
+	vector<int> calledByList;
 };
 
