@@ -84,12 +84,10 @@
     <ClCompile Include="..\source\Synonym.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\UnitTesting\DesignExtractorUnderTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\UnitTesting\PKBStub.cpp">
-=======
     <ClCompile Include="..\source\Details.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
