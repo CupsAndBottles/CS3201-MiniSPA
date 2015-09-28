@@ -4,12 +4,10 @@
 #include <string>
 #include <vector>
 #include "DesignExtractor.h"
-#include "ProcTable.h"
 #include "Procedure.h"
-#include "StmtTable.h"
 #include "Stmt.h"
 #include "Variable.h"
-#include "VarTable.h"
+
 enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
 typedef short PROC;
@@ -55,10 +53,11 @@ public:
 	void setEndNum(int index, int endNum);
 	void setProcModified(int index, vector<int> modifiedVar);
 	void setProcUses(int index, vector<int> usesVar);
-	void setProcCalls(int index, string callProc);
+	void setProcCalls(int index, string calls);
+	void setProcCalledBy(int index, string called);
 
 	//From StmtTable
-	void setType(int type);
+	int setType(int type);
 	void setParent(int index, int parentStmt);
 	void setParentT(int index, vector<int> parentStmts);
 	void setChildren(vector<pair<int,int>> parentChildStmts);
@@ -114,7 +113,7 @@ public:
 	
 
 	//While table
-	int getWholeStmt(int, int);
+	int getWhileStmt(int, int);
 
 	//If table
 	void getIfStmt(int, int);
