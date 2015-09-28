@@ -34,6 +34,9 @@ private:
 	bool isOperator(char o);
 	int isPriority(const char & c);
 	vector<string> evaluateSelect(Clauses select);
+	vector<string> permutateResultPair(vector<string> firstSet, vector<string> secondSet);
+	list<string> permutateResultSubset(vector<vector<string>> intermediateResult);
+	list<string> convertVectorToList(vector<string> mergedResults);
 	string convertToString(int index, TYPE type);
 	PKB *pkb = PKB::getInstanceOf();
 
