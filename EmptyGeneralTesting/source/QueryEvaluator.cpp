@@ -66,24 +66,91 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 }
 
 list<string> QueryEvaluator::permutateResult(vector<vector<string>>& intermediateResult) {
-	int numSyn = intermediateResult.size();
 	list<string> printedResults;
-	string toBeDisplayed = string();
 
-	for (int i = 0; i < intermediateResult[i].size(); i++){
-		toBeDisplayed = string();
-		for (int j = 0; j < intermediateResult.size(); j++) {
-			if (toBeDisplayed.empty()) {
-				toBeDisplayed = toBeDisplayed + intermediateResult[j][i];
-			}
-			else {
-				toBeDisplayed = toBeDisplayed + ", " + intermediateResult[j][i];
-			}
-		}
-		printedResults.push_back(toBeDisplayed);
-	}
+	printedResults = permutateResultSubset(intermediateResult);
 
 	return printedResults;
+}
+
+vector<string> QueryEvaluator::permutateResultPair(vector<string> firstSet, vector<string> secondSet) {
+	string toBeDisplayed = string();
+	vector<string> mergedPair;
+	vector<string> largerSet;
+	vector<string> smallerSet;
+
+	if (firstSet.size() <= secondSet.size()) {
+		largerSet = secondSet;
+		smallerSet = firstSet;
+	}
+	else {
+		largerSet = firstSet;
+		smallerSet = secondSet;
+	}
+
+	for (int i = 0; i < largerSet.size(); i++) {
+		toBeDisplayed = string();
+		for (int j = 0; j < smallerSet.size(); j++) {
+			toBeDisplayed = largerSet.at(i) + ", " + smallerSet.at(j);
+		}
+
+		mergedPair.push_back(toBeDisplayed);
+	}
+
+	return mergedPair;
+}
+
+list<string> QueryEvaluator::permutateResultSubset(vector<vector<string>> intermediateResult) {
+	list<string> stringedResults;
+
+	if (intermediateResult.size() == 0) {
+		return stringedResults;
+	}
+	if (intermediateResult.size() == 1) {
+		stringedResults = convertVectorToList(intermediateResult.front());
+		return stringedResults;
+	}
+	else {
+		int lastSetToMerge;
+		int numSyn = intermediateResult.size();
+		bool isOdd = false;
+		vector<vector<string>> mergedResults;
+
+		if (numSyn % 2 == 1) {
+			isOdd = true;
+		}
+		else {
+			isOdd = false;
+		}
+
+		if (isOdd) {
+			lastSetToMerge = intermediateResult.size() - 2; // leave the last set out.
+		}
+		else {
+			lastSetToMerge = intermediateResult.size() - 1;
+		}
+
+		for (int i = 0; i < lastSetToMerge; i++) {
+			mergedResults.push_back(permutateResultPair(intermediateResult.at(i), intermediateResult.at(i + 1)));
+		}
+
+
+		if (isOdd) {
+			mergedResults.push_back(intermediateResult.back()); // will terminate, eventually it will be 3 sets (if more than 3) which merge to become 1.
+		}
+
+		return permutateResultSubset(mergedResults);
+	}
+}
+
+list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
+	list<string> listedResults;
+
+	for (int i = 0; i < mergedResults.size(); i++) {
+		listedResults.push_back(mergedResults.at(i));
+	}
+
+	return listedResults;
 }
 
 vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
