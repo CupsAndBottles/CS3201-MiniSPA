@@ -28,6 +28,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> suchThat;
 	vector<Clauses> pattern;
 	vector<Clauses> select;
+	vector<vector<string>> intermediateResult;
 	list<string> result;
 	bool isTrueClause;
 
@@ -55,8 +56,82 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			return emptyResult;
 		}
 	}
+	for (int i = 0; i < select.size(); i++) {
+		intermediateResult.push_back(evaluateSelect(select[i]));
+	}
 
-	return list<string>();
+	result = permutateResult(intermediateResult);
+
+	return result;
+}
+
+list<string> QueryEvaluator::permutateResult(vector<vector<string>>& intermediateResult) {
+	int numSyn = intermediateResult.size();
+	list<string> printedResults;
+	string toBeDisplayed = string();
+
+	for (int i = 0; i < intermediateResult[i].size(); i++){
+		toBeDisplayed = string();
+		for (int j = 0; j < intermediateResult.size(); j++) {
+			if (toBeDisplayed.empty()) {
+				toBeDisplayed = toBeDisplayed + intermediateResult[j][i];
+			}
+			else {
+				toBeDisplayed = toBeDisplayed + ", " + intermediateResult[j][i];
+			}
+		}
+		printedResults.push_back(toBeDisplayed);
+	}
+
+	return printedResults;
+}
+
+vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
+	vector<string> resultForSyn;
+
+	string synonym = select.getParentStringVal();
+	TYPE type = select.getParent().getType();
+
+	for (int i = 0; i < this->results.size(); i++) {
+		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
+			for (int j = 0; j < results[i].getResult().size(); j++) {
+				resultForSyn.push_back(convertToString(results[i].getResult().at(j), type));
+			}
+		}
+	}
+
+	return resultForSyn;
+}
+
+string QueryEvaluator::convertToString(int index, TYPE type) {
+
+	// No UNDERSCORE TYPE / CONSTANT
+	switch (type) {
+	case ASSIGN:
+		return to_string(index);
+		break;
+	case STATEMENT:
+		return to_string(index);
+		break;
+	case PROCEDURE:
+		return this->pkb->getProcName(index);
+		break;
+	case WHILE:
+		return to_string(index);
+		break;
+	case IF:
+		return to_string(index);
+		break;
+	case VARIABLE:
+		return this->pkb->getVarName(index);
+		break;
+	case CALLS:
+		return to_string(index);
+		break;
+	default:
+		cout << "Convert to String, no TYPE matches" << endl;
+	}
+
 }
 
 vector<Synonym> QueryEvaluator::getResults(){
@@ -142,13 +217,13 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		else{ 			
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
 			if (!clause.getRightChild().getIsExpression) {		// pattern a(_, x ) 
-				for (int i = 1; i < this->pkb->getNumStmt(); i++) {
+				for (int i = 1; i < this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);
 				}
 			}
 			else {		// pattern a(_, _x_)
-				for (int i = 1; i < this->pkb->getNumStmt(); i++) {
+				for (int i = 1; i < this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
 						intermediateResult.push_back(i);
 					}
@@ -157,7 +232,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 	}
 	else { //left child is a variable
-		vector<pair<int,int>> stmtLst = this->pkb.getModifies(TYPE::ASSIGN, WILDCARD , TYPE::VARIABLE, clause.getLeftChild().getIntValue());
+		vector<pair<int,int>> stmtLst = this->pkb->getModifies(TYPE::ASSIGN, WILDCARD , TYPE::VARIABLE, clause.getLeftChild().getIntValue());
 		if (clause.getRightCType() == TYPE::UNDERSCORE) { // a(v, _)
 			for (int i = 0; i < stmtLst.size(); i++) {
 				intermediateResult.push_back(stmtLst[i].first);
