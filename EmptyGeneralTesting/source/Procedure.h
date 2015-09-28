@@ -18,8 +18,8 @@ public:
 	int getIndexNum(string procNum);
 	int getStartNo();
 	int getEndNo();
-	vector<int> getCalls(int procIndex);
-	vector<int> getCalledBy(int procIndex);
+	vector<int> getCalls();
+	vector<int> getCalledBy();
 	void setStartNo(int stmtNum);
 	void setEndNo(int stmtNum);
 	vector<int> getUsed();

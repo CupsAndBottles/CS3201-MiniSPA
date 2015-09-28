@@ -77,12 +77,12 @@ int Procedure::getEndNo() {
 	return endStmtNum;
 }
 
-vector<int> Procedure::getCalls(int procIndex)
+vector<int> Procedure::getCalls()
 {
 	return callsList;
 }
 
-vector<int> Procedure::getCalledBy(int procIndex)
+vector<int> Procedure::getCalledBy()
 {
 	return calledByList;
 }
