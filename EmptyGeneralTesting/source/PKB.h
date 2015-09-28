@@ -50,6 +50,7 @@ public:
 
 	//PARSER->PKB
 	//From ProcTable
+	//edit header: WL
 	int setProcNameInProcTable(string procName);
 	void setStartNum(int index, int startNum);
 	void setEndNum(int index, int endNum);
@@ -87,7 +88,7 @@ public:
 	int getFollowedBy(int index);
 
 	//PQL-PKB
-	std::vector<pair<int, int>> getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex);
+	std::vector<pair<int, int>>  getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex);
 	std::vector<pair<int, int>> getCalls(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
 	std::vector<pair<int, int>> getUses(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
 	std::vector<pair<int, int>> getParent(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
@@ -102,9 +103,9 @@ public:
 	//From VarTable
 	int getVarIndex(string varName);
 	string getVarName(int index);
-	string getProcNameInVarTable(int index);
-	int getUsedByStmtNum(int index);
-	int getModifiedByStmtNum(int index);
+	vector<int> getProcNameInVarTable(int index);
+	vector<int> getUsedByStmtNum(int index);
+	vector<int> getModifiedByStmtNum(int index);
 	 
 	//From VarTable 
 	int setVarName(string varName);
