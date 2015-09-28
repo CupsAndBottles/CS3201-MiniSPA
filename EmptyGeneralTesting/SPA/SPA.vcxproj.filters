@@ -84,7 +84,6 @@
     <ClCompile Include="..\source\Synonym.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\UnitTesting\DesignExtractorUnderTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
