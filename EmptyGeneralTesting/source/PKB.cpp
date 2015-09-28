@@ -15,6 +15,7 @@ using namespace std;
 
 const int OFFSET = 1;
 const int NOT_FOUND = -1;
+const int UNDEFINED = -1;
 
 PKB* PKB::m_Instance = NULL;
 
@@ -233,9 +234,96 @@ int PKB::getNoOfStmt(){
 	return this->stmtTable.size() - OFFSET;
 }
 
+//WL
+//return <stmt no, varIndex>. 
 std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex)
 {
+	vector<int> stmtNos;
+	vector<int> varNos;
+	vector<pair<int, int>> results;
+	if (stmtNum != -1 && varIndex != -1) {
+		varNos = stmtTable.at(stmtNum).getModifies();
+		for (int i = 0; i < varNos.size(); i++) {
+			if (varNos.at(i) == varIndex) {
+				results.push_back(std::make_pair(stmtNum, varIndex));
+				break;
+			}
+		}
+	}
+	else if (stmtNum != -1) {
+		varNos = stmtTable.at(stmtNum).getModifies();
+		for (int i = 0; i < varNos.size(); i++) {
+			results.push_back(std::make_pair(stmtNum, varNos.at(i)));
+		}
+	}
+	else if (varIndex != -1) {
+        stmtNos = varTable.at(varIndex).getModifiedBy();
+		for (int i = 0; i < stmtNos.size(); i++) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < stmtTable.size(); i++) {
+			if (type1 == stmtTable.at(i).getType()) {
+				varNos = stmtTable.at(i).getModifies();
+				for (int k = 0; k < varNos.size(); k++) {
+	               results.push_back(std::make_pair(i, varNos.at(k)));
+				}		
+			}
+		}
+	}
+	return results;
+}
 
+//ZH
+vector<pair<int, int>> PKB::getCalls(TYPE type1, int procIndexFirst, TYPE type2, int procIndexSecond) {
+	vector<pair<int, int>> result;
+	vector<int> call;
+
+	if (procIndexFirst == UNDEFINED) {
+		if (procIndexSecond == UNDEFINED) {
+			// Both undefined
+			for (int i = 0; i < procTable.size(); i++) {
+				call = procTable[i].getCalls();
+				for (int j = 0; j < call.size(); j++) {
+					result.push_back(make_pair(i, call[j]));
+				}
+			}
+		}
+		else {
+			// Only Second defined
+			call = procTable[procIndexSecond].getCalledBy();
+			for (int j = 0; j < call.size(); j++) {
+				result.push_back(make_pair(call[j], procIndexSecond));
+			}
+		}
+	}
+	else {
+		if (procIndexSecond == UNDEFINED) {
+			// Only first defined
+			call = procTable[procIndexFirst].getCalls();
+			for (int i = 0; i < call.size(); i++) {
+				result.push_back(make_pair(procIndexFirst, call[i]));
+			}
+		}
+		else {
+			// both defined
+			call = procTable[procIndexFirst].getCalls();
+			for (int i = 0; i < call.size(); i++) {
+				if (call[i] == procIndexSecond) {
+					result.push_back(make_pair(procIndexFirst, procIndexSecond));
+				}
+			}
+		}
+	}
+	
+	return result;
+}
+
+vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+{
 	if (type1 == ASSIGN) {
 		if (type2 == VARIABLE) {
 			return std::vector < pair<int, int>>();
@@ -245,52 +333,47 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 	else if (type1 == STATEMENT) {
 		if (type2 == VARIABLE) {
 			return std::vector < pair<int, int>>();
-		}
 
-	}
-	else if (type1 == PROCEDURE) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
-		}
-
-	}
-	else if (type1 == CALLS) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
-		}
-	}
-
-}
-
-std::vector<pair<int, int>> PKB::getCalls(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+//WL
+std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, int varIndex)
 {
-	return std::vector<pair<int, int>>();
-}
-std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
-{
-	if (type1 == ASSIGN) {
-		if (type2 == VARIABLE) {
-			return std::vector < pair<int, int>>();
+	vector<int> stmtNos;
+	vector<int> varNos;
+	vector<pair<int, int>> results;
+	if (stmtNum != -1 && varIndex != -1) {
+		varNos = stmtTable.at(stmtNum).getUses();
+		for (int i = 0; i < varNos.size(); i++) {
+			if (varNos.at(i) == varIndex) {
+				results.push_back(std::make_pair(stmtNum, varIndex));
+				break;
+			}
 		}
-
-	}
-	else if (type1 == STATEMENT) {
-		if (type2 == VARIABLE) {
-			return std::vector < pair<int, int>>();
-		}
-
-	}
-	else if (type1 == PROCEDURE) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
-		}
-
-	}
-	else if (type1 == CALLS) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
+	}	
+	else if(stmtNum != -1) {
+		varNos = stmtTable.at(stmtNum).getUses();
+		for (int i = 0; i < varNos.size(); i++) {
+			results.push_back(std::make_pair(stmtNum, varNos.at(i)));
 		}
 	}
+	else if (varIndex != -1) {
+		stmtNos = varTable.at(varIndex).getUsedBy();
+		for (int i = 0; i < stmtNos.size(); i++) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < stmtTable.size(); i++) {
+			if (type1 == stmtTable.at(i).getType()) {
+				varNos = stmtTable.at(i).getUses();
+				for (int k = 0; k < varNos.size(); k++) {
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
+			}
+		}
+	}
+	return results;
 	
 }
 std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
@@ -373,20 +456,22 @@ std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type
 }
 
 
-
-string PKB::getProcNameInVarTable(int index)
+//WL
+vector<int> PKB::getProcNameInVarTable(int index)
 {
-	return 0;
+	return varTable.at(index).getProcNames();
 }
 
-int PKB::getUsedByStmtNum(int index)
+//WL
+vector<int> PKB::getUsedByStmtNum(int index)
 {
-	//return varTable.setUsedBy(index);
+	return varTable.at(index).getUsedBy();
 }
 
-int PKB::getModifiedByStmtNum(int index)
+//WL
+vector<int> PKB::getModifiedByStmtNum(int index)
 {
-	//return varTable.setModifiedBy(index);
+	return varTable.at(index).getModifiedBy();
 }
 
 vector<int> PKB::extractParentT(int stmtNum)
