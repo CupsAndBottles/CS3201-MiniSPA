@@ -240,8 +240,33 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 {
 	vector<int> stmtNos;
 	vector<int> varNos;
+	vector<int> procNos;
 	vector<pair<int, int>> results;
-	if (stmtNum != -1 && varIndex != -1) {
+	if (type1 == 2 && stmtNum != -1) {
+		varNos = procTable.at(stmtNum).getModified();
+		if (varIndex != -1) {
+			for (int i = 0; i < varNos.size(); i++) {
+				if (varNos.at(i) == varIndex) {
+					results.push_back(std::make_pair(stmtNum, varIndex));
+					break;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < varNos.size(); i++) {
+				results.push_back(std::make_pair(stmtNum, varNos.at(i)));
+			}
+		}
+	}
+	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
+		for (int i = 1; i < procTable.size(); i++) {
+			varNos = procTable.at(i).getModified();
+			for (int k = 0; k < varNos.size(); k++) {
+				results.push_back(std::make_pair(i, varNos.at(k)));
+			}
+		}
+	}
+	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getModifies();
 		for (int i = 0; i < varNos.size(); i++) {
 			if (varNos.at(i) == varIndex) {
@@ -257,20 +282,20 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 		}
 	}
 	else if (varIndex != -1) {
-        stmtNos = varTable.at(varIndex).getModifiedBy();
+		stmtNos = varTable.at(varIndex).getModifiedBy();
 		for (int i = 0; i < stmtNos.size(); i++) {
-			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType() || type1 == 1) {
 				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
 			}
 		}
 	}
 	else {
 		for (int i = 1; i < stmtTable.size(); i++) {
-			if (type1 == stmtTable.at(i).getType()) {
+			if (type1 == stmtTable.at(i).getType() || type1 == 1 || type2 == 3) {
 				varNos = stmtTable.at(i).getModifies();
 				for (int k = 0; k < varNos.size(); k++) {
-	               results.push_back(std::make_pair(i, varNos.at(k)));
-				}		
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
 			}
 		}
 	}
@@ -327,8 +352,33 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 {
 	vector<int> stmtNos;
 	vector<int> varNos;
+	vector<int> procNos;
 	vector<pair<int, int>> results;
-	if (stmtNum != -1 && varIndex != -1) {
+	if (type1 == 2 && stmtNum != -1) {
+		varNos = procTable.at(stmtNum).getUsed();
+		if (varIndex != -1) {
+			for (int i = 0; i < varNos.size(); i++) {
+				if (varNos.at(i) == varIndex) {
+					results.push_back(std::make_pair(stmtNum, varIndex));
+					break;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < varNos.size(); i++) {
+				results.push_back(std::make_pair(stmtNum, varNos.at(i)));
+			}
+		}
+	}
+	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
+		for (int i = 1; i < procTable.size(); i++) {
+				varNos = procTable.at(i).getUsed();
+				for (int k = 0; k < varNos.size(); k++) {
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
+			}
+	}
+	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getUses();
 		for (int i = 0; i < varNos.size(); i++) {
 			if (varNos.at(i) == varIndex) {
@@ -346,14 +396,14 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 	else if (varIndex != -1) {
 		stmtNos = varTable.at(varIndex).getUsedBy();
 		for (int i = 0; i < stmtNos.size(); i++) {
-			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType() || type1 == 1) {
 				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
 			}
 		}
 	}
 	else {
 		for (int i = 1; i < stmtTable.size(); i++) {
-			if (type1 == stmtTable.at(i).getType()) {
+			if (type1 == stmtTable.at(i).getType() || type1 == 1 || type2 == 3) {
 				varNos = stmtTable.at(i).getUses();
 				for (int k = 0; k < varNos.size(); k++) {
 					results.push_back(std::make_pair(i, varNos.at(k)));
