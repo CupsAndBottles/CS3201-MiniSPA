@@ -97,7 +97,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\ParserForPattern.cpp">
->>>>>>> 64ab473fd11c00576be6c961746bc81bd85b8a7b
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -174,12 +173,10 @@
     <ClInclude Include="..\source\Synonym.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\UnitTesting\DesignExtractorUnderTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\UnitTesting\PKBStub.h">
-=======
     <ClInclude Include="..\source\Details.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -187,7 +184,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ParserForPattern.h">
->>>>>>> 64ab473fd11c00576be6c961746bc81bd85b8a7b
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
