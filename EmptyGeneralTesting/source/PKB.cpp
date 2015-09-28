@@ -10,6 +10,10 @@ using namespace std;
 
 #include "PKB.h"
 #include "DesignExtractor.h"
+
+const int OFFSET = 1;
+const int NOT_FOUND = -1;
+
 PKB* PKB::m_Instance = NULL;
 
 PKB* PKB::getInstanceOf()
@@ -199,20 +203,21 @@ void PKB::setUsedVar(int index, vector<string> usedVar)
 	stmtTable.setUsedVar(index, usedVarIndex);
 }
 
+//ZH
 void PKB::setRightExpr(int index, string expr)
 {
-	stmtTable.setRightExpr(index, expr);
+	stmtTable[i].setRightExpr(expr);
 }
 
-string PKB::getRightExpr(int index)
-{
-	return stmtTable.getRightExpression(index);
+//ZH
+string PKB::getRightExpr(int index){
+	return stmtTable[index].getRightExpression();
 
 }
 
-int PKB::getNoOfStmt()
-{
-	return stmtTable.getNoOfStmts();;
+//ZH
+int PKB::getNoOfStmt(){
+	return this->stmtTable.size() - OFFSET;
 }
 
 std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex)
@@ -391,6 +396,7 @@ vector<int> PKB::extractFollowedByT(int stmtNum)
 	return design.extractFollowedByT(stmtNum);
 }
 
+// These methods might not be required
 int PKB::getParent(int stmtNum)
 {
 	return stmtTable.getParent(stmtNum);
@@ -411,40 +417,40 @@ int PKB::getFollowedBy(int stmtNum)
 	return stmtTable.getFollowedBy(stmtNum);
 }
 
+//ZH
+int PKB::getProcIndex(string procName){
 
-int PKB::getProcIndex(string procName)
-{
-	int procIndex = procTable.getProcIndexNo(procName);
-	return procIndex;
+	for (int i = 0; i < procTable.size(); i++) {
+		if (this->procTable[i].getName() == procName) {
+			return i;
+		}
+	}
+	return NOT_FOUND;
 }
 
+//ZH
 string PKB::getProcName(int procIndex)
 {
-	string procName = procTable.getProcName(procIndex);
-	return procName;
+	return procTable[procIndex].getName();
 }
 
+
+//ZH
 int PKB::getVarIndex(string varName)
 {
-	int varIndex = varTable.getIndex(varName);
-	return varIndex;
+	bool isFound = false;
 
+	for (int i = 0; i < varTable.size(); i++) {
+		if (this->varTable[i].getVarName() == varName) {
+			return i;
+		}
+	}
+
+	return NOT_FOUND;
 }
 
+//ZH
 string PKB::getVarName(int index)
 {
-	string varName = varTable.getVarName(index);
-	return varName;
-}
-
-//someone pls edit this
-int PKB::getWholeStmt(int startNum, int controlVar)
-{
-//	startNum = procTable.getStartStmtNo(procedure);
-	//return startNum;
-}
-
-void PKB::getIfStmt(int startNum, int controlVar)
-{
-	//startNum = procTable.getStartStmtNo(procedure);
+	return varTable[index].getVarName();
 }

@@ -16,14 +16,17 @@ typedef short PROC;
 
 class TNode;
 
-//class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
-
 class PKB {
 private:
 	PKB() {};
 	PKB(const PKB&) {};
 	PKB& operator = (PKB const&) {};
 	static PKB* m_Instance;
+	//ZH
+	vector<Stmt> stmtTable;
+	vector<Variable> varTable;
+	vector<Procedure> procTable;
+
 public:
 	//	string procNum;
 	string procName;
@@ -42,13 +45,8 @@ public:
 	
 	~PKB();
 	static PKB* getInstanceOf();
-	VarTable varTable;
-	ProcTable procTable;
-	StmtTable stmtTable;
 	Procedure proc;
 	DesignExtractor design;
-	//Stmt stmts;
-	//Variable var;
 
 	//PARSER->PKB
 	//From ProcTable
