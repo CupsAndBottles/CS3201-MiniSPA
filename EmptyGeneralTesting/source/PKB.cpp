@@ -10,6 +10,10 @@ using namespace std;
 
 #include "PKB.h"
 #include "DesignExtractor.h"
+
+const int OFFSET = 1;
+const int NOT_FOUND = -1;
+
 PKB* PKB::m_Instance = NULL;
 
 PKB* PKB::getInstanceOf()
@@ -199,47 +203,50 @@ void PKB::setUsedVar(int index, vector<string> usedVar)
 	stmtTable.setUsedVar(index, usedVarIndex);
 }
 
+//ZH
 void PKB::setRightExpr(int index, string expr)
 {
-	stmtTable.setRightExpr(index, expr);
+	stmtTable[i].setRightExpr(expr);
 }
 
-string PKB::getRightExpr(int index)
-{
-	return stmtTable.getRightExpression(index);
+//ZH
+string PKB::getRightExpr(int index){
+	return stmtTable[index].getRightExpression();
 
 }
 
-int PKB::getNoOfStmt()
-{
-	return stmtTable.getNoOfStmts();;
+//ZH
+int PKB::getNoOfStmt(){
+	return this->stmtTable.size() - OFFSET;
 }
 
 std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex)
 {
+
 	if (type1 == ASSIGN) {
-		return std::vector<pair<int, int>>();
+		if (type2 == VARIABLE) {
+			return std::vector < pair<int, int>>();
+		}
+
 	}
 	else if (type1 == STATEMENT) {
+		if (type2 == VARIABLE) {
+			return std::vector < pair<int, int>>();
+		}
 
 	}
 	else if (type1 == PROCEDURE) {
+		if (type2 == VARIABLE) {
+			return std::vector<pair<int, int>>();
+		}
 
 	}
-
-	if (type2 == ASSIGN) {
-
+	else if (type1 == CALLS) {
+		if (type2 == VARIABLE) {
+			return std::vector<pair<int, int>>();
+		}
 	}
-	else if (type2 == STATEMENT) {
 
-	}
-	else if (type2 == PROCEDURE) {
-
-	}
-	else if (type2 == CONSTANT) {
-
-	}
-	return std::vector<pair<int, int>>();
 }
 
 std::vector<pair<int, int>> PKB::getCalls(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
@@ -248,16 +255,98 @@ std::vector<pair<int, int>> PKB::getCalls(TYPE type1, int stmtNum1, TYPE type2, 
 }
 std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
-	return std::vector<pair<int, int>>();
+	if (type1 == ASSIGN) {
+		if (type2 == VARIABLE) {
+			return std::vector < pair<int, int>>();
+		}
+
+	}
+	else if (type1 == STATEMENT) {
+		if (type2 == VARIABLE) {
+			return std::vector < pair<int, int>>();
+		}
+
+	}
+	else if (type1 == PROCEDURE) {
+		if (type2 == VARIABLE) {
+			return std::vector<pair<int, int>>();
+		}
+
+	}
+	else if (type1 == CALLS) {
+		if (type2 == VARIABLE) {
+			return std::vector<pair<int, int>>();
+		}
+	}
+	
 }
 std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
-	return std::vector<pair<int, int>>();
+	if (type1 == STATEMENT) {
+		if (type2 == STATEMENT) {
+			return std::vector<pair<int, int>>();
+		}
+		else if (type2 == ASSIGN) {
+			return std::vector<pair<int, int>>();
+		}
+		else {
+			return std::vector<pair<int, int>>(); //if not statement/assign, will be call
+		}
+	}
+	else if (type1 == WHILE) {
+		if (type2 == STATEMENT) {
+			return std::vector<pair<int, int>>();
+		}
+		else if (type2 == ASSIGN) {
+			return std::vector<pair<int, int>>();
+		}
+		else {
+			return std::vector<pair<int, int>>(); //if not stmt/assign, will be call
+		}
+	}
+	else {
+		if (type1 == IF) {
+			if (type2 == STATEMENT) {
+				return std::vector<pair<int, int>>();
+			}
+			else if (type2 == ASSIGN) {
+				return std::vector<pair<int, int>>();
+			}
+		}
+	}
 }
 
 std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
-	return std::vector<pair<int, int>>();
+	if (type1 == STATEMENT) {
+		if (type2 == ASSIGN) {
+			return std::vector<pair<int, int>>();
+		}
+	}
+	else if (type1 == ASSIGN) {
+		if (type2 == ASSIGN) {
+			return std::vector<pair<int, int>>();
+		}
+		else {
+			return std::vector<pair<int, int>>(); //if not assign,it is call
+		}
+	}
+	else if (type1 == WHILE) {
+		if (type2 == ASSIGN) {
+			return std::vector<pair<int, int>>();
+		}
+		else {
+			return std::vector<pair<int, int>>(); //if not assign, it is if
+		}
+	}
+	else {
+		if (type1 == IF) {
+			if (type2 == ASSIGN) {
+				return std::vector<pair<int, int>>();
+			}
+		}
+	}
+
 }
 
 std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
@@ -274,7 +363,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type
 
 string PKB::getProcNameInVarTable(int index)
 {
-	
+	return 0;
 }
 
 int PKB::getUsedByStmtNum(int index)
@@ -304,9 +393,10 @@ vector<int> PKB::extractFollowsT(int stmtNum)
 
 vector<int> PKB::extractFollowedByT(int stmtNum)
 {
-	design.extractFollowedByT(stmtNum);
+	return design.extractFollowedByT(stmtNum);
 }
 
+// These methods might not be required
 int PKB::getParent(int stmtNum)
 {
 	return stmtTable.getParent(stmtNum);
@@ -327,40 +417,40 @@ int PKB::getFollowedBy(int stmtNum)
 	return stmtTable.getFollowedBy(stmtNum);
 }
 
+//ZH
+int PKB::getProcIndex(string procName){
 
-int PKB::getProcIndex(string procName)
-{
-	int procIndex = procTable.getProcIndexNo(procName);
-	return procIndex;
+	for (int i = 0; i < procTable.size(); i++) {
+		if (this->procTable[i].getName() == procName) {
+			return i;
+		}
+	}
+	return NOT_FOUND;
 }
 
+//ZH
 string PKB::getProcName(int procIndex)
 {
-	string procName = procTable.getProcName(procIndex);
-	return procName;
+	return procTable[procIndex].getName();
 }
 
+
+//ZH
 int PKB::getVarIndex(string varName)
 {
-	int varIndex = varTable.getIndex(varName);
-	return varIndex;
+	bool isFound = false;
 
+	for (int i = 0; i < varTable.size(); i++) {
+		if (this->varTable[i].getVarName() == varName) {
+			return i;
+		}
+	}
+
+	return NOT_FOUND;
 }
 
+//ZH
 string PKB::getVarName(int index)
 {
-	string varName = varTable.getVarName(index);
-	return varName;
-}
-
-//someone pls edit this
-int PKB::getWholeStmt(int startNum, int controlVar)
-{
-//	startNum = procTable.getStartStmtNo(procedure);
-	//return startNum;
-}
-
-void PKB::getIfStmt(int startNum, int controlVar)
-{
-	//startNum = procTable.getStartStmtNo(procedure);
+	return varTable[index].getVarName();
 }

@@ -28,17 +28,6 @@ void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<s
 	addResultTree(resultData[0], resultData[1]);
 	addSuchThatTree(suchThatData[0], suchThatData[1], suchThatData[2]);
 	addPatternTree(patternData[0], patternData[1], patternData[2], patternData[3]);
-
-	/*
-	std::cout << "ResultTree = " << resultRoot->stringValue << '\n';
-	//	std::cout << "ResultTree = " << resultRoot->rightSibling->stringValue << '\n';
-	//std::cout << "ResultTree = " << resultRoot->rightSibling->rightSibling->stringValue << '\n';
-	std::cout << "LCHILD = " << suchThatRoot->leftChild->stringValue << '\n';
-	std::cout << "RCHILD = " << suchThatRoot->rightChild->stringValue << '\n';
-
-	std::cout << "patternCHILD = " << patternRoot->leftChild->stringValue << '\n';
-	std::cout << "patternCHILD = " << patternRoot->rightChild->stringValue << '\n';
-	*/
 }
 
 
@@ -69,8 +58,6 @@ void QueryTree::addResultTree(vector<string> syn, vector<string> type)
 		resultTree.push_back(Clauses());
 		resultTree.at(i).setParentStringVal(syn.at(i));
 		resultTree.at(i).setParentType(type.at(i));
-		std::cout << "result(stringVal) = " << resultTree.at(i).getParent().getStringValue() << '\n';
-		std::cout << "result(type) = " << resultTree.at(i).getParent().getType() << '\n';
 	}
 }
 
@@ -115,6 +102,9 @@ void QueryTree::addPatternTree(vector<string> stringVal, vector<string> type, ve
 		patternTree.at(z).setRightCIntValue(atoi(intVal.at(i + 2).c_str()));
 		patternTree.at(z).setRightCStringValue(stringVal.at(i + 2));
 		z++;
+		if (type.at(i).compare("if") == 0) {
+			i++;
+		}
 	}
 		
 }

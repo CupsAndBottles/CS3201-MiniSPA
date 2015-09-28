@@ -32,6 +32,7 @@
     <ClCompile Include="..\source\QueryTree.cpp" />
     <ClCompile Include="..\source\RelTable.cpp" />
     <ClCompile Include="..\source\Details.cpp" />
+    <ClCompile Include="..\source\ParserOfType.cpp" />
     <ClCompile Include="..\source\Stmt.cpp" />
     <ClCompile Include="..\source\StmtTable.cpp" />
     <ClCompile Include="..\source\Synonym.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="..\source\ParserForSuchThat.h" />
     <ClInclude Include="..\source\ParserForWith.h" />
     <ClInclude Include="..\source\ParserKeyword.h" />
+    <ClInclude Include="..\source\ParserOfType.h" />
     <ClInclude Include="..\source\ParserOfTypeForSuchThat.h" />
     <ClInclude Include="..\source\ParserTypeWithSyn.h" />
     <ClInclude Include="..\source\PKB.h" />

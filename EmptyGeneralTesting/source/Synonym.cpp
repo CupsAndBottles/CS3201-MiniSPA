@@ -7,18 +7,34 @@ Synonym::Synonym()
 Synonym::Synonym(TYPE type, string syn, vector<int>& resultsToStore) {
 	this->type = type;
 	this->syn = syn;
-	for (int i = 0; i < resultsToStore.size(); i++) {
-		addResult(resultsToStore[i]);
-	}
+	addResult(resultsToStore);
 }
 
 Synonym::~Synonym()
 {
 }
 
-void Synonym::addResult(int index)
-{
-	result.insert(index);
+void Synonym::addResult(vector<int> &resultToBeStored) {
+	vector<int> intersect;
+
+	if (result.empty()) {
+		for (int i = 0; i < resultToBeStored.size(); i++) {
+			result.push_back(resultToBeStored[i]);
+		}
+	}
+	else {
+		for (int i = 0; i < resultToBeStored.size(); i++) {
+			for (int j = 0; i < result.size(); j++) {
+				if (resultToBeStored[i] == result[j]) {
+					intersect.push_back(result[j]);
+				}
+			}
+		}
+	}
+
+	// Might cause problems
+	this->result = intersect;
+
 }
 
 void Synonym::setSyn(string syn) {
@@ -29,7 +45,7 @@ void Synonym::setType(TYPE type) {
 	this->type = type;
 }
 
-set<int> Synonym::getResult()
+vector<int> Synonym::getResult()
 {
 	return this->result;
 }

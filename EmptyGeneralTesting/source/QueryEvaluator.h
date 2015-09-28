@@ -18,6 +18,8 @@ public:
 
 	list<string> evaluateQuery(QueryTree tree);
 
+	list<string> permutateResult(vector<vector<string>>& intermediateResult);
+
 	vector<Synonym> getResults();
 
 private:
@@ -31,6 +33,8 @@ private:
 	string convertToShuntingYard(string statement);
 	bool isOperator(char o);
 	int isPriority(const char & c);
+	vector<string> evaluateSelect(Clauses select);
+	string convertToString(int index, TYPE type);
 	PKB *pkb = PKB::getInstanceOf();
 
 };

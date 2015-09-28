@@ -12,15 +12,16 @@ public:
 	Synonym();
 	Synonym(TYPE type, string syn, vector<int>& resultsToStore);
 	~Synonym();
+	void addResult(vector<int>& resultToBeAdded);
 	string getSyn();
-	set<int> getResult();
-	void addResult(int index);
+	vector<int> getResult();
 	void setSyn(string syn);
 	void setType(TYPE type);
 	TYPE getType();
 
 private:
 	string syn;
-	set<int> result;
+	//set<int> result;
+	vector<int> result;
 	TYPE type;
 };

@@ -25,7 +25,7 @@ int Details::getIntValue()
 	return intValue;
 }
 
-Details::Type Details::getType()
+Details::TYPE Details::getType()
 {
 	return type;
 }
@@ -47,40 +47,40 @@ void Details::setIntValue(int intVal)
 
 void Details::setType(string typeInString)
 {
-	Type type = convertToType(typeInString);
+	TYPE type = convertToType(typeInString);
 	this->type = type;
 }
 
-Details::Type Details::convertToType(string typeInString)
+Details::TYPE Details::convertToType(string typeInString)
 {
 	if (typeInString.compare("_") == 0) {
-		return Type::UNDERSCORE;
+		return TYPE::UNDERSCORE;
 	}
 	else if (typeInString.compare("variable") == 0) {
-		return Type::VARIABLE;
+		return TYPE::VARIABLE;
 	}
 	else if (typeInString.compare("assign") == 0) {
-		return Type::ASSIGN;
+		return TYPE::ASSIGN;
 	}
 	else if (typeInString.compare("procedure") == 0) {
-		return Type::PROCEDURE;
+		return TYPE::PROCEDURE;
 	}
 	else if (typeInString.compare("call") == 0) {
-		return Type::CALLS;
+		return TYPE::CALLS;
 	}
 	else if (typeInString.compare("equation") == 0) {
-		return Type::EQUATION;
+		return TYPE::EQUATION;
 	}
 	else if (typeInString.compare("constant") == 0) {
-		return Type::CONSTANT;
+		return TYPE::CONSTANT;
 	}
 	else if (typeInString.compare("while") == 0) {
-		return Type::WHILE;
+		return TYPE::WHILE;
 	}
 	else if (typeInString.compare("if") == 0) {
-		return Type::IF;
+		return TYPE::IF;
 	}
 	else if (typeInString.compare("stmt") == 0 || typeInString.compare("prog_line") == 0) {
-		return Type::STATEMENT;
+		return TYPE::STATEMENT;
 	}
 }
