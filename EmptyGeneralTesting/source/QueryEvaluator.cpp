@@ -55,6 +55,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			return emptyResult;
 		}
 	}
+
 	return list<string>();
 }
 
@@ -219,9 +220,7 @@ void QueryEvaluator::storeResults(vector<int>& intermediateResult, string syn, T
 		// Syn found in vector<Synonym> results
 		if (this->results[i].getSyn() == syn) {
 			isPresentInResults = true;
-			for (int j = 0; j < intermediateResult.size(); i++) {
-				this->results[i].addResult(intermediateResult[i]);
-			}
+			results[i].addResult(intermediateResult);
 		}
 	}
 
