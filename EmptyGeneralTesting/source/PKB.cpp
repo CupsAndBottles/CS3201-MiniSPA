@@ -234,33 +234,38 @@ int PKB::getNoOfStmt(){
 	return this->stmtTable.size() - OFFSET;
 }
 
+//WL
+//return <stmt no, varIndex>. 
 std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex)
 {
-
-	if (type1 == ASSIGN) {
-		if (type2 == VARIABLE) {
-			return std::vector < pair<int, int>>();
-		}
-
-	}
-	else if (type1 == STATEMENT) {
-		if (type2 == VARIABLE) {
-			return std::vector < pair<int, int>>();
-		}
-
-	}
-	else if (type1 == PROCEDURE) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
-		}
-
-	}
-	else if (type1 == CALLS) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
+	vector<int> stmtNos;
+	vector<int> varNos;
+	vector<pair<int, int>> results;
+	if (stmtNum != -1) {
+		varNos = stmtTable.at(stmtNum).getModifies();
+		for (int i = 0; i < varNos.size(); i++) {
+			results.push_back(std::make_pair(stmtNum, varNos.at(i)));
 		}
 	}
-
+	else if (varIndex != -1) {
+        stmtNos = varTable.at(varIndex).getModifiedBy();
+		for (int i = 0; i < stmtNos.size(); i++) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < stmtTable.size(); i++) {
+			if (type1 == stmtTable.at(i).getType()) {
+				varNos = stmtTable.at(i).getModifies();
+				for (int k = 0; k < varNos.size(); k++) {
+	               results.push_back(std::make_pair(i, varNos.at(k)));
+				}		
+			}
+		}
+	}
+	return results;
 }
 
 //ZH
@@ -319,20 +324,38 @@ vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int st
 	else if (type1 == STATEMENT) {
 		if (type2 == VARIABLE) {
 			return std::vector < pair<int, int>>();
-		}
 
-	}
-	else if (type1 == PROCEDURE) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
+//WL
+std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, int varIndex)
+{
+	vector<int> stmtNos;
+	vector<int> varNos;
+	vector<pair<int, int>> results;
+	if (stmtNum != -1) {
+		varNos = stmtTable.at(stmtNum).getUses();
+		for (int i = 0; i < varNos.size(); i++) {
+			results.push_back(std::make_pair(stmtNum, varNos.at(i)));
 		}
-
 	}
-	else if (type1 == CALLS) {
-		if (type2 == VARIABLE) {
-			return std::vector<pair<int, int>>();
+	else if (varIndex != -1) {
+		stmtNos = varTable.at(varIndex).getUsedBy();
+		for (int i = 0; i < stmtNos.size(); i++) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
+			}
 		}
 	}
+	else {
+		for (int i = 0; i < stmtTable.size(); i++) {
+			if (type1 == stmtTable.at(i).getType()) {
+				varNos = stmtTable.at(i).getUses();
+				for (int k = 0; k < varNos.size(); k++) {
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
+			}
+		}
+	}
+	return results;
 	
 }
 std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
@@ -415,20 +438,22 @@ std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type
 }
 
 
-
-string PKB::getProcNameInVarTable(int index)
+//WL
+vector<int> PKB::getProcNameInVarTable(int index)
 {
-	return 0;
+	return varTable.at(index).getProcNames();
 }
 
-int PKB::getUsedByStmtNum(int index)
+//WL
+vector<int> PKB::getUsedByStmtNum(int index)
 {
-	//return varTable.setUsedBy(index);
+	return varTable.at(index).getUsedBy();
 }
 
-int PKB::getModifiedByStmtNum(int index)
+//WL
+vector<int> PKB::getModifiedByStmtNum(int index)
 {
-	//return varTable.setModifiedBy(index);
+	return varTable.at(index).getModifiedBy();
 }
 
 vector<int> PKB::extractParentT(int stmtNum)
