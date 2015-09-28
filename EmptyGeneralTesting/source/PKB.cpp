@@ -13,6 +13,7 @@ using namespace std;
 
 const int OFFSET = 1;
 const int NOT_FOUND = -1;
+const int UNDEFINED = -1;
 
 PKB* PKB::m_Instance = NULL;
 
@@ -206,7 +207,7 @@ void PKB::setUsedVar(int index, vector<string> usedVar)
 //ZH
 void PKB::setRightExpr(int index, string expr)
 {
-	stmtTable[i].setRightExpr(expr);
+	stmtTable[index].setRightExpr(expr);
 }
 
 //ZH
@@ -249,11 +250,52 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 
 }
 
-std::vector<pair<int, int>> PKB::getCalls(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
-{
-	return std::vector<pair<int, int>>();
+//ZH
+vector<pair<int, int>> PKB::getCalls(TYPE type1, int procIndexFirst, TYPE type2, int procIndexSecond) {
+	vector<pair<int, int>> result;
+	vector<int> call;
+
+	if (procIndexFirst == UNDEFINED) {
+		if (procIndexSecond == UNDEFINED) {
+			// Both undefined
+			for (int i = 0; i < procTable.size(); i++) {
+				call = procTable[i].getCalls();
+				for (int j = 0; j < call.size(); j++) {
+					result.push_back(make_pair(i, call[j]));
+				}
+			}
+		}
+		else {
+			// Only Second defined
+			call = procTable[procIndexSecond].getCalledBy();
+			for (int j = 0; j < call.size(); j++) {
+				result.push_back(make_pair(call[j], procIndexSecond));
+			}
+		}
+	}
+	else {
+		if (procIndexSecond == UNDEFINED) {
+			// Only first defined
+			call = procTable[procIndexFirst].getCalls();
+			for (int i = 0; i < call.size(); i++) {
+				result.push_back(make_pair(procIndexFirst, call[i]));
+			}
+		}
+		else {
+			// both defined
+			call = procTable[procIndexFirst].getCalls();
+			for (int i = 0; i < call.size(); i++) {
+				if (call[i] == procIndexSecond) {
+					result.push_back(make_pair(procIndexFirst, procIndexSecond));
+				}
+			}
+		}
+	}
+	
+	return result;
 }
-std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+
+vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	if (type1 == ASSIGN) {
 		if (type2 == VARIABLE) {
