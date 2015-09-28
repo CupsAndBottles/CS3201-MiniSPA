@@ -367,35 +367,46 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 
 std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
-	if (type1 == STATEMENT) {
-		if (type2 == STATEMENT) {
-			return std::vector<pair<int, int>>();
-		}
-		else if (type2 == ASSIGN) {
-			return std::vector<pair<int, int>>();
-		}
-		else {
-			return std::vector<pair<int, int>>(); //if not statement/assign, will be call
-		}
-	}
-	else if (type1 == WHILE) {
-		if (type2 == STATEMENT) {
-			return std::vector<pair<int, int>>();
-		}
-		else if (type2 == ASSIGN) {
-			return std::vector<pair<int, int>>();
-		}
-		else {
-			return std::vector<pair<int, int>>(); //if not stmt/assign, will be call
-		}
-	}
-	else {
-		if (type1 == IF) {
-			if (type2 == STATEMENT) {
-				return std::vector<pair<int, int>>();
+	vector<int> childrenStmtNos;
+	vector<int> parentStmtNos;
+	vector<pair<int, int>> results;
+
+	if (stmtNum1 != -1) {
+		childrenStmtNos = stmtTable.at(stmtNum1).getChildren();
+
+		for (int i = 0; i < childrenStmtNos.size(); i++) {
+			if (stmtNum2 != -1) { // Parent(2, 6)
+				if (stmtNum2 == childrenStmtNos.at(i)) {
+					results.push_back(std::make_pair(stmtNum1, stmtNum2));
+					break;
+				}
 			}
-			else if (type2 == ASSIGN) {
-				return std::vector<pair<int, int>>();
+			else { // Parent(2, s/w/a/_/c)
+				if (type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
+					results.push_back(std::make_pair(stmtNum1, childrenStmtNos.at(i)));
+				}
+			}
+		}
+	}
+	else if (stmtNum2 != -1) { // Parent(s/w/a/_/c, 4)
+		parentStmtNos = stmtTable.at(stmtNum2).getParent();
+
+		for (int i = 0; i < parentStmtNos.size(); i++) {
+			if (type1 == stmtTable.at(parentStmtNos.at(i)).getType()) {
+				results.push_back(std::make_pair(parentStmtNos.at(i), stmtNum2));
+			}
+		}
+	}
+	else { // Parent(s/w/a/_/c, s/w/a/_/c)
+		for (int i = 1; i < stmtTable.size(); i++) {
+			if (type1 == stmtTable.at(i).getType()) {
+				childrenStmtNos = stmtTable.at(i).getChildren();
+
+				for (int j = 0; j < childrenStmtNos.size(); j++) {
+					if (type2 == stmtTable.at(i).getType()) {
+						results.push_back(std::make_pair(i, childrenStmtNos.at(j)));
+					}
+				}
 			}
 		}
 	}
