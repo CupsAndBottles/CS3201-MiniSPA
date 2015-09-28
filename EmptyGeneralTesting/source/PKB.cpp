@@ -368,7 +368,7 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	vector<int> childrenStmtNos;
-	vector<int> parentStmtNos;
+	int parentStmtNo;
 	vector<pair<int, int>> results;
 
 	if (stmtNum1 != -1) {
@@ -382,28 +382,26 @@ std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2,
 				}
 			}
 			else { // Parent(2, s/w/a/_/c)
-				if (type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
+				if (type2 == STATEMENT || type2 == UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
 					results.push_back(std::make_pair(stmtNum1, childrenStmtNos.at(i)));
 				}
 			}
 		}
 	}
-	else if (stmtNum2 != -1) { // Parent(s/w/a/_/c, 4)
-		parentStmtNos = stmtTable.at(stmtNum2).getParent();
+	else if (stmtNum2 != -1) { // Parent(s/w,_ , 4)
+		parentStmtNo = stmtTable.at(stmtNum2).getParent();
 
-		for (int i = 0; i < parentStmtNos.size(); i++) {
-			if (type1 == stmtTable.at(parentStmtNos.at(i)).getType()) {
-				results.push_back(std::make_pair(parentStmtNos.at(i), stmtNum2));
-			}
+		if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
+			results.push_back(std::make_pair(parentStmtNo, stmtNum2));
 		}
 	}
-	else { // Parent(s/w/a/_/c, s/w/a/_/c)
+	else { // Parent(s/w/_, s/w/a/_/c)
 		for (int i = 1; i < stmtTable.size(); i++) {
-			if (type1 == stmtTable.at(i).getType()) {
+			if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				childrenStmtNos = stmtTable.at(i).getChildren();
 
 				for (int j = 0; j < childrenStmtNos.size(); j++) {
-					if (type2 == stmtTable.at(i).getType()) {
+					if (type2 == STATEMENT || type2 == UNDERSCORE || type2 == stmtTable.at(i).getType()) {
 						results.push_back(std::make_pair(i, childrenStmtNos.at(j)));
 					}
 				}
