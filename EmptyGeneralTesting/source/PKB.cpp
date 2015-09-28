@@ -265,7 +265,7 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 		}
 	}
 	else {
-		for (int i = 0; i < stmtTable.size(); i++) {
+		for (int i = 1; i < stmtTable.size(); i++) {
 			if (type1 == stmtTable.at(i).getType()) {
 				varNos = stmtTable.at(i).getModifies();
 				for (int k = 0; k < varNos.size(); k++) {
@@ -322,18 +322,6 @@ vector<pair<int, int>> PKB::getCalls(TYPE type1, int procIndexFirst, TYPE type2,
 	return result;
 }
 
-vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
-{
-	if (type1 == ASSIGN) {
-		if (type2 == VARIABLE) {
-			return std::vector < pair<int, int>>();
-		}
-
-	}
-	else if (type1 == STATEMENT) {
-		if (type2 == VARIABLE) {
-			return std::vector < pair<int, int>>();
-
 //WL
 std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, int varIndex)
 {
@@ -364,7 +352,7 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 		}
 	}
 	else {
-		for (int i = 0; i < stmtTable.size(); i++) {
+		for (int i = 1; i < stmtTable.size(); i++) {
 			if (type1 == stmtTable.at(i).getType()) {
 				varNos = stmtTable.at(i).getUses();
 				for (int k = 0; k < varNos.size(); k++) {
@@ -376,6 +364,7 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 	return results;
 	
 }
+
 std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	if (type1 == STATEMENT) {
