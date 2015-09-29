@@ -8,7 +8,7 @@
 #include "Synonym.h"
 #include "Enum.h"
 
-enum class TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
+enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 
 class QueryEvaluator
 {
@@ -16,7 +16,7 @@ public:
 	QueryEvaluator();
 	~QueryEvaluator();
 
-	list<string> evaluateQuery(QueryTree tree);
+	list<string>& evaluateQuery(QueryTree tree);
 
 	list<string> permutateResult(vector<vector<string>>& intermediateResult);
 

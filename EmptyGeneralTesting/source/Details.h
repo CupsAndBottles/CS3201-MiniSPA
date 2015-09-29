@@ -9,7 +9,6 @@ public:
 	Details();
 	~Details();
 			//  0             1         2          3           4
-	//enum Type { underscore, variable, assignment, procedure, calls, equation, statement, constant, While, If };
 	enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS, EQUATION };
 
 	int intValue;
