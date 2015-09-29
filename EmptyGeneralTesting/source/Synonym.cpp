@@ -4,7 +4,7 @@ Synonym::Synonym()
 {
 }
 
-Synonym::Synonym(TYPE type, string syn, vector<int>& resultsToStore) {
+Synonym::Synonym(Enum::TYPE type, string syn, vector<int>& resultsToStore) {
 	this->type = type;
 	this->syn = syn;
 	addResult(resultsToStore);
@@ -41,7 +41,7 @@ void Synonym::setSyn(string syn) {
 	this->syn = syn;
 }
 
-void Synonym::setType(TYPE type) {
+void Synonym::setType(Enum::TYPE type) {
 	this->type = type;
 }
 
@@ -55,6 +55,6 @@ string Synonym::getSyn()
 	return this->syn;
 }
 
-TYPE Synonym::getType() {
+Enum::TYPE Synonym::getType() {
 	return this->type;
 }

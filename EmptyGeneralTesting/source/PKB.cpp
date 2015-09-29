@@ -545,7 +545,8 @@ std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmt1, TYPE type2, i
 			}
 		}
 	}
-
+	
+	return follows;
 }
 
 std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)

@@ -8,8 +8,6 @@
 #include "Synonym.h"
 #include "Enum.h"
 
-enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
-
 class QueryEvaluator
 {
 public:
@@ -29,7 +27,7 @@ private:
 	bool evaluatePattern(Clauses clause);
 	bool evaluateAssign(Clauses clause);
 	void storeResultsForSyn(Clauses clause, vector<pair<int, int>> results);
-	void storeResults(vector<int>& intermediateResult, string syn, TYPE type);
+	void storeResults(vector<int>& intermediateResult, string syn, Enum::TYPE type);
 	string convertToShuntingYard(string statement);
 	bool isOperator(char o);
 	int isPriority(const char & c);
@@ -37,7 +35,7 @@ private:
 	vector<string> permutateResultPair(vector<string> firstSet, vector<string> secondSet);
 	list<string> permutateResultSubset(vector<vector<string>> intermediateResult);
 	list<string> convertVectorToList(vector<string> mergedResults);
-	string convertToString(int index, TYPE type);
+	string convertToString(int index, Enum::TYPE type);
 	PKB *pkb = PKB::getInstanceOf();
 
 };
