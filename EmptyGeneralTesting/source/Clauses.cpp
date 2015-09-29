@@ -1,4 +1,5 @@
 #include "Clauses.h"
+#include "Enum.h"
 
 Clauses::Clauses()
 {
@@ -46,7 +47,7 @@ string Clauses::getParentStringVal()
 	return parent.getStringValue();
 }
 
-Details::TYPE Clauses::getParentType()
+Enum::TYPE Clauses::getParentType()
 {
 	return parent.getType();
 }
@@ -86,7 +87,7 @@ int Clauses::getRightCIntValue()
 	return rightChild.getIntValue();
 }
 
-Details::TYPE Clauses::getRightCType()
+Enum::TYPE Clauses::getRightCType()
 {
 	return rightChild.getType();
 }
@@ -126,7 +127,7 @@ int Clauses::getLeftCIntValue()
 	return leftChild.getIntValue();
 }
 
-Details::TYPE Clauses::getLeftCType()
+Enum::TYPE Clauses::getLeftCType()
 {
 	return leftChild.getType();
 }
