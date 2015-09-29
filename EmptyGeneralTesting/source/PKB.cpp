@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include "Procedure.h"
-#include "StmtTable.h"
 #include "Stmt.h"
 #include "Variable.h"
 
@@ -543,25 +542,25 @@ vector<int> PKB::extractFollowedByT(int stmtNum)
 //V: design Extractor required methods
 int PKB::getParent(int stmtNum)
 {
-	return stmtTable.getParent(stmtNum);
+	return stmtTable[stmtNum].getParent();
 }
 
 //V: for the design extractor
 std::vector<int> PKB::getChildren(int stmtNum)
 {
-	return stmtTable.getChildren(stmtNum);
+	return stmtTable[stmtNum].getChildren();
 }
 
 //V: for the design extractor
 int PKB::getFollows(int stmtNum)
 {
-	return stmtTable.getFollows(stmtNum);
+	return stmtTable[stmtNum].getFollows();
 }
 
 //V: for the design extractor
 int PKB::getFollowedBy(int stmtNum)
 {
-	return stmtTable.getFollowedBy(stmtNum);
+	return stmtTable[stmtNum].getFollowedBy();
 }
 
 //ZH
