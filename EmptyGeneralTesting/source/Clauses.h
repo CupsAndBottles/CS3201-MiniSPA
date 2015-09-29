@@ -24,7 +24,7 @@ public:
 	void setParentStringVal(string stringVal);
 	void setParentType(string type);
 	string getParentStringVal();
-	Details::TYPE getParentType();
+	Enum::TYPE getParentType();
 
 	void setRightCIsExpression(bool isExpression);
 	void setRightCStringValue(string stringVal);
@@ -34,7 +34,7 @@ public:
 	bool getRightCIsExpression();
 	string getRightCStringValue();
 	int getRightCIntValue();
-	Details::TYPE getRightCType();
+	Enum::TYPE getRightCType();
 
 	void setLeftCIsExpression(bool isExpression);
 	void setLeftCStringValue(string stringVal);
@@ -44,7 +44,7 @@ public:
 	bool getLeftCIsExpression();
 	string getLeftCStringValue();
 	int getLeftCIntValue();
-	Details::TYPE getLeftCType();
+	Enum::TYPE getLeftCType();
 	
 };
 

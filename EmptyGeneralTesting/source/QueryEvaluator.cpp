@@ -4,7 +4,6 @@
 const string EMPTY_STRING = "";
 const int WILDCARD = -1;
 const int NOT_FOUND = -1;
-const int UNDERSCORE = -2;
 
 const string RELATIONSHIP_CALLS = "Calls";
 const string RELATIONSHIP_FOLLOWS = "Follows";
@@ -157,7 +156,7 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	vector<string> resultForSyn;
 
 	string synonym = select.getParentStringVal();
-	TYPE type = select.getParent().getType();
+	Enum::TYPE type = select.getParent().getType();
 
 	for (int i = 0; i < this->results.size(); i++) {
 		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
@@ -170,29 +169,29 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	return resultForSyn;
 }
 
-string QueryEvaluator::convertToString(int index, TYPE type) {
+string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 
 	// No UNDERSCORE TYPE / CONSTANT
 	switch (type) {
-	case ASSIGN:
+	case Enum::TYPE::ASSIGN:
 		return to_string(index);
 		break;
-	case STATEMENT:
+	case Enum::TYPE::STATEMENT:
 		return to_string(index);
 		break;
-	case PROCEDURE:
+	case Enum::TYPE::PROCEDURE:
 		return this->pkb->getProcName(index);
 		break;
-	case WHILE:
+	case Enum::TYPE::WHILE:
 		return to_string(index);
 		break;
-	case IF:
+	case Enum::TYPE::IF:
 		return to_string(index);
 		break;
-	case VARIABLE:
+	case Enum::TYPE::VARIABLE:
 		return this->pkb->getVarName(index);
 		break;
-	case CALLS:
+	case Enum::TYPE::CALLS:
 		return to_string(index);
 		break;
 	default:
@@ -214,11 +213,11 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	int indexForFirstParam = firstParam.getIntValue();
 	int indexForSecondParam = secondParam.getIntValue();
 
-	if (indexForFirstParam == UNDERSCORE) {
+	if (indexForFirstParam == Enum::TYPE::UNDERSCORE) {
 		indexForFirstParam = WILDCARD;
 	}
 
-	if (indexForSecondParam == UNDERSCORE) {
+	if (indexForSecondParam == Enum::TYPE::UNDERSCORE) {
 		indexForSecondParam = WILDCARD;
 	}
 
@@ -258,15 +257,15 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 }
 
 bool QueryEvaluator::evaluatePattern(Clauses clause) {
-	TYPE type = clause.getParentType();
+	Enum::TYPE type = clause.getParentType();
 	
 	switch(type) {
-	case TYPE::ASSIGN : 
+	case Enum::TYPE::ASSIGN : 
 		return evaluateAssign(clause);
 		break;
-	case TYPE::IF :
+	case Enum::TYPE::IF :
 		break;
-	case TYPE::WHILE :
+	case Enum::TYPE::WHILE :
 		break;
 	default:
 		break;
@@ -277,13 +276,13 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	vector<int> intermediateResult;
 	
 	// if left child is underscore
-	if (clause.getLeftChild().getType == TYPE::UNDERSCORE) {
-		if (clause.getRightChild().getType == TYPE::UNDERSCORE) {
+	if (clause.getLeftChild().getType() == Enum::TYPE::UNDERSCORE) {
+		if (clause.getRightChild().getType() == Enum::TYPE::UNDERSCORE) {
 			return true;
 		}
 		else{ 			
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
-			if (!clause.getRightChild().getIsExpression) {		// pattern a(_, x ) 
+			if (!clause.getRightChild().getIsExpression()) {		// pattern a(_, x ) 
 				for (int i = 1; i < this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);
@@ -299,8 +298,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 	}
 	else { //left child is a variable
-		vector<pair<int,int>> stmtLst = this->pkb->getModifies(TYPE::ASSIGN, WILDCARD , TYPE::VARIABLE, clause.getLeftChild().getIntValue());
-		if (clause.getRightCType() == TYPE::UNDERSCORE) { // a(v, _)
+		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftChild().getIntValue());
+		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (int i = 0; i < stmtLst.size(); i++) {
 				intermediateResult.push_back(stmtLst[i].first);
 			}
@@ -325,7 +324,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	}
 	
 	if (intermediateResult.size() != 0) {
-		storeResults(intermediateResult, clause.getParentStringVal, TYPE::ASSIGN);
+		storeResults(intermediateResult, clause.getParentStringVal, Enum::TYPE::ASSIGN);
 		return true;
 	}
 	else {
@@ -355,7 +354,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	}
 }
 
-void QueryEvaluator::storeResults(vector<int>& intermediateResult, string syn, TYPE type) {
+void QueryEvaluator::storeResults(vector<int>& intermediateResult, string syn, Enum::TYPE type) {
 	bool isPresentInResults = false;
 
 	for (int i = 0; i < this->results.size(); i++) {
