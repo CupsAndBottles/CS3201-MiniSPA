@@ -317,8 +317,8 @@ vector<pair<int, int>> PKB::getCalls(Enum::TYPE type1, int procIndexFirst, Enum:
 	vector<pair<int, int>> result;
 	vector<int> call;
 
-	if ((type1 == UNDERSCORE) || (procIndexFirst == UNDEFINED)) {
-		if ((type2 == UNDERSCORE) || (procIndexSecond == UNDEFINED)) {
+	if ((type1 == Enum::TYPE::UNDERSCORE) || (procIndexFirst == UNDEFINED)) {
+		if ((type2 == Enum::TYPE::UNDERSCORE) || (procIndexSecond == UNDEFINED)) {
 			// Both undefined
 			for (int i = 0; i < procTable.size(); i++) {
 				call = procTable[i].getCalls();
@@ -336,7 +336,7 @@ vector<pair<int, int>> PKB::getCalls(Enum::TYPE type1, int procIndexFirst, Enum:
 		}
 	}
 	else {
-		if ((type2 == UNDERSCORE) || (procIndexSecond == UNDEFINED)) {
+		if ((type2 == Enum::TYPE::UNDERSCORE) || (procIndexSecond == UNDEFINED)) {
 			// Only first defined
 			call = procTable[procIndexFirst].getCalls();
 			for (int i = 0; i < call.size(); i++) {
@@ -443,7 +443,7 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 				}
 			}
 			else { // Parent(2, s/w/a/_/c)
-				if (type2 == STATEMENT || type2 == UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
+				if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
 					results.push_back(std::make_pair(stmtNum1, childrenStmtNos.at(i)));
 				}
 			}
@@ -452,17 +452,17 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 	else if (stmtNum2 != -1) { // Parent(s/w,_ , 4)
 		parentStmtNo = stmtTable.at(stmtNum2).getParent();
 
-		if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
+		if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
 			results.push_back(std::make_pair(parentStmtNo, stmtNum2));
 		}
 	}
 	else { // Parent(s/w/_, s/w/a/_/c)
 		for (int i = 1; i < stmtTable.size(); i++) {
-			if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(i).getType()) {
+			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				childrenStmtNos = stmtTable.at(i).getChildren();
 
 				for (int j = 0; j < childrenStmtNos.size(); j++) {
-					if (type2 == STATEMENT || type2 == UNDERSCORE || type2 == stmtTable.at(i).getType()) {
+					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(i).getType()) {
 						results.push_back(std::make_pair(i, childrenStmtNos.at(j)));
 					}
 				}
@@ -479,8 +479,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 
 	if (stmt1 == -1) {
 		if (stmt2 == -1){
-			if (type1 == UNDERSCORE || type1 == STATEMENT) {
-				if (type2 == UNDERSCORE || type2 == STATEMENT) {
+			if (type1 == Enum::TYPE::UNDERSCORE || type1 == Enum::TYPE::STATEMENT) {
+				if (type2 == Enum::TYPE::UNDERSCORE || type2 == Enum::TYPE::STATEMENT) {
 					// follows(_,_) or follows(s1,s2)
 					for (int i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getFollows() > 0) {
@@ -500,7 +500,7 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 				}
 			}
 			else {
-				if (type2 == UNDERSCORE || type2 == STATEMENT) {
+				if (type2 == Enum::TYPE::UNDERSCORE || type2 == Enum::TYPE::STATEMENT) {
 					// follows(call/if/assign/while, _) or follows(call/if/assign/while, s1)
 					for (int i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
@@ -556,7 +556,7 @@ std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum
 	vector<int>childrenT;
 	vector<pair<int, int>> results;
 
-	if ((type1 == STATEMENT) && (type2 == STATEMENT)) {
+	if ((type1 == Enum::TYPE::STATEMENT) && (type2 == Enum::TYPE::STATEMENT)) {
 		//both are undefined ie (s1,s2)
 		if ((stmtNum1 == -1) && (stmtNum2 == -1)) {
 			//check if parent exists inefficient

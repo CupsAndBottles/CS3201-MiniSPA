@@ -7,6 +7,7 @@
 #include "Procedure.h"
 #include "Stmt.h"
 #include "Variable.h"
+#include "Enum.h"
 
 using namespace std;
 typedef short PROC;

@@ -213,11 +213,11 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	int indexForFirstParam = firstParam.getIntValue();
 	int indexForSecondParam = secondParam.getIntValue();
 
-	if (indexForFirstParam == UNDERSCORE) {
+	if (indexForFirstParam == Enum::TYPE::UNDERSCORE) {
 		indexForFirstParam = WILDCARD;
 	}
 
-	if (indexForSecondParam == UNDERSCORE) {
+	if (indexForSecondParam == Enum::TYPE::UNDERSCORE) {
 		indexForSecondParam = WILDCARD;
 	}
 
@@ -276,13 +276,13 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	vector<int> intermediateResult;
 	
 	// if left child is underscore
-	if (clause.getLeftChild().getType == Enum::TYPE::UNDERSCORE) {
-		if (clause.getRightChild().getType == ENum::TYPE::UNDERSCORE) {
+	if (clause.getLeftChild().getType() == Enum::TYPE::UNDERSCORE) {
+		if (clause.getRightChild().getType() == Enum::TYPE::UNDERSCORE) {
 			return true;
 		}
 		else{ 			
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
-			if (!clause.getRightChild().getIsExpression) {		// pattern a(_, x ) 
+			if (!clause.getRightChild().getIsExpression()) {		// pattern a(_, x ) 
 				for (int i = 1; i < this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);
