@@ -8,7 +8,6 @@
 #include "Stmt.h"
 #include "Variable.h"
 
-enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
 typedef short PROC;
 
@@ -85,13 +84,13 @@ public:
 	int getFollowedBy(int index);
 
 	//PQL-PKB
-	std::vector<pair<int, int>> getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex);
-	std::vector<pair<int, int>> getCalls(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getUses(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getParent(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getFollows(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getParentT(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getFollowsT(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
+	std::vector<pair<int, int>> getCalls(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getUses(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getParent(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getFollows(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getParentT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getFollowsT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 
 	//From ProcTable
 	int getProcIndex(string procName);

@@ -7,6 +7,7 @@
 #include "Procedure.h"
 #include "Stmt.h"
 #include "Variable.h"
+#include "Enum.h"
 
 using namespace std;
 
@@ -245,7 +246,7 @@ int PKB::getNoOfStmt(){
 
 //WL
 //return <stmt no, varIndex>. 
-std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex)
+std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex)
 {
 	vector<int> stmtNos;
 	vector<int> varNos;
@@ -312,7 +313,7 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 }
 
 //ZH
-vector<pair<int, int>> PKB::getCalls(TYPE type1, int procIndexFirst, TYPE type2, int procIndexSecond) {
+vector<pair<int, int>> PKB::getCalls(Enum::TYPE type1, int procIndexFirst, Enum::TYPE type2, int procIndexSecond) {
 	vector<pair<int, int>> result;
 	vector<int> call;
 
@@ -357,7 +358,7 @@ vector<pair<int, int>> PKB::getCalls(TYPE type1, int procIndexFirst, TYPE type2,
 }
 
 //WL
-std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, int varIndex)
+std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex)
 {
 	vector<int> stmtNos;
 	vector<int> varNos;
@@ -425,7 +426,7 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 }
 
 //XH
-std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {
 	vector<int> childrenStmtNos;
 	int parentStmtNo;
@@ -473,7 +474,7 @@ std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2,
 }
 
 //ZH
-std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmt1, TYPE type2, int stmt2){
+std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::TYPE type2, int stmt2){
 	vector<pair<int, int>> follows;
 
 	if (stmt1 == -1) {
@@ -548,7 +549,7 @@ std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmt1, TYPE type2, i
 
 }
 
-std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {	
 	vector<int>parentT;
 	vector<int>childrenT;
@@ -595,7 +596,7 @@ std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2
 	}
 }
 
-std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
+std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {
 	return std::vector<pair<int, int>>();
 }
