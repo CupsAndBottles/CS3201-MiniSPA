@@ -59,4 +59,5 @@ private:
 	list<pair<int, string >> lines;
 	int cBrack;
 	void handleFollows(int index, string stmt);
+	PKB* const instance = PKB::getInstanceOf();
 };

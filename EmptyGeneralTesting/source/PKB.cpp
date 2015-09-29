@@ -18,13 +18,19 @@ const int NOT_FOUND = -1;
 const int UNDEFINED = -1;
 
 PKB* PKB::m_Instance = NULL;
+vector<Stmt> stmtTable;
+vector<Variable> varTable;
+vector<Procedure> procTable;
 
 PKB* PKB::getInstanceOf()
 {
-	if (m_Instance)
+	if (m_Instance) {
 		m_Instance = new PKB;
+	}
 	return m_Instance;
 }
+
+
 
 //-----------------------------------------------------------------------------
 //ProcTable Setters:
@@ -63,7 +69,6 @@ void PKB::setProcUses(int index, vector<int> usesVar)
 	procTable[index].setUsedVar(usesVar);
 }
 
-//G: Yet to implement in table.
 void PKB::setProcCalls(int index, string calls)
 {
 	int procIndex = getProcIndex(calls);
@@ -118,12 +123,10 @@ PKB::~PKB()
 {
 }
 //G: index not necessary. 
-int PKB::setType(int type)
+void PKB::setType(int type)
 {
 	int index = stmtTable.size();
 	stmtTable[index].setStmtType(type);
-
-	return index;
 }
 
 //G: parent set from setChildren method.
@@ -643,7 +646,10 @@ int PKB::getParent(int stmtNum)
 //V: for the design extractor
 std::vector<int> PKB::getChildren(int stmtNum)
 {
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/master
 	return stmtTable[stmtNum].getChildren();
 }
 
