@@ -1,4 +1,5 @@
 #include "Details.h"
+#include "Enum.h"
 
 Details::Details()
 {
@@ -25,7 +26,7 @@ int Details::getIntValue()
 	return intValue;
 }
 
-Details::TYPE Details::getType()
+Enum::TYPE Details::getType()
 {
 	return type;
 }
@@ -47,40 +48,40 @@ void Details::setIntValue(int intVal)
 
 void Details::setType(string typeInString)
 {
-	TYPE type = convertToType(typeInString);
+	Enum::TYPE type = convertToType(typeInString);
 	this->type = type;
 }
 
-Details::TYPE Details::convertToType(string typeInString)
+Enum::TYPE Details::convertToType(string typeInString)
 {
 	if (typeInString.compare("_") == 0) {
-		return TYPE::UNDERSCORE;
+		return Enum::TYPE::UNDERSCORE;
 	}
 	else if (typeInString.compare("variable") == 0) {
-		return TYPE::VARIABLE;
+		return Enum::TYPE::VARIABLE;
 	}
 	else if (typeInString.compare("assign") == 0) {
-		return TYPE::ASSIGN;
+		return Enum::TYPE::ASSIGN;
 	}
 	else if (typeInString.compare("procedure") == 0) {
-		return TYPE::PROCEDURE;
+		return Enum::TYPE::PROCEDURE;
 	}
 	else if (typeInString.compare("call") == 0) {
-		return TYPE::CALLS;
+		return Enum::TYPE::CALLS;
 	}
 	else if (typeInString.compare("equation") == 0) {
-		return TYPE::EQUATION;
+		return Enum::TYPE::EQUATION;
 	}
 	else if (typeInString.compare("constant") == 0) {
-		return TYPE::CONSTANT;
+		return Enum::TYPE::CONSTANT;
 	}
 	else if (typeInString.compare("while") == 0) {
-		return TYPE::WHILE;
+		return Enum::TYPE::WHILE;
 	}
 	else if (typeInString.compare("if") == 0) {
-		return TYPE::IF;
+		return Enum::TYPE::IF;
 	}
 	else if (typeInString.compare("stmt") == 0 || typeInString.compare("prog_line") == 0) {
-		return TYPE::STATEMENT;
+		return Enum::TYPE::STATEMENT;
 	}
 }

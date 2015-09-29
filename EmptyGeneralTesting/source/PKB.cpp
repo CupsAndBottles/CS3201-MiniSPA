@@ -157,7 +157,7 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 //V 
 void PKB::setChildrenT(int index, vector<int> childrenT)
 {
-	stmtTable.at[index].setChildrenT(childrenT);
+	stmtTable[index].setChildrenT(childrenT);
 	
 }
 
@@ -183,14 +183,14 @@ void PKB::setFollowedBy(int index, int followedBy)
 void PKB::setFollowsT(int index, vector<int> followsT)
 {
 
-	stmtTable.at[index].setFollowsT(followsT);
+	stmtTable[index].setFollowsT(followsT);
 }
 
 //V
 void PKB::setFollowedByT(int index, vector<int> followedByT)
 {
 
-	stmtTable.at[index].setFollowedByT(followedByT);
+	stmtTable[index].setFollowedByT(followedByT);
 }
 
 //G: change variable passed as string to int and set stmttable.
@@ -567,7 +567,7 @@ std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2
 		//(s1,num)
 		}else if ((stmtNum1 == -1) && (stmtNum2 != -1)) {
 			parentT = extractParentT(stmtNum2);
-			for (int i = 0; i < parentT.size; i++) {
+			for (int i = 0; i < parentT.size(); i++) {
 				results.push_back(std::make_pair(parentT.at(i), stmtNum2));
 			}
 			return results;
@@ -575,7 +575,7 @@ std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2
 		} //(num,s1)
 		else if ((stmtNum1 != -1) && (stmtNum2 == -1)) {
 			childrenT = extractChildrenT(stmtNum1);
-			for (int i = 0; i < childrenT.size; i++) {
+			for (int i = 0; i < childrenT.size(); i++) {
 				results.push_back(std::make_pair(stmtNum1,childrenT.at(i)));
 			}
 			return results;
@@ -583,7 +583,7 @@ std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2
 		} //(num,num)
 		else if ((stmtNum1 != -1) && (stmtNum2 != -1)) {
 			parentT = extractParentT(stmtNum2);
-			for (int i = 0; i < parentT.size; i++) {
+			for (int i = 0; i < parentT.size(); i++) {
 				if (parentT.at(i) == stmtNum1) {
 					results.push_back(std::make_pair(stmtNum1, stmtNum2));
 				}
@@ -646,10 +646,6 @@ int PKB::getParent(int stmtNum)
 //V: for the design extractor
 std::vector<int> PKB::getChildren(int stmtNum)
 {
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 	return stmtTable[stmtNum].getChildren();
 }
 

@@ -1,0 +1,7 @@
+#pragma once
+
+class Enum {
+public:
+	enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS, EQUATION};
+
+};
