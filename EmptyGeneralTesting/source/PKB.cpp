@@ -646,10 +646,6 @@ int PKB::getParent(int stmtNum)
 //V: for the design extractor
 std::vector<int> PKB::getChildren(int stmtNum)
 {
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 	return stmtTable[stmtNum].getChildren();
 }
 
