@@ -577,7 +577,7 @@ std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2
 		} //(num,s1)
 		else if ((stmtNum1 != -1) && (stmtNum2 == -1)) {
 			childrenT = extractChildrenT(stmtNum1);
-			for (int i = 0; i < childrenT.size; i++) {
+			for (int i = 0; i < childrenT.size(); i++) {
 				results.push_back(std::make_pair(stmtNum1,childrenT.at(i)));
 			}
 			return results;
