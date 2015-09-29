@@ -18,13 +18,19 @@ const int NOT_FOUND = -1;
 const int UNDEFINED = -1;
 
 PKB* PKB::m_Instance = NULL;
+vector<Stmt> stmtTable;
+vector<Variable> varTable;
+vector<Procedure> procTable;
 
 PKB* PKB::getInstanceOf()
 {
-	if (m_Instance)
+	if (m_Instance) {
 		m_Instance = new PKB;
+	}
 	return m_Instance;
 }
+
+
 
 //-----------------------------------------------------------------------------
 //ProcTable Setters:
@@ -63,7 +69,6 @@ void PKB::setProcUses(int index, vector<int> usesVar)
 	procTable[index].setUsedVar(usesVar);
 }
 
-//G: Yet to implement in table.
 void PKB::setProcCalls(int index, string calls)
 {
 	int procIndex = getProcIndex(calls);
@@ -118,12 +123,10 @@ PKB::~PKB()
 {
 }
 //G: index not necessary. 
-int PKB::setType(int type)
+void PKB::setType(int type)
 {
 	int index = stmtTable.size();
 	stmtTable[index].setStmtType(type);
-
-	return index;
 }
 
 //G: parent set from setChildren method.
@@ -154,7 +157,8 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 //V 
 void PKB::setChildrenT(int index, vector<int> childrenT)
 {
-	stmtTable[index].setChildrenT(childrenT);
+	stmtTable.at[index].setChildrenT(childrenT);
+	
 }
 
 //G: set Follows and FollowedBy in same method
@@ -178,13 +182,15 @@ void PKB::setFollowedBy(int index, int followedBy)
 //V
 void PKB::setFollowsT(int index, vector<int> followsT)
 {
-	stmtTable[index].setFollowsT(followsT);
+
+	stmtTable.at[index].setFollowsT(followsT);
 }
 
 //V
 void PKB::setFollowedByT(int index, vector<int> followedByT)
 {
-	stmtTable[index].setFollowedByT(followedByT);
+
+	stmtTable.at[index].setFollowedByT(followedByT);
 }
 
 //G: change variable passed as string to int and set stmttable.
@@ -422,7 +428,7 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
 	vector<int> childrenStmtNos;
-	vector<int> parentStmtNos;
+	int parentStmtNo;
 	vector<pair<int, int>> results;
 
 	if (stmtNum1 != -1) {
@@ -436,28 +442,26 @@ std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2,
 				}
 			}
 			else { // Parent(2, s/w/a/_/c)
-				if (type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
+				if (type2 == STATEMENT || type2 == UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
 					results.push_back(std::make_pair(stmtNum1, childrenStmtNos.at(i)));
 				}
 			}
 		}
 	}
-	else if (stmtNum2 != -1) { // Parent(s/w/a/_/c, 4)
-		parentStmtNos = stmtTable.at(stmtNum2).getParent();
+	else if (stmtNum2 != -1) { // Parent(s/w,_ , 4)
+		parentStmtNo = stmtTable.at(stmtNum2).getParent();
 
-		for (int i = 0; i < parentStmtNos.size(); i++) {
-			if (type1 == stmtTable.at(parentStmtNos.at(i)).getType()) {
-				results.push_back(std::make_pair(parentStmtNos.at(i), stmtNum2));
-			}
+		if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
+			results.push_back(std::make_pair(parentStmtNo, stmtNum2));
 		}
 	}
-	else { // Parent(s/w/a/_/c, s/w/a/_/c)
+	else { // Parent(s/w/_, s/w/a/_/c)
 		for (int i = 1; i < stmtTable.size(); i++) {
-			if (type1 == stmtTable.at(i).getType()) {
+			if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				childrenStmtNos = stmtTable.at(i).getChildren();
 
 				for (int j = 0; j < childrenStmtNos.size(); j++) {
-					if (type2 == stmtTable.at(i).getType()) {
+					if (type2 == STATEMENT || type2 == UNDERSCORE || type2 == stmtTable.at(i).getType()) {
 						results.push_back(std::make_pair(i, childrenStmtNos.at(j)));
 					}
 				}
@@ -543,20 +547,48 @@ std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmt1, TYPE type2, i
 }
 
 std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
-{
+{	
+	vector<int>parentT;
+	vector<int>childrenT;
+	vector<pair<int, int>> results;
+
 	if ((type1 == STATEMENT) && (type2 == STATEMENT)) {
 		//both are undefined ie (s1,s2)
 		if ((stmtNum1 == -1) && (stmtNum2 == -1)) {
-
+			//check if parent exists inefficient
+			for (int i = 1; i < stmtTable.size(); i++) {
+				if (stmtTable.at(i).getParent() != -1) {
+					results.push_back(std::make_pair(stmtTable.at(i).getParent(), i));
+					break;
+				}
+			}
+			return results;
 
 		//(s1,num)
 		}else if ((stmtNum1 == -1) && (stmtNum2 != -1)) {
+			parentT = extractParentT(stmtNum2);
+			for (int i = 0; i < parentT.size; i++) {
+				results.push_back(std::make_pair(parentT.at(i), stmtNum2));
+			}
+			return results;
 
-
-		
 		} //(num,s1)
 		else if ((stmtNum1 != -1) && (stmtNum2 == -1)) {
-			
+			childrenT = extractChildrenT(stmtNum1);
+			for (int i = 0; i < childrenT.size; i++) {
+				results.push_back(std::make_pair(stmtNum1,childrenT.at(i)));
+			}
+			return results;
+
+		} //(num,num)
+		else if ((stmtNum1 != -1) && (stmtNum2 != -1)) {
+			parentT = extractParentT(stmtNum2);
+			for (int i = 0; i < parentT.size; i++) {
+				if (parentT.at(i) == stmtNum1) {
+					results.push_back(std::make_pair(stmtNum1, stmtNum2));
+				}
+			}
+			return results;
 		}
 	}
 }
@@ -614,6 +646,10 @@ int PKB::getParent(int stmtNum)
 //V: for the design extractor
 std::vector<int> PKB::getChildren(int stmtNum)
 {
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 	return stmtTable[stmtNum].getChildren();
 }
 
