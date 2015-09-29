@@ -18,13 +18,19 @@ const int NOT_FOUND = -1;
 const int UNDEFINED = -1;
 
 PKB* PKB::m_Instance = NULL;
+vector<Stmt> stmtTable;
+vector<Variable> varTable;
+vector<Procedure> procTable;
 
 PKB* PKB::getInstanceOf()
 {
-	if (m_Instance)
+	if (m_Instance) {
 		m_Instance = new PKB;
+	}
 	return m_Instance;
 }
+
+
 
 //-----------------------------------------------------------------------------
 //ProcTable Setters:

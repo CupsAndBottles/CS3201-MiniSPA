@@ -11,7 +11,7 @@
 using namespace std;
 vector<string> tokens;
 list<pair<int, string>> listOfStatements;
-list<pair<int, int>> parentLink;
+vector<pair<int, int>> parentLink;
 list<pair<int, int>> followLink;
 list<pair<int, string>> stmtNoAndExpr;
 string currProcName;
@@ -132,6 +132,7 @@ void Parser::Procedure() {
 			handleFollows((*i).first, (*i).second);
 		}
 	}
+	instance->setChildren(parentLink);
 }
 
 void Parser::addToParent(int child) {
@@ -314,12 +315,12 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 string Parser::getParentChild() {
 	string output;
 	while (!parentLink.empty()) {
-		pair<int, int> parentChild = parentLink.front();
+		pair<int, int> parentChild = parentLink.back();
 		int parent = parentChild.first;
 		int child = parentChild.second;
 		output.append("Parent: " + to_string(parent) + " Child: " + to_string(child)+"| ");
 		if (!parentLink.empty()) {
-			parentLink.pop_front();
+			parentLink.pop_back();
 		}
 	}
 	return output;

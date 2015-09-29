@@ -4,12 +4,10 @@
 #include <string>
 #include <vector>
 #include "DesignExtractor.h"
-#include "ProcTable.h"
 #include "Procedure.h"
-#include "StmtTable.h"
 #include "Stmt.h"
 #include "Variable.h"
-#include "VarTable.h"
+
 enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
 typedef short PROC;
@@ -19,8 +17,6 @@ class TNode;
 class PKB {
 private:
 	PKB() {};
-	PKB(const PKB&) {};
-	PKB& operator = (PKB const&) {};
 	static PKB* m_Instance;
 	//ZH
 	vector<Stmt> stmtTable;
