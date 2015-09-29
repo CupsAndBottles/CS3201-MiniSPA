@@ -468,6 +468,8 @@ std::vector<pair<int, int>> PKB::getParent(TYPE type1, int stmtNum1, TYPE type2,
 			}
 		}
 	}
+
+	return results;
 }
 
 //ZH
