@@ -154,11 +154,8 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 //V 
 void PKB::setChildrenT(int index, vector<int> childrenT)
 {
-<<<<<<< HEAD
 	stmtTable.at[index].setChildrenT(childrenT);
-=======
-	stmtTable[index].setChildrenT(childrenT);
->>>>>>> ac5a57e5111d09fe0046c958cdf362875a10ab99
+	
 }
 
 //G: set Follows and FollowedBy in same method
@@ -182,21 +179,15 @@ void PKB::setFollowedBy(int index, int followedBy)
 //V
 void PKB::setFollowsT(int index, vector<int> followsT)
 {
-<<<<<<< HEAD
+
 	stmtTable.at[index].setFollowsT(followsT);
-=======
-	stmtTable[index].setFollowsT(followsT);
->>>>>>> ac5a57e5111d09fe0046c958cdf362875a10ab99
 }
 
 //V
 void PKB::setFollowedByT(int index, vector<int> followedByT)
 {
-<<<<<<< HEAD
+
 	stmtTable.at[index].setFollowedByT(followedByT);
-=======
-	stmtTable[index].setFollowedByT(followedByT);
->>>>>>> ac5a57e5111d09fe0046c958cdf362875a10ab99
 }
 
 //G: change variable passed as string to int and set stmttable.
@@ -654,11 +645,8 @@ int PKB::getParent(int stmtNum)
 //V: for the design extractor
 std::vector<int> PKB::getChildren(int stmtNum)
 {
-<<<<<<< HEAD
+
 	return stmtTable[stmtNum].getChildren();
-=======
-	return stmtTable[stmtNum].getChildren(stmtNum);
->>>>>>> ac5a57e5111d09fe0046c958cdf362875a10ab99
 }
 
 //V: for the design extractor
