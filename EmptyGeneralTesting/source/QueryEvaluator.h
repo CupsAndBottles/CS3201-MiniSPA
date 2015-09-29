@@ -8,7 +8,7 @@
 #include "Synonym.h"
 #include "Enum.h"
 
-enum class TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
+enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 
 class QueryEvaluator
 {
