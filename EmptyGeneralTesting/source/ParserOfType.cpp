@@ -1,5 +1,6 @@
 #include "ParserOfType.h"
 #include "ParserException.h"
+#include "PKB.h"
 #include <iostream>
 #include <regex>
 #include<vector>
@@ -19,6 +20,7 @@ ParserOfType::~ParserOfType()
 vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vector<string> type, vector<string> synonymType)
 {
 	vector<vector<string>> synAndType;
+	int index;
 	synAndType.push_back(vector <string>()); //stringVal
 	synAndType.push_back(vector <string>()); //type
 	synAndType.push_back(vector <string>()); //intVal
@@ -63,20 +65,19 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		return synAndType;
 	}
 	else if (isVariable(synonym)) {
-		//index = getIndex(synonym);
-		//synAndType[2].push_back(std::to_string(index));
+		index = pkb->getVarIndex(synonym);
+		synAndType[2].push_back(std::to_string(index));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("variable");
-		synAndType[2].push_back("-1");
 		synAndType[3].push_back(isSubExpression);
 		return synAndType;
 	}
 	else if (isProcedure(synonym)) {
-		//index = getProcIndexNum(synonym);
-		//synAndType[2].push_back(std::to_string(index));
+		index = pkb->getProcIndex(synonym);
+		synAndType[2].push_back(std::to_string(index));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("procedure");
-		synAndType[2].push_back("-1");
+	//	synAndType[2].push_back("-1");
 		synAndType[3].push_back(isSubExpression);
 		return synAndType;
 	}
@@ -181,16 +182,9 @@ string ParserOfType::removeUnwanted(string syn)
 
 bool ParserOfType::isVariable(string syn)
 {
-	if (syn.length() != 1) {
+	int index = pkb->getVarIndex(syn);
+	if (index == -1) {
 		return false;
-	}
-	std::locale loc;
-	for (std::size_t i = 0; i < syn.length(); i++) {
-		if (!isalpha(syn[i], loc)) {
-			//std::cout << "syn[i] in = " << syn[i] << '\n';
-			return false;
-			break;
-		}
 	}
 	return true;
 }
@@ -198,12 +192,10 @@ bool ParserOfType::isVariable(string syn)
 bool ParserOfType::isProcedure(string syn)
 {
 	std::locale loc;
-	for (std::size_t i = 0; i < syn.length(); i++) {
-		if (!isalpha(syn[i], loc)) {
+	int index = pkb->getProcIndex(syn);
+		if (index == -1) {
 			//std::cout << "syn[i] in = " << syn[i] << '\n';
 			return false;
-			break;
-		}
 	}
 	return true;
 }

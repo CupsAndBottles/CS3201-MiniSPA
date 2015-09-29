@@ -71,10 +71,6 @@ void Validation::patternValidation(vector<vector<string>> patternSynAndType)
 			throw ParserException("Grammar is wrong for pattern of " + patternSynAndType[0].at(0));
 		
 		}
-		else if (patternSynAndType[1].at(i + 1).compare("_") == 0 && patternSynAndType[1].at(i + 2).compare("_") == 0) {
-			throw ParserException("Grammar is wrong for pattern of " + patternSynAndType[0].at(0) );
-	
-		}
 		else if (patternSynAndType[1].at(i).compare("if") == 0 && !std::regex_match(patternSynAndType[1].at(i + 3), synonym.at(ag2))) {
 			throw ParserException("Grammar is wrong for pattern of " + patternSynAndType[0].at(0) );
 		
