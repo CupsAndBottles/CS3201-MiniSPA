@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 #include "DesignExtractor.h"
+#include "ProcTable.h"
 #include "Procedure.h"
+#include "StmtTable.h"
 #include "Stmt.h"
 #include "Variable.h"
-
+#include "VarTable.h"
 enum TYPE { ASSIGN, STATEMENT, PROCEDURE, UNDERSCORE, WHILE, IF, VARIABLE, CONSTANT, CALLS };
 using namespace std;
 typedef short PROC;
@@ -48,17 +50,15 @@ public:
 
 	//PARSER->PKB
 	//From ProcTable
-	//edit header: WL
 	int setProcNameInProcTable(string procName);
 	void setStartNum(int index, int startNum);
 	void setEndNum(int index, int endNum);
 	void setProcModified(int index, vector<int> modifiedVar);
 	void setProcUses(int index, vector<int> usesVar);
-	void setProcCalls(int index, string calls);
-	void setProcCalledBy(int index, string called);
+	void setProcCalls(int index, string callProc);
 
 	//From StmtTable
-	int setType(int type);
+	void setType(int type);
 	void setParent(int index, int parentStmt);
 	void setParentT(int index, vector<int> parentStmts);
 	void setChildren(vector<pair<int,int>> parentChildStmts);
@@ -87,7 +87,7 @@ public:
 	int getFollowedBy(int index);
 
 	//PQL-PKB
-	std::vector<pair<int, int>>  getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex);
+	std::vector<pair<int, int>> getModifies(TYPE type1, int stmtNum, TYPE type2, int varIndex);
 	std::vector<pair<int, int>> getCalls(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
 	std::vector<pair<int, int>> getUses(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
 	std::vector<pair<int, int>> getParent(TYPE type1, int stmtNum, TYPE type2, int stmtNum2);
@@ -114,7 +114,7 @@ public:
 	
 
 	//While table
-	int getWhileStmt(int, int);
+	int getWholeStmt(int, int);
 
 	//If table
 	void getIfStmt(int, int);

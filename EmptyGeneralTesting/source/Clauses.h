@@ -24,7 +24,7 @@ public:
 	void setParentStringVal(string stringVal);
 	void setParentType(string type);
 	string getParentStringVal();
-	Details::Type getParentType();
+	Details::TYPE getParentType();
 
 	void setRightCIsExpression(bool isExpression);
 	void setRightCStringValue(string stringVal);
@@ -34,7 +34,7 @@ public:
 	bool getRightCIsExpression();
 	string getRightCStringValue();
 	int getRightCIntValue();
-	Details::Type getRightCType();
+	Details::TYPE getRightCType();
 
 	void setLeftCIsExpression(bool isExpression);
 	void setLeftCStringValue(string stringVal);
@@ -44,7 +44,7 @@ public:
 	bool getLeftCIsExpression();
 	string getLeftCStringValue();
 	int getLeftCIntValue();
-	Details::Type getLeftCType();
+	Details::TYPE getLeftCType();
 	
 };
 

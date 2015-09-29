@@ -46,7 +46,7 @@ string Clauses::getParentStringVal()
 	return parent.getStringValue();
 }
 
-Details::Type Clauses::getParentType()
+Details::TYPE Clauses::getParentType()
 {
 	return parent.getType();
 }
@@ -86,7 +86,7 @@ int Clauses::getRightCIntValue()
 	return rightChild.getIntValue();
 }
 
-Details::Type Clauses::getRightCType()
+Details::TYPE Clauses::getRightCType()
 {
 	return rightChild.getType();
 }
@@ -126,7 +126,7 @@ int Clauses::getLeftCIntValue()
 	return leftChild.getIntValue();
 }
 
-Details::Type Clauses::getLeftCType()
+Details::TYPE Clauses::getLeftCType()
 {
 	return leftChild.getType();
 }

@@ -23,9 +23,7 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 	synAndType.push_back(vector <string>()); //type
 	synAndType.push_back(vector <string>()); //intVal
 	synAndType.push_back(vector <string>()); //isExpression
-	std::cout << "ENTER = " << '\n';
 	string isSubExpression = checkSubExpression(synonym);
-	std::cout << "PaserOfType = " << isSubExpression << '\n';
 	synonym = removeUnwanted(synonym);
 
 	if (isSynDigit(synonym) && clauseType == 1) {
@@ -46,7 +44,6 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		int pos = isBeingDeclared(synonym, synonymType);
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back(type.at(pos));
-		std::cout << "typeInDeclared = " << synAndType[1].at(0) << '\n';
 		synAndType[2].push_back("-1");
 		synAndType[3].push_back(isSubExpression);
 		return synAndType;
@@ -54,7 +51,7 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 	else if (synonym.compare("_") == 0) {
 		synAndType[0].push_back("_");
 		synAndType[1].push_back("_");
-		synAndType[2].push_back("-2");
+		synAndType[2].push_back("-1");
 		synAndType[3].push_back(isSubExpression);
 		return synAndType;
 	}
@@ -94,7 +91,6 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 
 vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synonym, vector<string> type, vector<string> synonymType)
 {
-	std::cout << "clause = " << clauseType << '\n';
 	vector<vector<string>> synAndType;
 	synAndType.push_back(vector <string>()); //stringVal
 	synAndType.push_back(vector <string>()); //type
@@ -108,7 +104,7 @@ vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synony
 			synAndType[1].push_back(type.at(typeDeclared));
 			synAndType[2].push_back("-1");
 			synAndType[3].push_back("0");
-			std::cout << "ININININININININININ" << '\n';
+	
 			return synAndType;
 		}
 		else if (synonym.compare("BOOLEAN") == 0) {

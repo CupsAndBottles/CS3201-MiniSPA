@@ -22,7 +22,7 @@ QueryEvaluator::~QueryEvaluator()
 {
 }
 
-list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
+list<string>& QueryEvaluator::evaluateQuery(QueryTree tree)
 {
 	this->tree = tree;
 	vector<Clauses> suchThat;
