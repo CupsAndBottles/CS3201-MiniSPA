@@ -548,56 +548,150 @@ std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmt1, TYPE type2, i
 
 }
 
+//V
 std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {	
 	vector<int>parentT;
+	vector<int>children;
 	vector<int>childrenT;
 	vector<pair<int, int>> results;
 
-	if ((type1 == STATEMENT) && (type2 == STATEMENT)) {
-		//both are undefined ie (s1,s2)
-		if ((stmtNum1 == -1) && (stmtNum2 == -1)) {
-			//check if parent exists inefficient
-			for (int i = 1; i < stmtTable.size(); i++) {
-				if (stmtTable.at(i).getParent() != -1) {
-					results.push_back(std::make_pair(stmtTable.at(i).getParent(), i));
+	//(num, )
+	if (stmtNum1 != -1) {
+		children = stmtTable.at(stmtNum1).getChildren();
+		for (int i = 0; i < children.size(); i++) {
+			if (stmtNum2 != -1) { // ParentT(2, 6)
+				if (stmtNum2 == children.at(i)) {
+					results.push_back(std::make_pair(stmtNum1, stmtNum2));
 					break;
 				}
 			}
-			return results;
-
-		//(s1,num)
-		}else if ((stmtNum1 == -1) && (stmtNum2 != -1)) {
-			parentT = extractParentT(stmtNum2);
-			for (int i = 0; i < parentT.size(); i++) {
-				results.push_back(std::make_pair(parentT.at(i), stmtNum2));
-			}
-			return results;
-
-		} //(num,s1)
-		else if ((stmtNum1 != -1) && (stmtNum2 == -1)) {
-			childrenT = extractChildrenT(stmtNum1);
-			for (int i = 0; i < childrenT.size(); i++) {
-				results.push_back(std::make_pair(stmtNum1,childrenT.at(i)));
-			}
-			return results;
-
-		} //(num,num)
-		else if ((stmtNum1 != -1) && (stmtNum2 != -1)) {
-			parentT = extractParentT(stmtNum2);
-			for (int i = 0; i < parentT.size(); i++) {
-				if (parentT.at(i) == stmtNum1) {
-					results.push_back(std::make_pair(stmtNum1, stmtNum2));
+			else { // ParentT(2, s/w/if/a/_/c)
+				childrenT = extractChildrenT(stmtNum1);
+				if (type2 == STATEMENT || type2 == UNDERSCORE || stmtTable.at(childrenT.at(i)).getType() == type2) {
+						results.push_back(std::make_pair(stmtNum1, childrenT.at(i)));
+					}
 				}
 			}
-			return results;
+		} else if (stmtNum2 != -1) { // ParentT(s/w/if/_ , 4)
+			parentT = extractParentT(stmtNum2);
+			for (int i = 0; i < parentT.size();i++) {
+				if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(parentT.at(i)).getType()) {
+					results.push_back(std::make_pair(parentT.at(i), stmtNum2));
+				}
+		}
+	} else { // ParentT(s/w/_, s/w/a/_/c)
+		for (int i = 1; i < stmtTable.size(); i++) {
+			if (type1 == STATEMENT || type1 == UNDERSCORE || type1 == stmtTable.at(i).getType()) {
+				childrenT = extractChildrenT(i);
+				for (int j = 0; j < children.size(); j++) {
+					if (type2 == STATEMENT || type2 == UNDERSCORE || type2 == stmtTable.at(childrenT.at(i)).getType()) {
+						results.push_back(std::make_pair(i, children.at(j)));
+					}
+				}
+			}
 		}
 	}
+
+	return results;
 }
 
-std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
-{
-	return std::vector<pair<int, int>>();
+//V
+std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmt1, TYPE type2, int stmt2)
+{	
+	vector<int> follows;
+	vector<int> followsT;
+	vector<int> followedByT;
+	vector<pair<int, int>> results;
+
+	if (stmt1 == -1) {
+		if (stmt2 == -1) {
+			if (type1 == UNDERSCORE || type1 == STATEMENT) {
+				if (type2 == UNDERSCORE || type2 == STATEMENT) {
+					// followsT(_,_) or followsT(s1,s2)
+					for (int i = OFFSET; i < stmtTable.size(); i++) {
+						followsT = extractFollowsT(i);
+						if (followsT.size()>0) {
+						for (int j = 0; j < followsT.size(); j++) {
+								results.push_back(make_pair(i, followsT.at(j)));
+							}
+						}
+					}
+				}
+				else {
+					// follows(_ ,call/if/assign/while) or follows(s1, call/if/assign/while)
+					for (int i = OFFSET; i < stmtTable.size(); i++) {
+						if (stmtTable[i].getType() == type2) {
+							followsT = extractFollowsT(i);
+							if (followsT.size() > 0) {
+								for (int j = 0; j < followsT.size(); j++) {
+									results.push_back(make_pair(i, followsT.at(j)));
+								}
+							}
+						}
+					}
+				}
+			}
+			else {
+				if (type2 == UNDERSCORE || type2 == STATEMENT) {
+					// follows(call/if/assign/while, _) or follows(call/if/assign/while, s1)
+					for (int i = OFFSET; i < stmtTable.size(); i++) {
+						if (stmtTable[i].getType() == type1) {
+							followedByT = extractFollowedByT(i);
+							if (followedByT.size() > 0) {
+								for (int j = 0; j < followedByT.size(); j++) {
+									results.push_back(make_pair(followedByT.at(j), i));
+								}
+							}
+						}
+					}
+				}
+				else {
+					// follws(call/if/assign/while, call/if/assign/while)
+					for (int i = OFFSET; i < stmtTable.size(); i++) {
+						if (stmtTable[i].getType() == type1) {
+							followsT = extractFollowsT(i);
+							if (followsT.size() > 0) {
+								for (int j = 0; j < followsT.size(); j++) {
+									if (stmtTable[followsT.at(i)].getType() == type2) {
+										results.push_back(make_pair(i, followsT.at(j)));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+		}
+		else {
+			// stmt1 is -1, stmt2 is not -1
+			followedByT = extractFollowedByT(stmt2);
+			if (followedByT.size() > 0) {
+				for (int i = 0; i < followedByT.size(); i++) {
+					results.push_back(make_pair(followedByT.at(i), stmt2));
+				}
+			}
+		}
+	}
+	else {
+		if (stmt2 == -1) {
+			// stmt 1 is not -1, stmt 2 is -1
+			followsT = extractFollowsT(stmt1);
+			if (followsT.size() > 0) {
+				for (int i = 0; i < followsT.size(); i++) {
+					results.push_back(make_pair(stmt1, followsT.at(i)));
+				}
+			}
+		}
+		else {
+			//Both parameters are defined
+			if (stmtTable[stmt1].getFollows() == stmt2) {
+				results.push_back(make_pair(stmt1, stmt2));
+			}
+		}
+	}
+	return results;
 }
 
 
