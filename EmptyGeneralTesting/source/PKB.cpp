@@ -132,9 +132,10 @@ void PKB::setParent(int index, int parentStmt)
 	stmtTable[index].setParent(parentStmt);
 }
 
-void PKB::setParentT(int index, vector<int> parentStmts)
+//V: set parents
+void PKB::setParentT(int index, vector<int> parents)
 {
-	stmtTable.setParentT(index, parentStmts);
+	stmtTable.setParentT(index, parents);
 }
 
 //G: children and parent together as pair
@@ -150,9 +151,10 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 	}
 }
 
+//V 
 void PKB::setChildrenT(int index, vector<int> childrenT)
 {
-	stmtTable.setChildrenT(stmtNum, childrenT);
+	stmtTable.setChildrenT(index, childrenT);
 }
 
 //G: set Follows and FollowedBy in same method
@@ -173,15 +175,16 @@ void PKB::setFollowedBy(int index, int followedBy)
 	stmtTable[index].setFollowedBy(followedBy);
 }
 
-
-void PKB::setFollowsT(int index, vector<int> followsTStmts)
+//V
+void PKB::setFollowsT(int index, vector<int> followsT)
 {
-	stmtTable.setFollowsT(index, followsTStmts);
+	stmtTable.setFollowsT(index, followsT);
 }
 
-void PKB::setFollowedByT(int index, vector<int> followsByStmts)
+//V
+void PKB::setFollowedByT(int index, vector<int> followedByT)
 {
-	stmtTable.setFollowedByT(index, followsByStmts);
+	stmtTable.setFollowedByT(index, followedByT);
 }
 
 //G: change variable passed as string to int and set stmttable.
@@ -240,8 +243,33 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 {
 	vector<int> stmtNos;
 	vector<int> varNos;
+	vector<int> procNos;
 	vector<pair<int, int>> results;
-	if (stmtNum != -1 && varIndex != -1) {
+	if (type1 == 2 && stmtNum != -1) {
+		varNos = procTable.at(stmtNum).getModified();
+		if (varIndex != -1) {
+			for (int i = 0; i < varNos.size(); i++) {
+				if (varNos.at(i) == varIndex) {
+					results.push_back(std::make_pair(stmtNum, varIndex));
+					break;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < varNos.size(); i++) {
+				results.push_back(std::make_pair(stmtNum, varNos.at(i)));
+			}
+		}
+	}
+	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
+		for (int i = 1; i < procTable.size(); i++) {
+			varNos = procTable.at(i).getModified();
+			for (int k = 0; k < varNos.size(); k++) {
+				results.push_back(std::make_pair(i, varNos.at(k)));
+			}
+		}
+	}
+	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getModifies();
 		for (int i = 0; i < varNos.size(); i++) {
 			if (varNos.at(i) == varIndex) {
@@ -257,20 +285,20 @@ std::vector<pair<int, int>> PKB::getModifies(TYPE type1, int stmtNum, TYPE type2
 		}
 	}
 	else if (varIndex != -1) {
-        stmtNos = varTable.at(varIndex).getModifiedBy();
+		stmtNos = varTable.at(varIndex).getModifiedBy();
 		for (int i = 0; i < stmtNos.size(); i++) {
-			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType() || type1 == 1) {
 				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
 			}
 		}
 	}
 	else {
-		for (int i = 0; i < stmtTable.size(); i++) {
-			if (type1 == stmtTable.at(i).getType()) {
+		for (int i = 1; i < stmtTable.size(); i++) {
+			if (type1 == stmtTable.at(i).getType() || type1 == 1 || type2 == 3) {
 				varNos = stmtTable.at(i).getModifies();
 				for (int k = 0; k < varNos.size(); k++) {
-	               results.push_back(std::make_pair(i, varNos.at(k)));
-				}		
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
 			}
 		}
 	}
@@ -327,8 +355,33 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 {
 	vector<int> stmtNos;
 	vector<int> varNos;
+	vector<int> procNos;
 	vector<pair<int, int>> results;
-	if (stmtNum != -1 && varIndex != -1) {
+	if (type1 == 2 && stmtNum != -1) {
+		varNos = procTable.at(stmtNum).getUsed();
+		if (varIndex != -1) {
+			for (int i = 0; i < varNos.size(); i++) {
+				if (varNos.at(i) == varIndex) {
+					results.push_back(std::make_pair(stmtNum, varIndex));
+					break;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < varNos.size(); i++) {
+				results.push_back(std::make_pair(stmtNum, varNos.at(i)));
+			}
+		}
+	}
+	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
+		for (int i = 1; i < procTable.size(); i++) {
+				varNos = procTable.at(i).getUsed();
+				for (int k = 0; k < varNos.size(); k++) {
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
+			}
+	}
+	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getUses();
 		for (int i = 0; i < varNos.size(); i++) {
 			if (varNos.at(i) == varIndex) {
@@ -346,14 +399,14 @@ std::vector<pair<int, int>> PKB::getUses(TYPE type1, int stmtNum, TYPE type2, in
 	else if (varIndex != -1) {
 		stmtNos = varTable.at(varIndex).getUsedBy();
 		for (int i = 0; i < stmtNos.size(); i++) {
-			if (type1 == stmtTable.at(stmtNos.at(i)).getType()) {
+			if (type1 == stmtTable.at(stmtNos.at(i)).getType() || type1 == 1) {
 				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
 			}
 		}
 	}
 	else {
-		for (int i = 0; i < stmtTable.size(); i++) {
-			if (type1 == stmtTable.at(i).getType()) {
+		for (int i = 1; i < stmtTable.size(); i++) {
+			if (type1 == stmtTable.at(i).getType() || type1 == 1 || type2 == 3) {
 				varNos = stmtTable.at(i).getUses();
 				for (int k = 0; k < varNos.size(); k++) {
 					results.push_back(std::make_pair(i, varNos.at(k)));
@@ -491,7 +544,21 @@ std::vector<pair<int, int>> PKB::getFollows(TYPE type1, int stmt1, TYPE type2, i
 
 std::vector<pair<int, int>> PKB::getParentT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
 {
-	return std::vector<pair<int, int>>();
+	if ((type1 == STATEMENT) && (type2 == STATEMENT)) {
+		//both are undefined ie (s1,s2)
+		if ((stmtNum1 == -1) && (stmtNum2 == -1)) {
+
+
+		//(s1,num)
+		}else if ((stmtNum1 == -1) && (stmtNum2 != -1)) {
+
+
+		
+		} //(num,s1)
+		else if ((stmtNum1 != -1) && (stmtNum2 == -1)) {
+			
+		}
+	}
 }
 
 std::vector<pair<int, int>> PKB::getFollowsT(TYPE type1, int stmtNum1, TYPE type2, int stmtNum2)
@@ -538,22 +605,25 @@ vector<int> PKB::extractFollowedByT(int stmtNum)
 	return design.extractFollowedByT(stmtNum);
 }
 
-// These methods might not be required
+//V: design Extractor required methods
 int PKB::getParent(int stmtNum)
 {
 	return stmtTable.getParent(stmtNum);
 }
 
+//V: for the design extractor
 std::vector<int> PKB::getChildren(int stmtNum)
 {
 	return stmtTable.getChildren(stmtNum);
 }
 
+//V: for the design extractor
 int PKB::getFollows(int stmtNum)
 {
 	return stmtTable.getFollows(stmtNum);
 }
 
+//V: for the design extractor
 int PKB::getFollowedBy(int stmtNum)
 {
 	return stmtTable.getFollowedBy(stmtNum);

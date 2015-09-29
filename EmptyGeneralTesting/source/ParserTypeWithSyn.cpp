@@ -68,15 +68,13 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 		if (suchThatSynonym[i].size() != 3) {
 			throw ParserException("unidentified such that synonym");
 		}
-			std::cout << "suchthatmodifies = " << suchThatSynonym[i].at(0) << '\n';
+
 		temp = parserOfType.setClauseType(1, suchThatSynonym[i].at(0), type, synonym);
-		std::cout << "temp = " << temp[0].at(0) << '\n';
 		if (temp.size() == 0) {
 			throw ParserException("SuchThat synonym unidentified");
 		}
 		suchThatSynAndType.insert(suchThatSynAndType.end(), temp.begin(), temp.end());
 		for (std::size_t k = 1; k < 3; k++) {
-			std::cout << "2)suchThat = " << suchThatSynonym[i].at(k) << '\n';
 			temp = parserOfType.setType(1, suchThatSynonym[i].at(k), type, synonym);
 			if (temp.size() == 0) {
 				throw ParserException("SuchThat synonym unidentified");

@@ -1,20 +1,70 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="..\source\Clauses.cpp" />
+    <ClCompile Include="..\source\DesignExtractor.cpp" />
+    <ClCompile Include="..\source\PairSeparator.cpp" />
+    <ClCompile Include="..\source\Parser.cpp" />
+    <ClCompile Include="..\source\ParserException.cpp" />
+    <ClCompile Include="..\source\ParserForPattern.cpp" />
+    <ClCompile Include="..\source\ParserForPQL.cpp" />
+    <ClCompile Include="..\source\ParserForSelect.cpp" />
+    <ClCompile Include="..\source\ParserForSuchThat.cpp" />
+    <ClCompile Include="..\source\ParserForWith.cpp" />
+    <ClCompile Include="..\source\ParserKeyword.cpp" />
+    <ClCompile Include="..\source\ParserOfTypeForSuchThat.cpp" />
+    <ClCompile Include="..\source\ParserTypeWithSyn.cpp" />
+    <ClCompile Include="..\source\PKB.cpp" />
+    <ClCompile Include="..\source\PQLController.cpp" />
+    <ClCompile Include="..\source\Procedure.cpp" />
+    <ClCompile Include="..\source\ProcTable.cpp" />
+    <ClCompile Include="..\source\QueryEvaluator.cpp" />
+    <ClCompile Include="..\source\QueryTree.cpp" />
+    <ClCompile Include="..\source\RelTable.cpp" />
+    <ClCompile Include="..\source\Details.cpp" />
+    <ClCompile Include="..\source\Stmt.cpp" />
+    <ClCompile Include="..\source\StmtTable.cpp" />
+    <ClCompile Include="..\source\Synonym.cpp" />
+    <ClCompile Include="..\source\Validation.cpp" />
+    <ClCompile Include="..\source\Variable.cpp" />
+    <ClCompile Include="..\source\VarTable.cpp" />
+    <ClCompile Include="..\UnitTesting\DesignExtractorUnderTest.cpp" />
+    <ClCompile Include="..\UnitTesting\PKBStub.cpp" />
+    <ClCompile Include="..\source\ParserOfType.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <ClInclude Include="..\source\DesignExtractor.h" />
+    <ClInclude Include="..\source\Details.h" />
+    <ClInclude Include="..\source\Clauses.h" />
+    <ClInclude Include="..\source\ParserForPattern.h" />
+    <ClInclude Include="..\source\PairSeparator.h" />
+    <ClInclude Include="..\source\Parser.h" />
+    <ClInclude Include="..\source\ParserException.h" />
+    <ClInclude Include="..\source\ParserForPQL.h" />
+    <ClInclude Include="..\source\ParserForSelect.h" />
+    <ClInclude Include="..\source\ParserForSuchThat.h" />
+    <ClInclude Include="..\source\ParserForWith.h" />
+    <ClInclude Include="..\source\ParserKeyword.h" />
+    <ClInclude Include="..\source\ParserOfTypeForSuchThat.h" />
+    <ClInclude Include="..\source\ParserTypeWithSyn.h" />
+    <ClInclude Include="..\source\PKB.h" />
+    <ClInclude Include="..\source\PQLController.h" />
+    <ClInclude Include="..\source\Procedure.h" />
+    <ClInclude Include="..\source\ProcTable.h" />
+    <ClInclude Include="..\source\QueryEvaluator.h" />
+    <ClInclude Include="..\source\QueryTree.h" />
+    <ClInclude Include="..\source\RelTable.h" />
+    <ClInclude Include="..\source\Stmt.h" />
+    <ClInclude Include="..\source\StmtTable.h" />
+    <ClInclude Include="..\source\Synonym.h" />
+    <ClInclude Include="..\source\Validation.h" />
+    <ClInclude Include="..\source\Variable.h" />
+    <ClInclude Include="..\source\VarTable.h" />
+    <ClInclude Include="..\UnitTesting\DesignExtractorUnderTest.h" />
+    <ClInclude Include="..\UnitTesting\PKBStub.h" />
+    <ClInclude Include="..\source\ParserOfType.h" />
+=======
     <ClCompile Include="..\source\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -84,12 +134,10 @@
     <ClCompile Include="..\source\Synonym.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\UnitTesting\DesignExtractorUnderTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\UnitTesting\PKBStub.cpp">
-=======
     <ClCompile Include="..\source\Details.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -97,7 +145,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\ParserForPattern.cpp">
->>>>>>> 64ab473fd11c00576be6c961746bc81bd85b8a7b
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -174,12 +221,10 @@
     <ClInclude Include="..\source\Synonym.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\UnitTesting\DesignExtractorUnderTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\UnitTesting\PKBStub.h">
-=======
     <ClInclude Include="..\source\Details.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -187,8 +232,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ParserForPattern.h">
->>>>>>> 64ab473fd11c00576be6c961746bc81bd85b8a7b
       <Filter>Header Files</Filter>
     </ClInclude>
+>>>>>>> origin/master
   </ItemGroup>
 </Project>
