@@ -63,7 +63,6 @@ void PKB::setProcUses(int index, vector<int> usesVar)
 	procTable[index].setUsedVar(usesVar);
 }
 
-//G: Yet to implement in table.
 void PKB::setProcCalls(int index, string calls)
 {
 	int procIndex = getProcIndex(calls);
@@ -118,12 +117,10 @@ PKB::~PKB()
 {
 }
 //G: index not necessary. 
-int PKB::setType(int type)
+void PKB::setType(int type)
 {
 	int index = stmtTable.size();
 	stmtTable[index].setStmtType(type);
-
-	return index;
 }
 
 //G: parent set from setChildren method.

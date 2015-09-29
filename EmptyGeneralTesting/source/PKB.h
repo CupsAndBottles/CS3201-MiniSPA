@@ -57,6 +57,8 @@ public:
 	void setProcUses(int index, vector<int> usesVar);
 	void setProcCalls(int index, string callProc);
 
+	void setProcCalledBy(int index, string called);
+
 	//From StmtTable
 	void setType(int type);
 	void setParent(int index, int parentStmt);
