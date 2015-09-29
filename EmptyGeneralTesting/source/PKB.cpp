@@ -313,12 +313,12 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 }
 
 //ZH
-vector<pair<int, int>> PKB::getCalls(Enum::TYPE type1, int procIndexFirst, Enum::TYPE type2, int procIndexSecond) {
+vector<pair<int, int>> PKB::getCalls(int procIndexFirst, int procIndexSecond) {
 	vector<pair<int, int>> result;
 	vector<int> call;
 
-	if ((type1 == Enum::TYPE::UNDERSCORE) || (procIndexFirst == UNDEFINED)) {
-		if ((type2 == Enum::TYPE::UNDERSCORE) || (procIndexSecond == UNDEFINED)) {
+	if (procIndexFirst == -1) {
+		if (procIndexSecond == -1) {
 			// Both undefined
 			for (int i = 0; i < procTable.size(); i++) {
 				call = procTable[i].getCalls();
@@ -336,7 +336,7 @@ vector<pair<int, int>> PKB::getCalls(Enum::TYPE type1, int procIndexFirst, Enum:
 		}
 	}
 	else {
-		if ((type2 == Enum::TYPE::UNDERSCORE) || (procIndexSecond == UNDEFINED)) {
+		if (procIndexSecond == -1) {
 			// Only first defined
 			call = procTable[procIndexFirst].getCalls();
 			for (int i = 0; i < call.size(); i++) {

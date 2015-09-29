@@ -324,7 +324,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	}
 	
 	if (intermediateResult.size() != 0) {
-		storeResults(intermediateResult, clause.getParentStringVal, Enum::TYPE::ASSIGN);
+		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::ASSIGN);
 		return true;
 	}
 	else {
@@ -339,14 +339,14 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	Details firstParam = clause.getLeftChild();
 	Details secondParam = clause.getRightChild();
 
-	if (firstParam.getIntValue == WILDCARD) {
+	if (firstParam.getIntValue() == WILDCARD) {
 		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
 			firstSynResults.push_back(it->first);
 		}
 		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
 	}
 
-	if (secondParam.getIntValue == WILDCARD) {
+	if (secondParam.getIntValue() == WILDCARD) {
 		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
 			secondSynResults.push_back(it->second);
 		}
@@ -445,6 +445,8 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		outputString = outputString + stackTop;
 		stack.pop();
 	}
+
+	return outputString;
 }
 //end of method
 

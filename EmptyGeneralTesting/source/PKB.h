@@ -86,7 +86,7 @@ public:
 
 	//PQL-PKB
 	std::vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
-	std::vector<pair<int, int>> getCalls(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	std::vector<pair<int, int>> getCalls(int stmtNum, int stmtNum2);
 	std::vector<pair<int, int>> getUses(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	std::vector<pair<int, int>> getParent(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	std::vector<pair<int, int>> getFollows(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
