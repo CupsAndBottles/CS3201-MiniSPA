@@ -3,6 +3,7 @@
 #include<vector>
 #include<string>
 #include<regex>
+#include "PKB.h"
 
 using namespace std;
 class ParserOfType
@@ -19,7 +20,8 @@ public:
 	string removeUnwanted(string syn);
 	bool isVariable(string syn);
 	bool isProcedure(string syn);
-	bool isExpression(string syn);
+	bool isExpression(string syn); 
+	PKB *pkb = PKB::getInstanceOf();
 };
 
 
