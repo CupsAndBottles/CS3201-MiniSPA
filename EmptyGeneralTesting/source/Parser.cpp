@@ -12,16 +12,20 @@ using namespace std;
 vector<string> tokens;
 list<pair<int, string>> listOfStatements;
 vector<pair<int, int>> parentLink;
-list<pair<int, int>> followLink;
+vector<pair<int, int>> followLink;
 list<pair<int, string>> stmtNoAndExpr;
+vector<pair<int, string>> procCall;
 string currProcName;
 int currIndex = 0;
 int numOfProc = 0;
 vector<int> currFollows;
 stack<char> closeBracket;
 stack<char> openBracket;
+vector<string> varModifiedInProc;
+vector<string> varUsedInProc;
 list<pair<int, string>> containerElements;
 string prevStmt;
+int procNumInTble;
 
 Parser::Parser()
 {
@@ -126,13 +130,22 @@ void Parser::Procedure() {
 		else if (stmt.find("if") != std::string::npos) {
 			//processIf();
 		}
+		else if (stmt.find("calls") != std::string::npos) {
+			processCalls((*i).first, (*i).second);
+		}
 		else {
 			processExpressions((*i).first, (*i).second);
 			handleModifyAndUses((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
 		}
 	}
+	setRelationsInTable();
+}
+
+void Parser::setRelationsInTable() {
 	instance->setChildren(parentLink);
+	instance->setFollows(followLink);
+	instance->setProcCalls(procCall);
 }
 
 void Parser::addToParent(int child) {
@@ -167,7 +180,16 @@ void Parser::processProcedure(int index, string statement) {
 	string procName = statement.substr(statement.find("procedure") + 9);
 	currProcName = procName;
 	numOfProc++;
+	procNumInTble = instance->setProcNameInProcTable(statement);
+	instance->setStartNum(procNumInTble,index);
+}
 
+void Parser::processCalls(int index, string stmt) {
+	pair<int, string> paired;
+	string callVar = stmt.substr(stmt.find("calls") + 5);
+	paired.first = procNumInTble;
+	paired.second = callVar;
+	procCall.push_back(paired);
 }
 
 void Parser::processWhile(int index, string statement) {
@@ -181,6 +203,7 @@ void Parser::processWhile(int index, string statement) {
 		parentPair.second = index-numOfProc;
 		parentLink.push_back(parentPair);
 	}
+	instance->setType(1);
 	containerElements.push_back(pair);
 	addToParent(pair.first);
 	handleModifyAndUses(pair.first, pair.second);
@@ -198,12 +221,13 @@ bool Parser::isOperator(char o) {
 void Parser::processExpressions(int index, string statement) {
 	list<char> output;
 	stack<char> stack;
+	string s = "";
 	output.clear();
+	instance->setType(0);
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
 			addToParent(index);
-			//break;
 		}
 		if (c == '}') {
 
@@ -268,6 +292,9 @@ void Parser::processExpressions(int index, string statement) {
 			}
 			else {
 				output.push_back(charac);
+				s = ""+charac;
+				int index = instance->setVarName(s);
+				instance->setProcNames(index,currProcName);
 			}
 		}
 	}
@@ -281,7 +308,7 @@ void Parser::processExpressions(int index, string statement) {
 		output.push_back(stackTop);
 		stack.pop();
 	}
-	setExprInStmtTable(index, output);
+	setExprInStmtTable(index-numOfProc, output);
 
 }
 //end of method
@@ -296,17 +323,20 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		size_t bracketPos = stmt.find("{");
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
-	
+		instance->setUsedVar(i-numOfProc,varInWhile);
+		instance->setUsedBy(varInWhile,i-numOfProc);
+		varUsedInProc.push_back(varInWhile);
 	}
 	else {
 		size_t equal = stmt.find("=");
 		char modified = stmt.at(0);
-		string s;
-		s.push_back(modified);
 
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
 			if (isVariable(c)) {
-		
+				string s = "" + c;
+				instance->setModifies(i-numOfProc,s);
+				instance->setModifiedBy(s,i-numOfProc);
+				varUsedInProc.push_back(s);
 			}
 		}
 	}
@@ -339,61 +369,25 @@ string Parser::getExpression() {
 string Parser::getFollow() {
 	string output;
 	while (!followLink.empty()) {
-		pair<int, int> followPair = followLink.front();
+		pair<int, int> followPair = followLink.back();
 		int firstNum = followPair.first;
 		int secondNum = followPair.second;
 		output.append(to_string(firstNum) + "->" + to_string(secondNum) + "|");
 		if (!followLink.empty()) {
-			followLink.pop_front();
+			followLink.pop_back();
 		}
 	}
 		return output;
 }
 
-void Parser::insertIntoStmtTable(int typeOfStat, int i, int stmtNum, int var) {
-	int parent;
-	int child;
-
-	int follows;
-	int followedBy;
-	vector<int> parentT;
-	vector<int> childrenT;
-	vector<int> followsT;
-	vector<int> followedByT;
-	int uses;
-	int modify;
-	string rExpr;
-
-	for (list<pair<int, string>>::iterator it = stmtNoAndExpr.begin(); it != stmtNoAndExpr.end(); ++it) {
-		if ((*it).first = stmtNum) {
-			rExpr = (*it).second;
-		}
-		else {
-			rExpr = "";
-		}
-	}
-
-	if (i = 0) {//modify
-		modify = var;
-	//	stmtTable.insertStmt(typeOfStat, 0, 0, 0, 0, parentT, childrenT, followsT, followedByT, 0, modify, rExpr);
-	}
-	else if (i = 1) {
-		uses = var;
-		//stmtTable.insertStmt(typeOfStat, 0, 0, 0, 0, parentT, childrenT, followsT, followedByT, uses, 0, rExpr);
-	}
-}
 void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
-	pair<int, string> pairs;
-	pairs.first = index - 1;
+	int newIndex = index - numOfProc;
 	string s;
 	for (list<char>::iterator it = exprOutput.begin(); it != exprOutput.end(); ++it) {
 
 		s.push_back(*it);
 	}
-	if (!s.empty()) {
-		pairs.second = s;
-	}
-	stmtNoAndExpr.push_back(pairs);
+	instance->setRightExpr(newIndex,s);
 }
 
 void Parser::Error() {
@@ -432,8 +426,11 @@ void Parser::pushCloseBracket(int stmtNum) {
 void Parser::setProcEndNum(int stmtNum) {
 
 	if (containerElements.empty()) {
-		//procTable.setEndStmtNo(stmtNum - numOfProc, currProcName);
-		//cBrack = 0;
+		instance->setEndNum(procNumInTble,stmtNum - numOfProc);
+		instance->setProcModified(procNumInTble,varModifiedInProc);
+		instance->setProcUses(procNumInTble,varUsedInProc);
+		varUsedInProc.clear();
+		varModifiedInProc.clear();
 	}
 }
 void Parser::pushOpenBracket() {

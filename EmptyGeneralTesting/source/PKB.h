@@ -46,29 +46,29 @@ public:
 
 	//PARSER->PKB
 	//From ProcTable
-	int setProcNameInProcTable(string procName);
-	void setStartNum(int index, int startNum);
-	void setEndNum(int index, int endNum);
-	void setProcModified(int index, vector<int> modifiedVar);
-	void setProcUses(int index, vector<int> usesVar);
-	void setProcCalls(int index, string callProc);
-
-	void setProcCalledBy(int index, string called);
-
+	int setProcNameInProcTable(string procName);//done
+	void setStartNum(int index, int startNum); //done
+	void setEndNum(int index, int endNum); //done
+	void setProcModified(int index, vector<string> modifiedVar);//done
+	void setProcUses(int index, vector<string> usesVar);//done
+	void setProcCalls(vector<pair<int,string>> procCalls);
+	void setProcCalledBy(int index, int called);
+	
 	//From StmtTable
-	void setType(int type);
-	void setParent(int index, int parentStmt);
+	void setType(int type);//done
+	void setParent(int index, int parentStmt); //done
 	void setParentT(int index, vector<int> parentStmts);
-	void setChildren(vector<pair<int,int>> parentChildStmts);
+	void setChildren(vector<pair<int,int>> parentChildStmts); //done
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(int index, vector<pair<int, int>> follows);
-	void setFollowedBy(int index, int followedBy);
+	void setFollows(vector<pair<int, int>> follows);//done
+	void setFollowedBy(int index, int followedBy);//done
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts);
-	void setModifies(int index, vector<string> modifiedVar);
+	void setModifies(int index,string modifiedVar);//done
 	//void setConstant(int index, vector<int> usesStmts);
-	void setUsedVar(int index, vector<string> usedVar);
-	void setRightExpr(int index, string rightExpression);
+	void setUsedVar(int index, string usedVar);//done
+	void setRightExpr(int index, string rightExpression);//done
+
 	string getRightExpr(int index);
 	int getNoOfStmt();
 
@@ -85,13 +85,13 @@ public:
 	int getFollowedBy(int index);
 
 	//PQL-PKB
-	std::vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
-	std::vector<pair<int, int>> getCalls(int stmtNum, int stmtNum2);
-	std::vector<pair<int, int>> getUses(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getParent(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getFollows(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getParentT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
-	std::vector<pair<int, int>> getFollowsT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
+	vector<pair<int, int>> getCalls(int stmtNum, int stmtNum2);
+	vector<pair<int, int>> getUses(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getParent(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getFollows(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getParentT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getFollowsT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 
 	//From ProcTable
 	int getProcIndex(string procName);
@@ -105,10 +105,10 @@ public:
 	vector<int> getModifiedByStmtNum(int index);
 	 
 	//From VarTable 
-	int setVarName(string varName);
-	void setProcNames(int index,string procName);
-	void setUsedBy(int index,int stmtNum);
-	void setModifiedBy(int index, int stmtNum);
+	int setVarName(string varName);//done
+	void setProcNames(int index,string procName); //done
+	void setUsedBy(string varName,int stmtNum); //done
+	void setModifiedBy(string varName, int stmtNum);//done
 	
 
 	//While table
