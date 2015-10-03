@@ -41,7 +41,8 @@ int PKB::setProcNameInProcTable(string procName)
 {
 	int index = getProcIndex(procName);
 	if (index == -1) {
-		int size = procTable.size();
+		procTable.push_back(Procedure());
+		int size = procTable.size() - OFFSET;
 		procTable[size].setProcName(procName);
 		index = getProcIndex(procName);
 	}
@@ -251,7 +252,7 @@ string PKB::getRightExpr(int index){
 
 //ZH
 int PKB::getNoOfStmt(){
-	return this->stmtTable.size() - OFFSET;
+	return stmtTable.size() - OFFSET;
 }
 
 //WL
@@ -776,8 +777,12 @@ int PKB::getFollowedBy(int stmtNum)
 //ZH
 int PKB::getProcIndex(string procName){
 
+	if (procTable.size() == 0) {
+		return NOT_FOUND;
+	}
+
 	for (int i = 0; i < procTable.size(); i++) {
-		if (this->procTable[i].getName() == procName) {
+		if (procTable[i].getName() == procName) {
 			return i;
 		}
 	}
@@ -797,7 +802,7 @@ int PKB::getVarIndex(string varName)
 	bool isFound = false;
 
 	for (int i = 0; i < varTable.size(); i++) {
-		if (this->varTable[i].getVarName() == varName) {
+		if (varTable[i].getVarName() == varName) {
 			return i;
 		}
 	}

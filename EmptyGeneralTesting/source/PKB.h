@@ -18,10 +18,6 @@ class PKB {
 private:
 	PKB() {};
 	static PKB* m_Instance;
-	//ZH
-	vector<Stmt> stmtTable;
-	vector<Variable> varTable;
-	vector<Procedure> procTable;
 
 public:
 	//	string procNum;
@@ -46,28 +42,28 @@ public:
 
 	//PARSER->PKB
 	//From ProcTable
-	int setProcNameInProcTable(string procName);//done
-	void setStartNum(int index, int startNum); //done
-	void setEndNum(int index, int endNum); //done
-	void setProcModified(int index, vector<string> modifiedVar);//done
-	void setProcUses(int index, vector<string> usesVar);//done
+	int setProcNameInProcTable(string procName); //tested
+	void setStartNum(int index, int startNum); 
+	void setEndNum(int index, int endNum); 
+	void setProcModified(int index, vector<string> modifiedVar);
+	void setProcUses(int index, vector<string> usesVar);
 	void setProcCalls(vector<pair<int,string>> procCalls);
 	void setProcCalledBy(int index, int called);
 	
 	//From StmtTable
-	void setType(int type);//done
-	void setParent(int index, int parentStmt); //done
+	void setType(int type);
+	void setParent(int index, int parentStmt); 
 	void setParentT(int index, vector<int> parentStmts);
-	void setChildren(vector<pair<int,int>> parentChildStmts); //done
+	void setChildren(vector<pair<int,int>> parentChildStmts); 
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(vector<pair<int, int>> follows);//done
-	void setFollowedBy(int index, int followedBy);//done
+	void setFollows(vector<pair<int, int>> follows);
+	void setFollowedBy(int index, int followedBy);
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts);
-	void setModifies(int index,string modifiedVar);//done
+	void setModifies(int index,string modifiedVar);
 	//void setConstant(int index, vector<int> usesStmts);
-	void setUsedVar(int index, string usedVar);//done
-	void setRightExpr(int index, string rightExpression);//done
+	void setUsedVar(int index, string usedVar);
+	void setRightExpr(int index, string rightExpression);
 
 	string getRightExpr(int index);
 	int getNoOfStmt();
