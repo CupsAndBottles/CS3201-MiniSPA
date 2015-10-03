@@ -15,6 +15,9 @@ public:
 	QueryEvaluator(PKB &pkb, QueryTree tree);
 	~QueryEvaluator();
 	list<string>& evaluateQuery(QueryTree tree);
+
+	list<string> evaluateQuery(QueryTree tree);
+
 	list<string> permutateResult(vector<vector<string>>& intermediateResult);
 	vector<Synonym> getResults();
 
