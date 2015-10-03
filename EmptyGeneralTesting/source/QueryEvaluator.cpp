@@ -21,7 +21,7 @@ QueryEvaluator::~QueryEvaluator()
 {
 }
 
-list<string>& QueryEvaluator::evaluateQuery(QueryTree tree)
+list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 {
 	this->tree = tree;
 	vector<Clauses> suchThat;
@@ -55,6 +55,7 @@ list<string>& QueryEvaluator::evaluateQuery(QueryTree tree)
 			return emptyResult;
 		}
 	}
+
 	for (int i = 0; i < select.size(); i++) {
 		intermediateResult.push_back(evaluateSelect(select[i]));
 	}

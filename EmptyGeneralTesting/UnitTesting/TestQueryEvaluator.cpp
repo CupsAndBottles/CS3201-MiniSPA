@@ -16,29 +16,9 @@ namespace UnitTesting
 			PKB *pkb = PKB::getInstanceOf();
 
 			// Sets stmts
-			pkb->setType(Enum::TYPE::ASSIGN); // beads = command + 10
-			pkb->setType(Enum::TYPE::WHILE); // while coffee
-			pkb->setType(Enum::TYPE::ASSIGN); // command = inspiration + beads
-
-			// Sets variables
-			pkb->setVarName("beads");
-			pkb->setVarName("command");
-			pkb->setVarName("inspiration");
-
-			// Sets parent and children
-/*			pkb->setParent(3, 2);
-			pkb->setChildren(vector<pair<int, int>> {(2, 3)});
-*/
-			// Sets modifies and uses
-			pkb->setModifies(1, "beads");
-			pkb->setUsedVar(1, "command");
-			pkb->setUsedVar(2, "coffee");
-			pkb->setModifies(3, "command");
-			pkb->setModifies(2, "command");
-			pkb->setUsedVar(3, "inspiration");
-			pkb->setUsedVar(2, "inspiration");
-			pkb->setUsedVar(3, "beads");
-			pkb->setUsedVar(2, "beads");
+			pkb->setType(Enum::TYPE::ASSIGN); // stmt 1: assignment stmt
+			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
+			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -47,7 +27,15 @@ namespace UnitTesting
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 			string actualResults = string("1, 3");
 
-			Assert::AreEqual(actualResults, results.front());
+			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
+				Assert::AreEqual(actualResults, *it);
+			}
+		} 
+
+		TEST_METHOD(TestEvaluateSuchThatModifies) {
+			PKB *pkb = PKB::getInstanceOf();
+
+
 		}
 	};
 }

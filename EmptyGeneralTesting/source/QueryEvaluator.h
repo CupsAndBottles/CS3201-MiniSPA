@@ -14,7 +14,7 @@ public:
 	QueryEvaluator();
 	~QueryEvaluator();
 
-	list<string>& evaluateQuery(QueryTree tree);
+	list<string> evaluateQuery(QueryTree tree);
 
 	list<string> permutateResult(vector<vector<string>>& intermediateResult);
 
