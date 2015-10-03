@@ -13,7 +13,7 @@ namespace UnitTesting
 	{
 	public:
 		TEST_METHOD(TestEvaluateSelectClause) {
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
 
 			// Sets stmts
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 1: assignment stmt
@@ -22,7 +22,7 @@ namespace UnitTesting
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			QueryEvaluator queryEvaluator = QueryEvaluator();
+			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 			string actualResults = string("1, 3");
@@ -44,7 +44,7 @@ namespace UnitTesting
 					x = beads + command; }						\\8
 			*/
 		/**********************************************************/
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -72,7 +72,7 @@ namespace UnitTesting
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; while w; variable v; Select a such that Modifies(a, _) pattern w(v, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			QueryEvaluator queryEvaluator = QueryEvaluator();
+			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 			string actualResults = string("1, 2, 3, 5, 7, 8");
@@ -95,7 +95,7 @@ namespace UnitTesting
 					x = beads + command; }}						\\8
 		*/
 		/**********************************************************/
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -146,7 +146,7 @@ namespace UnitTesting
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select v pattern a(_, \"x * 9\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			QueryEvaluator queryEvaluator = QueryEvaluator();
+			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 		//	string actualResults = string("command, inspiration, coffee, beads, x");
