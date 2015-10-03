@@ -106,6 +106,7 @@ public:
 	void setUsedBy(string varName,int stmtNum); //done
 	void setModifiedBy(string varName, int stmtNum);//done
 	
+	int getType(int index);
 
 	//While table
 	int getWholeStmt(int, int);

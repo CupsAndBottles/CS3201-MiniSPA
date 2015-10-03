@@ -106,11 +106,12 @@ void PKB::setProcCalledBy(int index, int called)
 //Vartable Setters:
 
 //G: check for existence, return index if exists else, set varname and return new index
-int PKB::setVarName(string varName)
-{
+int PKB::setVarName(string varName){
+	
 	int index = getVarIndex(varName);
 	if (index = -1) {
-		int size = varTable.size();
+		varTable.push_back(Variable());
+		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
 	}
@@ -147,9 +148,12 @@ PKB::~PKB()
 {
 }
 //G: index not necessary. 
-void PKB::setType(int type)
-{
-	int index = stmtTable.size();
+void PKB::setType(int type){	
+	if (stmtTable.size() == 0) {
+		stmtTable.push_back(Stmt());
+	}
+	stmtTable.push_back(Stmt());
+	int index = stmtTable.size() - OFFSET;
 	stmtTable[index].setStmtType(type);
 }
 
@@ -814,4 +818,9 @@ int PKB::getVarIndex(string varName)
 string PKB::getVarName(int index)
 {
 	return varTable[index].getVarName();
+}
+
+//ZH
+int PKB::getType(int index) {
+	return stmtTable[index].getType();
 }
