@@ -12,12 +12,10 @@ class QueryEvaluator
 {
 public:
 	QueryEvaluator();
+	QueryEvaluator(PKB pkb);
 	~QueryEvaluator();
-
 	list<string> evaluateQuery(QueryTree tree);
-
 	list<string> permutateResult(vector<vector<string>>& intermediateResult);
-
 	vector<Synonym> getResults();
 
 private:
@@ -36,6 +34,5 @@ private:
 	list<string> permutateResultSubset(vector<vector<string>> intermediateResult);
 	list<string> convertVectorToList(vector<string> mergedResults);
 	string convertToString(int index, Enum::TYPE type);
-	PKB *pkb = PKB::getInstanceOf();
-
+	PKB *pkb;
 };

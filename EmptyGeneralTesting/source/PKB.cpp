@@ -18,11 +18,12 @@ const int OFFSET = 1;
 const int NOT_FOUND = -1;
 const int UNDEFINED = -1;
 
-PKB* PKB::m_Instance = NULL;
+//PKB* PKB::m_Instance = NULL;
 vector<Stmt> stmtTable;
 vector<Variable> varTable;
 vector<Procedure> procTable;
 
+/**
 PKB* PKB::getInstanceOf()
 {
 	if (m_Instance) {
@@ -30,8 +31,7 @@ PKB* PKB::getInstanceOf()
 	}
 	return m_Instance;
 }
-
-
+**/
 
 //-----------------------------------------------------------------------------
 //ProcTable Setters:
@@ -140,9 +140,9 @@ void PKB::setModifiedBy(string varName, int stmtNum)
 
 //----------------------------------------------------------------------------------------------------------------
 
-//PKB::PKB()
-//{
-//}
+PKB::PKB()
+{
+}
 
 PKB::~PKB()
 {
@@ -256,7 +256,12 @@ string PKB::getRightExpr(int index){
 
 //ZH
 int PKB::getNoOfStmt(){
-	return stmtTable.size() - OFFSET;
+	if (stmtTable.size() == 0) {
+		return 0;
+	}
+	else {
+		return stmtTable.size() - OFFSET;
+	}
 }
 
 //WL

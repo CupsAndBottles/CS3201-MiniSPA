@@ -16,8 +16,8 @@ class TNode;
 
 class PKB {
 private:
-	PKB() {};
-	static PKB* m_Instance;
+	//static PKB* m_Instance;
+	void setParent(int index, int parentStmt);
 
 public:
 	//	string procNum;
@@ -29,14 +29,15 @@ public:
 	int varIndex;
 	int stmtNum;
 	int modify;
+	
 	string procedure;
 	vector<int> varModifiedList;
 	vector<int>parentT;
 	vector<int> childrenT;
 
-	
+	PKB();
 	~PKB();
-	static PKB* getInstanceOf();
+//	static PKB* getInstanceOf();
 	Procedure proc;
 	DesignExtractor design;
 
@@ -52,7 +53,6 @@ public:
 	
 	//From StmtTable
 	void setType(Enum::TYPE type);
-	void setParent(int index, int parentStmt); 
 	void setParentT(int index, vector<int> parentStmts);
 	void setChildren(vector<pair<int,int>> parentChildStmts); 
 	void setChildrenT(int index, vector<int> childrenStmts);
@@ -63,10 +63,10 @@ public:
 	void setModifies(int index,string modifiedVar);
 	//void setConstant(int index, vector<int> usesStmts);
 	void setUsedVar(int index, string usedVar);
-	void setRightExpr(int index, string rightExpression);
+	void setRightExpr(int index, string rightExpression);  //tested
 
-	string getRightExpr(int index);
-	int getNoOfStmt();
+	string getRightExpr(int index); //tested
+	int getNoOfStmt(); //tested
 
 	//PKB->DESIGNEXT
 	vector<int> extractParentT(int index);
@@ -101,17 +101,17 @@ public:
 	vector<int> getModifiedByStmtNum(int index);
 	 
 	//From VarTable 
-	int setVarName(string varName);//done
-	void setProcNames(int index,string procName); //done
-	void setUsedBy(string varName,int stmtNum); //done
-	void setModifiedBy(string varName, int stmtNum);//done
+	int setVarName(string varName);
+	void setProcNames(int index,string procName); 
+	void setUsedBy(string varName,int stmtNum); 
+	void setModifiedBy(string varName, int stmtNum);
 	
 	int getType(int index);
 
 	//While table
-	int getWholeStmt(int, int);
+	//int getWholeStmt(int, int);
 
 	//If table
-	void getIfStmt(int, int);
+	//void getIfStmt(int, int);
 
 };
