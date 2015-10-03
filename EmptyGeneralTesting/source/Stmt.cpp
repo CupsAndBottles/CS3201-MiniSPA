@@ -24,9 +24,9 @@ void Stmt::setChildren(int child)
 	childrenList.push_back(child);
 }
 
-void Stmt::setUsedVar(vector<int> usedList)
+void Stmt::setUsedVar(int usedVar)
 {
-	usedVarList = usedList;
+	usedVarList.push_back(usedVar);
 }
 
 void Stmt::setUsedConstant(vector<int> usedConstant)
@@ -34,9 +34,9 @@ void Stmt::setUsedConstant(vector<int> usedConstant)
 	usedConstantList = usedConstant;
 }
 
-void Stmt::setModifiedVar(vector<int> modifiedList)
+void Stmt::setModifiedVar(int modifiedList)
 {
-	modifiedVarList = modifiedList;
+	modifiedVarList.push_back(modifiedList);
 }
 
 void Stmt::setRightExpr(string rightExpr)

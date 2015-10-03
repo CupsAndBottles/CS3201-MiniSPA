@@ -1,10 +1,13 @@
-procedure main{
+proceduremain{
 y=5;
 z=7;
-while s{
-	while k{
+	while s{
+		while k{
 		k=o+p;
-		j=o+p;}
-	p=o+i;}
+		j=o+p;
+		}
+	p=o+i;
+	}
 j=i+p;
-z=k+l;}
+z=k+l;
+}

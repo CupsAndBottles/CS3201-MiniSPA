@@ -11,9 +11,9 @@ public:
 	void setStmtType(int t);
 	void setParent(int p);
 	void setChildren(int child);
-	void setUsedVar(vector<int> usedList);
+	void setUsedVar(int usedVar);
 	void setUsedConstant(vector<int> usedConstant);
-	void setModifiedVar(vector<int> modifiedList);
+	void setModifiedVar(int modifiedVar);
 	void setRightExpr(string rightExpr);
 	void setFollows(int followStmt);
 	void setFollowedBy(int followedByStmt);

@@ -24,7 +24,7 @@ namespace UnitTesting
 
 		TEST_METHOD(TestParent) {
 			string parentChild = parser.getParentChild();
-			Assert::AreEqual(parentChild,string("Parent: 3 Child: 4| Parent: 4 Child: 5| Parent: 4 Child: 6| Parent: 3 Child: 7| "));
+			Assert::AreEqual(parentChild,string("Parent: 3 Child: 7| Parent: 4 Child: 6| Parent: 4 Child: 5| Parent: 3 Child: 4| "));
 		}
 
 		TEST_METHOD(TestExpression) {
