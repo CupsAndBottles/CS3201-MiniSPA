@@ -51,7 +51,7 @@ public:
 	void setProcCalledBy(int index, int called);
 	
 	//From StmtTable
-	void setType(int type);
+	void setType(Enum::TYPE type);
 	void setParent(int index, int parentStmt); 
 	void setParentT(int index, vector<int> parentStmts);
 	void setChildren(vector<pair<int,int>> parentChildStmts); 
