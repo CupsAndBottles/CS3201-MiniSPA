@@ -136,15 +136,16 @@ void ParserTypeWithSyn::checkCommonSynonym()
 {
 	int number = 0;
 	string temp = "";
-	for (int i = 0; i < suchThatSynAndType[0].size(); i++) {
-		for (int j = 0; j < patternSynAndType[0].size(); j++) {
-			if (suchThatSynAndType[0].at(i).compare(patternSynAndType[0].at(j)) == 0 && temp.compare(suchThatSynAndType[0].at(i)) != 0 &&
-				suchThatSynAndType[0].at(i).compare("_") != 0) {
-				temp = suchThatSynAndType[0].at(i);
-				number++;
+	if(suchThatSynAndType.size() > 0 && patternSynAndType.size() > 0) {
+		for (int i = 0; i < suchThatSynAndType[0].size(); i++) {
+			for (int j = 0; j < patternSynAndType[0].size(); j++) {
+				if (suchThatSynAndType[0].at(i).compare(patternSynAndType[0].at(j)) == 0 && temp.compare(suchThatSynAndType[0].at(i)) != 0 &&
+					suchThatSynAndType[0].at(i).compare("_") != 0) {
+					temp = suchThatSynAndType[0].at(i);
+					number++;
+				}
 			}
 		}
-
 		if (number > 1) {
 			throw ParserException("Only 1 common synonym should be evaluated");
 		}

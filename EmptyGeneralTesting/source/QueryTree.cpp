@@ -24,10 +24,15 @@ QueryTree & QueryTree::return_created_Object()
 
 void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<string>> suchThatData, vector<vector<string>> patternData)
 {
-	std::cout << "Enter1st = " << '\n';
-	addResultTree(resultData[0], resultData[1]);
-	addSuchThatTree(suchThatData[0], suchThatData[1], suchThatData[2]);
-	addPatternTree(patternData[0], patternData[1], patternData[2], patternData[3]);
+	if (resultData.size() > 0) {
+		addResultTree(resultData[0], resultData[1]);
+	}
+	if (suchThatData.size() > 0) {
+		addSuchThatTree(suchThatData[0], suchThatData[1], suchThatData[2]);
+	}
+	if (patternData.size() > 0) {
+		addPatternTree(patternData[0], patternData[1], patternData[2], patternData[3]);
+	}
 }
 
 
