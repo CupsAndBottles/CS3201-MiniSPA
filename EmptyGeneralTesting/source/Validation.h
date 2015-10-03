@@ -22,7 +22,7 @@ public:
 		std::regex("\\bvariable\\b|\\b_\\b"), // modifies/use 2nd arg and pattern assign1 (4)
 		std::regex("\\bvariable\\b"), // pattern 1st agrument for while and if (5)
 		std::regex("\\b_\\b"), // _(6)
-		std::regex("\\bvariable\\b|\\b_\\b|\\bexpression\\b"), //7 for assign arg1 (7)
+		std::regex("\\bvariable\\b|\\b_\\b|\\bequation\\b"), //7 for assign arg1 (7)
 		std::regex("\\bprocedure\\b|\\b_\\b"), //for calls (8)
 		std::regex("\\bassign\\b|\\b_\\b")//for affect (9)
 	};

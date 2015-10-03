@@ -21,7 +21,8 @@ public:
 	bool isVariable(string syn);
 	bool isProcedure(string syn);
 	bool isExpression(string syn); 
-	PKB *pkb = PKB::getInstanceOf();
+	//PKB *pkb = PKB::getInstanceOf();
+	PKB *pkb;
 };
 
 
