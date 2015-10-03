@@ -12,7 +12,7 @@ class QueryEvaluator
 {
 public:
 	QueryEvaluator();
-	QueryEvaluator(PKB &pkb, QueryTree tree);
+	QueryEvaluator(PKB pkb);
 	~QueryEvaluator();
 	list<string> evaluateQuery(QueryTree tree);
 	list<string> permutateResult(vector<vector<string>>& intermediateResult);

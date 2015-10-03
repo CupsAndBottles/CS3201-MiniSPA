@@ -16,7 +16,6 @@ class TNode;
 
 class PKB {
 private:
-	PKB();
 	//static PKB* m_Instance;
 	void setParent(int index, int parentStmt);
 
@@ -30,14 +29,15 @@ public:
 	int varIndex;
 	int stmtNum;
 	int modify;
+	
 	string procedure;
 	vector<int> varModifiedList;
 	vector<int>parentT;
 	vector<int> childrenT;
 
-	
+	PKB();
 	~PKB();
-	static PKB* getInstanceOf();
+//	static PKB* getInstanceOf();
 	Procedure proc;
 	DesignExtractor design;
 

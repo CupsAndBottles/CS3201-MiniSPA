@@ -17,7 +17,7 @@ QueryEvaluator::QueryEvaluator()
 {
 }
 
-QueryEvaluator::QueryEvaluator(PKB &pkb, QueryTree tree) {
+QueryEvaluator::QueryEvaluator(PKB pkb) {
 	this->pkb = &pkb;
 	
 }

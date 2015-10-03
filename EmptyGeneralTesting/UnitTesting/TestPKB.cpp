@@ -19,7 +19,8 @@ namespace UnitTesting
 		**/
 
 		TEST_METHOD(PKB_getNoOfStmt) {
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
+			pkb = &PKB();
 			int NumOfStmt = 0;
 
 			Assert::AreEqual(NumOfStmt, pkb->getNoOfStmt());
@@ -31,7 +32,8 @@ namespace UnitTesting
 		}
 
 		TEST_METHOD(PKB_getProcNameInProcTable) {
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
+			pkb = &PKB();
 			int index; 
 			string procName = "TestProc";
 			
@@ -41,7 +43,8 @@ namespace UnitTesting
 		}
 
 		TEST_METHOD(PKB_getVarName) {
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
+			pkb = &PKB();
 			int index;
 			string varName = "TestVarName";
 
@@ -52,7 +55,8 @@ namespace UnitTesting
 
 
 		TEST_METHOD(PKB_getType){
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
+			pkb = &PKB();
 			
 			pkb->setType(Enum::TYPE::ASSIGN);
 
@@ -60,7 +64,8 @@ namespace UnitTesting
 		}
 
 		TEST_METHOD(PKB_getRightExpression) {
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
+			pkb = &PKB();
 			string rightExpr = "x";
 
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -71,7 +76,8 @@ namespace UnitTesting
 		}
 
 		TEST_METHOD(PKB_getParent) {
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
+			pkb = &PKB();
 
 			pkb->setType(Enum::TYPE::WHILE);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -99,7 +105,8 @@ namespace UnitTesting
 		}
 
 		TEST_METHOD(PKB_getFollows) {
-			PKB *pkb = PKB::getInstanceOf();
+			PKB *pkb;
+			pkb = &PKB();
 			vector<pair<int, int>> expectedResult;
 			vector<pair<int, int>> actualResult;
 			
