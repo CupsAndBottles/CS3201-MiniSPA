@@ -203,7 +203,7 @@ void Parser::processWhile(int index, string statement) {
 		parentPair.second = index-numOfProc;
 		parentLink.push_back(parentPair);
 	}
-	instance->setType(1);
+	instance->setType(Enum::TYPE::WHILE);
 	containerElements.push_back(pair);
 	addToParent(pair.first);
 	handleModifyAndUses(pair.first, pair.second);
@@ -223,7 +223,7 @@ void Parser::processExpressions(int index, string statement) {
 	stack<char> stack;
 	string s = "";
 	output.clear();
-	instance->setType(0);
+	instance->setType(Enum::TYPE::ASSIGN);
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
