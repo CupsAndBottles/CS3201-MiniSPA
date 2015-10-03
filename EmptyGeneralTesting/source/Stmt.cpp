@@ -9,7 +9,7 @@ Stmt::~Stmt()
 {
 }
 
-void Stmt::setStmtType(int t)
+void Stmt::setStmtType(Enum::TYPE t)
 {
 	type = t;
 }

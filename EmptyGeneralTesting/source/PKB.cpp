@@ -148,7 +148,7 @@ PKB::~PKB()
 {
 }
 //G: index not necessary. 
-void PKB::setType(int type){	
+void PKB::setType(Enum::TYPE type) {
 	if (stmtTable.size() == 0) {
 		stmtTable.push_back(Stmt());
 	}

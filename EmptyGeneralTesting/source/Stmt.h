@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Enum.h"
 using namespace std;
 class Stmt
 {
@@ -7,8 +8,8 @@ class Stmt
 public:
 	Stmt();
 	~Stmt();
-
-	void setStmtType(int t);
+	
+	void setStmtType(Enum::TYPE t);
 	void setParent(int p);
 	void setChildren(int child);
 	void setUsedVar(int usedVar);
@@ -46,7 +47,7 @@ public:
 
 private:
 	int index;
-	int type;
+	Enum::TYPE type;
 	int parent;
 	vector<int> parentT;
 	vector<int> childrenList;
