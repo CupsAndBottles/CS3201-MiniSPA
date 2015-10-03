@@ -41,7 +41,8 @@ int PKB::setProcNameInProcTable(string procName)
 {
 	int index = getProcIndex(procName);
 	if (index == -1) {
-		int size = procTable.size();
+		procTable.push_back(Procedure());
+		int size = procTable.size() - OFFSET;
 		procTable[size].setProcName(procName);
 		index = getProcIndex(procName);
 	}
@@ -105,11 +106,12 @@ void PKB::setProcCalledBy(int index, int called)
 //Vartable Setters:
 
 //G: check for existence, return index if exists else, set varname and return new index
-int PKB::setVarName(string varName)
-{
+int PKB::setVarName(string varName){
+	
 	int index = getVarIndex(varName);
 	if (index = -1) {
-		int size = varTable.size();
+		varTable.push_back(Variable());
+		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
 	}
@@ -146,9 +148,12 @@ PKB::~PKB()
 {
 }
 //G: index not necessary. 
-void PKB::setType(int type)
-{
-	int index = stmtTable.size();
+void PKB::setType(int type){	
+	if (stmtTable.size() == 0) {
+		stmtTable.push_back(Stmt());
+	}
+	stmtTable.push_back(Stmt());
+	int index = stmtTable.size() - OFFSET;
 	stmtTable[index].setStmtType(type);
 }
 
@@ -251,7 +256,7 @@ string PKB::getRightExpr(int index){
 
 //ZH
 int PKB::getNoOfStmt(){
-	return this->stmtTable.size() - OFFSET;
+	return stmtTable.size() - OFFSET;
 }
 
 //WL
@@ -776,8 +781,12 @@ int PKB::getFollowedBy(int stmtNum)
 //ZH
 int PKB::getProcIndex(string procName){
 
+	if (procTable.size() == 0) {
+		return NOT_FOUND;
+	}
+
 	for (int i = 0; i < procTable.size(); i++) {
-		if (this->procTable[i].getName() == procName) {
+		if (procTable[i].getName() == procName) {
 			return i;
 		}
 	}
@@ -797,7 +806,7 @@ int PKB::getVarIndex(string varName)
 	bool isFound = false;
 
 	for (int i = 0; i < varTable.size(); i++) {
-		if (this->varTable[i].getVarName() == varName) {
+		if (varTable[i].getVarName() == varName) {
 			return i;
 		}
 	}
@@ -809,4 +818,9 @@ int PKB::getVarIndex(string varName)
 string PKB::getVarName(int index)
 {
 	return varTable[index].getVarName();
+}
+
+//ZH
+int PKB::getType(int index) {
+	return stmtTable[index].getType();
 }
