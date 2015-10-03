@@ -3,6 +3,7 @@
 #include "QueryEvaluator.h"
 #include "ParserForPQL.h"
 #include "PKB.h"
+#include "Enum.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -15,9 +16,9 @@ namespace UnitTesting
 			PKB *pkb = PKB::getInstanceOf();
 
 			// Sets stmts
-			pkb->setType(0); // beads = command + 10
-			pkb->setType(1); // while coffee
-			pkb->setType(0); // command = inspiration + beads
+			pkb->setType(Enum::TYPE::ASSIGN); // beads = command + 10
+			pkb->setType(Enum::TYPE::WHILE); // while coffee
+			pkb->setType(Enum::TYPE::ASSIGN); // command = inspiration + beads
 
 			// Sets variables
 			pkb->setVarName("beads");

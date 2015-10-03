@@ -34,7 +34,7 @@ namespace UnitTesting
 		TEST_METHOD(PKB_getType){
 			PKB *pkb = PKB::getInstanceOf();
 			
-			pkb->setType(0);
+			pkb->setType(Enum::TYPE::ASSIGN);
 
 			Assert::AreEqual(0, pkb->getType(1));
 		}
