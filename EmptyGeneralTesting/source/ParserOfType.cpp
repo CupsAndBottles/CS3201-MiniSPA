@@ -25,6 +25,9 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 	synAndType.push_back(vector <string>()); //type
 	synAndType.push_back(vector <string>()); //intVal
 	synAndType.push_back(vector <string>()); //isExpression
+
+	PKB pkb;
+	this->pkb = &pkb;
 	string isSubExpression = checkSubExpression(synonym);
 	synonym = removeUnwanted(synonym);
 
@@ -65,7 +68,7 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		return synAndType;
 	}
 	else if (isVariable(synonym)) {
-		index = pkb->getVarIndex(synonym);
+		index = pkb.getVarIndex(synonym);
 		synAndType[2].push_back(std::to_string(index));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("variable");
@@ -73,7 +76,7 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		return synAndType;
 	}
 	else if (isProcedure(synonym)) {
-		index = pkb->getProcIndex(synonym);
+		index = pkb.getProcIndex(synonym);
 		synAndType[2].push_back(std::to_string(index));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("procedure");
