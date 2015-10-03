@@ -27,9 +27,9 @@ list<pair<int, string>> containerElements;
 string prevStmt;
 int procNumInTble;
 
-Parser::Parser()
+Parser::Parser(PKB pkb)
 {
-
+	this->pkb = &pkb;
 }
 
 Parser::~Parser()
@@ -143,9 +143,9 @@ void Parser::Procedure() {
 }
 
 void Parser::setRelationsInTable() {
-	instance->setChildren(parentLink);
-	instance->setFollows(followLink);
-	instance->setProcCalls(procCall);
+	this->pkb->setChildren(parentLink);
+	this->pkb->setFollows(followLink);
+	this->pkb->setProcCalls(procCall);
 }
 
 void Parser::addToParent(int child) {
@@ -180,8 +180,8 @@ void Parser::processProcedure(int index, string statement) {
 	string procName = statement.substr(statement.find("procedure") + 9);
 	currProcName = procName;
 	numOfProc++;
-	procNumInTble = instance->setProcNameInProcTable(statement);
-	instance->setStartNum(procNumInTble,index);
+	procNumInTble = this->pkb->setProcNameInProcTable(statement);
+	this->pkb->setStartNum(procNumInTble,index);
 }
 
 void Parser::processCalls(int index, string stmt) {
@@ -203,7 +203,7 @@ void Parser::processWhile(int index, string statement) {
 		parentPair.second = index-numOfProc;
 		parentLink.push_back(parentPair);
 	}
-	instance->setType(Enum::TYPE::WHILE);
+	this->pkb->setType(Enum::TYPE::WHILE);
 	containerElements.push_back(pair);
 	addToParent(pair.first);
 	handleModifyAndUses(pair.first, pair.second);
@@ -223,7 +223,7 @@ void Parser::processExpressions(int index, string statement) {
 	stack<char> stack;
 	string s = "";
 	output.clear();
-	instance->setType(Enum::TYPE::ASSIGN);
+	this->pkb->setType(Enum::TYPE::ASSIGN);
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
@@ -293,8 +293,8 @@ void Parser::processExpressions(int index, string statement) {
 			else {
 				output.push_back(charac);
 				s = ""+charac;
-				int index = instance->setVarName(s);
-				instance->setProcNames(index,currProcName);
+				int index = this->pkb->setVarName(s);
+				this->pkb->setProcNames(index,currProcName);
 			}
 		}
 	}
@@ -323,8 +323,8 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		size_t bracketPos = stmt.find("{");
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
-		instance->setUsedVar(i-numOfProc,varInWhile);
-		instance->setUsedBy(varInWhile,i-numOfProc);
+		this->pkb->setUsedVar(i-numOfProc,varInWhile);
+		this->pkb->setUsedBy(varInWhile,i-numOfProc);
 		varUsedInProc.push_back(varInWhile);
 	}
 	else {
@@ -334,8 +334,8 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
 			if (isVariable(c)) {
 				string s = "" + c;
-				instance->setModifies(i-numOfProc,s);
-				instance->setModifiedBy(s,i-numOfProc);
+				this->pkb->setModifies(i-numOfProc,s);
+				this->pkb->setModifiedBy(s,i-numOfProc);
 				varUsedInProc.push_back(s);
 			}
 		}
@@ -387,7 +387,7 @@ void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 
 		s.push_back(*it);
 	}
-	instance->setRightExpr(newIndex,s);
+	this->pkb->setRightExpr(newIndex,s);
 }
 
 void Parser::Error() {
@@ -426,9 +426,9 @@ void Parser::pushCloseBracket(int stmtNum) {
 void Parser::setProcEndNum(int stmtNum) {
 
 	if (containerElements.empty()) {
-		instance->setEndNum(procNumInTble,stmtNum - numOfProc);
-		instance->setProcModified(procNumInTble,varModifiedInProc);
-		instance->setProcUses(procNumInTble,varUsedInProc);
+		this->pkb->setEndNum(procNumInTble,stmtNum - numOfProc);
+		this->pkb->setProcModified(procNumInTble,varModifiedInProc);
+		this->pkb->setProcUses(procNumInTble,varUsedInProc);
 		varUsedInProc.clear();
 		varModifiedInProc.clear();
 	}
