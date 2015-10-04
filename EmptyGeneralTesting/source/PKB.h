@@ -39,7 +39,7 @@ public:
 	~PKB();
 //	static PKB* getInstanceOf();
 	Procedure proc;
-	DesignExtractor design;
+	//DesignExtractor design;
 
 	//PARSER->PKB
 	//From ProcTable
@@ -69,10 +69,10 @@ public:
 	int getNoOfStmt(); //tested
 
 	//PKB->DESIGNEXT
-	vector<int> extractParentT(int index);
-	vector<int> extractChildrenT(int index);
-	vector<int> extractFollowsT(int index);
-	vector<int> extractFollowedByT(int index);
+	void extractParentT(int index);
+	void extractChildrenT(int index);
+	void extractFollowsT(int index);
+	void extractFollowedByT(int index);
 
 	//DESIGNEXT->PKB
 	int getParent(int index);
