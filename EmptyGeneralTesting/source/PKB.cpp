@@ -232,19 +232,19 @@ void PKB::setUsedVar(int index, string usedVar)
 	stmtTable[index].setUsedVar(varIndex);
 }
 
-//ZH
+//ZH - tested
 void PKB::setRightExpr(int index, string expr)
 {
 	stmtTable[index].setRightExpr(expr);
 }
 
-//ZH
+//ZH - tested
 string PKB::getRightExpr(int index){
 	return stmtTable[index].getRightExpression();
 
 }
 
-//ZH
+//ZH - tested
 int PKB::getNoOfStmt(){
 	if (stmtTable.size() == 0) {
 		return 0;

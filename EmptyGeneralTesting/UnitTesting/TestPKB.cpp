@@ -90,7 +90,9 @@ namespace UnitTesting
 			PKB *pkb = new PKB();
 			vector<pair<int, int>> children;
 			vector<pair<int, int>> expectedResult;
+			vector<pair<int, int>> expectedDefinedResult;
 			vector<pair<int, int>> actualResults;
+			vector<pair<int, int>> emptyResult;
 
 			pkb->setType(Enum::TYPE::WHILE);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -100,15 +102,57 @@ namespace UnitTesting
 			children.push_back(make_pair(1, 3));
 			pkb->setChildren(children);
 
+			expectedResult.push_back(make_pair(1, 3));
 			expectedResult.push_back(make_pair(1, 2));
-			//expectedResult.push_back(make_pair(1, 3));
+			expectedDefinedResult.push_back(make_pair(1, 2));
 
-			actualResults = pkb->getParent(Enum::TYPE::WHILE, 1, Enum::TYPE::ASSIGN, 2);
-			
+			// Parent(s1,s2)
+			actualResults = pkb->getParent(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
 			for (size_t i = 0; i < expectedResult.size(); i++) {
 				Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
 				Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
 
+			// Parent( _, _)
+			actualResults = pkb->getParent(Enum::TYPE::UNDERSCORE, UNDEFINED, Enum::TYPE::UNDERSCORE, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
+
+			// Parent ( 1, 2)
+			actualResults = pkb->getParent(Enum::TYPE::WHILE, 1, Enum::TYPE::ASSIGN, 2);
+			for (size_t i = 0; i < expectedDefinedResult.size(); i++) {
+				Assert::AreEqual(expectedDefinedResult[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedDefinedResult[i].second, actualResults[i].second);
+			}
+
+			// Parent( w, 2)
+			actualResults = pkb->getParent(Enum::TYPE::WHILE, UNDEFINED, Enum::TYPE::STATEMENT, 2);
+			for (size_t i = 0; i < expectedDefinedResult.size(); i++) {
+				Assert::AreEqual(expectedDefinedResult[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedDefinedResult[i].second, actualResults[i].second);
+			}
+
+			// Parent( 1, s)
+			actualResults = pkb->getParent(Enum::TYPE::WHILE, 1, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
+
+			// Empty result
+			actualResults = pkb->getParent(Enum::TYPE::STATEMENT, 2, Enum::TYPE::STATEMENT, 1);
+			for (size_t i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
+			
+			// Parent( w, a) - failed
+			actualResults = pkb->getParent(Enum::TYPE::WHILE, UNDEFINED, Enum::TYPE::ASSIGN, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
 			}
 
 			delete pkb;
