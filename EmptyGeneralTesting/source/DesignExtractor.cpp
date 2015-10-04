@@ -1,28 +1,22 @@
 #pragma once
-
-#include<stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
-#include "PKB.h"
 #include "DesignExtractor.h"
 
 using namespace std;
 
-DesignExtractor::DesignExtractor() {
-
-	//pkb = PKB::getInstanceOf();
+DesignExtractor::DesignExtractor()
+{
 }
 
 DesignExtractor::~DesignExtractor() {
 }
 
-std::vector<int> DesignExtractor::extractParentT(int stmtNum) {
+std::vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
 	int index = stmtNum;
+	vector<int> parentCol = col;
 	int parent;
 
 	while (true) {
-		parent = PKB::getInstanceOf()->getParent(stmtNum);
+		parent = col.at(stmtNum);
 		if (parent == 1) {
 			break;
 		}
@@ -31,13 +25,11 @@ std::vector<int> DesignExtractor::extractParentT(int stmtNum) {
 			stmtNum = parent;
 		}
 	}
-	PKB::getInstanceOf()->setParentT(index, ParentT);
-
 	return ParentT;
 }
 
-std::vector<int> DesignExtractor::extractChildrenT(int stmtNum) {
-	std::vector<int> children = PKB::getInstanceOf()->getChildren(stmtNum);
+std::vector<int> DesignExtractor::extractChildrenT(vector<vector<int>> col,int stmtNum) {
+	std::vector<int> children = col.at(stmtNum);
 	int child;
 
 	child = children.at(0);
@@ -45,13 +37,13 @@ std::vector<int> DesignExtractor::extractChildrenT(int stmtNum) {
 		ChildrenT.push_back(-1);
 	}
 	else {
-		extractChildrenTRec(children);
+		extractChildrenTRec(children,col);
 	}
-	PKB::getInstanceOf()->setChildrenT(stmtNum, ChildrenT);
+
 	return ChildrenT;
 }
 
-void DesignExtractor::extractChildrenTRec(std::vector<int> children) {
+void DesignExtractor::extractChildrenTRec(std::vector<int> children, vector<vector<int>> col) {
 
 	for (int i = 0; i < (int)children.size(); i++) {
 		int child = children.at(i);
@@ -60,17 +52,17 @@ void DesignExtractor::extractChildrenTRec(std::vector<int> children) {
 		}
 		else {
 			ChildrenT.push_back(child);
-			extractChildrenTRec(PKB::getInstanceOf()->getChildren(child));
+			extractChildrenTRec(col.at(child), col);
 		}
 	}
 }
 
-std::vector<int> DesignExtractor::extractFollowsT(int stmtNum) {
+std::vector<int> DesignExtractor::extractFollowsT(vector<int> col, int stmtNum) {
 	int index = stmtNum;
 	int num;
 
 	while (true) {
-		num = PKB::getInstanceOf()->getFollows(stmtNum);
+		num = col.at(stmtNum);
 		if (num != -1) {
 			break;
 		}
@@ -79,16 +71,15 @@ std::vector<int> DesignExtractor::extractFollowsT(int stmtNum) {
 			stmtNum = num;
 		}
 	}
-	PKB::getInstanceOf()->setFollowsT(index, FollowsT);
 	return FollowsT;
 }
 
-std::vector<int> DesignExtractor::extractFollowedByT(int stmtNum) {
+std::vector<int> DesignExtractor::extractFollowedByT(vector<int> col, int stmtNum) {
 	int index = stmtNum;
 	int num;
 
 	while (true) {
-		num = PKB::getInstanceOf()->getFollowedBy(stmtNum);
+		num = col.at(stmtNum);
 		if (num == -1) {
 			break;
 		}
@@ -97,6 +88,6 @@ std::vector<int> DesignExtractor::extractFollowedByT(int stmtNum) {
 			stmtNum = num;
 		}
 	}
-	PKB::getInstanceOf()->setFollowedByT(index, FollowedByT);
+
 	return FollowedByT;
 }

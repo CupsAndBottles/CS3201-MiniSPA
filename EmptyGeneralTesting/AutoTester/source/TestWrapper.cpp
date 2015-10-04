@@ -23,8 +23,9 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
   // ...rest of your code...
-	Parser p;
-	p.openFile(filename);
+	PKB pkb;
+	Parser parser(pkb);
+	parser.openFile(filename);
 }
 
 // method to evaluating a query
@@ -33,7 +34,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // ...code to evaluate query...
 	
 	//TO REMOVE
-	PKB pkb();
+	PKB pkb;
 	ParserForPQL parserForPQL(query);
 	QueryEvaluator queryEvaluator(pkb);
 	results = queryEvaluator.evaluateQuery(parserForPQL.getQueryTree());
