@@ -27,32 +27,21 @@ void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 		for (int i = 0; i < suchThatSynAndType[1].size(); i++) {
 
 			if (suchThatSynAndType[1].at(i).compare("") == 0) {
-				relName = suchThatSynAndType[0].at(0);
+				relName = suchThatSynAndType[0].at(i);
 				RelTable relTableClass(relName);
 				ag1 = relTableClass.getAg1Synonym();
 				ag2 = relTableClass.getAg2Synonym();
-				//	std::cout << "relName = " << relTableClass.getRe << '\n';
-				//std::cout << "relName = " << ag1 << '\n';
-				isSyn = true;
 			}
 			else if (i % 3 == 1) {
-				if (std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag1))) {
-
-					isSyn = true;
-					//		break;
+				if (!std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag1))) {
+					throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
 				}
 			}
 			else {
-				//	std::cout << "type1 = " << ag2 << '\n';
-				if (std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag2))) {
-					isSyn = true;
-					//		break;
+				if (!std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag2))) {
+					throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
 				}
 			}
-			if (!isSyn) {
-				throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
-			}
-			isSyn = false;
 		}
 	}
 }

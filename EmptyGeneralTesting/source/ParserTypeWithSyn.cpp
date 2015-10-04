@@ -79,7 +79,16 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 		if (temp.size() == 0) {
 			throw ParserException("SuchThat synonym unidentified");
 		}
-		suchThatSynAndType.insert(suchThatSynAndType.end(), temp.begin(), temp.end());
+		if (i == 0) {
+			suchThatSynAndType.insert(patternSynAndType.end(), temp.begin(), temp.end());
+		}
+		else {
+			suchThatSynAndType[0].insert(suchThatSynAndType[0].end(), temp[0].begin(), temp[0].end());
+			suchThatSynAndType[1].insert(suchThatSynAndType[1].end(), temp[1].begin(), temp[1].end());
+			suchThatSynAndType[2].insert(suchThatSynAndType[2].end(), temp[2].begin(), temp[2].end());
+			suchThatSynAndType[3].insert(suchThatSynAndType[3].end(), temp[3].begin(), temp[3].end());
+		}
+
 		for (std::size_t k = 1; k < 3; k++) {
 			temp = parserOfType.setType(1, suchThatSynonym[i].at(k), type, synonym);
 			if (temp.size() == 0) {
