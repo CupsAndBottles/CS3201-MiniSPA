@@ -13,7 +13,7 @@ namespace UnitTesting
 	{
 	public:
 		TEST_METHOD(TestEvaluateSelectClause) {
-			PKB *pkb;
+			PKB *pkb = new PKB();
 
 			// Sets stmts
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 1: assignment stmt
@@ -44,7 +44,7 @@ namespace UnitTesting
 					x = beads + command; }						\\8
 			*/
 		/**********************************************************/
-			PKB *pkb;
+			PKB *pkb = new PKB();
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -95,7 +95,7 @@ namespace UnitTesting
 					x = beads + command; }}						\\8
 		*/
 		/**********************************************************/
-			PKB *pkb;
+			PKB *pkb = new PKB();
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
