@@ -43,6 +43,11 @@ vector<vector<string>> ParserTypeWithSyn::getPatternSynAndType()
 
 void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vector<string> type, vector<string> synonym)
 {
+	selectSynAndType.push_back(vector <string>());
+	selectSynAndType.push_back(vector <string>());
+	selectSynAndType.push_back(vector <string>());
+	selectSynAndType.push_back(vector <string>());
+
 	vector<vector<string>> temp;
 	std::cout << selectSynonym.at(0) << '\n';
 	ParserOfType parserOfType;
@@ -51,9 +56,10 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 		if (temp.size() == 0) {
 			throw ParserException("Select synonym unidentified");
 		}
-
-		//std::copy(temp.begin(), temp.end(), std::back_inserter(selectSynAndType));
-		selectSynAndType.insert(selectSynAndType.end(), temp.begin(), temp.end());
+		selectSynAndType[0].insert(selectSynAndType[0].end(), temp[0].begin(), temp[0].end());
+		selectSynAndType[1].insert(selectSynAndType[1].end(), temp[1].begin(), temp[1].end());
+		selectSynAndType[2].insert(selectSynAndType[2].end(), temp[2].begin(), temp[2].end());
+		selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
 	}
 
 }
