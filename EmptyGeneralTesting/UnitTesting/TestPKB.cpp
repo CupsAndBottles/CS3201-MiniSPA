@@ -156,8 +156,6 @@ namespace UnitTesting
 			}
 
 			delete pkb;
-//			Assert::IsTrue(expectedResults == pkb->getParent(Enum::TYPE::STATEMENT, -1, Enum::TYPE::STATEMENT, -1));
-//		Assert::IsTrue(expectedResults == pkb->getParent(Enum::TYPE::STATEMENT, 1, Enum::TYPE::STATEMENT, 2));
 		}
 
 		TEST_METHOD(PKB_getFollows) {
@@ -244,6 +242,178 @@ namespace UnitTesting
 			delete pkb;
 		}
 
+		TEST_METHOD(PKB_getModifies) {
+			PKB *pkb = new PKB();
+			string varX = "x";
+			string varY = "y";
+			vector<pair<int, int>> actualResult;
+			vector<pair<int, int>> expectedResult;
+			vector<pair<int, int>> emptyResult;
+
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::WHILE);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setVarName(varX);
+			pkb->setVarName(varY);
+
+			pkb->setModifies(1, varX);
+			pkb->setModifies(2, varX);
+			pkb->setModifies(2, varY);
+			pkb->setModifies(3, varY);
+			pkb->setModifies(4, varX);
+			pkb->setModifiedBy(varX, 1);
+			pkb->setModifiedBy(varX, 2);
+			pkb->setModifiedBy(varY, 2);
+			pkb->setModifiedBy(varY, 3);
+			pkb->setModifiedBy(varX, 4);
+
+			expectedResult.push_back(make_pair(1, 0));
+			expectedResult.push_back(make_pair(2, 0));
+			expectedResult.push_back(make_pair(2, 1));
+			expectedResult.push_back(make_pair(3, 1));
+			expectedResult.push_back(make_pair(4, 0));
+
+			actualResult = pkb->getModifies(Enum::TYPE::UNDERSCORE, UNDEFINED, Enum::TYPE::UNDERSCORE, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(2, 0));
+			expectedResult.push_back(make_pair(2, 1));
+			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, 2, Enum::TYPE::VARIABLE, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(2, 1));
+			expectedResult.push_back(make_pair(3, 1));
+			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::VARIABLE, 1);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(1, 0));
+			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, 1, Enum::TYPE::VARIABLE, 0);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, 3, Enum::TYPE::VARIABLE, 0);
+			for (size_t i = 0; i < actualResult.size(); i++) {
+				Assert::AreEqual(emptyResult[i].second, actualResult[i].second);
+				Assert::AreEqual(emptyResult[i].first, actualResult[i].first);
+			}
+
+			
+		}
+
+		TEST_METHOD(PKB_getUses) {
+			PKB *pkb = new PKB();
+			string varX = "x";
+			string varY = "y";
+			vector<pair<int, int>> actualResult;
+			vector<pair<int, int>> expectedResult;
+			vector<pair<int, int>> emptyResult;
+
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::WHILE);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setVarName(varX);
+			pkb->setVarName(varY);
+
+			pkb->setUsedVar(1, varX);
+			pkb->setUsedVar(2, varX);
+			pkb->setUsedVar(2, varY);
+			pkb->setUsedVar(3, varY);
+			pkb->setUsedVar(4, varX);
+			pkb->setUsedBy(varX, 1);
+			pkb->setUsedBy(varX, 2);
+			pkb->setUsedBy(varY, 2);
+			pkb->setUsedBy(varY, 3);
+			pkb->setModifiedBy(varX, 4);
+
+			expectedResult.push_back(make_pair(1, 0));
+			expectedResult.push_back(make_pair(2, 0));
+			expectedResult.push_back(make_pair(2, 1));
+			expectedResult.push_back(make_pair(3, 1));
+			expectedResult.push_back(make_pair(4, 0));
+
+			actualResult = pkb->getUses(Enum::TYPE::UNDERSCORE, UNDEFINED, Enum::TYPE::UNDERSCORE, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			actualResult = pkb->getUses(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			actualResult = pkb->getUses(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(2, 0));
+			expectedResult.push_back(make_pair(2, 1));
+			actualResult = pkb->getUses(Enum::TYPE::STATEMENT, 2, Enum::TYPE::VARIABLE, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(2, 1));
+			expectedResult.push_back(make_pair(3, 1));
+			actualResult = pkb->getUses(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::VARIABLE, 1);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(1, 0));
+			actualResult = pkb->getUses(Enum::TYPE::STATEMENT, 1, Enum::TYPE::VARIABLE, 0);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			actualResult = pkb->getUses(Enum::TYPE::STATEMENT, 3, Enum::TYPE::VARIABLE, 0);
+			for (size_t i = 0; i < actualResult.size(); i++) {
+				Assert::AreEqual(emptyResult[i].second, actualResult[i].second);
+				Assert::AreEqual(emptyResult[i].first, actualResult[i].first);
+			}
+
+
+		}
+
 		TEST_METHOD(PKB_getUsedByStmtNum) {
 			PKB *pkb = new PKB();
 			vector<int> used;
@@ -264,7 +434,6 @@ namespace UnitTesting
 			used = pkb -> getUsedByStmtNum(0);
 			expectedResult.push_back(1);
 
-		//	Assert::AreEqual();
 			for (size_t i = 0; i < expectedResult.size(); i++) {
 				Assert::AreEqual(expectedResult[i], used[i]);
 			}
