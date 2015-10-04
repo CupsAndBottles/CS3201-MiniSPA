@@ -31,18 +31,22 @@ void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 				RelTable relTableClass(relName);
 				ag1 = relTableClass.getAg1Synonym();
 				ag2 = relTableClass.getAg2Synonym();
+				//	std::cout << "relName = " << relTableClass.getRe << '\n';
+				//std::cout << "relName = " << ag1 << '\n';
 				isSyn = true;
 			}
 			else if (i % 3 == 1) {
 				if (std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag1))) {
 
 					isSyn = true;
-
+					//		break;
 				}
 			}
 			else {
+				//	std::cout << "type1 = " << ag2 << '\n';
 				if (std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag2))) {
 					isSyn = true;
+					//		break;
 				}
 			}
 			if (!isSyn) {
@@ -51,7 +55,6 @@ void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 			isSyn = false;
 		}
 	}
-
 }
 
 void Validation::patternValidation(vector<vector<string>> patternSynAndType)
@@ -69,7 +72,6 @@ void Validation::patternValidation(vector<vector<string>> patternSynAndType)
 
 			if (!std::regex_match(patternSynAndType[1].at(i + 1), synonym.at(ag1))) {
 				throw ParserException("Grammar is wrong for " + patternSynAndType[0].at(0) + " of " + patternSynAndType[0].at(i));
-
 			}
 			else if (!std::regex_match(patternSynAndType[1].at(i + 2), synonym.at(ag2))) {
 				throw ParserException("Grammar is wrong for pattern of " + patternSynAndType[0].at(0));
