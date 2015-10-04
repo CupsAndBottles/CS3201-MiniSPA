@@ -27,31 +27,23 @@ void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 		for (int i = 0; i < suchThatSynAndType[1].size(); i++) {
 
 			if (suchThatSynAndType[1].at(i).compare("") == 0) {
-				relName = suchThatSynAndType[0].at(0);
+				relName = suchThatSynAndType[0].at(i);
 				RelTable relTableClass(relName);
 				ag1 = relTableClass.getAg1Synonym();
 				ag2 = relTableClass.getAg2Synonym();
-				isSyn = true;
 			}
 			else if (i % 3 == 1) {
-				if (std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag1))) {
-
-					isSyn = true;
-
+				if (!std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag1))) {
+					throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
 				}
 			}
 			else {
-				if (std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag2))) {
-					isSyn = true;
+				if (!std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag2))) {
+					throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
 				}
 			}
-			if (!isSyn) {
-				throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
-			}
-			isSyn = false;
 		}
 	}
-
 }
 
 void Validation::patternValidation(vector<vector<string>> patternSynAndType)
@@ -69,7 +61,6 @@ void Validation::patternValidation(vector<vector<string>> patternSynAndType)
 
 			if (!std::regex_match(patternSynAndType[1].at(i + 1), synonym.at(ag1))) {
 				throw ParserException("Grammar is wrong for " + patternSynAndType[0].at(0) + " of " + patternSynAndType[0].at(i));
-
 			}
 			else if (!std::regex_match(patternSynAndType[1].at(i + 2), synonym.at(ag2))) {
 				throw ParserException("Grammar is wrong for pattern of " + patternSynAndType[0].at(0));
