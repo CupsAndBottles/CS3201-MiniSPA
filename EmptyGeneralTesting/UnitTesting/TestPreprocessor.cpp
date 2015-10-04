@@ -121,7 +121,7 @@ namespace UnitTesting
 			PKB pkb;
 			pkb.setVarName("x");
 			pkb.setVarName("y");
-/*
+
 			string input = "while w1, w2, w3; assign a, n; Select <w1,w2, w3> with n = 10 pattern a(\"x\", _) such that Follows(n, a)";
 			ParserForPQL parser4(input);
 			QueryTree queryTree = parser4.getQueryTree();
@@ -182,10 +182,10 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), true);
 
-*/
-			string input = "while w1, w2, w3; assign a, n; variable v; Select <w1,w2, w3> with n = 10 pattern w1(v, _) such that Follows(n, a)";
+
+			input = "while w1, w2, w3; assign a, n; variable v; Select <w1,w2, w3> with n = 10 pattern w1(v, _) such that Follows(n, a)";
 			ParserForPQL parser12(input);
-			QueryTree queryTree = parser12.getQueryTree();
+			queryTree = parser12.getQueryTree();
 
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getParentStringVal(), string("w1"));
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getParentType()), 4);
