@@ -17,8 +17,8 @@ QueryEvaluator::QueryEvaluator()
 {
 }
 
-QueryEvaluator::QueryEvaluator(PKB pkb) {
-	this->pkb = &pkb;
+QueryEvaluator::QueryEvaluator(PKB &inputPKB) {
+	this->pkb = &inputPKB;
 	
 }
 
