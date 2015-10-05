@@ -20,7 +20,7 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
@@ -160,7 +160,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Follows(1, 2)");
+			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Follows(1, 2)", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -297,7 +297,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Parent(s, _)");
+			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Parent(s, _)", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -438,7 +438,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select p such that Uses(2, v)");
+			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select p such that Uses(2, v)", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -579,7 +579,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")");
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -725,7 +725,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; variable x; Select a such that Modifies(a, x) pattern a(_, \"_x * 9_\")");
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable x; Select a such that Modifies(a, x) pattern a(_, \"_x * 9_\")", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
