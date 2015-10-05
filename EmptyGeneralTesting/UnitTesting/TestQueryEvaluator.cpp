@@ -377,12 +377,15 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			//	string actualResults = string("command, inspiration, coffee, beads, x");
-			string actualResults = string("beads, command, inspiration, coffee, x");
+			string actualResults = string( "7");
+			string outputString;
 
+			Assert::AreEqual(results.size(), (size_t) 1);
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-				Assert::AreEqual(actualResults, *it);
+				outputString = outputString + *it;
 			}
+
+			Assert::AreEqual(outputString, actualResults);
 		}
 
 		TEST_METHOD(QE_SuchThatPlusPattern) {
@@ -520,8 +523,6 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			//	string actualResults = string("command, inspiration, coffee, beads, x");
-			//  string actualResults = string("beads, command, inspiration, coffee, x");
 			
 			list<string> expectedResult;
 			expectedResult.push_back("7");
@@ -530,14 +531,6 @@ namespace UnitTesting
 
 			Assert::IsTrue(expectedResult.size() == results.size());
 			Assert::IsTrue(expectedResult == results);
-
-		//		for (size_t i = 0; i < expectedResult.size(); i++) {
-		//		Assert::AreEqual(expectedResult.at(i), results[i]);
-		//	}
-
-		//	for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-		//		Assert::AreEqual(actualResults, *it);
-		//	}
 		}
 
 		TEST_METHOD(QE_shuntingyard) {
