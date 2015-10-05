@@ -150,7 +150,7 @@ namespace UnitTesting
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			Assert::IsFalse(queryTree.getPatternTree().at(0).getRightCIsExpression());
+			Assert::IsTrue(queryTree.getPatternTree().at(0).getRightCIsExpression());
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -294,7 +294,6 @@ namespace UnitTesting
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			Assert::IsFalse(queryTree.getPatternTree().at(0).getRightCIsExpression());
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
