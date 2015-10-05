@@ -12,79 +12,6 @@ namespace UnitTesting
 	TEST_CLASS(TestPKB)
 	{
 	public:
-		TEST_METHOD(PKB_getNoOfStmt) {
-			PKB *pkb = new PKB();
-			int NumOfStmt = 0;
-
-			Assert::AreEqual(NumOfStmt, pkb->getNoOfStmt());
-
-			pkb->setType(Enum::TYPE::ASSIGN);
-			NumOfStmt = 1;
-
-			Assert::AreEqual(NumOfStmt, pkb->getNoOfStmt());
-			
-			delete pkb;
-		}
-
-		TEST_METHOD(PKB_getProcNameInProcTable) {
-			PKB *pkb = new PKB();
-			int index; 
-			string procName = "TestProc";
-			
-			index = pkb->setProcNameInProcTable(procName);
-
-			Assert::AreEqual(procName, pkb->getProcName(index));
-
-			delete pkb;
-		}
-
-		TEST_METHOD(PKB_getVarIndex) {
-			PKB *pkb = new PKB();
-			string varName = "forTesting";
-
-			pkb->setVarName(varName);
-
-			Assert::AreEqual(0, pkb->getVarIndex(varName));
-
-			delete pkb;
-
-		}
-
-		TEST_METHOD(PKB_getVarName) {
-			PKB *pkb = new PKB();
-			int index;
-			string varName = "forTesting";
-
-			index = pkb->setVarName(varName);
-
-			Assert::AreEqual(varName, pkb->getVarName(index));
-
-			delete pkb;
-		}
-
-
-		TEST_METHOD(PKB_getType){
-			PKB *pkb = new PKB();
-			
-			pkb->setType(Enum::TYPE::ASSIGN);
-
-			Assert::IsTrue(Enum::TYPE::ASSIGN == pkb->getType(1));
-
-			delete pkb;
-		}
-
-		TEST_METHOD(PKB_getRightExpression) {
-			PKB *pkb = new PKB();
-
-			string rightExpr = "x";
-
-			pkb->setType(Enum::TYPE::ASSIGN);
-			pkb->setRightExpr(1, rightExpr);
-
-			Assert::AreEqual(rightExpr, pkb->getRightExpr(1));
-
-			delete pkb;
-		}
 
 		TEST_METHOD(PKB_getParent) {
 			PKB *pkb = new PKB();
@@ -411,7 +338,107 @@ namespace UnitTesting
 				Assert::AreEqual(emptyResult[i].first, actualResult[i].first);
 			}
 
+		}
 
+		TEST_METHOD(PKB_getFollowsT) {
+			PKB *pkb = new PKB();
+			vector<pair<int, int>> expectedResult;
+			vector<pair<int, int>> expectedResult2;
+			vector<pair<int, int>> actualResult;
+			vector<pair<int, int>> emptyResult;
+			
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::WHILE);
+			
+			vector<pair<int, int>> follows;
+			follows.push_back(make_pair(1, 2));
+			follows.push_back(make_pair(2, 3));
+			follows.push_back(make_pair(3, 4));
+			expectedResult.push_back(make_pair(1, 2));
+			expectedResult.push_back(make_pair(2, 3));
+			expectedResult.push_back(make_pair(3, 4));
+			expectedResult.push_back(make_pair(1 ,3));
+			expectedResult.push_back(make_pair(1, 4));
+			expectedResult.push_back(make_pair(2, 4));
+		
+			expectedResult2.push_back(make_pair(2, 3));
+
+			pkb->setFollows(follows);
+
+			// followsT (s1, s2)
+			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::IsTrue(expectedResult.size() > actualResult.size());
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			// followT( _ , _ )
+			actualResult = pkb->getFollowsT(Enum::TYPE::UNDERSCORE, UNDEFINED, Enum::TYPE::UNDERSCORE, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			// followsT( a, s1)
+			actualResult = pkb->getFollowsT(Enum::TYPE::ASSIGN, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(1, 2));
+			expectedResult.push_back(make_pair(2, 3));
+			expectedResult.push_back(make_pair(1, 3));
+
+			// followsT( s1, a) - different
+			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::ASSIGN, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			// followsT( a1, a2)
+			actualResult = pkb->getFollowsT(Enum::TYPE::ASSIGN, UNDEFINED, Enum::TYPE::ASSIGN, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
+			}
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(1, 3));
+			expectedResult.push_back(make_pair(2, 3));
+			// followsT(a, 3)
+			actualResult = pkb->getFollowsT(Enum::TYPE::ASSIGN, UNDEFINED, Enum::TYPE::STATEMENT, 3);
+			for (size_t i = 0; i < expectedResult2.size(); i++) {
+				Assert::AreEqual(expectedResult2[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult2[i].first, actualResult[i].first);
+			}
+
+			expectedResult.clear();
+			expectedResult.push_back(make_pair(2, 3));
+			// followsT(2, a)
+			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, 2, Enum::TYPE::ASSIGN, -1);
+			for (size_t i = 0; i < expectedResult2.size(); i++) {
+				Assert::AreEqual(expectedResult2[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult2[i].first, actualResult[i].first);
+			}
+
+			//followsT(2, 3)
+			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, 2, Enum::TYPE::STATEMENT, 3);
+			for (size_t i = 0; i < expectedResult2.size(); i++) {
+				Assert::AreEqual(expectedResult2[i].second, actualResult[i].second);
+				Assert::AreEqual(expectedResult2[i].first, actualResult[i].first);
+			}
+
+			//follows(5, 4) - non existent entry
+			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, 4, Enum::TYPE::STATEMENT, 3);
+			Assert::IsTrue(actualResult == emptyResult);
+
+			delete pkb;
 		}
 
 		TEST_METHOD(PKB_getUsedByStmtNum) {
@@ -441,6 +468,79 @@ namespace UnitTesting
 			delete pkb;
 		}
 
+		TEST_METHOD(PKB_getNoOfStmt) {
+			PKB *pkb = new PKB();
+			int NumOfStmt = 0;
+
+			Assert::AreEqual(NumOfStmt, pkb->getNoOfStmt());
+
+			pkb->setType(Enum::TYPE::ASSIGN);
+			NumOfStmt = 1;
+
+			Assert::AreEqual(NumOfStmt, pkb->getNoOfStmt());
+
+			delete pkb;
+		}
+
+		TEST_METHOD(PKB_getProcNameInProcTable) {
+			PKB *pkb = new PKB();
+			int index;
+			string procName = "TestProc";
+
+			index = pkb->setProcNameInProcTable(procName);
+
+			Assert::AreEqual(procName, pkb->getProcName(index));
+
+			delete pkb;
+		}
+
+		TEST_METHOD(PKB_getVarIndex) {
+			PKB *pkb = new PKB();
+			string varName = "forTesting";
+
+			pkb->setVarName(varName);
+
+			Assert::AreEqual(0, pkb->getVarIndex(varName));
+
+			delete pkb;
+
+		}
+
+		TEST_METHOD(PKB_getVarName) {
+			PKB *pkb = new PKB();
+			int index;
+			string varName = "forTesting";
+
+			index = pkb->setVarName(varName);
+
+			Assert::AreEqual(varName, pkb->getVarName(index));
+
+			delete pkb;
+		}
+
+
+		TEST_METHOD(PKB_getType) {
+			PKB *pkb = new PKB();
+
+			pkb->setType(Enum::TYPE::ASSIGN);
+
+			Assert::IsTrue(Enum::TYPE::ASSIGN == pkb->getType(1));
+
+			delete pkb;
+		}
+
+		TEST_METHOD(PKB_getRightExpression) {
+			PKB *pkb = new PKB();
+
+			string rightExpr = "x";
+
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setRightExpr(1, rightExpr);
+
+			Assert::AreEqual(rightExpr, pkb->getRightExpr(1));
+
+			delete pkb;
+		}
 
 	};
 }
