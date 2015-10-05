@@ -848,6 +848,11 @@ int PKB::getFollows(int stmtNum)
 }
 
 //V
+vector<int> PKB::getFollowsT(int stmtNum) {
+	return stmtTable[stmtNum].getFollowsT();
+}
+
+//V
 int PKB::getFollowedBy(int stmtNum)
 {
 	return stmtTable[stmtNum].getFollowedBy();

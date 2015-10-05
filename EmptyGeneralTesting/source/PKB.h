@@ -82,6 +82,7 @@ public:
 	vector<int> getChildren(int index);
 	int getFollows(int index);	
 	int getFollowedBy(int index);
+	vector<int> getFollowsT(int stmtNum);
 
 	//PQL-PKB
 	vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);

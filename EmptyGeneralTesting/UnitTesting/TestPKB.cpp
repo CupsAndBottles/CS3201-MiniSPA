@@ -340,6 +340,24 @@ namespace UnitTesting
 
 		}
 
+		TEST_METHOD(PKB_extractFollowsT) {
+			PKB *pkb = new PKB();
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+
+			vector<pair<int, int>> follows;
+			follows.push_back(make_pair(1, 2));
+			follows.push_back(make_pair(2, 3));
+			follows.push_back(make_pair(3, 4));
+
+ 			pkb->extractFollowsT(4);
+			vector<int> expectedResults = { 3,2,1 };
+			vector<int> actualResults = pkb->getFollowsT(4);
+			Assert::AreEqual(expectedResults, actualResults);
+		}
+
 		TEST_METHOD(PKB_getFollowsT) {
 			PKB *pkb = new PKB();
 			vector<pair<int, int>> expectedResult;
