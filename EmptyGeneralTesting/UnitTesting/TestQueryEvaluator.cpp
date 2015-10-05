@@ -13,7 +13,7 @@ namespace UnitTesting
 	{
 	public:
 		TEST_METHOD(TestEvaluateSelectClause) {
-			PKB *pkb;
+			PKB *pkb = new PKB();
 
 			// Sets stmts
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 1: assignment stmt
@@ -44,7 +44,7 @@ namespace UnitTesting
 					x = beads + command; }						\\8
 			*/
 		/**********************************************************/
-			PKB *pkb;
+			PKB *pkb = new PKB();
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -95,7 +95,7 @@ namespace UnitTesting
 					x = beads + command; }}						\\8
 		*/
 		/**********************************************************/
-			PKB *pkb;
+			PKB *pkb = new PKB();
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -137,14 +137,14 @@ namespace UnitTesting
 			pkb->setUsedVar(7, "x");
 			pkb->setUsedVar(6, "x");
 			pkb->setUsedVar(4, "x");
-			pkb->setRightExpr(7, "x + x * 9");
+			pkb->setRightExpr(7, "xx9*+");
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedVar(4, "command");
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select v pattern a(_, \"x * 9\")");
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"x + x * 9\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -155,6 +155,16 @@ namespace UnitTesting
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
 				Assert::AreEqual(actualResults, *it);
 			}
+		}
+
+		TEST_METHOD(QE_shuntingyard) {
+			QueryEvaluator qe;
+			string equation = "x + 9";
+			string equation2 = "x + x * 9";
+			string ast = "x9+";
+			string ast2 = "xx9*+";
+			Assert::AreEqual(ast, qe.convertToShuntingYard(equation));
+			Assert::AreEqual(ast2, qe.convertToShuntingYard(equation2));
 		}
 	};
 }

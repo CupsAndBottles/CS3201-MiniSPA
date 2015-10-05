@@ -12,11 +12,12 @@ class QueryEvaluator
 {
 public:
 	QueryEvaluator();
-	QueryEvaluator(PKB pkb);
+	QueryEvaluator(PKB &pkb);
 	~QueryEvaluator();
 	list<string> evaluateQuery(QueryTree tree);
 	list<string> permutateResult(vector<vector<string>>& intermediateResult);
 	vector<Synonym> getResults();
+	string convertToShuntingYard(string statement);
 
 private:
 	QueryTree tree;
@@ -26,7 +27,6 @@ private:
 	bool evaluateAssign(Clauses clause);
 	void storeResultsForSyn(Clauses clause, vector<pair<int, int>> results);
 	void storeResults(vector<int>& intermediateResult, string syn, Enum::TYPE type);
-	string convertToShuntingYard(string statement);
 	bool isOperator(char o);
 	int isPriority(const char & c);
 	vector<string> evaluateSelect(Clauses select);
