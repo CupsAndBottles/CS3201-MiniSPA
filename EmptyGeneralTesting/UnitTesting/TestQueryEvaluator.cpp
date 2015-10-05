@@ -42,11 +42,7 @@ namespace UnitTesting
 			delete pkb;
 		} 
 
-<<<<<<< HEAD
-//		TEST_METHOD(TestEvaluateSuchThatModifiesPatternWhile) {
-=======
 		TEST_METHOD(QE_EvaluateSuchThatModifiesPatternWhile) {
->>>>>>> edf944a955f70e3731ab604f0946a2d8e8e111b0
 		/*********************** Test Code ************************/
 			/*	beads = command + 10;							\\1
 				beads = 34;										\\2
@@ -58,7 +54,7 @@ namespace UnitTesting
 					x = beads + command; }						\\8
 			*/
 		/**********************************************************/
-/*			PKB *pkb = new PKB();
+			PKB *pkb = new PKB();
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -89,9 +85,7 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-<<<<<<< HEAD
-			string actualResults = string("1, 2, 3, 5, 7");
-=======
+
 			list<string> expectedResults;
 			
 			expectedResults.push_back("1");
@@ -102,7 +96,6 @@ namespace UnitTesting
 			expectedResults.push_back("8");
 
 			string actualResults = string("1, 2, 3, 5, 7, 8");
->>>>>>> edf944a955f70e3731ab604f0946a2d8e8e111b0
 
 			Assert::IsTrue(expectedResults == results);
 
@@ -126,57 +119,8 @@ namespace UnitTesting
 					x = beads + command; }}						\\8
 		*/
 		/**********************************************************/
-/*			PKB *pkb1 = new PKB();
+			PKB *pkb = new PKB();
 
-<<<<<<< HEAD
-			pkb1->setType(Enum::TYPE::ASSIGN);
-			pkb1->setType(Enum::TYPE::ASSIGN);
-			pkb1->setType(Enum::TYPE::ASSIGN);
-			pkb1->setType(Enum::TYPE::WHILE);
-			pkb1->setType(Enum::TYPE::ASSIGN);
-			pkb1->setType(Enum::TYPE::WHILE);
-			pkb1->setType(Enum::TYPE::ASSIGN);
-			pkb1->setType(Enum::TYPE::ASSIGN);
-
-			vector<string> varUsed;
-			pkb1->setProcNameInProcTable("dream");
-			pkb1->setVarName("beads");
-			pkb1->setVarName("command");
-			
-			varUsed.push_back("command");
-			pkb1->setUsedVar(1, "command");
-			pkb1->setVarName("inspiration");
-			
-			varUsed.push_back("inspiration");
-			pkb1->setUsedVar(3, "inspiration");
-			pkb1->setVarName("coffee");
-			
-			varUsed.push_back("coffee");
-			pkb1->setUsedVar(4, "coffee");
-			
-			varUsed.push_back("beads");
-			pkb1->setUsedVar(5, "beads");
-			pkb1->setUsedVar(4, "beads");
-			pkb1->setUsedVar(5, "command");
-			pkb1->setUsedVar(4, "command");
-			pkb1->setUsedVar(5, "coffee");
-			pkb1->setUsedVar(4, "coffee");
-			pkb1->setUsedVar(6, "command");
-			pkb1->setUsedVar(4, "command");
-
-			pkb1->setVarName("x");
-			varUsed.push_back("x");
-			pkb1->setUsedVar(7, "x");
-			pkb1->setUsedVar(6, "x");
-			pkb1->setUsedVar(4, "x");
-			pkb1->setUsedVar(8, "beads");
-			pkb1->setUsedVar(4, "beads");
-			pkb1->setUsedVar(8, "command");
-			pkb1->setUsedVar(4, "command");
-			pkb1->setProcUses(0, varUsed);
-
-			ParserForPQL parserPQL = ParserForPQL("procedure p; Select p");
-=======
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -195,7 +139,7 @@ namespace UnitTesting
 
 			pkb->setProcNameInProcTable("dream");	//0
 
-													// Set ALL follows
+			// Set ALL follows
 			vector<pair<int, int>> follows;
 			follows.push_back(make_pair(1, 2));
 			follows.push_back(make_pair(2, 3));
@@ -438,24 +382,17 @@ namespace UnitTesting
 			pkb->setProcUses(0, varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")");
->>>>>>> edf944a955f70e3731ab604f0946a2d8e8e111b0
 			QueryTree queryTree = parserPQL.getQueryTree();
-			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb1);
+			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-<<<<<<< HEAD
-			string actualResults1 = string("dyfyfiyf");
-=======
+
 			//	string actualResults = string("command, inspiration, coffee, beads, x");
 			string actualResults = string("beads, command, inspiration, coffee, x");
->>>>>>> edf944a955f70e3731ab604f0946a2d8e8e111b0
 
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-				Assert::AreEqual(actualResults1, *it);
+				Assert::AreEqual(actualResults, *it);
 			}
-<<<<<<< HEAD
-		}*/ 
-=======
 		}
 
 		TEST_METHOD(QE_SuchThatPlusPattern) {
@@ -492,7 +429,7 @@ namespace UnitTesting
 
 			pkb->setProcNameInProcTable("dream");	//0
 
-													// Set ALL follows
+			// Set ALL follows
 			vector<pair<int, int>> follows;
 			follows.push_back(make_pair(1, 2));
 			follows.push_back(make_pair(2, 3));
@@ -626,6 +563,5 @@ namespace UnitTesting
 			Assert::AreEqual(ast2, qe.convertToShuntingYard(equation2));
 			Assert::AreEqual(ast3, qe.convertToShuntingYard(equation3));
 		}
->>>>>>> edf944a955f70e3731ab604f0946a2d8e8e111b0
 	};
 }
