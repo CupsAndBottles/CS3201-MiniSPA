@@ -31,7 +31,6 @@ public:
 	string getParentChild();
 	string getExpression();
 	string getFollow();
-	void insertIntoStmtTable(Enum::TYPE typeOfStat, int i, int stmtNum, int var);
 	void setExprInStmtTable(int index, list<char> exprOutput);
 	void Error();
 	int isPriority(const char & c);

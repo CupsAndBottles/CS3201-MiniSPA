@@ -18,6 +18,9 @@ const int OFFSET = 1;
 const int NOT_FOUND = -1;
 const int UNDEFINED = -1;
 
+vector<Stmt> stmtTable;
+vector<Variable> varTable;
+vector<Procedure> procTable;
 //-----------------------------------------------------------------------------
 //ProcTable Setters:
 
@@ -94,12 +97,10 @@ void PKB::setProcCalledBy(int index, int called)
 //ZH: tested
 //G: check for existence, return index if exists else, set varname and return new index
 int PKB::setVarName(string varName){
-	
 	int index = getVarIndex(varName);
 	if (index = -1) {
-		varTable.push_back(Variable());
-		int size = varTable.size() - OFFSET;
-		varTable[size].setVarName(varName);
+		Variable variable(varName,0,0,0);
+		varTable.push_back(variable);
 		index = getVarIndex(varName);
 	}
 	return index;
@@ -109,20 +110,38 @@ int PKB::setVarName(string varName){
 void PKB::setProcNames(int index, string procName)
 {
 	int procIndex = getProcIndex(procName);
-	varTable[index].setProcNames(procIndex);
+	if (procIndex != -1) {
+		varTable[index].insertIntoProc(procIndex);
+	}
+	else {
+		setProcNameInProcTable(procName);
+		setProcNames(index,procName);
+	}
 
 }
 
 void PKB::setUsedBy(string varName, int stmtNum)
 {
 	int varIndex = getVarIndex(varName);
-	varTable[varIndex].setUsedBy(stmtNum);
+	if (varIndex != -1) {
+		varTable[varIndex].insertIntoUses(stmtNum);
+	}
+	else {
+		setVarName(varName);
+		setUsedBy(varName,stmtNum);
+	}
 }
 
 void PKB::setModifiedBy(string varName, int stmtNum)
 {
 	int varIndex = getVarIndex(varName);
-	varTable[varIndex].setModifiedBy(stmtNum);
+	if (varIndex != -1) {
+		varTable[varIndex].insertIntoModify(stmtNum);
+	}
+	else {
+		setVarName(varName);
+		setModifiedBy(varName,stmtNum);
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------

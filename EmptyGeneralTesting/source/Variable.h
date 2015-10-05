@@ -10,7 +10,8 @@ using namespace std;
 class Variable
 {
 public:
-	Variable();
+	Variable(string varName,int procIndex, int uStmtLst, int mStmtLst);
+
 	~Variable();
 	int getindex();
 	string getVarName();
@@ -22,9 +23,6 @@ public:
 	void insertIntoUses(int use);
 	void insertIntoProc(int procName);
 	void setVarName(string varName);
-	void setProcNames(int proc);
-	void setUsedBy(int stmtLst);
-	void setModifiedBy(int stmtLst);
 	void sortVectors(vector<int> list);
 
 private:
@@ -33,8 +31,6 @@ private:
 	vector<int> procNamesList;
 	vector<int> usedByList;
 	vector<int> modifiedByList;
-	vector<int> setProcNames();
-
 
 };
 

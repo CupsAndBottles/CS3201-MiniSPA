@@ -17,10 +17,6 @@ class TNode;
 class PKB {
 private:
 	
-	vector<Stmt> stmtTable;
-	vector<Variable> varTable;
-	vector<Procedure> procTable;
-
 	//From stmtTable
 	void setFollowedBy(int index, int followedBy); 
 	
