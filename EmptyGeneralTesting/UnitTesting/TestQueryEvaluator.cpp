@@ -20,24 +20,14 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
-			pkb->setVarName("beads");
-			pkb->setModifies(1, "beads");
-			pkb->setModifiedBy("beads", 1);
-			pkb->setVarName("command");
-			pkb->setModifies(3, "command");
-			pkb->setModifiedBy("command", 3);
-
-			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Modifies(a, v)");
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			string actualResults = string("1, 2");
+			list<string> expectedResults = { "1", "3" };
 
-			Assert::AreEqual(actualResults, results.front());
-			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-				Assert::AreEqual(actualResults, *it);
-			}
+			Assert::IsTrue(expectedResults == results);
 
 			delete pkb;
 		} 
@@ -146,6 +136,7 @@ namespace UnitTesting
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
 			follows.push_back(make_pair(7, 8));
+			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
@@ -235,25 +226,20 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, x + x * 9)");
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Uses(a, v)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-		//	string actualResults = string("command, inspiration, coffee, beads, x");
-			string expectedResult = string("7");
-			string actualResult;
-
-			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-				actualResult = actualResult + *it;
-			}
-
-			Assert::AreEqual(actualResult, expectedResult);
+			list<string> expectedResults = { "1", "3", "5", "7", "8"};
+			
+		
+			Assert::IsTrue(expectedResults == results);
 		}
 
 		TEST_METHOD(QE_PatternSubExpression) {
 			/*********************** Test Code ************************/
-			/*	
+			/*
 			Procedure dream {
 				beads = command + 10;							\\1
 				beads = 34;										\\2
@@ -292,6 +278,7 @@ namespace UnitTesting
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
 			follows.push_back(make_pair(7, 8));
+			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
@@ -302,9 +289,9 @@ namespace UnitTesting
 			pkb->setChildren(parent);
 
 			// Statement 1 - set constant as variables?
-			pkb->setVarName("beads");		
+			pkb->setVarName("beads");
 			pkb->setVarName("command");
-			pkb->setRightExpr(1 ,"command10+");
+			pkb->setRightExpr(1, "command10+");
 			pkb->setModifies(1, "beads");
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
@@ -313,7 +300,7 @@ namespace UnitTesting
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
-			
+
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
 			pkb->setRightExpr(3, "inspiration1+");
@@ -321,7 +308,7 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
-			
+
 			//Statement 4
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
@@ -346,7 +333,7 @@ namespace UnitTesting
 			pkb->setUsedBy("coffee", 4);
 			pkb->setModifies(4, "stamps");
 			pkb->setModifiedBy("stamps", 4);
-			
+
 			// statement 7
 			pkb->setVarName("x");
 			pkb->setUsedVar(7, "x");
@@ -373,11 +360,11 @@ namespace UnitTesting
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
 			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command",6);
+			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
-			
+
 
 			pkb->setProcUses(0, varUsed);
 
@@ -386,13 +373,9 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-
-			//	string actualResults = string("command, inspiration, coffee, beads, x");
-			string actualResults = string("beads, command, inspiration, coffee, x");
-
-			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-				Assert::AreEqual(actualResults, *it);
-			}
+			list<string> expectedResults = { "7" };
+			
+			Assert::IsTrue(expectedResults == results);
 		}
 
 		TEST_METHOD(QE_SuchThatPlusPattern) {
@@ -436,6 +419,7 @@ namespace UnitTesting
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
 			follows.push_back(make_pair(7, 8));
+			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
@@ -530,24 +514,12 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			//	string actualResults = string("command, inspiration, coffee, beads, x");
-			//  string actualResults = string("beads, command, inspiration, coffee, x");
-			
-			list<string> expectedResult;
-			expectedResult.push_back("7");
+			list<string> expectedResult = { "7" };
 
-			Assert::AreEqual(expectedResult.front(), results.front());
+//			Assert::AreEqual(expectedResult.front(), results.front());
 
-			Assert::IsTrue(expectedResult.size() == results.size());
+//			Assert::IsTrue(expectedResult.size() == results.size());
 			Assert::IsTrue(expectedResult == results);
-
-		//		for (size_t i = 0; i < expectedResult.size(); i++) {
-		//		Assert::AreEqual(expectedResult.at(i), results[i]);
-		//	}
-
-		//	for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-		//		Assert::AreEqual(actualResults, *it);
-		//	}
 		}
 
 		TEST_METHOD(QE_shuntingyard) {

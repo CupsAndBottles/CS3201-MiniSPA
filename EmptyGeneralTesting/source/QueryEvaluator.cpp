@@ -160,15 +160,52 @@ list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
 
 vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	vector<string> resultForSyn;
+	bool hasCommonSyn = false;
 
 	string synonym = select.getParentStringVal();
 	Enum::TYPE type = select.getParent().getType();
 
 	for (int i = 0; i < this->results.size(); i++) {
 		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
+			hasCommonSyn = true;
 			for (int j = 0; j < results[i].getResult().size(); j++) {
 				resultForSyn.push_back(convertToString(results[i].getResult().at(j), type));
 			}
+		}
+	}
+	
+	if (!hasCommonSyn) {
+		switch (type) {
+		case Enum::TYPE::STATEMENT:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				resultForSyn.push_back(to_string(i));
+			}
+			break;
+		case Enum::TYPE::ASSIGN:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				if (pkb->getType(i) == Enum::TYPE::ASSIGN) {
+					resultForSyn.push_back(to_string(i));
+				}
+			}
+			break;
+		case Enum::TYPE::WHILE:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				if (pkb->getType(i) == Enum::TYPE::WHILE) {
+					resultForSyn.push_back(to_string(i));
+				}
+			}
+			break;
+		case Enum::TYPE::PROCEDURE:
+			for (int i = 0; i < pkb->getNoOfProc(); i++) {
+				resultForSyn.push_back(pkb->getProcName(i));
+			}
+			break;
+		case Enum::TYPE::VARIABLE:
+			for (int i = 0; i < pkb->getNoOfVar(); i++) {
+				resultForSyn.push_back(pkb->getVarName(i));
+			}
+		default:
+			break;
 		}
 	}
 
@@ -341,20 +378,28 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> results) {
 	vector<int> firstSynResults;
 	vector<int> secondSynResults;
+	int previousStoredIndex = WILDCARD;
 
 	Details firstParam = clause.getLeftChild();
 	Details secondParam = clause.getRightChild();
 
 	if (firstParam.getIntValue() == WILDCARD) {
 		for (int i = 0; i < results.size(); i++) {
-			firstSynResults.push_back(results[i].first);
+			if (previousStoredIndex == WILDCARD || previousStoredIndex != results[i].first) {
+				previousStoredIndex = results[i].first;
+				firstSynResults.push_back(results[i].first);
+			}
 		}
+		previousStoredIndex = WILDCARD;
 		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
 	}
 
 	if (secondParam.getIntValue() == WILDCARD) {
 		for (int i = 0; i < results.size(); i++) {
-			secondSynResults.push_back(results[i].second);
+			if (previousStoredIndex == WILDCARD || previousStoredIndex != results[i].second) {
+				previousStoredIndex = results[i].second;
+				secondSynResults.push_back(results[i].second);
+			}
 		}
 		storeResults(secondSynResults, secondParam.getStringValue(), secondParam.getType());
 	}
