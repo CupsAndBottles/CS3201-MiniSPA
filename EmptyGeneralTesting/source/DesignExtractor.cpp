@@ -17,7 +17,7 @@ std::vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
 
 	while (true) {
 		parent = col.at(stmtNum);
-		if (parent == 1) {
+		if (parent == -1) {
 			break;
 		}
 		else {
@@ -63,7 +63,7 @@ std::vector<int> DesignExtractor::extractFollowsT(vector<int> col, int stmtNum) 
 
 	while (true) {
 		num = col.at(stmtNum);
-		if (num != -1) {
+		if (num == -1) {
 			break;
 		}
 		else {
