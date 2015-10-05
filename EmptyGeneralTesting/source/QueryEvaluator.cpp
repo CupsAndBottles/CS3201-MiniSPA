@@ -70,7 +70,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	return result;
 }
 
-list<string> QueryEvaluator::permutateResult(vector<vector<string>>& intermediateResult) {
+list<string> QueryEvaluator::permutateResult(vector<vector<string>> intermediateResult) {
 	list<string> printedResults;
 
 	printedResults = permutateResultSubset(intermediateResult);
@@ -360,7 +360,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	}
 }
 
-void QueryEvaluator::storeResults(vector<int>& intermediateResult, string syn, Enum::TYPE type) {
+void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, Enum::TYPE type) {
 	bool isPresentInResults = false;
 
 	for (int i = 0; i < this->results.size(); i++) {
