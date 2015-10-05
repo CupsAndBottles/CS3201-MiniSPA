@@ -20,13 +20,21 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
+			pkb->setVarName("beads");
+			pkb->setModifies(1, "beads");
+			pkb->setModifiedBy("beads", 1);
+			pkb->setVarName("command");
+			pkb->setModifies(3, "command");
+			pkb->setModifiedBy("command", 3);
+
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Modifies(a, v)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			string actualResults = string("1, 3");
+			string actualResults = string("1, 2");
 
+			Assert::AreEqual(actualResults, results.front());
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
 				Assert::AreEqual(actualResults, *it);
 			}
@@ -72,11 +80,12 @@ namespace UnitTesting
 			pkb->setModifies(8, "x");
 			pkb->setModifies(4, "x");
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; while w; variable v; Select a such that Modifies(a, _) pattern w(v, _)");
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Modifies(a, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
+
 			list<string> expectedResults;
 			
 			expectedResults.push_back("1");
@@ -106,7 +115,7 @@ namespace UnitTesting
 				while coffee {									\\4
 					stamps = beads + command + coffee;			\\5
 					while command {								\\6
-						x = x + x * 9;}							\\7
+						x = x * 9;}								\\7
 					x = beads + command; }}						\\8
 		*/
 		/**********************************************************/
@@ -130,7 +139,7 @@ namespace UnitTesting
 
 			pkb->setProcNameInProcTable("dream");	//0
 
-													// Set ALL follows
+			// Set ALL follows
 			vector<pair<int, int>> follows;
 			follows.push_back(make_pair(1, 2));
 			follows.push_back(make_pair(2, 3));
@@ -422,7 +431,7 @@ namespace UnitTesting
 
 			pkb->setProcNameInProcTable("dream");	//0
 
-													// Set ALL follows
+			// Set ALL follows
 			vector<pair<int, int>> follows;
 			follows.push_back(make_pair(1, 2));
 			follows.push_back(make_pair(2, 3));
