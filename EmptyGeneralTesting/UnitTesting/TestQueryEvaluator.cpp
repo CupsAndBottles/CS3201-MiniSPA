@@ -148,9 +148,8 @@ namespace UnitTesting
 			pkb->setUsedVar(4, "command");
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")");
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"x + x * 9\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			Assert::IsTrue(queryTree.getPatternTree().at(0).getRightCIsExpression());
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
