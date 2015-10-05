@@ -28,6 +28,7 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 
 	PKB pkb;
 	this->pkb = &pkb;
+	synonym = removeOpenComma(synonym);
 	string isSubExpression = checkSubExpression(synonym);
 	synonym = removeUnwanted(synonym);
 
@@ -177,7 +178,15 @@ string ParserOfType::checkSubExpression(string arg2) {
 
 string ParserOfType::removeUnwanted(string syn)
 {
-	if (syn.length() > 1 && ((syn[0] == '\"' && syn[syn.length() - 1] == '\"') || (syn[0] == '_' && syn[syn.length() - 1] == '_'))) {
+	while (syn.length() > 1 && ((syn[0] == '\"' && syn[syn.length() - 1] == '\"') || (syn[0] == '_' && syn[syn.length() - 1] == '_'))) {
+		syn = syn.substr(1, syn.length() - 2);
+	}
+	return syn;
+}
+
+string ParserOfType::removeOpenComma(string syn)
+{
+	if (syn.length() > 1 && ((syn[0] == '\"' && syn[syn.length() - 1] == '\"'))) {
 		return syn.substr(1, syn.length() - 2);
 	}
 	return syn;
