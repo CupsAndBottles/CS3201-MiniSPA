@@ -901,3 +901,13 @@ string PKB::getVarName(int index){
 int PKB::getType(int index) {
 	return stmtTable[index].getType();
 }
+
+//ZH
+int PKB::getNoOfProc() {
+	return procTable.size();
+}
+
+//ZH
+int PKB::getNoOfVar() {
+	return varTable.size();
+}

@@ -10,9 +10,9 @@ class Synonym
 {
 public:
 	Synonym();
-	Synonym(Enum::TYPE type, string syn, vector<int>& resultsToStore);
+	Synonym(Enum::TYPE type, string syn, vector<int> resultsToStore);
 	~Synonym();
-	void addResult(vector<int>& resultToBeAdded);
+	void addResult(vector<int> resultToBeAdded);
 	string getSyn();
 	vector<int> getResult();
 	void setSyn(string syn);
@@ -21,7 +21,6 @@ public:
 
 private:
 	string syn;
-	//set<int> result;
 	vector<int> result;
 	Enum::TYPE type;
 };

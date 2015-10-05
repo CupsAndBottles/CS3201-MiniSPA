@@ -230,9 +230,9 @@ namespace UnitTesting
 
 			expectedResult.clear();
 			expectedResult.push_back(make_pair(2, 1));
-			expectedResult.push_back(make_pair(3, 1));
-			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::VARIABLE, 1);
-			for (size_t i = 0; i < expectedResult.size(); i++) {
+			//expectedResult.push_back(make_pair(3, 1));
+			actualResult = pkb->getModifies(Enum::TYPE::WHILE, UNDEFINED, Enum::TYPE::VARIABLE, 1);
+			for (size_t i = 0; i < actualResult.size(); i++) {
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
