@@ -70,7 +70,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	return result;
 }
 
-list<string> QueryEvaluator::permutateResult(vector<vector<string>>& intermediateResult) {
+list<string> QueryEvaluator::permutateResult(vector<vector<string>> intermediateResult) {
 	list<string> printedResults;
 
 	printedResults = permutateResultSubset(intermediateResult);
@@ -360,7 +360,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	}
 }
 
-void QueryEvaluator::storeResults(vector<int>& intermediateResult, string syn, Enum::TYPE type) {
+void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, Enum::TYPE type) {
 	bool isPresentInResults = false;
 
 	for (int i = 0; i < this->results.size(); i++) {
@@ -384,12 +384,22 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 	//modify and uses - modify => a = b+c, a is modified. Uses= b and c
 	list<char> output;
 	stack<char> stack;
+	string s = "";
 	output.clear();
 	string outputString;
 
+	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
+
 	for (char c : statement) {
 		char charac = c;
-		
+		if (c == ';') {
+			//addToParent(index);
+		}
+		if (c == '}') {
+
+			//pushCloseBracket(index);
+			break;
+		}
 		if (isOperator(charac))
 		{
 			char o1 = charac;
@@ -398,7 +408,7 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			{
 				char o2 = stack.top();
 
-				while (isOperator(o2) && (isPriority(o2) >= isPriority(o1)))
+				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
 					output.push_back(o2);
@@ -436,7 +446,18 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			}
 			if (topCharac != '(')
 			{
-				cout << "error (";
+				cout << "error";
+			}
+		}
+		else
+		{
+			if (charac == '=') {
+				//output.pop_back();
+
+			}
+			else {
+				output.push_back(charac);
+				s = "" + charac;
 			}
 		}
 	}
@@ -445,13 +466,16 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		char stackTop = stack.top();
 		if (stackTop == ')' || stackTop == '(')
 		{
-			cout << "error with brackets";
+			//Error();
 		}
 		output.push_back(stackTop);
-		outputString = outputString + stackTop;
 		stack.pop();
 	}
 
+	for (list<char>::iterator it = output.begin(); it != output.end(); ++it) {
+
+		outputString.push_back(*it);
+	}
 	return outputString;
 }
 //end of method

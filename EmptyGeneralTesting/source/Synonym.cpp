@@ -4,7 +4,7 @@ Synonym::Synonym()
 {
 }
 
-Synonym::Synonym(Enum::TYPE type, string syn, vector<int>& resultsToStore) {
+Synonym::Synonym(Enum::TYPE type, string syn, vector<int> resultsToStore) {
 	this->type = type;
 	this->syn = syn;
 	addResult(resultsToStore);
@@ -14,26 +14,29 @@ Synonym::~Synonym()
 {
 }
 
-void Synonym::addResult(vector<int> &resultToBeStored) {
+void Synonym::addResult(vector<int> resultToBeStored) {
 	vector<int> intersect;
 
-	if (result.empty()) {
+	if (this->result.empty()) {
 		for (int i = 0; i < resultToBeStored.size(); i++) {
-			result.push_back(resultToBeStored[i]);
+			this->result.push_back(resultToBeStored[i]);
 		}
 	}
 	else {
 		for (int i = 0; i < resultToBeStored.size(); i++) {
-			for (int j = 0; i < result.size(); j++) {
-				if (resultToBeStored[i] == result[j]) {
-					intersect.push_back(result[j]);
+			for (int j = 0; j < this->result.size(); j++) {
+				if (resultToBeStored[i] == this->result[j]) {
+					intersect.push_back(this->result[j]);
 				}
 			}
 		}
+		this->result.clear();
+		for (size_t i = 0; i < intersect.size(); i++) {
+			this->result.push_back(intersect[i]);
+		}
 	}
 
-	// Might cause problems
-	this->result = intersect;
+
 
 }
 
