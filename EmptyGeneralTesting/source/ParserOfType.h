@@ -18,6 +18,7 @@ public:
 	int isBeingDeclared(string syn, vector<string> synType);
 	string checkSubExpression(string arg2);
 	string removeUnwanted(string syn);
+	string removeOpenComma(string syn);
 	bool isVariable(string syn);
 	bool isProcedure(string syn);
 	bool isExpression(string syn); 
