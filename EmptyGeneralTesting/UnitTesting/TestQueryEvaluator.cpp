@@ -20,19 +20,27 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
+			pkb->setVarName("beads");
+			pkb->setModifies(1, "beads");
+			pkb->setModifiedBy("beads", 1);
+			pkb->setVarName("command");
+			pkb->setModifies(3, "command");
+			pkb->setModifiedBy("command", 3);
+
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Modifies(a, v)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			string actualResults = string("1, 3");
+			string actualResults = string("1, 2");
 
+			Assert::AreEqual(actualResults, results.front());
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
 				Assert::AreEqual(actualResults, *it);
 			}
 		} 
 
-		TEST_METHOD(TestEvaluateSuchThatModifiesPatternWhile) {
+//		TEST_METHOD(TestEvaluateSuchThatModifiesPatternWhile) {
 		/*********************** Test Code ************************/
 			/*	beads = command + 10;							\\1
 				beads = 34;										\\2
@@ -44,7 +52,7 @@ namespace UnitTesting
 					x = beads + command; }						\\8
 			*/
 		/**********************************************************/
-			PKB *pkb = new PKB();
+/*			PKB *pkb = new PKB();
 
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -70,12 +78,12 @@ namespace UnitTesting
 			pkb->setModifies(8, "x");
 			pkb->setModifies(4, "x");
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; while w; variable v; Select a such that Modifies(a, _) pattern w(v, _)");
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Modifies(a, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			string actualResults = string("1, 2, 3, 5, 7, 8");
+			string actualResults = string("1, 2, 3, 5, 7");
 
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
 				Assert::AreEqual(actualResults, *it);
@@ -91,70 +99,68 @@ namespace UnitTesting
 				while coffee {									\\4
 					stamps = beads + command + coffee;			\\5
 					while command {								\\6
-						x = x + x * 9;}							\\7
+						x = x * 9;}								\\7
 					x = beads + command; }}						\\8
 		*/
 		/**********************************************************/
-			PKB *pkb = new PKB();
+/*			PKB *pkb1 = new PKB();
 
-			pkb->setType(Enum::TYPE::ASSIGN);
-			pkb->setType(Enum::TYPE::ASSIGN);
-			pkb->setType(Enum::TYPE::ASSIGN);
-			pkb->setType(Enum::TYPE::WHILE);
-			pkb->setType(Enum::TYPE::ASSIGN);
-			pkb->setType(Enum::TYPE::WHILE);
-			pkb->setType(Enum::TYPE::ASSIGN);
-			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb1->setType(Enum::TYPE::ASSIGN);
+			pkb1->setType(Enum::TYPE::ASSIGN);
+			pkb1->setType(Enum::TYPE::ASSIGN);
+			pkb1->setType(Enum::TYPE::WHILE);
+			pkb1->setType(Enum::TYPE::ASSIGN);
+			pkb1->setType(Enum::TYPE::WHILE);
+			pkb1->setType(Enum::TYPE::ASSIGN);
+			pkb1->setType(Enum::TYPE::ASSIGN);
 
 			vector<string> varUsed;
-			pkb->setProcNameInProcTable("dream");
-			pkb->setVarName("beads");
-			pkb->setVarName("command");
+			pkb1->setProcNameInProcTable("dream");
+			pkb1->setVarName("beads");
+			pkb1->setVarName("command");
 			
 			varUsed.push_back("command");
-			pkb->setUsedVar(1, "command");
-			pkb->setVarName("inspiration");
+			pkb1->setUsedVar(1, "command");
+			pkb1->setVarName("inspiration");
 			
 			varUsed.push_back("inspiration");
-			pkb->setUsedVar(3, "inspiration");
-			pkb->setVarName("coffee");
+			pkb1->setUsedVar(3, "inspiration");
+			pkb1->setVarName("coffee");
 			
 			varUsed.push_back("coffee");
-			pkb->setUsedVar(4, "coffee");
+			pkb1->setUsedVar(4, "coffee");
 			
 			varUsed.push_back("beads");
-			pkb->setUsedVar(5, "beads");
-			pkb->setUsedVar(4, "beads");
-			pkb->setUsedVar(5, "command");
-			pkb->setUsedVar(4, "command");
-			pkb->setUsedVar(5, "coffee");
-			pkb->setUsedVar(4, "coffee");
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedVar(4, "command");
+			pkb1->setUsedVar(5, "beads");
+			pkb1->setUsedVar(4, "beads");
+			pkb1->setUsedVar(5, "command");
+			pkb1->setUsedVar(4, "command");
+			pkb1->setUsedVar(5, "coffee");
+			pkb1->setUsedVar(4, "coffee");
+			pkb1->setUsedVar(6, "command");
+			pkb1->setUsedVar(4, "command");
 
-			pkb->setVarName("x");
+			pkb1->setVarName("x");
 			varUsed.push_back("x");
-			pkb->setUsedVar(7, "x");
-			pkb->setUsedVar(6, "x");
-			pkb->setUsedVar(4, "x");
-			pkb->setRightExpr(7, "x + x * 9");
-			pkb->setUsedVar(8, "beads");
-			pkb->setUsedVar(4, "beads");
-			pkb->setUsedVar(8, "command");
-			pkb->setUsedVar(4, "command");
-			pkb->setProcUses(0, varUsed);
+			pkb1->setUsedVar(7, "x");
+			pkb1->setUsedVar(6, "x");
+			pkb1->setUsedVar(4, "x");
+			pkb1->setUsedVar(8, "beads");
+			pkb1->setUsedVar(4, "beads");
+			pkb1->setUsedVar(8, "command");
+			pkb1->setUsedVar(4, "command");
+			pkb1->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select v pattern a(_, \"x * 9\")");
+			ParserForPQL parserPQL = ParserForPQL("procedure p; Select p");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
+			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb1);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-		//	string actualResults = string("command, inspiration, coffee, beads, x");
-			string actualResults = string("beads, command, inspiration, coffee, x");
+			string actualResults1 = string("dyfyfiyf");
 
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
-				Assert::AreEqual(actualResults, *it);
+				Assert::AreEqual(actualResults1, *it);
 			}
-		}
+		}*/ 
 	};
 }

@@ -346,15 +346,15 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	Details secondParam = clause.getRightChild();
 
 	if (firstParam.getIntValue() == WILDCARD) {
-		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
-			firstSynResults.push_back(it->first);
+		for (int i = 0; i < results.size(); i++) {
+			firstSynResults.push_back(results[i].first);
 		}
 		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
 	}
 
 	if (secondParam.getIntValue() == WILDCARD) {
-		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
-			secondSynResults.push_back(it->second);
+		for (int i = 0; i < results.size(); i++) {
+			secondSynResults.push_back(results[i].second);
 		}
 		storeResults(secondSynResults, secondParam.getStringValue(), secondParam.getType());
 	}
