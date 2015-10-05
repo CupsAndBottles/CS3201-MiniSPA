@@ -352,10 +352,23 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 
- 			pkb->extractFollowsT(4);
-			vector<int> expectedResults = { 3,2,1 };
-			vector<int> actualResults = pkb->getFollowsT(4);
-			Assert::AreEqual(expectedResults, actualResults);
+			pkb->setFollows(follows);
+
+			//int follows1 = pkb->getFollows(1);
+
+			int follows2 = pkb->getFollows(2);
+			Assert::AreEqual(1, follows2);
+			//int follows3 = pkb->getFollows(3);
+			//Assert::AreEqual(2, follows3);
+			//int follows4 =
+ 			//pkb->extractFollowsT(3);
+			//vector<int> expectedResults = { 3,2,1 };
+			//vector<int> actualResults = pkb->getFollowsT(4);
+
+			//Assert::AreEqual(expectedResults.size(), actualResults.size());
+			//for (int i = 0; i < actualResults.size(); i++) {
+				//Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+		//	}
 		}
 
 		TEST_METHOD(PKB_getFollowsT) {
