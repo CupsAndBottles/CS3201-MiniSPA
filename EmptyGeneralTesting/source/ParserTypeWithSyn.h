@@ -3,15 +3,14 @@
 #include <string>
 #include <iostream>
 #include "QueryTree.h"
+#include "PKB.h"
 
 using namespace std;
 
 class ParserTypeWithSyn
 {
 public:
-	ParserTypeWithSyn(vector<string> selectSynonym, vector<vector<string>> suchThatSynonym,
-		vector<vector<string>> withSynonym,
-		vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
+	ParserTypeWithSyn(PKB & querypkb, vector<string> selectSynonym, vector<vector<string>> suchThatSynonym, vector<vector<string>> withSynonym, vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
 	~ParserTypeWithSyn();
 
 	vector<vector<string>> selectSynAndType;
@@ -27,5 +26,6 @@ public:
 	void parsePatternTypeWithSyn(vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
 	void checkType(string syn, vector<string> arguments, vector<string> typeSyn, vector<string> type);
 	void checkCommonSynonym();
+	PKB *pkb;
 };
 

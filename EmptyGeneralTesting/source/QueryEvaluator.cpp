@@ -17,8 +17,8 @@ QueryEvaluator::QueryEvaluator()
 {
 }
 
-QueryEvaluator::QueryEvaluator(PKB pkb) {
-	this->pkb = &pkb;
+QueryEvaluator::QueryEvaluator(PKB &inputPKB) {
+	this->pkb = &inputPKB;
 	
 }
 
@@ -70,7 +70,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	return result;
 }
 
-list<string> QueryEvaluator::permutateResult(vector<vector<string>>& intermediateResult) {
+list<string> QueryEvaluator::permutateResult(vector<vector<string>> intermediateResult) {
 	list<string> printedResults;
 
 	printedResults = permutateResultSubset(intermediateResult);
@@ -160,15 +160,52 @@ list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
 
 vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	vector<string> resultForSyn;
+	bool hasCommonSyn = false;
 
 	string synonym = select.getParentStringVal();
 	Enum::TYPE type = select.getParent().getType();
 
 	for (int i = 0; i < this->results.size(); i++) {
 		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
+			hasCommonSyn = true;
 			for (int j = 0; j < results[i].getResult().size(); j++) {
 				resultForSyn.push_back(convertToString(results[i].getResult().at(j), type));
 			}
+		}
+	}
+	
+	if (!hasCommonSyn) {
+		switch (type) {
+		case Enum::TYPE::STATEMENT:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				resultForSyn.push_back(to_string(i));
+			}
+			break;
+		case Enum::TYPE::ASSIGN:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				if (pkb->getType(i) == Enum::TYPE::ASSIGN) {
+					resultForSyn.push_back(to_string(i));
+				}
+			}
+			break;
+		case Enum::TYPE::WHILE:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				if (pkb->getType(i) == Enum::TYPE::WHILE) {
+					resultForSyn.push_back(to_string(i));
+				}
+			}
+			break;
+		case Enum::TYPE::PROCEDURE:
+			for (int i = 0; i < pkb->getNoOfProc(); i++) {
+				resultForSyn.push_back(pkb->getProcName(i));
+			}
+			break;
+		case Enum::TYPE::VARIABLE:
+			for (int i = 0; i < pkb->getNoOfVar(); i++) {
+				resultForSyn.push_back(pkb->getVarName(i));
+			}
+		default:
+			break;
 		}
 	}
 
@@ -341,26 +378,34 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> results) {
 	vector<int> firstSynResults;
 	vector<int> secondSynResults;
+	int previousStoredIndex = WILDCARD;
 
 	Details firstParam = clause.getLeftChild();
 	Details secondParam = clause.getRightChild();
 
 	if (firstParam.getIntValue() == WILDCARD) {
-		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
-			firstSynResults.push_back(it->first);
+		for (int i = 0; i < results.size(); i++) {
+			if (previousStoredIndex == WILDCARD || previousStoredIndex != results[i].first) {
+				previousStoredIndex = results[i].first;
+				firstSynResults.push_back(results[i].first);
+			}
 		}
+		previousStoredIndex = WILDCARD;
 		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
 	}
 
 	if (secondParam.getIntValue() == WILDCARD) {
-		for (vector<pair<int, int>>::iterator it = results.begin(); it != results.end(); it++) {
-			secondSynResults.push_back(it->second);
+		for (int i = 0; i < results.size(); i++) {
+			if (previousStoredIndex == WILDCARD || previousStoredIndex != results[i].second) {
+				previousStoredIndex = results[i].second;
+				secondSynResults.push_back(results[i].second);
+			}
 		}
 		storeResults(secondSynResults, secondParam.getStringValue(), secondParam.getType());
 	}
 }
 
-void QueryEvaluator::storeResults(vector<int>& intermediateResult, string syn, Enum::TYPE type) {
+void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, Enum::TYPE type) {
 	bool isPresentInResults = false;
 
 	for (int i = 0; i < this->results.size(); i++) {
@@ -384,12 +429,22 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 	//modify and uses - modify => a = b+c, a is modified. Uses= b and c
 	list<char> output;
 	stack<char> stack;
+	string s = "";
 	output.clear();
 	string outputString;
 
+	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
+
 	for (char c : statement) {
 		char charac = c;
-		
+		if (c == ';') {
+			//addToParent(index);
+		}
+		if (c == '}') {
+
+			//pushCloseBracket(index);
+			break;
+		}
 		if (isOperator(charac))
 		{
 			char o1 = charac;
@@ -398,7 +453,7 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			{
 				char o2 = stack.top();
 
-				while (isOperator(o2) && (isPriority(o2) >= isPriority(o1)))
+				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
 					output.push_back(o2);
@@ -436,7 +491,18 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			}
 			if (topCharac != '(')
 			{
-				cout << "error (";
+				cout << "error";
+			}
+		}
+		else
+		{
+			if (charac == '=') {
+				//output.pop_back();
+
+			}
+			else {
+				output.push_back(charac);
+				s = "" + charac;
 			}
 		}
 	}
@@ -445,13 +511,16 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		char stackTop = stack.top();
 		if (stackTop == ')' || stackTop == '(')
 		{
-			cout << "error with brackets";
+			//Error();
 		}
 		output.push_back(stackTop);
-		outputString = outputString + stackTop;
 		stack.pop();
 	}
 
+	for (list<char>::iterator it = output.begin(); it != output.end(); ++it) {
+
+		outputString.push_back(*it);
+	}
 	return outputString;
 }
 //end of method

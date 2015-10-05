@@ -34,8 +34,8 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // ...code to evaluate query...
 	
 	//TO REMOVE
-	PKB pkb();
-	ParserForPQL parserForPQL(query);
+	PKB pkb;
+	ParserForPQL parserForPQL(query, pkb);
 	QueryEvaluator queryEvaluator(pkb);
 	results = queryEvaluator.evaluateQuery(parserForPQL.getQueryTree());
 

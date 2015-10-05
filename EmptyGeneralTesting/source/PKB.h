@@ -16,8 +16,13 @@ class TNode;
 
 class PKB {
 private:
-	//static PKB* m_Instance;
 	void setParent(int index, int parentStmt);
+	vector<Stmt> stmtTable;
+	vector<Variable> varTable;
+	vector<Procedure> procTable;
+
+	//From stmtTable
+	void setFollowedBy(int index, int followedBy); 
 
 public:
 	//	string procNum;
@@ -37,7 +42,6 @@ public:
 
 	PKB();
 	~PKB();
-//	static PKB* getInstanceOf();
 	Procedure proc;
 	//DesignExtractor design;
 
@@ -52,12 +56,11 @@ public:
 	void setProcCalledBy(int index, int called);
 	
 	//From StmtTable
-	void setType(Enum::TYPE type);
+	void setType(Enum::TYPE type);	//tested
 	void setParentT(int index, vector<int> parentStmts);
 	void setChildren(vector<pair<int,int>> parentChildStmts); 
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(vector<pair<int, int>> follows);
-	void setFollowedBy(int index, int followedBy);
+	void setFollows(vector<pair<int, int>> follows); // tested
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts);
 	void setModifies(int index,string modifiedVar);
@@ -77,7 +80,7 @@ public:
 	//DESIGNEXT->PKB
 	int getParent(int index);
 	vector<int> getChildren(int index);
-	int getFollows(int index);
+	int getFollows(int index);	
 	int getFollowedBy(int index);
 
 	//PQL-PKB
@@ -85,7 +88,7 @@ public:
 	vector<pair<int, int>> getCalls(int stmtNum, int stmtNum2);
 	vector<pair<int, int>> getUses(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	vector<pair<int, int>> getParent(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
-	vector<pair<int, int>> getFollows(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getFollows(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2); // tested
 	vector<pair<int, int>> getParentT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	vector<pair<int, int>> getFollowsT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 
@@ -94,9 +97,9 @@ public:
 	string getProcName(int procIndex);
 
 	//From VarTable
-	int getVarIndex(string varName);
-	string getVarName(int index);
-	vector<int> getProcNameInVarTable(int index);
+	int getVarIndex(string varName); //tested
+	string getVarName(int index); //tested
+	vector<int> getProcNameInVarTable(int index); // tested
 	vector<int> getUsedByStmtNum(int index);
 	vector<int> getModifiedByStmtNum(int index);
 	 
@@ -108,6 +111,8 @@ public:
 	
 	int getType(int index);
 
+	int getNoOfProc();
+	int getNoOfVar();
 	//While table
 	//int getWholeStmt(int, int);
 

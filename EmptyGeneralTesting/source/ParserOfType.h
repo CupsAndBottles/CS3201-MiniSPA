@@ -12,17 +12,18 @@ public:
 	ParserOfType();
 	~ParserOfType();
 
-	vector<vector<string>> setType(int clauseType, string synonym, vector<string> type, vector<string> synonymType);
+	vector<vector<string>> setType(PKB & pkb, int clauseType, string synonym, vector<string> type, vector<string> synonymType);
 	vector<vector<string>> setClauseType(int clauseType, string synonym, vector<string> type, vector<string> synonymType);
 	bool isSynDigit(string syn);
 	int isBeingDeclared(string syn, vector<string> synType);
 	string checkSubExpression(string arg2);
 	string removeUnwanted(string syn);
+	string removeOpenComma(string syn);
 	bool isVariable(string syn);
 	bool isProcedure(string syn);
 	bool isExpression(string syn); 
 	//PKB *pkb = PKB::getInstanceOf();
-	PKB *pkb;
+	PKB *pkb = new PKB();
 };
 
 
