@@ -158,6 +158,11 @@ void PKB::setParentT(int index, vector<int> parents)
 	stmtTable[index].setParentT(parents);
 }
 
+//V
+vector<int> PKB::getParentT(int stmtNum) {
+	return stmtTable[stmtNum].getParentT();
+}
+
 //G: children and parent together as pair
 void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 {
@@ -169,6 +174,10 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 		stmtTable[index].setChildren(child);
 		setParent(child,index);
 	}
+}
+
+void PKB::setChildren(int index, int child) {
+	stmtTable[index].setChildren(child);
 }
 
 //V 

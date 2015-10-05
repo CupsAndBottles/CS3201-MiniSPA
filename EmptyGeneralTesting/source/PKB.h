@@ -16,14 +16,14 @@ class TNode;
 
 class PKB {
 private:
-	void setParent(int index, int parentStmt);
+	
 	vector<Stmt> stmtTable;
 	vector<Variable> varTable;
 	vector<Procedure> procTable;
 
 	//From stmtTable
 	void setFollowedBy(int index, int followedBy); 
-
+	
 public:
 	//	string procNum;
 	string procName;
@@ -83,6 +83,9 @@ public:
 	int getFollows(int index);	
 	int getFollowedBy(int index);
 	vector<int> getFollowsT(int stmtNum);
+	vector<int> getParentT(int stmtNum);
+	void setParent(int index, int parentStmt);
+	void setChildren(int index, int child);
 
 	//PQL-PKB
 	vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
