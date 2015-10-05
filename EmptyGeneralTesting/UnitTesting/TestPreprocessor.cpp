@@ -241,6 +241,21 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), false);
 
+			input = " assign a, n; if if; Select a pattern a(_, \"_x*9_\")";
+			ParserForPQL parser15(input);
+			queryTree = parser15.getQueryTree();
+
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getParentStringVal(), string("a"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getParentType()), 0);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCStringValue(), string("_"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCType()), 3);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCStringValue(), string("x*9"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCType()), 9);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), true);
+
 		}
 		TEST_METHOD(testAnd) {
 			string input = "while w1, w2, w3; assign a, n; Select w1 such that Parent*(w1, w2) and Follows(n, a)";
