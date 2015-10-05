@@ -111,6 +111,8 @@ public:
 	
 	int getType(int index);
 
+	int getNoOfProc();
+	int getNoOfVar();
 	//While table
 	//int getWholeStmt(int, int);
 
