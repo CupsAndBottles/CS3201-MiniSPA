@@ -18,6 +18,9 @@ class PKB {
 private:
 	
 	//From stmtTable
+	vector<Stmt> stmtTable;
+	vector<Variable> varTable;
+	vector<Procedure> procTable;
 	void setFollowedBy(int index, int followedBy); 
 	
 public:

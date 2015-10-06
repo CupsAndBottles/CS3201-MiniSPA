@@ -18,9 +18,6 @@ const int OFFSET = 1;
 const int NOT_FOUND = -1;
 const int UNDEFINED = -1;
 
-vector<Stmt> stmtTable;
-vector<Variable> varTable;
-vector<Procedure> procTable;
 //-----------------------------------------------------------------------------
 //ProcTable Setters:
 
