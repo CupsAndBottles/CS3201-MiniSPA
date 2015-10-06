@@ -143,9 +143,9 @@ void Parser::Procedure() {
 }
 
 void Parser::setRelationsInTable() {
-	this->pkb->setChildren(parentLink);
-	this->pkb->setFollows(followLink);
-	this->pkb->setProcCalls(procCall);
+//	this->pkb->setChildren(parentLink);
+	//this->pkb->setFollows(followLink);
+	//this->pkb->setProcCalls(procCall);
 }
 
 void Parser::addToParent(int child) {
@@ -180,8 +180,8 @@ void Parser::processProcedure(int index, string statement) {
 	string procName = statement.substr(statement.find("procedure") + 9);
 	currProcName = procName;
 	numOfProc++;
-	procNumInTble = this->pkb->setProcNameInProcTable(statement);
-	this->pkb->setStartNum(procNumInTble,index);
+	//procNumInTble = this->pkb->setProcNameInProcTable(statement);
+	//this->pkb->setStartNum(procNumInTble,index);
 }
 
 void Parser::processCalls(int index, string stmt) {
@@ -203,7 +203,7 @@ void Parser::processWhile(int index, string statement) {
 		parentPair.second = index-numOfProc;
 		parentLink.push_back(parentPair);
 	}
-	this->pkb->setType(Enum::TYPE::WHILE);
+	//this->pkb->setType(Enum::TYPE::WHILE);
 	containerElements.push_back(pair);
 	addToParent(pair.first);
 	handleModifyAndUses(pair.first, pair.second);
@@ -221,13 +221,16 @@ bool Parser::isOperator(char o) {
 void Parser::processExpressions(int index, string statement) {
 	list<char> output;
 	stack<char> stack;
-	string s = "";
+	string s ;
 	output.clear();
-	this->pkb->setType(Enum::TYPE::ASSIGN);
+	//this->pkb->setType(Enum::TYPE::ASSIGN);
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
+			int index = this->pkb->setVarName(s);
+			this->pkb->setProcNames(index, currProcName);
 			addToParent(index);
+			s = "";
 		}
 		if (c == '}') {
 
@@ -236,8 +239,10 @@ void Parser::processExpressions(int index, string statement) {
 		}
 		if (isOperator(charac))
 		{
+			int index = this->pkb->setVarName(s);
+			this->pkb->setProcNames(index, currProcName);
 			char o1 = charac;
-
+			s = "";
 			if (!stack.empty())
 			{
 				char o2 = stack.top();
@@ -286,15 +291,16 @@ void Parser::processExpressions(int index, string statement) {
 		else
 		{
 			if (charac == '=') {
+				int index = this->pkb->setVarName(s);
+				this->pkb->setProcNames(index, currProcName);
 				handleModifyAndUses(index, statement);
+				s = "";
 				//output.pop_back();
 
 			}
 			else {
 				output.push_back(charac);
-				s = ""+charac;
-				int index = this->pkb->setVarName(s);
-				this->pkb->setProcNames(index,currProcName);
+				s.push_back(charac);
 			}
 		}
 	}
@@ -323,19 +329,22 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		size_t bracketPos = stmt.find("{");
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
-		this->pkb->setUsedVar(i-numOfProc,varInWhile);
-		this->pkb->setUsedBy(varInWhile,i-numOfProc);
+		//this->pkb->setUsedVar(i-numOfProc,varInWhile);
+		this->pkb->setUsedBy(varInWhile, i - numOfProc);
 		varUsedInProc.push_back(varInWhile);
 	}
 	else {
 		size_t equal = stmt.find("=");
 		char modified = stmt.at(0);
-
+		string s;
+		s.push_back(modified);
+		this->pkb->setModifiedBy(s, i - numOfProc);
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
+			s = "";
 			if (isVariable(c)) {
-				string s = "" + c;
-				this->pkb->setModifies(i-numOfProc,s);
-				this->pkb->setModifiedBy(s,i-numOfProc);
+				s.push_back(c);
+			//	this->pkb->setModifies(i-numOfProc,s);
+				this->pkb->setUsedBy(s, i - numOfProc);
 				varUsedInProc.push_back(s);
 			}
 		}
@@ -387,7 +396,7 @@ void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 
 		s.push_back(*it);
 	}
-	this->pkb->setRightExpr(newIndex,s);
+	//this->pkb->setRightExpr(newIndex,s);
 }
 
 void Parser::Error() {
@@ -426,9 +435,9 @@ void Parser::pushCloseBracket(int stmtNum) {
 void Parser::setProcEndNum(int stmtNum) {
 
 	if (containerElements.empty()) {
-		this->pkb->setEndNum(procNumInTble,stmtNum - numOfProc);
-		this->pkb->setProcModified(procNumInTble,varModifiedInProc);
-		this->pkb->setProcUses(procNumInTble,varUsedInProc);
+		//this->pkb->setEndNum(procNumInTble,stmtNum - numOfProc);
+		//this->pkb->setProcModified(procNumInTble,varModifiedInProc);
+		//this->pkb->setProcUses(procNumInTble,varUsedInProc);
 		varUsedInProc.clear();
 		varModifiedInProc.clear();
 	}
@@ -457,7 +466,7 @@ bool Parser::isConstant(char c) {
 void Parser::handleFollows(int index, string stmt) {
 	string currStmt = stmt;
 	pair<int, int> paired;
-	cout << stmt + "\n";
+	//cout << stmt + "\n";
 	if (prevStmt.empty()) {
 		prevStmt = stmt;
 		currFollows.push_back(index-numOfProc);

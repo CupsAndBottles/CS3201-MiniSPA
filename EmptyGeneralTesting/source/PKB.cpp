@@ -94,12 +94,10 @@ void PKB::setProcCalledBy(int index, int called)
 //ZH: tested
 //G: check for existence, return index if exists else, set varname and return new index
 int PKB::setVarName(string varName){
-	
 	int index = getVarIndex(varName);
 	if (index = -1) {
-		varTable.push_back(Variable());
-		int size = varTable.size() - OFFSET;
-		varTable[size].setVarName(varName);
+		Variable variable(varName,0,0,0);
+		varTable.push_back(variable);
 		index = getVarIndex(varName);
 	}
 	return index;
@@ -109,20 +107,38 @@ int PKB::setVarName(string varName){
 void PKB::setProcNames(int index, string procName)
 {
 	int procIndex = getProcIndex(procName);
-	varTable[index].setProcNames(procIndex);
+	if (procIndex != -1) {
+		varTable[index].insertIntoProc(procIndex);
+	}
+	else {
+		setProcNameInProcTable(procName);
+		setProcNames(index,procName);
+	}
 
 }
 
 void PKB::setUsedBy(string varName, int stmtNum)
 {
 	int varIndex = getVarIndex(varName);
-	varTable[varIndex].setUsedBy(stmtNum);
+	if (varIndex != -1) {
+		varTable[varIndex].insertIntoUses(stmtNum);
+	}
+	else {
+		setVarName(varName);
+		setUsedBy(varName,stmtNum);
+	}
 }
 
 void PKB::setModifiedBy(string varName, int stmtNum)
 {
 	int varIndex = getVarIndex(varName);
-	varTable[varIndex].setModifiedBy(stmtNum);
+	if (varIndex != -1) {
+		varTable[varIndex].insertIntoModify(stmtNum);
+	}
+	else {
+		setVarName(varName);
+		setModifiedBy(varName,stmtNum);
+	}
 }
 
 //----------------------------------------------------------------------------------------------------------------
@@ -158,6 +174,11 @@ void PKB::setParentT(int index, vector<int> parents)
 	stmtTable[index].setParentT(parents);
 }
 
+//V
+vector<int> PKB::getParentT(int stmtNum) {
+	return stmtTable[stmtNum].getParentT();
+}
+
 //G: children and parent together as pair
 void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 {
@@ -169,6 +190,10 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 		stmtTable[index].setChildren(child);
 		setParent(child,index);
 	}
+}
+
+void PKB::setChildren(int index, int child) {
+	stmtTable[index].setChildren(child);
 }
 
 //V 
@@ -187,8 +212,8 @@ void PKB::setFollows(vector<pair<int,int>> follows)
 		int firstStmt = paired.first;
 		int secondStmt = paired.second;
 		follows.pop_back();
-		stmtTable[firstStmt].setFollows(secondStmt);
-		setFollowedBy(secondStmt,firstStmt);
+		stmtTable[secondStmt].setFollows(firstStmt);
+		setFollowedBy(firstStmt,secondStmt);
 	}
 }
 
@@ -495,8 +520,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 				if (type2 == Enum::TYPE::UNDERSCORE || type2 == Enum::TYPE::STATEMENT) {
 					// follows(_,_) or follows(s1,s2)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
-						if (stmtTable[i].getFollows() > 0) {
-							follows.push_back(make_pair(i, stmtTable[i].getFollows()));
+						if (stmtTable[i].getFollowedBy() > 0) {
+							follows.push_back(make_pair(i, stmtTable[i].getFollowedBy()));
 						}
 					}
 				}
@@ -504,8 +529,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 					// follows(_ ,call/if/assign/while) or follows(s1, call/if/assign/while)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type2) {
-							if (stmtTable[i].getFollows() > 0) {
-								follows.push_back(make_pair(i, stmtTable[i].getFollows()));
+							if (stmtTable[i].getFollowedBy() > 0) {
+								follows.push_back(make_pair(i, stmtTable[i].getFollowedBy()));
 							}
 						}
 					}
@@ -516,8 +541,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 					// follows(call/if/assign/while, _) or follows(call/if/assign/while, s1)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
-							if (stmtTable[i].getFollowedBy() > 0) {
-								follows.push_back(make_pair(stmtTable[i].getFollowedBy(),i));
+							if (stmtTable[i].getFollows() > 0) {
+								follows.push_back(make_pair(stmtTable[i].getFollows(),i));
 							}
 						}
 					}
@@ -526,9 +551,9 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 					// follows(call/if/assign/while, call/if/assign/while)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
-							if (stmtTable[i].getFollows() > 0) {
-								if (stmtTable[stmtTable[i].getFollows()].getType() == type2) {
-									follows.push_back(make_pair(i, stmtTable[i].getFollows()));
+							if (stmtTable[i].getFollowedBy() > 0) {
+								if (stmtTable[stmtTable[i].getFollowedBy()].getType() == type2) {
+									follows.push_back(make_pair(i, stmtTable[i].getFollowedBy()));
 								}
 							}
 						}
@@ -542,10 +567,10 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 			if (stmt2 > stmtTable.size()) {
 				return follows;
 			}
-			followedBy = stmtTable[stmt2].getFollowedBy();
-			if (followedBy > 0) {
-				if (stmtTable[followedBy].getType() == type1) {
-					follows.push_back(make_pair(stmtTable[stmt2].getFollowedBy(), stmt2));
+			follow = stmtTable[stmt2].getFollows();
+			if (follow > 0) {
+				if (stmtTable[follow].getType() == type1) {
+					follows.push_back(make_pair(stmtTable[stmt2].getFollows(), stmt2));
 				}
 			}
 		}
@@ -556,10 +581,10 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 			if (stmt1 > stmtTable.size()) {
 				return follows;
 			}
-			follow = stmtTable[stmt1].getFollows();
+			follow = stmtTable[stmt1].getFollowedBy();
 			if (follow > 0) {
 				if (stmtTable[follow].getType() == type2) {
-					follows.push_back(make_pair(stmt1, stmtTable[stmt1].getFollows()));
+					follows.push_back(make_pair(stmt1, stmtTable[stmt1].getFollowedBy()));
 				}
 			}
 		}
@@ -568,7 +593,7 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 			if (stmt1 > stmtTable.size() || stmt2 > stmtTable.size()) {
 				return follows;
 			}
-			if (stmtTable[stmt1].getFollows() == stmt2) {
+			if (stmtTable[stmt1].getFollowedBy() == stmt2) {
 				follows.push_back(make_pair(stmt1, stmt2));
 			}
 		}
@@ -845,6 +870,11 @@ std::vector<int> PKB::getChildren(int stmtNum)
 int PKB::getFollows(int stmtNum)
 {
 	return stmtTable[stmtNum].getFollows();
+}
+
+//V
+vector<int> PKB::getFollowsT(int stmtNum) {
+	return stmtTable[stmtNum].getFollowsT();
 }
 
 //V

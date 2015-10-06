@@ -11,12 +11,15 @@
 #include "ParserForPattern.h"
 #include "ParserForWith.h"
 #include "ParserTypeWithSyn.h"
+#include "PKB.h"
 
 using namespace std;
 
-ParserForPQL::ParserForPQL(string input)
+ParserForPQL::ParserForPQL(string input, PKB &querypkb)
 {
+	this->pkb = &querypkb;
 	parse(input);
+
 }
 
 ParserForPQL::~ParserForPQL()
@@ -127,7 +130,7 @@ void ParserForPQL::parseTypeWithSyn(vector<string> selectSynonym, vector<vector<
 	vector<vector<string>> withSynonym,
 	vector<vector<string>> patternSynonym)
 {
-	ParserTypeWithSyn parserTypeWithSyn(selectSynonym, suchThatSynonym,
+	ParserTypeWithSyn parserTypeWithSyn(*pkb, selectSynonym, suchThatSynonym,
 		withSynonym, patternSynonym, type[1], synonym[1]);
 	selectSynAndType = parserTypeWithSyn.getSelectSynAndType();
 	suchThatSynAndType = parserTypeWithSyn.getSuchThatSynAndType();
@@ -191,5 +194,6 @@ void ParserForPQL::startValidate()
 {
 	Validation validation(suchThatSynAndType, patternSynAndType);
 }
+
 
 

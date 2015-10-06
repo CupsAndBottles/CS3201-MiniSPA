@@ -1,6 +1,7 @@
 #include "ParserOfType.h"
 #include "ParserException.h"
 #include "PKB.h"
+#include "ParserForPQL.h"
 #include <iostream>
 #include <regex>
 #include<vector>
@@ -17,8 +18,9 @@ ParserOfType::~ParserOfType()
 {
 }
 
-vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vector<string> type, vector<string> synonymType)
+vector<vector<string>> ParserOfType::setType(PKB &querypkb, int clauseType, string synonym, vector<string> type, vector<string> synonymType)
 {
+	this->pkb = &querypkb; 
 	vector<vector<string>> synAndType;
 	int index;
 	synAndType.push_back(vector <string>()); //stringVal
@@ -26,8 +28,6 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 	synAndType.push_back(vector <string>()); //intVal
 	synAndType.push_back(vector <string>()); //isExpression
 
-	PKB pkb;
-	this->pkb = &pkb;
 	synonym = removeOpenComma(synonym);
 	string isSubExpression = checkSubExpression(synonym);
 	synonym = removeUnwanted(synonym);
@@ -69,7 +69,7 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		return synAndType;
 	}
 	else if (isVariable(synonym)) {
-		index = pkb.getVarIndex(synonym);
+		index = pkb->getVarIndex(synonym);
 		synAndType[2].push_back(std::to_string(index));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("variable");
@@ -77,7 +77,7 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		return synAndType;
 	}
 	else if (isProcedure(synonym)) {
-		index = pkb.getProcIndex(synonym);
+		index = pkb->getProcIndex(synonym);
 		synAndType[2].push_back(std::to_string(index));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("procedure");

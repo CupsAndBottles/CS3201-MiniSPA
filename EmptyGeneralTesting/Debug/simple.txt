@@ -1,13 +1,6 @@
 proceduremain{
-y=5;
-z=7;
-	while s{
-		while k{
-		k=o+p;
-		j=o+p;
-		}
-	p=o+i;
-	}
 j=i+p;
 z=k+l;
+y=u+o;
+t=g+c;
 }

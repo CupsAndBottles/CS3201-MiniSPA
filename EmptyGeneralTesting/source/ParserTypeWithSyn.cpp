@@ -6,14 +6,17 @@
 #include <locale> 
 #include "QueryTree.h"
 #include "ParserException.h"
+#include "PKB.h"
 
 
 using namespace std;
 
-ParserTypeWithSyn::ParserTypeWithSyn(vector<string> selectSynonym, vector<vector<string>> suchThatSynonym,
+ParserTypeWithSyn::ParserTypeWithSyn(PKB &querypkb, vector<string> selectSynonym, vector<vector<string>> suchThatSynonym,
+	
 	vector<vector<string>> withSynonym,
 	vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym)
 {
+	this->pkb = &querypkb;
 	parseSelectTypeWithSyn(selectSynonym, type, synonym);
 	parseSuchThatTypeWithSyn(suchThatSynonym, type, synonym);
 	//parseWithTypeWithSyn(withSynonym, type, synonym);
@@ -90,7 +93,7 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 		}
 
 		for (std::size_t k = 1; k < 3; k++) {
-			temp = parserOfType.setType(1, suchThatSynonym[i].at(k), type, synonym);
+			temp = parserOfType.setType(*pkb, 1, suchThatSynonym[i].at(k), type, synonym);
 			if (temp.size() == 0) {
 				throw ParserException("SuchThat synonym unidentified");
 			}
@@ -111,11 +114,6 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 
 void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym)
 {
-	//patternSynAndType.push_back(vector<string>()); //stringVal
-	//patternSynAndType.push_back(vector<string>()); //type
-	//patternSynAndType.push_back(vector<string>()); //intVal
-	//patternSynAndType.push_back(vector<string>()); //isExpression(1 true)
-	
 	ParserOfType parserOfType;
 	vector<vector<string>> temp;
 	for (std::size_t i = 0; i < patternSynonym.size(); i++) {
@@ -134,7 +132,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 		}
 
 		for (int k = 1; k < patternSynonym[i].size(); k++) {
-			temp = parserOfType.setType(2, patternSynonym[i].at(k), type, synonym);
+			temp = parserOfType.setType(*pkb, 2, patternSynonym[i].at(k), type, synonym);
 			if (temp.size() == 0) {
 				throw ParserException("Pattern synonym unidentified");
 			}
