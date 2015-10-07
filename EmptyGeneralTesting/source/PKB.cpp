@@ -536,8 +536,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 					// follows(_ ,call/if/assign/while) or follows(s1, call/if/assign/while)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type2) {
-							if (stmtTable[i].getFollowedBy() > 0) {
-								follows.push_back(make_pair(i, stmtTable[i].getFollowedBy()));
+							if (stmtTable[i].getFollows() > 0) {
+								follows.push_back(make_pair(stmtTable[i].getFollows(), i));
 							}
 						}
 					}
@@ -548,8 +548,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 					// follows(call/if/assign/while, _) or follows(call/if/assign/while, s1)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
-							if (stmtTable[i].getFollows() > 0) {
-								follows.push_back(make_pair(stmtTable[i].getFollows(),i));
+							if (stmtTable[i].getFollowedBy() > 0) {
+								follows.push_back(make_pair(i, stmtTable[i].getFollowedBy()));
 							}
 						}
 					}
