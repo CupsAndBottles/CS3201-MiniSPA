@@ -16,8 +16,6 @@ class TNode;
 
 class PKB {
 private:
-	
-	//From stmtTable
 	vector<Stmt> stmtTable;
 	vector<Variable> varTable;
 	vector<Procedure> procTable;
@@ -57,15 +55,17 @@ public:
 	//From StmtTable
 	void setType(Enum::TYPE type);	//tested
 	void setParentT(int index, vector<int> parentStmts);
-	void setChildren(vector<pair<int,int>> parentChildStmts); 
+	void setChildren(vector<pair<int,int>> parentChildStmts); //bug
 	void setChildrenT(int index, vector<int> childrenStmts);
 	void setFollows(vector<pair<int, int>> follows); // tested
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts);
-	void setModifies(int index,string modifiedVar);
+	void setModifies(int index,string modifiedVar);//bug
 	//void setConstant(int index, vector<int> usesStmts);
-	void setUsedVar(int index, string usedVar);
+	void setUsedVar(int index, string usedVar);//bug
 	void setRightExpr(int index, string rightExpression);  //tested
+	void setParent(int index, int parentStmt);
+
 
 	string getRightExpr(int index); //tested
 	int getNoOfStmt(); //tested
@@ -83,8 +83,7 @@ public:
 	int getFollowedBy(int index);
 	vector<int> getFollowsT(int stmtNum);
 	vector<int> getParentT(int stmtNum);
-	void setParent(int index, int parentStmt);
-	void setChildren(int index, int child);
+
 
 	//PQL-PKB
 	vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
@@ -107,8 +106,8 @@ public:
 	vector<int> getModifiedByStmtNum(int index);
 	 
 	//From VarTable 
-	int setVarName(string varName);
-	void setProcNames(int index,string procName); 
+	int setVarName(string varName); //working
+	void setProcNames(int index,string procName); //working
 	void setUsedBy(string varName,int stmtNum); 
 	void setModifiedBy(string varName, int stmtNum);
 	

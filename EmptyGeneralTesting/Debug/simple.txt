@@ -1,6 +1,8 @@
-proceduremain{
+procedure main{
 j=i+p;
+while w{
 z=k+l;
 y=u+o;
+}
 t=g+c;
 }

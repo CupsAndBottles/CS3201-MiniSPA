@@ -6,12 +6,8 @@
 
 using namespace std;
 
-Variable::Variable(string varName, int procIndex, int uStmtLst, int mStmtLst)
+Variable::Variable()
 {
-	setVarName(varName);
-	insertIntoProc(procIndex);
-	insertIntoUses(uStmtLst);
-	insertIntoModify(mStmtLst);
 }
 
 Variable::~Variable()
@@ -54,8 +50,8 @@ void Variable::insertIntoModify(int modify) {
 	if (modify != 0 && !binary_search(modifiedByList.begin(), modifiedByList.end(), modify)) {
 		modifiedByList.push_back(modify);
 	}
-	cout << "Varname : " << varName << "\n";
-	cout << "Modified: " << modify << "\n";
+//	cout << "Varname : " << varName << "\n";
+//	cout << "Modified: " << modify << "\n";
 }
 
 //Bug: weird numbers added. 
