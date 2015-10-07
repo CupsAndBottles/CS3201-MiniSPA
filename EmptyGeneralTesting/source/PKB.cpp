@@ -261,11 +261,11 @@ void PKB::setModifies(int index, string modifiedVar)
 
 	int varIndex = getVarIndex(modifiedVar);
 	stmtTable[index].setModifiedVar(varIndex);
-	cout << "---------------------------------------\n";
+	/*cout << "---------------------------------------\n";
 	cout << "Index : " << varIndex << "\n";
 	cout << "Modified var: " << modifiedVar << "\n";
 	cout << "stmt table:  " << index << "\n";
-	cout << "---------------------------------------\n";
+	cout << "---------------------------------------\n";*/
 }
 
 /* G: Constants here or in another table?
@@ -280,11 +280,11 @@ void PKB::setUsedVar(int index, string usedVar)
 {
 	int varIndex = getVarIndex(usedVar);
 	stmtTable[index].setUsedVar(varIndex);
-	cout << "---------------------------------------\n";
+	/*cout << "---------------------------------------\n";
 	cout << "Index : " << varIndex << "\n";
 	cout << "Used var: " << usedVar << "\n";
 	cout << "stmt table:  " << index << "\n";
-	cout << "---------------------------------------\n";
+	cout << "---------------------------------------\n";*/
 }
 
 //ZH - tested

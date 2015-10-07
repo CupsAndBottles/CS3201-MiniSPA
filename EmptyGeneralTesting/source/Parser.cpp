@@ -225,7 +225,7 @@ void Parser::processExpressions(int index, string statement) {
 			int index = pkb->setVarName(s);
 			pkb->setProcNames(index, currProcName);
 			s = "";
-			break;
+		//	break;
 		}
 		if (c == '}') {
 
@@ -369,7 +369,9 @@ string Parser::getExpression() {
 	int counter = 0;
 	for (i = (stmtNoAndExpr).begin(); i != (stmtNoAndExpr).end(); ++i) {
 		counter++;
-		output.append(to_string(counter) + ": " + (*i).second + " ");
+		if ((*i).second != ";") {
+			output.append(to_string(counter) + ": " + (*i).second + " ");
+		}
 	}
 	return output;
 }
@@ -393,7 +395,9 @@ void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 	pairs.first = index - 1;
 	string s;
 	for (list<char>::iterator it = exprOutput.begin(); it != exprOutput.end(); ++it) {
+		if (*it != ';') {
 			s.push_back(*it);
+		}
 	}
 	pkb->setRightExpr(pairs.first, s);
 	if (!s.empty()) {
