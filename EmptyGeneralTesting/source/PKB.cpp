@@ -112,9 +112,9 @@ int PKB::setVarName(string varName){
 		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
+		//cout << "set varName: " << varName << "\n";
+		//cout << "set varIndex: " << index << "\n";
 	}
-	//cout << "set varName: " << varName << "\n";
-	//cout << "set varIndex: " << index << "\n";
 	return index;
 }
 

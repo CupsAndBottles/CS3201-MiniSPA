@@ -325,6 +325,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
 		int index = pkb->setVarName(varInWhile);
+		
 		pkb->setProcNames(index, currProcName);
 		pkb->setUsedBy(varInWhile, i - numOfProc);
 		pkb->setUsedVar(i - numOfProc,varInWhile);
@@ -332,19 +333,25 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 	}
 	else {
 		size_t equal = stmt.find("=");
-		char modified = stmt.at(0);
+		string modified = stmt.substr(0, equal);
 		string s;
-		s.push_back(modified);
-		pkb->setModifiedBy(s, i - numOfProc);
-		pkb->setModifies(i-numOfProc,s);
-		varModifiedInProc.push_back(s);
+
+		//cout << modified << "\n";
+		pkb->setModifiedBy(modified, i - numOfProc);
+		pkb->setModifies(i-numOfProc,modified);
+		varModifiedInProc.push_back(modified);
+	
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
-			s = "";
-			if (isVariable(c)) {
+			if (isOperator(c) || c == '}' || c == ';') {
+				if (!s.empty()) {
+					pkb->setUsedBy(s, i - numOfProc);
+					pkb->setUsedVar(i - numOfProc, s);
+					varUsedInProc.push_back(s);
+				}
+				s = "";
+			}
+			else {
 				s.push_back(c);
-				pkb->setUsedBy(s, i - numOfProc);
-				pkb->setUsedVar(i - numOfProc, s);
-				varUsedInProc.push_back(s);
 			}
 		}
 	}
