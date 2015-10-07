@@ -101,8 +101,8 @@ int PKB::setVarName(string varName){
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
 	}
-	cout << "varName: " << varName << "\n";
-	cout << "varIndex: " << index << "\n";
+	//cout << "set varName: " << varName << "\n";
+	//cout << "set varIndex: " << index << "\n";
 	return index;
 }
 
@@ -110,16 +110,8 @@ int PKB::setVarName(string varName){
 void PKB::setProcNames(int index, string procName)
 {
 	int procIndex = getProcIndex(procName);
-	if (procIndex != -1) {
-		varTable[index].insertIntoProc(procIndex);
-	}
-	else {
-		setProcNameInProcTable(procName);
-		setProcNames(index,procName);
-	}
-	cout << "procname: " << procName << "\n";
-	cout << "procindex: " << procIndex << "\n";
-	cout << "------------------------------------------------------------------" << "\n";
+	varTable[index].insertIntoProc(procIndex);
+	
 }
 
 
@@ -130,21 +122,26 @@ void PKB::setUsedBy(string varName, int stmtNum)
 		varTable[varIndex].insertIntoUses(stmtNum);
 	}
 	else {
+		cout << "insert varname again: " << varName << "\n";
 		setVarName(varName);
-		setUsedBy(varName,stmtNum);
+		setUsedBy(varName, stmtNum);
 	}
+	cout << "varname: " << varName << "\n";
+	cout << "stmtNum: " << stmtNum<< "\n";
 }
 
 void PKB::setModifiedBy(string varName, int stmtNum)
 {
 	int varIndex = getVarIndex(varName);
 	if (varIndex != -1) {
-		varTable[varIndex].insertIntoModify(stmtNum);
+	varTable[varIndex].insertIntoModify(stmtNum);
 	}
 	else {
 		setVarName(varName);
 		setModifiedBy(varName,stmtNum);
 	}
+	//cout << "varname: " << varName << "\n";
+	//cout << "stmtNum: " << stmtNum << "\n";
 }
 
 //----------------------------------------------------------------------------------------------------------------

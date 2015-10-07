@@ -108,7 +108,7 @@ public:
 	 
 	//From VarTable 
 	int setVarName(string varName); //working
-	void setProcNames(int index,string procName); //working
+	void setProcNames(int index,string procName); //working - need to do for multiple procs
 	void setUsedBy(string varName,int stmtNum); 
 	void setModifiedBy(string varName, int stmtNum);
 	
