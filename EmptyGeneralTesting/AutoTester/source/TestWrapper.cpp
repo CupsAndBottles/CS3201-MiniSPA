@@ -17,15 +17,18 @@ volatile bool TestWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
+	this->pkb = pkb;
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
   // ...rest of your code...
-	PKB pkb;
-	Parser parser(pkb);
+	Parser parser;
 	parser.openFile(filename);
+	cout << "After parser";
+	 pkb = parser.getPkb();
+	 cout << "after get pkb";
 }
 
 // method to evaluating a query
@@ -33,11 +36,19 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
 	
-	//TO REMOVE
-	PKB pkb;
-	ParserForPQL parserForPQL(query, pkb);
-	QueryEvaluator queryEvaluator(pkb);
-	results = queryEvaluator.evaluateQuery(parserForPQL.getQueryTree());
+	//TO 
+	try {
+		cout << "before parserForPQL";
+		ParserForPQL parserForPQL(query, *pkb);
+		cout << " after ParserForPQL";
+		QueryEvaluator queryEvaluator(*pkb);
+		cout << " after evaluator";
+		results = queryEvaluator.evaluateQuery(parserForPQL.getQueryTree());
+		cout << "after results";
+	}
+	catch (exception& e) {
+		cout << e.what();
+	}
 
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
