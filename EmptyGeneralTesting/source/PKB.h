@@ -44,13 +44,13 @@ public:
 
 	//PARSER->PKB
 	//From ProcTable
-	int setProcNameInProcTable(string procName); //tested
-	void setStartNum(int index, int startNum); 
-	void setEndNum(int index, int endNum); 
-	void setProcModified(int index, vector<string> modifiedVar);
-	void setProcUses(int index, vector<string> usesVar);
-	void setProcCalls(vector<pair<int,string>> procCalls);
-	void setProcCalledBy(int index, int called);
+	int setProcNameInProcTable(string procName); //tested // working
+	void setStartNum(int index, int startNum);  //working
+	void setEndNum(int index, int endNum); //working
+	void setProcModified(int index, vector<string> modifiedVar);//working
+	void setProcUses(int index, vector<string> usesVar);//working
+	void setProcCalls(vector<pair<int,string>> procCalls); //not done yet
+	void setProcCalledBy(int index, int called);//not done yet
 	
 	//From StmtTable
 	void setType(Enum::TYPE type);	//tested
@@ -107,11 +107,11 @@ public:
 	vector<int> getModifiedByStmtNum(int index);
 	 
 	//From VarTable 
-	int setVarName(string varName); //working
+	int setVarName(string varName); //working - alphabets working, word is buggy. no uppercase, lowercase diff
 	void setProcNames(int index,string procName); //working - need to do for multiple procs
-	void setUsedBy(string varName,int stmtNum); 
-	void setModifiedBy(string varName, int stmtNum);
-	
+	void setUsedBy(string varName,int stmtNum);  //working
+	void setModifiedBy(string varName, int stmtNum); //working
+	 
 	int getType(int index);
 
 	int getNoOfProc();

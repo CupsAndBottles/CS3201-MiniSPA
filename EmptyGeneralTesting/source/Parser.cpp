@@ -17,6 +17,9 @@ list<pair<int, string>> stmtNoAndExpr;
 string currProcName;
 int currIndex = 0;
 int numOfProc = 0;
+int procNumInTble = 0;
+vector<string> varModifiedInProc;
+vector<string> varUsedInProc;
 vector<int> currFollows;
 stack<char> closeBracket;
 stack<char> openBracket;
@@ -171,6 +174,8 @@ void Parser::processProcedure(int index, string statement) {
 	string procName = statement.substr(statement.find("procedure") + 9);
 	currProcName = procName;
 	numOfProc++;
+	procNumInTble = pkb->setProcNameInProcTable(statement);
+	pkb->setStartNum(procNumInTble, index);
 
 }
 
@@ -313,6 +318,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		int index = pkb->setVarName(varInWhile);
 		pkb->setProcNames(index, currProcName);
 		pkb->setUsedBy(varInWhile, i - numOfProc);
+		varUsedInProc.push_back(varInWhile);
 	}
 	else {
 		size_t equal = stmt.find("=");
@@ -320,12 +326,13 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		string s;
 		s.push_back(modified);
 		pkb->setModifiedBy(s, i - numOfProc);
-
+		varModifiedInProc.push_back(s);
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
 			s = "";
 			if (isVariable(c)) {
 				s.push_back(c);
 				pkb->setUsedBy(s, i - numOfProc);
+				varUsedInProc.push_back(s);
 			}
 		}
 	}
@@ -420,8 +427,12 @@ void Parser::pushCloseBracket(int stmtNum) {
 void Parser::setProcEndNum(int stmtNum) {
 
 	if (containerElements.empty()) {
-		//procTable.setEndStmtNo(stmtNum - numOfProc, currProcName);
-		//cBrack = 0;
+		pkb->setEndNum(procNumInTble, stmtNum - numOfProc);
+		pkb->setProcModified(procNumInTble, varModifiedInProc);
+		pkb->setProcUses(procNumInTble,varUsedInProc);
+
+		varUsedInProc.clear();
+		varModifiedInProc.clear();
 	}
 }
 void Parser::pushOpenBracket() {

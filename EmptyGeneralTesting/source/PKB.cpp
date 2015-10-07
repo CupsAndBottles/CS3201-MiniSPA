@@ -32,18 +32,23 @@ int PKB::setProcNameInProcTable(string procName)
 		procTable[size].setProcName(procName);
 		index = getProcIndex(procName);
 	}
-
+	cout << "ProcName: "<<procName << "\n";
+	cout << "index: " << index<< "\n";
 	return index;
 }
 
 void PKB::setStartNum(int index, int startNum)
 {
 	procTable[index].setStartNo(startNum);
+	cout << "index: "<<index<<"\n";
+	cout << "start: " << startNum << "\n";
 }
 
 void PKB::setEndNum(int index, int endNum)
 {
 	procTable[index].setEndNo(endNum);
+	cout << "index: " << index << "\n";
+	cout << "end: " << endNum << "\n";
 }
 
 void PKB::setProcModified(int index, vector<string> modifiedVar)
@@ -51,10 +56,14 @@ void PKB::setProcModified(int index, vector<string> modifiedVar)
 	vector<int> modifiedVarIndex;
 	while (!modifiedVar.empty()) {
 		int i = getVarIndex(modifiedVar.back());
+		cout << "------------------------------------\n";
+		cout << "index: " << i << "\n";
+		cout << "modified var: "<<modifiedVar.back()<<"\n";
 		modifiedVar.pop_back();
 		modifiedVarIndex.push_back(i);
 	}
 	procTable[index].setModifiedVar(modifiedVarIndex);
+
 }
 
 void PKB::setProcUses(int index, vector<string> usesVar)
@@ -62,6 +71,9 @@ void PKB::setProcUses(int index, vector<string> usesVar)
 	vector<int> usesVarIndex;
 	while (!usesVar.empty()) {
 		int i = getVarIndex(usesVar.back());
+		cout << "------------------------------------\n";
+		cout << "index: " << i << "\n";
+		cout << "uses var: " << usesVar.back() << "\n";
 		usesVar.pop_back();
 		usesVarIndex.push_back(i);
 	}
@@ -111,7 +123,7 @@ void PKB::setProcNames(int index, string procName)
 {
 	int procIndex = getProcIndex(procName);
 	varTable[index].insertIntoProc(procIndex);
-	
+
 }
 
 
@@ -122,12 +134,9 @@ void PKB::setUsedBy(string varName, int stmtNum)
 		varTable[varIndex].insertIntoUses(stmtNum);
 	}
 	else {
-		cout << "insert varname again: " << varName << "\n";
 		setVarName(varName);
 		setUsedBy(varName, stmtNum);
 	}
-	cout << "varname: " << varName << "\n";
-	cout << "stmtNum: " << stmtNum<< "\n";
 }
 
 void PKB::setModifiedBy(string varName, int stmtNum)
