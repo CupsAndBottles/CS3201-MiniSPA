@@ -108,7 +108,7 @@ list<pair<int, string>> Parser::splitLines(string lines)
 			}
 			stmtNum++;
 			pair.first = stmtNum;
-			pair.second = toLowerCase(stmtToStore);
+			pair.second = stmtToStore;
 			result.push_back(pair);
 
 
