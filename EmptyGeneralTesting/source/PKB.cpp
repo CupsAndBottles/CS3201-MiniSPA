@@ -193,12 +193,14 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 		int index = paired.first;
 		int child = paired.second;
 		parentChildStmts.pop_back();
-		stmtTable[index].setChildren(child);
-		setParent(child,index);
+		cout << "Parent: " << index << "\n";
+		cout << "Child: " << child << "\n\n";
 	}
 }
 
-
+void PKB::setChildren(int index, int child) {
+	stmtTable[index].setChildren(child);
+}
 //V 
 void PKB::setChildrenT(int index, vector<int> childrenT)
 {

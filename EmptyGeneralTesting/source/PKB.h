@@ -56,6 +56,7 @@ public:
 	void setType(Enum::TYPE type);	//tested
 	void setParentT(int index, vector<int> parentStmts);
 	void setChildren(vector<pair<int,int>> parentChildStmts); //bug
+	void setChildren(int index, int child);
 	void setChildrenT(int index, vector<int> childrenStmts);
 	void setFollows(vector<pair<int, int>> follows); // tested
 	void setFollowsT(int index, vector<int> followsTStmts);
