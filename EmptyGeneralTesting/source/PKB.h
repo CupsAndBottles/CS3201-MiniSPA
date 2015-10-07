@@ -19,7 +19,6 @@ private:
 	vector<Stmt> stmtTable;
 	vector<Variable> varTable;
 	vector<Procedure> procTable;
-	void setFollowedBy(int index, int followedBy); 
 	
 public:
 	//	string procNum;
@@ -53,19 +52,20 @@ public:
 	void setProcCalledBy(int index, int called);//not done yet
 	
 	//From StmtTable
-	void setType(Enum::TYPE type);	//tested
-	void setParentT(int index, vector<int> parentStmts);
-	void setChildren(vector<pair<int,int>> parentChildStmts); //bug
-	void setChildren(int index, int child);
+	void setType(Enum::TYPE type);	//tested //done
+	void setParentT(int index, vector<int> parentStmts); 
+	void setChildren(vector<pair<int,int>> parentChildStmts); //working
+	void setChildren(int index, int child); //working
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(vector<pair<int, int>> follows); // tested
+	void setFollows(vector<pair<int, int>> follows); // tested //working
+	void setFollowedBy(int index, int followedBy); //working
 	void setFollowsT(int index, vector<int> followsTStmts);
-	void setFollowedByT(int index, vector<int> followsByStmts);
-	void setModifies(int index,string modifiedVar);//bug
+	void setFollowedByT(int index, vector<int> followsByStmts); 
+	void setModifies(int index,string modifiedVar);//working
 	//void setConstant(int index, vector<int> usesStmts);
-	void setUsedVar(int index, string usedVar);//bug
-	void setRightExpr(int index, string rightExpression);  //tested
-	void setParent(int index, int parentStmt);
+	void setUsedVar(int index, string usedVar);//working
+	void setRightExpr(int index, string rightExpression);  //tested //working
+	void setParent(int index, int parentStmt);  //working
 
 
 	string getRightExpr(int index); //tested

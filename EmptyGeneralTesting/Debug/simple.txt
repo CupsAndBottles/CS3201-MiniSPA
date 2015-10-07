@@ -4,4 +4,5 @@ while s{
 j=i+p;
 z=k+l;
 x=s+l;
-l=o+k;}}
+l=o+k;}
+}

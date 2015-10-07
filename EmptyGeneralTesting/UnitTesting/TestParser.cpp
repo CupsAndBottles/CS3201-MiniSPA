@@ -24,18 +24,18 @@ namespace UnitTesting
 
 		TEST_METHOD(TestParent) {
 			string parentChild = parser.getParentChild();
-			Assert::AreEqual(parentChild, string("Parent: 2 Child: 3| Parent: 2 Child: 4| Parent: 2 Child: 5| Parent: 2 Child: 6| "));
+			Assert::AreEqual(parentChild, string("Parent: 2 Child: 6| Parent: 2 Child: 5| Parent: 2 Child: 4| Parent: 2 Child: 3| "));
 		}
 
 		TEST_METHOD(TestExpression) {
 			string expr = parser.getExpression();
-			Assert::AreEqual(expr, string("1: y5; 2: jip;+ 3: zkl;+ 4: xsl;+ 5: lok;+ "));
+			Assert::AreEqual(expr, string("1: y5 2: jip+ 3: zkl+ 4: xsl+ 5: lok+ "));
 		}
 
 		//follows is incorrect - bracket issues. 
 		TEST_METHOD(TestFollows) {
 			string followRel = parser.getFollow();
-			Assert::AreEqual(followRel, string("1->2|3->4|4->5|5->6|"));
+			Assert::AreEqual(followRel, string("5->6|4->5|3->4|1->2|"));
 		}
 	};
 }

@@ -11,8 +11,8 @@
 using namespace std;
 vector<string> tokens;
 list<pair<int, string>> listOfStatements;
-list<pair<int, int>> parentLink;
-list<pair<int, int>> followLink;
+vector<pair<int, int>> parentLink;
+vector<pair<int, int>> followLink;
 list<pair<int, string>> stmtNoAndExpr;
 string currProcName;
 int currIndex = 0;
@@ -129,17 +129,26 @@ void Parser::Procedure() {
 			processProcedure((*i).first, (*i).second);
 		}
 		else if (stmt.find("while") != std::string::npos) {
+			pkb->setType(Enum::WHILE);
 			processWhile((*i).first, (*i).second);
 		}
 		else if (stmt.find("if") != std::string::npos) {
 			//processIf();
 		}
 		else {
+			pkb->setType(Enum::ASSIGN);
 			processExpressions((*i).first, (*i).second);
 			handleModifyAndUses((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
+			
 		}
 	}
+	setRelationsInTable();
+}
+
+void Parser::setRelationsInTable() {
+	pkb->setChildren(parentLink);
+	pkb->setFollows(followLink);
 }
 
 void Parser::addToParent(int child) {
@@ -216,7 +225,7 @@ void Parser::processExpressions(int index, string statement) {
 			int index = pkb->setVarName(s);
 			pkb->setProcNames(index, currProcName);
 			s = "";
-			//break;
+			break;
 		}
 		if (c == '}') {
 
@@ -318,6 +327,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		int index = pkb->setVarName(varInWhile);
 		pkb->setProcNames(index, currProcName);
 		pkb->setUsedBy(varInWhile, i - numOfProc);
+		pkb->setUsedVar(i - numOfProc,varInWhile);
 		varUsedInProc.push_back(varInWhile);
 	}
 	else {
@@ -326,12 +336,14 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		string s;
 		s.push_back(modified);
 		pkb->setModifiedBy(s, i - numOfProc);
+		pkb->setModifies(i-numOfProc,s);
 		varModifiedInProc.push_back(s);
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
 			s = "";
 			if (isVariable(c)) {
 				s.push_back(c);
 				pkb->setUsedBy(s, i - numOfProc);
+				pkb->setUsedVar(i - numOfProc, s);
 				varUsedInProc.push_back(s);
 			}
 		}
@@ -341,12 +353,12 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 string Parser::getParentChild() {
 	string output;
 	while (!parentLink.empty()) {
-		pair<int, int> parentChild = parentLink.front();
+		pair<int, int> parentChild = parentLink.back();
 		int parent = parentChild.first;
 		int child = parentChild.second;
 		output.append("Parent: " + to_string(parent) + " Child: " + to_string(child) + "| ");
 		if (!parentLink.empty()) {
-			parentLink.pop_front();
+			parentLink.pop_back();
 		}
 	}
 	return output;
@@ -365,26 +377,25 @@ string Parser::getExpression() {
 string Parser::getFollow() {
 	string output;
 	while (!followLink.empty()) {
-		pair<int, int> followPair = followLink.front();
+		pair<int, int> followPair = followLink.back();
 		int firstNum = followPair.first;
 		int secondNum = followPair.second;
 		output.append(to_string(firstNum) + "->" + to_string(secondNum) + "|");
 		if (!followLink.empty()) {
-			followLink.pop_front();
+			followLink.pop_back();
 		}
 	}
 	return output;
 }
-
 
 void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 	pair<int, string> pairs;
 	pairs.first = index - 1;
 	string s;
 	for (list<char>::iterator it = exprOutput.begin(); it != exprOutput.end(); ++it) {
-
-		s.push_back(*it);
+			s.push_back(*it);
 	}
+	pkb->setRightExpr(pairs.first, s);
 	if (!s.empty()) {
 		pairs.second = s;
 	}

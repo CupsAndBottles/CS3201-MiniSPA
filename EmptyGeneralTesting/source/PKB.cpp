@@ -32,23 +32,23 @@ int PKB::setProcNameInProcTable(string procName)
 		procTable[size].setProcName(procName);
 		index = getProcIndex(procName);
 	}
-	cout << "ProcName: "<<procName << "\n";
-	cout << "index: " << index<< "\n";
+	//cout << "ProcName: "<<procName << "\n";
+	//cout << "index: " << index<< "\n";
 	return index;
 }
 
 void PKB::setStartNum(int index, int startNum)
 {
 	procTable[index].setStartNo(startNum);
-	cout << "index: "<<index<<"\n";
-	cout << "start: " << startNum << "\n";
+	//cout << "index: "<<index<<"\n";
+	//cout << "start: " << startNum << "\n";
 }
 
 void PKB::setEndNum(int index, int endNum)
 {
 	procTable[index].setEndNo(endNum);
-	cout << "index: " << index << "\n";
-	cout << "end: " << endNum << "\n";
+	//cout << "index: " << index << "\n";
+	//cout << "end: " << endNum << "\n";
 }
 
 void PKB::setProcModified(int index, vector<string> modifiedVar)
@@ -56,9 +56,9 @@ void PKB::setProcModified(int index, vector<string> modifiedVar)
 	vector<int> modifiedVarIndex;
 	while (!modifiedVar.empty()) {
 		int i = getVarIndex(modifiedVar.back());
-		cout << "------------------------------------\n";
-		cout << "index: " << i << "\n";
-		cout << "modified var: "<<modifiedVar.back()<<"\n";
+		//cout << "------------------------------------\n";
+		//cout << "index: " << i << "\n";
+		//cout << "modified var: "<<modifiedVar.back()<<"\n";
 		modifiedVar.pop_back();
 		modifiedVarIndex.push_back(i);
 	}
@@ -71,9 +71,9 @@ void PKB::setProcUses(int index, vector<string> usesVar)
 	vector<int> usesVarIndex;
 	while (!usesVar.empty()) {
 		int i = getVarIndex(usesVar.back());
-		cout << "------------------------------------\n";
-		cout << "index: " << i << "\n";
-		cout << "uses var: " << usesVar.back() << "\n";
+	//	cout << "------------------------------------\n";
+	//	cout << "index: " << i << "\n";
+	//	cout << "uses var: " << usesVar.back() << "\n";
 		usesVar.pop_back();
 		usesVarIndex.push_back(i);
 	}
@@ -166,17 +166,22 @@ PKB::~PKB()
 //ZH: tested
 //G: index not necessary. 
 void PKB::setType(Enum::TYPE type) {
+
 	if (stmtTable.size() == 0) {
 		stmtTable.push_back(Stmt());
 	}
 	stmtTable.push_back(Stmt());
 	int index = stmtTable.size() - OFFSET;
 	stmtTable[index].setStmtType(type);
+	//cout << "Index: "<<index << "\n";
+	//cout << "Type: " << type << "\n";
 }
 
 //G: parent set from setChildren method.
 void PKB::setParent(int index, int parentStmt)
 {
+	//cout << "Parent: " << parentStmt << "\n";
+	//cout << "Child: " << index << "\n\n";
 	stmtTable[index].setParent(parentStmt);
 }
 
@@ -194,13 +199,16 @@ vector<int> PKB::getParentT(int stmtNum) {
 //G: children and parent together as pair
 void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 {
+
 	while (!parentChildStmts.empty()) {
 		pair<int, int> paired = parentChildStmts.back();
 		int index = paired.first;
 		int child = paired.second;
 		parentChildStmts.pop_back();
-		cout << "Parent: " << index << "\n";
-		cout << "Child: " << child << "\n\n";
+		stmtTable[index].setChildren(child);
+		setParent(child,index);
+		//cout << "Parent: " << index << "\n";
+		//cout << "Child: " << child << "\n\n";
 	}
 }
 
@@ -253,7 +261,11 @@ void PKB::setModifies(int index, string modifiedVar)
 
 	int varIndex = getVarIndex(modifiedVar);
 	stmtTable[index].setModifiedVar(varIndex);
-	//cout << "Var index: " << varIndex << "\n";
+	cout << "---------------------------------------\n";
+	cout << "Index : " << varIndex << "\n";
+	cout << "Modified var: " << modifiedVar << "\n";
+	cout << "stmt table:  " << index << "\n";
+	cout << "---------------------------------------\n";
 }
 
 /* G: Constants here or in another table?
@@ -268,11 +280,19 @@ void PKB::setUsedVar(int index, string usedVar)
 {
 	int varIndex = getVarIndex(usedVar);
 	stmtTable[index].setUsedVar(varIndex);
+	cout << "---------------------------------------\n";
+	cout << "Index : " << varIndex << "\n";
+	cout << "Used var: " << usedVar << "\n";
+	cout << "stmt table:  " << index << "\n";
+	cout << "---------------------------------------\n";
 }
 
 //ZH - tested
 void PKB::setRightExpr(int index, string expr)
 {
+//	cout << "Index: " << index << "\n";
+//	cout << "Expr: " << expr << "\n";
+
 	stmtTable[index].setRightExpr(expr);
 }
 

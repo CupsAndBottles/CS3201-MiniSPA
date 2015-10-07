@@ -48,13 +48,13 @@ public:
 private:
 	int index;
 	Enum::TYPE type;
-	int parent;
+	int parent=0;
 	vector<int> parentT;
 	vector<int> childrenList;
 	vector<int> childrenT;
 	vector<int> usedConstantList;
-	int followedBy;
-	int follows;
+	int followedBy=0;
+	int follows=0;
 	vector<int> followedByT;
 	vector<int> followsT;
 	vector<int> usedVarList;
