@@ -55,7 +55,6 @@ void PKB::setProcModified(int index, vector<string> modifiedVar)
 		modifiedVarIndex.push_back(i);
 	}
 	procTable[index].setModifiedVar(modifiedVarIndex);
-
 }
 
 void PKB::setProcUses(int index, vector<string> usesVar)
@@ -94,12 +93,16 @@ void PKB::setProcCalledBy(int index, int called)
 //ZH: tested
 //G: check for existence, return index if exists else, set varname and return new index
 int PKB::setVarName(string varName){
+	
 	int index = getVarIndex(varName);
-	if (index = -1) {
-		Variable variable(varName,0,0,0);
-		varTable.push_back(variable);
+	if (index == -1) {
+		varTable.push_back(Variable());
+		int size = varTable.size() - OFFSET;
+		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
 	}
+	cout << "varName: " << varName << "\n";
+	cout << "varIndex: " << index << "\n";
 	return index;
 }
 
@@ -114,8 +117,11 @@ void PKB::setProcNames(int index, string procName)
 		setProcNameInProcTable(procName);
 		setProcNames(index,procName);
 	}
-
+	cout << "procname: " << procName << "\n";
+	cout << "procindex: " << procIndex << "\n";
+	cout << "------------------------------------------------------------------" << "\n";
 }
+
 
 void PKB::setUsedBy(string varName, int stmtNum)
 {
@@ -192,9 +198,6 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 	}
 }
 
-void PKB::setChildren(int index, int child) {
-	stmtTable[index].setChildren(child);
-}
 
 //V 
 void PKB::setChildrenT(int index, vector<int> childrenT)
@@ -239,8 +242,10 @@ void PKB::setFollowedByT(int index, vector<int> followedByT)
 //G: change variable passed as string to int and set stmttable.
 void PKB::setModifies(int index, string modifiedVar)
 {
+
 	int varIndex = getVarIndex(modifiedVar);
 	stmtTable[index].setModifiedVar(varIndex);
+	//cout << "Var index: " << varIndex << "\n";
 }
 
 /* G: Constants here or in another table?

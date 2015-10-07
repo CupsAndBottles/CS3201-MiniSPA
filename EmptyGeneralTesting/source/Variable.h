@@ -10,7 +10,7 @@ using namespace std;
 class Variable
 {
 public:
-	Variable(string varName,int procIndex, int uStmtLst, int mStmtLst);
+	Variable();
 
 	~Variable();
 	int getindex();

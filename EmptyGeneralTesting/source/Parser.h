@@ -15,8 +15,9 @@ class Parser
 	char nextChar;
 	int charType;
 public:
-	Parser(PKB pkb);
+	Parser();
 	~Parser();
+	PKB* getPkb();
 	string openFile(string fileName);
 	string linesSplitted(list<pair<int, string>> linesToTest);
 	list<pair<int, string>>splitLines(string lines);
@@ -60,5 +61,5 @@ private:
 	list<pair<int, string >> lines;
 	int cBrack;
 	void handleFollows(int index, string stmt);
-	PKB* pkb;
+	PKB *pkb = new PKB();
 };
