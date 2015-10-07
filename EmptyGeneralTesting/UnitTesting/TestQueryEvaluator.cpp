@@ -28,8 +28,6 @@ namespace UnitTesting
 			list<string> expectedResults = { "1", "3" };
 
 			Assert::IsTrue(expectedResults == results);
-
-			delete pkb;
 		} 
 
 		TEST_METHOD(QE_EvaluateSuchThatFollowsGiven) {
@@ -77,8 +75,24 @@ namespace UnitTesting
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
+
+			vector<int> childrenT = { 5, 6, 7, 8 };
+			pkb->setChildrenT(4, childrenT);
+
+			childrenT.clear();
+			childrenT = { 7 };
+			pkb->setParentT(6, childrenT);
+
+			vector<int> parentT = { 4 };
+			pkb->setParentT(5, parentT);
+			pkb->setParentT(6, parentT);
+			pkb->setParentT(8, parentT);
+
+			parentT.push_back(6);
+			pkb->setParentT(7, parentT);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
@@ -214,8 +228,23 @@ namespace UnitTesting
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
+
+			vector<int> childrenT = { 5, 6, 7, 8 };
+			pkb->setChildrenT(4, childrenT);
+
+			childrenT = { 7 };
+			pkb->setParentT(6, childrenT);
+			
+			vector<int> parentT = { 4 };
+			pkb->setParentT(5, parentT);
+			pkb->setParentT(6, parentT);
+			pkb->setParentT(8, parentT);
+
+			parentT = { 4, 6 };
+			pkb->setParentT(7, parentT);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
@@ -304,9 +333,8 @@ namespace UnitTesting
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 
 			list<string> expectedResults = { "4", "6" };
-			
+
 			Assert::IsTrue(expectedResults == results);
-			delete pkb;
 		}
 
 		TEST_METHOD(QE_EvaluateSuchThatUsesNoCommonSyn) {
@@ -355,8 +383,24 @@ namespace UnitTesting
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
+
+			vector<int> childrenT = { 5, 6, 7, 8 };
+			pkb->setChildrenT(4, childrenT);
+
+			childrenT.clear();
+			childrenT = { 7 };
+			pkb->setParentT(6, childrenT);
+
+			vector<int> parentT = { 4 };
+			pkb->setParentT(5, parentT);
+			pkb->setParentT(6, parentT);
+			pkb->setParentT(8, parentT);
+
+			parentT.push_back(6);
+			pkb->setParentT(7, parentT);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
@@ -496,8 +540,24 @@ namespace UnitTesting
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
+
+			vector<int> childrenT = { 5, 6, 7, 8 };
+			pkb->setChildrenT(4, childrenT);
+
+			childrenT.clear();
+			childrenT = { 7 };
+			pkb->setParentT(6, childrenT);
+
+			vector<int> parentT = { 4 };
+			pkb->setParentT(5, parentT);
+			pkb->setParentT(6, parentT);
+			pkb->setParentT(8, parentT);
+
+			parentT.push_back(6);
+			pkb->setParentT(7, parentT);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
@@ -935,8 +995,24 @@ namespace UnitTesting
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
+
+			vector<int> childrenT = { 5, 6, 7, 8 };
+			pkb->setChildrenT(4, childrenT);
+
+			childrenT.clear();
+			childrenT = { 7 };
+			pkb->setParentT(6, childrenT);
+
+			vector<int> parentT = { 4 };
+			pkb->setParentT(5, parentT);
+			pkb->setParentT(6, parentT);
+			pkb->setParentT(8, parentT);
+
+			parentT.push_back(6);
+			pkb->setParentT(7, parentT);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
