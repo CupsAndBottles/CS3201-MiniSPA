@@ -17,7 +17,7 @@ std::vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
 
 	while (true) {
 		parent = col.at(stmtNum);
-		if (parent == -1) {
+		if (parent == 0) {
 			break;
 		}
 		else {
@@ -33,7 +33,7 @@ std::vector<int> DesignExtractor::extractChildrenT(vector<vector<int>> col,int s
 	int child;
 
 	child = children.at(0);
-	if (child == -1) {
+	if (child == 0) {
 		ChildrenT.push_back(-1);
 	}
 	else {
@@ -47,7 +47,7 @@ void DesignExtractor::extractChildrenTRec(std::vector<int> children, vector<vect
 
 	for (int i = 0; i < (int)children.size(); i++) {
 		int child = children.at(i);
-		if (child == -1) {
+		if (child == 0) {
 			return;
 		}
 		else {
@@ -63,7 +63,7 @@ std::vector<int> DesignExtractor::extractFollowsT(vector<int> col, int stmtNum) 
 
 	while (true) {
 		num = col.at(stmtNum);
-		if (num == -1) {
+		if (num == 0) {
 			break;
 		}
 		else {
@@ -80,7 +80,7 @@ std::vector<int> DesignExtractor::extractFollowedByT(vector<int> col, int stmtNu
 
 	while (true) {
 		num = col.at(stmtNum);
-		if (num == -1) {
+		if (num == 0) {
 			break;
 		}
 		else {

@@ -533,8 +533,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 					// follows(_ ,call/if/assign/while) or follows(s1, call/if/assign/while)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type2) {
-							if (stmtTable[i].getFollowedBy() > 0) {
-								follows.push_back(make_pair(i, stmtTable[i].getFollowedBy()));
+							if (stmtTable[i].getFollows() > 0) {
+								follows.push_back(make_pair(stmtTable[i].getFollows(), i));
 							}
 						}
 					}
@@ -545,8 +545,8 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 					// follows(call/if/assign/while, _) or follows(call/if/assign/while, s1)
 					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
-							if (stmtTable[i].getFollows() > 0) {
-								follows.push_back(make_pair(stmtTable[i].getFollows(),i));
+							if (stmtTable[i].getFollowedBy() > 0) {
+								follows.push_back(make_pair(i, stmtTable[i].getFollowedBy()));
 							}
 						}
 					}
@@ -679,13 +679,13 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 				if (type2 == Enum::TYPE::UNDERSCORE || type2 == Enum::TYPE::STATEMENT) {
 					// followsT(_,_) or followsT(s1,s2)
 					for (int i = OFFSET; i < stmtTable.size(); i++) {
-						if (stmtTable.at(i).getFollowsT().size() == 0) {
-							extractFollowsT(i);
+						if (stmtTable.at(i).getFollowedByT().size() == 0) {
+							extractFollowedByT(i);
 						}
-						followsT = stmtTable.at(i).getFollowsT();
-						if (followsT.size()>0) {
-						for (int j = 0; j < followsT.size(); j++) {
-								results.push_back(make_pair(i, followsT.at(j)));
+						followedByT = stmtTable.at(i).getFollowedByT();
+						if (followedByT.size()>0) {
+						for (int j = 0; j < followedByT.size(); j++) {
+								results.push_back(make_pair(i, followedByT.at(j)));
 							}
 						}
 					}
@@ -700,7 +700,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 							followsT = stmtTable.at(i).getFollowsT();
 							if (followsT.size() > 0) {
 								for (int j = 0; j < followsT.size(); j++) {
-									results.push_back(make_pair(i, followsT.at(j)));
+									results.push_back(make_pair(followsT.at(j),i));
 								}
 							}
 						}
@@ -718,7 +718,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 							followedByT = stmtTable.at(i).getFollowedByT();
 							if (followedByT.size() > 0) {
 								for (int j = 0; j < followedByT.size(); j++) {
-									results.push_back(make_pair(followedByT.at(j), i));
+									results.push_back(make_pair(i, followedByT.at(j)));
 								}
 							}
 						}
@@ -728,14 +728,14 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 					// follws(call/if/assign/while, call/if/assign/while)
 					for (int i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
-							if (stmtTable.at(i).getFollowsT().size() == 0) {
-								extractFollowsT(i);
+							if (stmtTable.at(i).getFollowedByT().size() == 0) {
+								extractFollowedByT(i);
 							}
-							followsT = stmtTable.at(i).getFollowsT();
-							if (followsT.size() > 0) {
-								for (int j = 0; j < followsT.size(); j++) {
-									if (stmtTable[followsT.at(i)].getType() == type2) {
-										results.push_back(make_pair(i, followsT.at(j)));
+							followedByT = stmtTable.at(i).getFollowedByT();
+							if (followedByT.size() > 0) {
+								for (int j = 0; j < followedByT.size(); j++) {
+									if (stmtTable[followedByT.at(j)].getType() == type2) {
+										results.push_back(make_pair(i, followedByT.at(j)));
 									}
 								}
 							}
@@ -747,13 +747,13 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 		}
 		else {
 			// stmt1 is -1, stmt2 is not -1
-			if (stmtTable.at(stmt2).getFollowedByT().size() == 0) {
-				extractFollowedByT(stmt2);
+			if (stmtTable.at(stmt2).getFollowsT().size() == 0) {
+				extractFollowsT(stmt2);
 			}
-			followedByT = stmtTable.at(stmt2).getFollowedByT();
-			if (followedByT.size() > 0) {
-				for (int i = 0; i < followedByT.size(); i++) {
-					results.push_back(make_pair(followedByT.at(i), stmt2));
+			followsT = stmtTable.at(stmt2).getFollowsT();
+			if (followsT.size() > 0) {
+				for (int i = 0; i < followsT.size(); i++) {
+					results.push_back(make_pair(followsT.at(i), stmt2));
 				}
 			}
 		}
@@ -762,20 +762,29 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 	else {
 		if (stmt2 == -1) {
 			// stmt 1 is not -1, stmt 2 is -1
-			if (stmtTable.at(stmt1).getFollowsT().size() == 0) {
-				extractFollowsT(stmt1);
+			if (stmtTable.at(stmt1).getFollowedByT().size() == 0) {
+				extractFollowedByT(stmt1);
 			}
-			followsT = stmtTable.at(stmt1).getFollowsT();
-			if (followsT.size() > 0) {
-				for (int i = 0; i < followsT.size(); i++) {
-					results.push_back(make_pair(stmt1, followsT.at(i)));
+			followedByT = stmtTable.at(stmt1).getFollowedByT();
+			if (followedByT.size() > 0) {
+				for (int i = 0; i < followedByT.size(); i++) {
+					results.push_back(make_pair(stmt1, followedByT.at(i)));
 				}
 			}
 		}
 		else {
 			//Both parameters are defined
-			if (stmtTable[stmt1].getFollows() == stmt2) {
-				results.push_back(make_pair(stmt1, stmt2));
+			if (stmtTable.at(stmt1).getFollowedByT().size() == 0) {
+				extractFollowedByT(stmt1);
+			}
+			followedByT = stmtTable.at(stmt1).getFollowedByT();
+			if (followedByT.size() > 0) {
+				for (int i = 0; i < followedByT.size(); i++) {
+					if (followedByT.at(i) == stmt2) {
+						results.push_back(make_pair(stmt1, stmt2));
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -814,7 +823,11 @@ void PKB::extractParentT(int stmtNum)
 		parentCol.push_back(stmtTable.at(i).getParent());
 	}
 	
-	parentT =  design.extractParentT(parentCol, stmtNum);
+	if (parentCol.size() == 0) {
+		parentT.push_back(0);
+	} else {
+		parentT = design.extractParentT(parentCol, stmtNum);
+	}
 	setParentT(stmtNum, parentT);
 }
 
@@ -827,7 +840,12 @@ void PKB::extractChildrenT(int stmtNum)
 	for (int i = 0; i < stmtTable.size(); i++) {
 		childrenCol.push_back(stmtTable.at(i).getChildren());
 	}
-	 childrenT = design.extractChildrenT(childrenCol, stmtNum);
+
+	if (childrenCol.size() == 0) {
+		childrenT.push_back(0);
+	} else {
+		childrenT = design.extractChildrenT(childrenCol, stmtNum);
+	}
 	 setChildrenT(stmtNum, childrenT);
 
 }
@@ -841,7 +859,12 @@ void PKB::extractFollowsT(int stmtNum)
 	for (int i = 0; i < stmtTable.size(); i++) {
 		followsCol.push_back(stmtTable.at(i).getFollows());
 	}
-	followsT = design.extractFollowsT(followsCol, stmtNum);
+
+	if (followsCol.size() == 0) {
+		followsT.push_back(0);
+	} else {
+		followsT = design.extractFollowsT(followsCol, stmtNum);
+	}
 	setFollowsT(stmtNum, followsT);
 }
 
@@ -854,9 +877,19 @@ void PKB::extractFollowedByT(int stmtNum)
 	for (int i = 0; i < stmtTable.size(); i++) {
 		followedByCol.push_back(stmtTable.at(i).getFollowedBy());
 	}
-	followedByT = design.extractFollowedByT(followedByCol,stmtNum);
+
+	if (followedByCol.size() == 0) {
+		followedByT.push_back(0);
+	} else {
+		followedByT = design.extractFollowedByT(followedByCol, stmtNum);
+	}
 	setFollowedByT(stmtNum, followedByT);
+
 }
+vector<int> PKB::getFollowedByT(int stmtNum) {
+	return stmtTable.at(stmtNum).getFollowedByT();
+}
+
 
 //V
 int PKB::getParent(int stmtNum)

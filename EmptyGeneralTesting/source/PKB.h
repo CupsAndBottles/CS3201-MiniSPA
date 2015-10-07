@@ -84,7 +84,7 @@ public:
 	int getFollowedBy(int index);
 	vector<int> getFollowsT(int stmtNum);
 	vector<int> getParentT(int stmtNum);
-
+	vector<int> getFollowedByT(int stmtNum);
 
 	//PQL-PKB
 	vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
