@@ -124,9 +124,9 @@ namespace UnitTesting
 			
 			children.push_back(make_pair(1, 2));
 			children.push_back(make_pair(2, 3));
-			pkb->setChildren(3, -1);
+			pkb->setChildren(3, 0);
 
-			pkb->setParent(1, -1);
+			pkb->setParent(1, 0);
 			pkb->setParent(2, 1);
 			pkb->setParent(3, 2);
 			pkb->setChildren(children);
@@ -142,7 +142,15 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
 				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
+
+			// Parent( _, _)
+			actualResults = pkb->getParentT(Enum::TYPE::UNDERSCORE, UNDEFINED, Enum::TYPE::UNDERSCORE, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+			Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+			Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
 			*/
+
 			// ParentT ( 1, 2)
 			expectedResults.clear();
 			actualResults.clear();
@@ -165,6 +173,32 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
 				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
+
+			/*
+			expectedResults.clear();
+			expectedResults.push_back(make_pair(1,2));
+			expectedResults.push_back(make_pair(1,3));
+			// Parent( 1, s)
+			actualResults = pkb->getParentT(Enum::TYPE::WHILE, 1, Enum::TYPE::STATEMENT, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+			Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+			Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
+
+			// Empty result
+			actualResults = pkb->getParentT(Enum::TYPE::STATEMENT, 2, Enum::TYPE::STATEMENT, 1);
+			for (size_t i = 0; i < actualResults.size(); i++) {
+			Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+			Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
+			
+			// Parent( w, a) - failed
+			actualResults = pkb->getParent(Enum::TYPE::WHILE, UNDEFINED, Enum::TYPE::ASSIGN, UNDEFINED);
+			for (size_t i = 0; i < expectedResult.size(); i++) {
+			Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
+			Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
+			}
+			*/
 
 			delete pkb;
 		}
