@@ -9,7 +9,7 @@ namespace UnitTesting
 	TEST_CLASS(TestDesignExtractor) {
 	
 	public:
-		TEST_METHOD(TestExtractParentT) {
+		TEST_METHOD(DE_TestExtractParentT) {
 			/*Source code:
 			1. while i {
 			2.	x = x + 2 + y;
@@ -26,7 +26,7 @@ namespace UnitTesting
 			vector<int> expectedResults = { 5,3,1 };
 			vector<int> actualResults;
 
-			vector<int>parentCol = { -1,-1,1,1,3,3,5,5 };
+			vector<int>parentCol = { 0,0,1,1,3,3,5,5 };
 			actualResults = designE.extractParentT(parentCol, 7);
 
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
@@ -36,9 +36,9 @@ namespace UnitTesting
 
 		}
 
-		TEST_METHOD(TestExtractChildrenT) {
+		TEST_METHOD(DE_TestExtractChildrenT) {
 			DesignExtractor designE;
-			vector<vector<int>> childrenCol = { {-1}, {2,3}, {-1}, {4,5}, {-1}, {6,7}, {-1}, {-1} };
+			vector<vector<int>> childrenCol = { {0}, {2,3}, {0}, {4,5}, {0}, {6,7}, {0}, {0} };
 			vector<int> expectedResults = {2,3,4,5,6,7};
 			vector<int> actualResults;
 			
@@ -49,7 +49,7 @@ namespace UnitTesting
 			}
 		}
 		
-		TEST_METHOD(TestExtractFollowsT) {
+		TEST_METHOD(DE_TestExtractFollowsT) {
 			/*Source code:
 			1. x = x + 7;
 			2. y = y + 7;
@@ -64,7 +64,7 @@ namespace UnitTesting
 			vector<int> expectedResults = { 4,3,2,1};
 			vector<int> actualResults;
 
-			vector<int>followsCol = {-1,-1,1,2,3,-1,-1,4 };
+			vector<int>followsCol = {0,0,1,2,3,0,0,4 };
 			actualResults = designE.extractFollowsT(followsCol, 7);
 
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
@@ -73,12 +73,12 @@ namespace UnitTesting
 			}
 		}
 
-		TEST_METHOD(TestExtractFollowedByT) {
+		TEST_METHOD(DE_TestExtractFollowedByT) {
 			DesignExtractor designE;
 			vector<int> expectedResults = { 2,3,4,7};
 			vector<int> actualResults;
 
-			vector<int>followedByCol = { -1,2,3,4,7,-1,-1,-1 };
+			vector<int>followedByCol = { 0,2,3,4,7,0,0,0 };
 			actualResults = designE.extractParentT(followedByCol, 1);
 
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
