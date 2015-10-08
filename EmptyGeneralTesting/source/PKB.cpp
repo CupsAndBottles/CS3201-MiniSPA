@@ -684,9 +684,13 @@ std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum
 					extractChildrenT(i);
 				}
 				childrenT = stmtTable.at(i).getChildrenT();
-				for (int j = 0; j < childrenT.size(); j++) {
-					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenT.at(j)).getType()) {
-						results.push_back(std::make_pair(i, childrenT.at(j)));
+				if (childrenT.at(0) == 0) {
+					continue;
+				}	else {
+					for (int j = 0; j < childrenT.size(); j++) {
+						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenT.at(j)).getType()) {
+							results.push_back(std::make_pair(i, childrenT.at(j)));
+						}
 					}
 				}
 			}
