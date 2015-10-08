@@ -25,9 +25,9 @@ void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 	bool isSyn = false;
 	if (suchThatSynAndType.size() > 0) {
 		for (int i = 0; i < suchThatSynAndType[1].size(); i++) {
-
 			if (suchThatSynAndType[1].at(i).compare("") == 0) {
 				relName = suchThatSynAndType[0].at(i);
+				std::transform(relName.begin(), relName.end(), relName.begin(), ::tolower);
 				RelTable relTableClass(relName);
 				ag1 = relTableClass.getAg1Synonym();
 				ag2 = relTableClass.getAg2Synonym();
@@ -52,6 +52,7 @@ void Validation::patternValidation(vector<vector<string>> patternSynAndType)
 	bool isSyn = false;
 	if (patternSynAndType.size() > 0) {
 		for (std::size_t i = 0; i < patternSynAndType[0].size(); i = i + 3) {
+		    std::transform(patternSynAndType[1].at(i).begin(), patternSynAndType[1].at(i).end(), patternSynAndType[1].at(i).begin(), ::tolower);
 			string relName = "Pattern" + patternSynAndType[1].at(i);
 			RelTable relTableClass(relName);
 			ag1 = relTableClass.getAg1Synonym();
@@ -77,3 +78,10 @@ void Validation::patternValidation(vector<vector<string>> patternSynAndType)
 		}
 	}
 }
+
+char easytolower(char in) {
+	if (in <= 'Z' && in >= 'A')
+		return in - ('Z' - 'z');
+	return in;
+}
+

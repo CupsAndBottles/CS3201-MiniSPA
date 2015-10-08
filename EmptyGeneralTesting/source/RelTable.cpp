@@ -84,29 +84,29 @@ void RelTable::addRelIntoTable()
 	follow.noArgs = 2;
 	follow.ag1Synonym = 2;
 	follow.ag2Synonym = 2;
-	relTable.insert(std::pair<string, Relationship>("Follows", follow));
+	relTable.insert(std::pair<string, Relationship>("follows", follow));
 
 	followT.noArgs = 2;
 	followT.ag1Synonym = 2;
 	followT.ag2Synonym = 2;
-	relTable.insert(std::pair<string, Relationship>("Follows*", followT));
+	relTable.insert(std::pair<string, Relationship>("follows*", followT));
 
 
 	parent.noArgs = parentT.noArgs = 2;
 	parent.ag1Synonym = parentT.ag1Synonym = 0;
 	parent.ag2Synonym = parentT.ag2Synonym = 1;
-	relTable.insert(std::pair<string, Relationship>("Parent", parent));
-	relTable.insert(std::pair<string, Relationship>("Parent*", parentT));
+	relTable.insert(std::pair<string, Relationship>("parent", parent));
+	relTable.insert(std::pair<string, Relationship>("parent*", parentT));
 
 	modifies.noArgs = 2;
 	modifies.ag1Synonym = 3;
 	modifies.ag2Synonym = 4;
-	relTable.insert(std::pair<string, Relationship>("Modifies", modifies));
+	relTable.insert(std::pair<string, Relationship>("modifies", modifies));
 
 	use.noArgs = 2;
 	use.ag1Synonym = 3;
 	use.ag2Synonym = 4;
-	relTable.insert(std::pair<string, Relationship>("Uses", use));
+	relTable.insert(std::pair<string, Relationship>("uses", use));
 
 	assign.noArgs = 2;
 	assign.ag1Synonym = 4;

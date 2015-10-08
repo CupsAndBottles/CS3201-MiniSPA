@@ -26,9 +26,9 @@ void TestWrapper::parse(std::string filename) {
   // ...rest of your code...
 	Parser parser;
 	parser.openFile(filename);
-	cout << "After parser";
+
 	 pkb = parser.getPkb();
-	 cout << "after get pkb";
+	 
 }
 
 // method to evaluating a query
@@ -38,13 +38,10 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 	
 	//TO 
 	try {
-		cout << "before parserForPQL";
 		ParserForPQL parserForPQL(query, *pkb);
-		cout << " after ParserForPQL";
+
 		QueryEvaluator queryEvaluator(*pkb);
-		cout << " after evaluator";
 		results = queryEvaluator.evaluateQuery(parserForPQL.getQueryTree());
-		cout << "after results";
 	}
 	catch (exception& e) {
 		cout << e.what();

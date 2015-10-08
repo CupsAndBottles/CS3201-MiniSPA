@@ -52,7 +52,7 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 	selectSynAndType.push_back(vector <string>());
 
 	vector<vector<string>> temp;
-	std::cout << selectSynonym.at(0) << '\n';
+
 	ParserOfType parserOfType;
 	for (int i = 0; i < selectSynonym.size(); i++) {
 		temp = parserOfType.setClauseType(0, selectSynonym.at(i), type, synonym);
@@ -64,11 +64,14 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 		selectSynAndType[2].insert(selectSynAndType[2].end(), temp[2].begin(), temp[2].end());
 		selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
 	}
-
 }
 
 void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThatSynonym, vector<string> type, vector<string> synonym)
 {
+	suchThatSynAndType.push_back(vector <string>());
+	suchThatSynAndType.push_back(vector <string>());
+	suchThatSynAndType.push_back(vector <string>());
+	suchThatSynAndType.push_back(vector <string>());
 	int index;
 	vector<vector<string>> temp;
 	ParserOfType parserOfType;
@@ -77,20 +80,16 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 		if (suchThatSynonym[i].size() != 3) {
 			throw ParserException("unidentified such that synonym");
 		}
-
 		temp = parserOfType.setClauseType(1, suchThatSynonym[i].at(0), type, synonym);
+	
 		if (temp.size() == 0) {
 			throw ParserException("SuchThat synonym unidentified");
 		}
-		if (i == 0) {
-			suchThatSynAndType.insert(patternSynAndType.end(), temp.begin(), temp.end());
-		}
-		else {
-			suchThatSynAndType[0].insert(suchThatSynAndType[0].end(), temp[0].begin(), temp[0].end());
-			suchThatSynAndType[1].insert(suchThatSynAndType[1].end(), temp[1].begin(), temp[1].end());
-			suchThatSynAndType[2].insert(suchThatSynAndType[2].end(), temp[2].begin(), temp[2].end());
-			suchThatSynAndType[3].insert(suchThatSynAndType[3].end(), temp[3].begin(), temp[3].end());
-		}
+		
+		suchThatSynAndType[0].insert(suchThatSynAndType[0].end(), temp[0].begin(), temp[0].end());
+		suchThatSynAndType[1].insert(suchThatSynAndType[1].end(), temp[1].begin(), temp[1].end());
+		suchThatSynAndType[2].insert(suchThatSynAndType[2].end(), temp[2].begin(), temp[2].end());
+		suchThatSynAndType[3].insert(suchThatSynAndType[3].end(), temp[3].begin(), temp[3].end());
 
 		for (std::size_t k = 1; k < 3; k++) {
 			temp = parserOfType.setType(*pkb, 1, suchThatSynonym[i].at(k), type, synonym);
@@ -116,20 +115,21 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 {
 	ParserOfType parserOfType;
 	vector<vector<string>> temp;
+	patternSynAndType.push_back(vector <string>());
+	patternSynAndType.push_back(vector <string>());
+	patternSynAndType.push_back(vector <string>());
+	patternSynAndType.push_back(vector <string>());
+
 	for (std::size_t i = 0; i < patternSynonym.size(); i++) {
 		temp = parserOfType.setClauseType(2, patternSynonym[i].at(0), type, synonym);
 		if (temp.size() == 0) {
 			throw ParserException("Pattern synonym unidentified");
 		}
-		if (i == 0) {
-			patternSynAndType.insert(patternSynAndType.end(), temp.begin(), temp.end());
-		}
-		else {
+		
 			patternSynAndType[0].insert(patternSynAndType[0].end(), temp[0].begin(), temp[0].end());
 			patternSynAndType[1].insert(patternSynAndType[1].end(), temp[1].begin(), temp[1].end());
 			patternSynAndType[2].insert(patternSynAndType[2].end(), temp[2].begin(), temp[2].end());
 			patternSynAndType[3].insert(patternSynAndType[3].end(), temp[3].begin(), temp[3].end());
-		}
 
 		for (int k = 1; k < patternSynonym[i].size(); k++) {
 			temp = parserOfType.setType(*pkb, 2, patternSynonym[i].at(k), type, synonym);
