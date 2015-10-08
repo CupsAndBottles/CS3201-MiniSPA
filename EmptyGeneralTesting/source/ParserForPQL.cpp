@@ -80,7 +80,10 @@ void ParserForPQL::getPosition(string input, int typeNo)
 			type[typeNo].push_back(match[0]);
 		}
 	}
-
+	
+	if (type[typeNo].size() == 0) {
+		throw ParserException("Invalid input");
+	}
 	addInFinalSyn(typeNo, input);
 	numberOfPos.push_back(j + 1);
 }

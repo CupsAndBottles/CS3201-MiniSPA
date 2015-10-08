@@ -92,8 +92,6 @@ vector<vector<string>> ParserOfType::setType(PKB &querypkb, int clauseType, stri
 
 
 // 0 -> select 1--> such that 2--> pattern 3--> with
-
-
 vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synonym, vector<string> type, vector<string> synonymType)
 {
 	vector<vector<string>> synAndType;
@@ -103,6 +101,7 @@ vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synony
 	synAndType.push_back(vector <string>()); //isExpression
 	if (clauseType == 0 || clauseType == 2) {
 		int typeDeclared = isBeingDeclared(synonym, synonymType);
+	
 		if (typeDeclared != -1) {
 
 			synAndType[0].push_back(synonym);
@@ -138,7 +137,7 @@ bool ParserOfType::isSynDigit(string syn)
 	int start = 0, end = syn.length();
 	for (std::size_t i = start; i < end; i++) {
 		if (!isdigit(syn[i])) {
-			//		std::cout << "ifDigit = " << syn[i] << '\n';
+		    std::cout << "ifDigit = " << syn[i] << '\n';
 			ifDigit = false;
 			break;
 		}
@@ -150,7 +149,6 @@ int ParserOfType::isBeingDeclared(string syn, vector<string> synType)
 {
 	for (std::size_t j = 0; j < synType.size(); j++) {
 		if (syn.compare(synType.at(j)) == 0) {
-			std::cout << "syn = " << syn << '\n';
 			return j;
 		}
 	}
