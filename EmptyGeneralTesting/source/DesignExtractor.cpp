@@ -34,9 +34,8 @@ std::vector<int> DesignExtractor::extractChildrenT(vector<vector<int>> col,int s
 
 	child = children.at(0);
 	if (child == 0) {
-		ChildrenT.push_back(-1);
-	}
-	else {
+		
+	} else {
 		extractChildrenTRec(children,col);
 	}
 
