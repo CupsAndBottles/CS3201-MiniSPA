@@ -47,7 +47,7 @@ string Parser::openFile(string fileName) {
 	{
 		while (getline(myfile, currLine))
 		{
-			size_t comments = currLine.find("//");
+			size_t comments = currLine.find("\\");
 			if (comments != string::npos)
 			{
 				currLine = currLine.erase(comments);
