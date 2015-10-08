@@ -332,7 +332,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftChild().getIntValue());
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (int i = 0; i < stmtLst.size(); i++) {
-				intermediateResult.push_back(stmtLst[i].first);
+					intermediateResult.push_back(stmtLst[i].first);
 			}
 		}
 		else {
@@ -340,14 +340,14 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 			if (!clause.getRightCIsExpression()) { // a(v, x + y)
 				for (int i = 0; i < stmtLst.size(); i++) {  
 					if (this->pkb->getRightExpr(stmtLst[i].first) == expr) {
-						intermediateResult.push_back(stmtLst[i].first);
+							intermediateResult.push_back(stmtLst[i].first);
 					}
 				}
 			}
 			else { // a(v, _x+y_)
 				for (int i = 0; i < stmtLst.size(); i++) {
-					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
-						intermediateResult.push_back(stmtLst[i].first);
+					if (this->pkb->getRightExpr(stmtLst[i].first).find(expr) != NOT_FOUND) {
+							intermediateResult.push_back(stmtLst[i].first);
 					}
 				}
 			}
