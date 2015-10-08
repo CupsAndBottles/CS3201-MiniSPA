@@ -127,8 +127,8 @@ namespace UnitTesting
 			pkb->setChildren(3, 0);
 
 			//pkb->setParent(1, 0);
-			pkb->setParent(2, 1);
-			pkb->setParent(3, 2);
+			//pkb->setParent(2, 1);
+			//pkb->setParent(3, 2);
 			//pkb->setParent(0, 3);
 			pkb->setChildren(children);
 			//vector<int> childrenStmt = { 0 };
@@ -147,20 +147,21 @@ namespace UnitTesting
 			//Assert::AreEqual(0, actualResults[3].first);
 			//Assert::AreEqual(0, actualResults[3].second);
 			//Assert::AreEqual(expectedResults[3].first, actualResults[3].first);
-			for (size_t i = 0; i < actualResults.size(); i++) {
-				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
-				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
-			}
-
+//			for (size_t i = 0; i < actualResults.size(); i++) {
+	//			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
+		//		Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
+			//}
 			
-			// Parent( _, _)
+			
+			//Parent( _, _)
 			actualResults = pkb->getParentT(Enum::TYPE::UNDERSCORE, UNDEFINED, Enum::TYPE::UNDERSCORE, UNDEFINED);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
 			for (size_t i = 0; i < expectedResults.size(); i++) {
 			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
 			Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
-	
 	*/
+	
 			// ParentT ( 1, 2)
 			expectedResults.clear();
 			actualResults.clear();
@@ -192,6 +193,7 @@ namespace UnitTesting
 			
 			// Parent( 1, s)
 			actualResults = pkb->getParentT(Enum::TYPE::WHILE, 1, Enum::TYPE::STATEMENT, UNDEFINED);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
 			for (size_t i = 0; i < expectedResults.size(); i++) {
 			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
 			Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
