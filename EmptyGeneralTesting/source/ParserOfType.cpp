@@ -137,7 +137,6 @@ bool ParserOfType::isSynDigit(string syn)
 	int start = 0, end = syn.length();
 	for (std::size_t i = start; i < end; i++) {
 		if (!isdigit(syn[i])) {
-		    std::cout << "ifDigit = " << syn[i] << '\n';
 			ifDigit = false;
 			break;
 		}

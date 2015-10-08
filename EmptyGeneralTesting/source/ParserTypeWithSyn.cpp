@@ -64,8 +64,6 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 		selectSynAndType[2].insert(selectSynAndType[2].end(), temp[2].begin(), temp[2].end());
 		selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
 	}
-	std::cout << "select : " << selectSynAndType[0].at(0) << '\n';
-
 }
 
 void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThatSynonym, vector<string> type, vector<string> synonym)
@@ -79,13 +77,11 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 	ParserOfType parserOfType;
 	bool ifSame = false;
 	for (std::size_t i = 0; i < suchThatSynonym.size(); i++) {
-		std::cout << "suchThatSize : " << suchThatSynonym.size() << '\n';
 		if (suchThatSynonym[i].size() != 3) {
 			throw ParserException("unidentified such that synonym");
 		}
-		std::cout << "suchThat1 : " << suchThatSynonym[i].at(0) << '\n';
 		temp = parserOfType.setClauseType(1, suchThatSynonym[i].at(0), type, synonym);
-		std::cout << "suchThatTemp : " << temp[0].at(0) << '\n';
+	
 		if (temp.size() == 0) {
 			throw ParserException("SuchThat synonym unidentified");
 		}
