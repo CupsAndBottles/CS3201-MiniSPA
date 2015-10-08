@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <algorithm>
 #include "Synonym.h"
 #include "Enum.h"
 

@@ -366,29 +366,26 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> results) {
 	vector<int> firstSynResults;
 	vector<int> secondSynResults;
-	int previousStoredIndex = WILDCARD;
 
 	Details firstParam = clause.getLeftChild();
 	Details secondParam = clause.getRightChild();
 
 	if (firstParam.getIntValue() == WILDCARD) {
 		for (int i = 0; i < results.size(); i++) {
-			if (previousStoredIndex == WILDCARD || previousStoredIndex != results[i].first) {
-				previousStoredIndex = results[i].first;
-				firstSynResults.push_back(results[i].first);
-			}
+			firstSynResults.push_back(results[i].first);
 		}
-		previousStoredIndex = WILDCARD;
+
+		sort(firstSynResults.begin(), firstSynResults.end());
+		firstSynResults.erase(unique(firstSynResults.begin(), firstSynResults.end()), firstSynResults.end());
 		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
 	}
 
 	if (secondParam.getIntValue() == WILDCARD) {
 		for (int i = 0; i < results.size(); i++) {
-			if (previousStoredIndex == WILDCARD || previousStoredIndex != results[i].second) {
-				previousStoredIndex = results[i].second;
-				secondSynResults.push_back(results[i].second);
-			}
+			secondSynResults.push_back(results[i].second);
 		}
+		sort(secondSynResults.begin(), secondSynResults.end());
+		secondSynResults.erase(unique(secondSynResults.begin(), secondSynResults.end()), secondSynResults.end());
 		storeResults(secondSynResults, secondParam.getStringValue(), secondParam.getType());
 	}
 }
