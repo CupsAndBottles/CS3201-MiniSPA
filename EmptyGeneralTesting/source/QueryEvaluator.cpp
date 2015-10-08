@@ -83,12 +83,11 @@ vector<string> QueryEvaluator::permutateResultPair(vector<string> firstSet, vect
 	vector<string> mergedPair;
 
 	for (int i = 0; i < firstSet.size(); i++) {
-		toBeDisplayed = string();
 		for (int j = 0; j < secondSet.size(); j++) {
+			toBeDisplayed = string();
 			toBeDisplayed = firstSet.at(i) + ", " + secondSet.at(j);
+			mergedPair.push_back(toBeDisplayed);
 		}
-
-		mergedPair.push_back(toBeDisplayed);
 	}
 
 	return mergedPair;
