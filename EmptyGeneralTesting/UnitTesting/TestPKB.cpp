@@ -147,10 +147,10 @@ namespace UnitTesting
 			//Assert::AreEqual(0, actualResults[3].first);
 			//Assert::AreEqual(0, actualResults[3].second);
 			//Assert::AreEqual(expectedResults[3].first, actualResults[3].first);
-//			for (size_t i = 0; i < actualResults.size(); i++) {
-	//			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
-		//		Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
-			//}
+			for (size_t i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
+			}
 
 			
 			// Parent( _, _)
@@ -189,14 +189,14 @@ namespace UnitTesting
 			expectedResults.push_back(make_pair(1,2));
 			expectedResults.push_back(make_pair(1,3));
 			
-			/*
+			
 			// Parent( 1, s)
 			actualResults = pkb->getParentT(Enum::TYPE::WHILE, 1, Enum::TYPE::STATEMENT, UNDEFINED);
 			for (size_t i = 0; i < expectedResults.size(); i++) {
 			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
 			Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
-			*/
+			
 			
 			vector<pair<int, int>> empty;
 			// Empty result
