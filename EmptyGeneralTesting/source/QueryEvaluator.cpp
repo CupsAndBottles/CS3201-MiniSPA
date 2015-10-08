@@ -81,22 +81,11 @@ list<string> QueryEvaluator::permutateResult(vector<vector<string>> intermediate
 vector<string> QueryEvaluator::permutateResultPair(vector<string> firstSet, vector<string> secondSet) {
 	string toBeDisplayed = string();
 	vector<string> mergedPair;
-	vector<string> largerSet;
-	vector<string> smallerSet;
 
-	if (firstSet.size() <= secondSet.size()) {
-		largerSet = secondSet;
-		smallerSet = firstSet;
-	}
-	else {
-		largerSet = firstSet;
-		smallerSet = secondSet;
-	}
-
-	for (int i = 0; i < largerSet.size(); i++) {
+	for (int i = 0; i < firstSet.size(); i++) {
 		toBeDisplayed = string();
-		for (int j = 0; j < smallerSet.size(); j++) {
-			toBeDisplayed = largerSet.at(i) + ", " + smallerSet.at(j);
+		for (int j = 0; j < secondSet.size(); j++) {
+			toBeDisplayed = firstSet.at(i) + ", " + secondSet.at(j);
 		}
 
 		mergedPair.push_back(toBeDisplayed);
@@ -135,7 +124,7 @@ list<string> QueryEvaluator::permutateResultSubset(vector<vector<string>> interm
 			lastSetToMerge = intermediateResult.size() - 1;
 		}
 
-		for (int i = 0; i < lastSetToMerge; i++) {
+		for (int i = 0; i < lastSetToMerge; i+=2) {
 			mergedResults.push_back(permutateResultPair(intermediateResult.at(i), intermediateResult.at(i + 1)));
 		}
 
