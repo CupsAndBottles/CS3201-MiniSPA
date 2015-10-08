@@ -1,8 +1,8 @@
 procedure main{
+y=5;
+while s{
 j=i+p;
-while w{
 z=k+l;
-y=u+o;
-}
-t=g+c;
+x=s+l;
+l=o+k;}
 }

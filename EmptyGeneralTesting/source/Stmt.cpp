@@ -1,9 +1,11 @@
 #include "Stmt.h"
-
+#include <iostream>
+using namespace std;
 
 Stmt::Stmt()
 {
 }
+
 
 Stmt::~Stmt()
 {
@@ -17,11 +19,13 @@ void Stmt::setStmtType(Enum::TYPE t)
 void Stmt::setParent(int p)
 {
 	parent = p;
+
 }
 
 void Stmt::setChildren(int child)
 {
 	childrenList.push_back(child);
+
 }
 
 void Stmt::setUsedVar(int usedVar)

@@ -19,7 +19,6 @@ private:
 	vector<Stmt> stmtTable;
 	vector<Variable> varTable;
 	vector<Procedure> procTable;
-	void setFollowedBy(int index, int followedBy); 
 	
 public:
 	//	string procNum;
@@ -44,28 +43,29 @@ public:
 
 	//PARSER->PKB
 	//From ProcTable
-	int setProcNameInProcTable(string procName); //tested
-	void setStartNum(int index, int startNum); 
-	void setEndNum(int index, int endNum); 
-	void setProcModified(int index, vector<string> modifiedVar);
-	void setProcUses(int index, vector<string> usesVar);
-	void setProcCalls(vector<pair<int,string>> procCalls);
-	void setProcCalledBy(int index, int called);
+	int setProcNameInProcTable(string procName); //tested // working
+	void setStartNum(int index, int startNum);  //working
+	void setEndNum(int index, int endNum); //working
+	void setProcModified(int index, vector<string> modifiedVar);//working
+	void setProcUses(int index, vector<string> usesVar);//working
+	void setProcCalls(vector<pair<int,string>> procCalls); //not done yet
+	void setProcCalledBy(int index, int called);//not done yet
 	
 	//From StmtTable
-	void setType(Enum::TYPE type);	//tested
-	void setParentT(int index, vector<int> parentStmts);
-	void setChildren(vector<pair<int,int>> parentChildStmts); //bug
-	void setChildren(int index, int child);
+	void setType(Enum::TYPE type);	//tested //done
+	void setParentT(int index, vector<int> parentStmts); 
+	void setChildren(vector<pair<int,int>> parentChildStmts); //working
+	void setChildren(int index, int child); //working
 	void setChildrenT(int index, vector<int> childrenStmts);
-	void setFollows(vector<pair<int, int>> follows); // tested
+	void setFollows(vector<pair<int, int>> follows); // tested //working
+	void setFollowedBy(int index, int followedBy); //working
 	void setFollowsT(int index, vector<int> followsTStmts);
-	void setFollowedByT(int index, vector<int> followsByStmts);
-	void setModifies(int index,string modifiedVar);//bug
+	void setFollowedByT(int index, vector<int> followsByStmts); 
+	void setModifies(int index,string modifiedVar);//working
 	//void setConstant(int index, vector<int> usesStmts);
-	void setUsedVar(int index, string usedVar);//bug
-	void setRightExpr(int index, string rightExpression);  //tested
-	void setParent(int index, int parentStmt);
+	void setUsedVar(int index, string usedVar);//working
+	void setRightExpr(int index, string rightExpression);  //tested //working
+	void setParent(int index, int parentStmt);  //working
 
 
 	string getRightExpr(int index); //tested
@@ -107,11 +107,11 @@ public:
 	vector<int> getModifiedByStmtNum(int index);
 	 
 	//From VarTable 
-	int setVarName(string varName); //working
-	void setProcNames(int index,string procName); //working
-	void setUsedBy(string varName,int stmtNum); 
-	void setModifiedBy(string varName, int stmtNum);
-	
+	int setVarName(string varName); //working - alphabets working, word is buggy. no uppercase, lowercase diff
+	void setProcNames(int index,string procName); //working - need to do for multiple procs
+	void setUsedBy(string varName,int stmtNum);  //working
+	void setModifiedBy(string varName, int stmtNum); //working
+	 
 	int getType(int index);
 
 	int getNoOfProc();
