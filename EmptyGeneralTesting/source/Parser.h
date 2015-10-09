@@ -28,6 +28,7 @@ public:
 	void processProcedure(int index, string statment);
 	void processCalls(int index, string stmt);
 	void processWhile(int index, string statment);
+	void processIfElse(int index, string stmt);
 	void handleModifyAndUses(int i, string stmt);
 	string getParentChild();
 	string getExpression();
