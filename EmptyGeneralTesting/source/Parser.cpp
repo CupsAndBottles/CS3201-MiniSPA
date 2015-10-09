@@ -183,7 +183,7 @@ void Parser::processProcedure(int index, string statement) {
 	string procName = statement.substr(statement.find("procedure") + 9);
 	currProcName = procName;
 	numOfProc++;
-	procNumInTble = pkb->setProcNameInProcTable(statement);
+	procNumInTble = pkb->setProcNameInProcTable(procName);
 	pkb->setStartNum(procNumInTble, index);
 
 }
