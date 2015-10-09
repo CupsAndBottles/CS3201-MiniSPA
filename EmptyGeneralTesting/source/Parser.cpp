@@ -144,8 +144,7 @@ void Parser::Procedure() {
 			
 			pkb->setType(Enum::ASSIGN);
 			processExpressions((*i).first, (*i).second);
-			handleModifyAndUses((*i).first, (*i).second);
-			//bug: proc
+			handleModifyAndUses((*i).first, (*i).second);	
 			handleFollows((*i).first, (*i).second);
 			
 		}
@@ -155,7 +154,7 @@ void Parser::Procedure() {
 
 void Parser::setRelationsInTable() {
 	pkb->setChildren(parentLink);
-	pkb->setFollows(followLink);
+//	pkb->setFollows(followLink);
 
 	string procName = pkb->setProcCalls(callsLink);
 
@@ -191,6 +190,7 @@ string Parser::toLowerCase(string s) {
 	return stmtInLC;
 }
 void Parser::processProcedure(int index, string statement) {
+	currFollows.clear();
 	size_t bracketPos = statement.find("{");
 	statement.replace(bracketPos, string("{").length(), "");
 	pushOpenBracket();
@@ -208,6 +208,10 @@ void Parser::processCalls(int index, string stmt)
 	string procCalls = stmt.substr(stmt.find("call") + 4);
 	size_t semiColonPos = procCalls.find(";");
 	procCalls.replace(semiColonPos, string(";").length(), "");
+
+	size_t bracketPos = procCalls.find("}");
+	procCalls.replace(bracketPos, string("}").length(), "");
+
 	callsPair.first = procNumInTble;
 	callsPair.second = procCalls;
 	callsLink.push_back(callsPair);
@@ -426,14 +430,14 @@ string Parser::getFollow() {
 
 void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 	pair<int, string> pairs;
-	pairs.first = index - 1;
+	pairs.first = index - numOfProc;
 	string s;
 	for (list<char>::iterator it = exprOutput.begin(); it != exprOutput.end(); ++it) {
 		if (*it != ';') {
 			s.push_back(*it);
 		}
 	}
-	//bug: new procedure
+	
 	pkb->setRightExpr(pairs.first, s);
 	if (!s.empty()) {
 		pairs.second = s;
@@ -505,7 +509,7 @@ bool Parser::isConstant(char c) {
 	}
 	return isConstant;
 }
-
+//why crashing here when multiple procs?
 void Parser::handleFollows(int index, string stmt) {
 	string currStmt = stmt;
 	pair<int, int> paired;
@@ -517,10 +521,12 @@ void Parser::handleFollows(int index, string stmt) {
 	else
 	{
 		if (prevStmt.find("{") != std::string::npos) {
+	
 			currFollows.push_back(index - numOfProc);
 			prevStmt = currStmt;
 		}
 		else if (prevStmt.find("}") != std::string::npos) {
+
 			size_t n = std::count(prevStmt.begin(), prevStmt.end(), '}');
 			for (int i = 0; i < n;i++) {
 				if (!currFollows.empty()) {
@@ -529,7 +535,9 @@ void Parser::handleFollows(int index, string stmt) {
 			}
 			paired.first = currFollows.back();
 			paired.second = index - numOfProc;
-			currFollows.pop_back();
+			if (!currFollows.empty()) {
+				currFollows.pop_back();
+			}
 			currFollows.push_back(index - numOfProc);
 			followLink.push_back(paired);
 			prevStmt = currStmt;
@@ -537,7 +545,9 @@ void Parser::handleFollows(int index, string stmt) {
 		else {
 			paired.first = currFollows.back();
 			paired.second = index - numOfProc;
-			currFollows.pop_back();
+			if (!currFollows.empty()) {
+				currFollows.pop_back();
+			}
 			currFollows.push_back(index - numOfProc);
 			followLink.push_back(paired);
 			prevStmt = currStmt;
