@@ -1,0 +1,40 @@
+1 - All assignment
+assign a;
+Select a;
+1, 2, 3, 5, 7, 8
+5000
+2 - Pattern sub expression
+assign a; 
+Select a pattern a(_, "_x*9_")
+7
+5000 
+3 - Follows
+stmt s;
+Select s such that Follows(1, 2)
+1, 2, 3, 4, 5, 6, 7, 8
+5000
+4 - Parent
+while w; assign a;
+Select w such that Parent(w, a)
+4, 6
+5000
+5 - Modifies
+assign a; 
+Select a such that Modifies(a, "beads")
+1, 2
+5000
+6 - Uses
+stmt s;
+Select s such that Uses(s, "command")
+1, 5, 6, 8
+5000
+7 - Follows *
+stmt s; stmt s1;
+Select s such that Follows*(s, s1)
+1, 2, 3, 5, 7
+5000
+8 - Parent *
+while w; stmt s;
+Select s such that Parent*(s, 8)
+4, 6
+5000

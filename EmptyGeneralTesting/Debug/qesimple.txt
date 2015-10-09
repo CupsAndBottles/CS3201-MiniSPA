@@ -1,0 +1,9 @@
+procedure dream{
+beads = command + 10;
+beads = 34;							
+command = inspiration + 1;
+while coffee {							
+stamps = beads + command + coffee;
+while command {	
+x = x + x * 9;							
+x = beads + command; }}}
