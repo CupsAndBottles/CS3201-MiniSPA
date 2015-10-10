@@ -66,20 +66,20 @@ void RelTable::addRelIntoTable()
 	call.noArgs = 2;
 	call.ag1Synonym = 8;
 	call.ag2Synonym = 8;
-	relTable.insert(std::pair<string, Relationship>("Calls", call));
-	relTable.insert(std::pair<string, Relationship>("Calls*", call));
+	relTable.insert(std::pair<string, Relationship>("calls", call));
+	relTable.insert(std::pair<string, Relationship>("calls*", call));
 
 	next.noArgs = 2;
 	next.ag1Synonym = 2;
 	next.ag2Synonym = 2;
-	relTable.insert(std::pair<string, Relationship>("Next", next));
-	relTable.insert(std::pair<string, Relationship>("Next*", next));
+	relTable.insert(std::pair<string, Relationship>("next", next));
+	relTable.insert(std::pair<string, Relationship>("next*", next));
 
 	affect.noArgs = 2;
 	affect.ag1Synonym = 9;
 	affect.ag2Synonym = 9;
-	relTable.insert(std::pair<string, Relationship>("Affect", affect));
-	relTable.insert(std::pair<string, Relationship>("Affect*", affect));
+	relTable.insert(std::pair<string, Relationship>("affect", affect));
+	relTable.insert(std::pair<string, Relationship>("affect*", affect));
 	
 	follow.noArgs = 2;
 	follow.ag1Synonym = 2;

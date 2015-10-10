@@ -131,6 +131,18 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCIntValue(), 1);
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("y"));
 
+			input = "while w1; assign a; prog_line n; Select w1 such that Next*(20, n) and Next*(40, 620)";
+			ParserForPQL parser10(input, *pkb);
+			queryTree = parser10.getQueryTree();
+
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getParentStringVal(), string("Next*"));
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCStringValue(), string("20"));
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getLeftCType()), 1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCIntValue(), 20);
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getRightCType()), 1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCIntValue(), -1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("n"));
+
 			input = "while w; Select w such that Parent(w, 7)";
 			ParserForPQL parser9(input, *pkb);
 			queryTree = parser9.getQueryTree();
@@ -269,6 +281,7 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCType()), 9);
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), true);
+
 
 		}
 		TEST_METHOD(TestAnd) {
