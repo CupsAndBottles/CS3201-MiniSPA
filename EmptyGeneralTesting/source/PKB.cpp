@@ -81,18 +81,24 @@ void PKB::setProcUses(int index, vector<string> usesVar)
 }
 
 //index=procCalling, calls - procCalled
-void PKB::setProcCalls(vector<pair<int, string>> procCalls)
+string PKB::setProcCalls(vector<pair<int, string>> procCalls)
 {
+	string procNot = "";
 	while (!procCalls.empty()) {
 		pair<int, string> paired = procCalls.back();
 		int index = paired.first;
 		string procCalled = paired.second;
 		int procIndex = getProcIndex(procCalled);
 		procCalls.pop_back();
-		procTable[index].setCalls(procIndex);
-		setProcCalledBy(procIndex, index);
+		if (procIndex != -1) {
+			procTable[index].setCalls(procIndex);
+			setProcCalledBy(procIndex, index);
+		}
+		else {
+			procNot = procCalled;
+		}
 	}
-
+	return procNot;
 }
 
 void PKB::setProcCalledBy(int index, int called)

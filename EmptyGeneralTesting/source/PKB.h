@@ -48,7 +48,7 @@ public:
 	void setEndNum(int index, int endNum); //working
 	void setProcModified(int index, vector<string> modifiedVar);//working
 	void setProcUses(int index, vector<string> usesVar);//working
-	void setProcCalls(vector<pair<int,string>> procCalls); //not done yet
+	string setProcCalls(vector<pair<int,string>> procCalls); //not done yet
 	void setProcCalledBy(int index, int called);//not done yet
 	
 	//From StmtTable
