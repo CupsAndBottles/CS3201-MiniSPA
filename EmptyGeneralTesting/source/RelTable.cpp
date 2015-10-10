@@ -78,8 +78,8 @@ void RelTable::addRelIntoTable()
 	affect.noArgs = 2;
 	affect.ag1Synonym = 9;
 	affect.ag2Synonym = 9;
-	relTable.insert(std::pair<string, Relationship>("affect", affect));
-	relTable.insert(std::pair<string, Relationship>("affect*", affect));
+	relTable.insert(std::pair<string, Relationship>("affects", affect));
+	relTable.insert(std::pair<string, Relationship>("affects*", affect));
 	
 	follow.noArgs = 2;
 	follow.ag1Synonym = 2;
