@@ -542,12 +542,12 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
 
 			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCStringValue(), string("v"));
-			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCType()), 2);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCType()), 6);
 			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCIntValue()), -1);
 			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCIsExpression(), false);
 			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCStringValue(), string("v1"));
-			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCType()), 2);
-			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCIntValue()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCType()), 6);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCIsExpression(), false);
 		}
 		};
