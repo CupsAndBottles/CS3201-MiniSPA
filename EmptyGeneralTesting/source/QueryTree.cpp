@@ -80,9 +80,6 @@ void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vecto
 	int z = 0;
 
 	for (std::size_t i = 0; i < stringVal.size(); i = i + 2) {
-		std::cout << "type.at(i) = " << intVal.at(i) << '\n';
-
-		std::cout << "type.at(i + 1) = " << intVal.at(i + 1) << '\n';
 		withTree.push_back(Clauses());
 		withTree.at(z).setLeftCType(type.at(i));
 		withTree.at(z).setLeftCIsExpression(false);
