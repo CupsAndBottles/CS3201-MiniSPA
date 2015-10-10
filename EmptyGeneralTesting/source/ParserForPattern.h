@@ -11,8 +11,6 @@ public:
 
 	void parsePattern(vector<vector<string>> type, vector<vector<string>> synonym, int pos);
 
-	void checkType(string syn);
-
 	vector<string> removeUnwanted(vector<string> PatternSynonym);
 
 	string getToBeSplit(vector<string> PatternSubset, int i);
@@ -23,7 +21,7 @@ public:
 
 	vector<string> getPatternSynonym();
 
-	char toBeSplitWith[3] = { ',', ')' };
+	char toBeSplitWith[2] = { ',', ')' };
 	vector<string> patternSynonym;
 
 };
