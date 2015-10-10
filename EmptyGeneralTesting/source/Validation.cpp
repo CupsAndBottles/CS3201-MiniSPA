@@ -7,10 +7,8 @@
 
 using namespace std;
 
-Validation::Validation(vector<vector<string>> suchThatSynAndType, vector<vector<string>> patternSynAndType)
+Validation::Validation()
 {
-	grammarValidation(suchThatSynAndType);
-	patternValidation(patternSynAndType);
 }
 
 
@@ -34,12 +32,12 @@ void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 			}
 			else if (i % 3 == 1) {
 				if (!std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag1))) {
-					throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
+					throw ParserException("Grammar is wrong for " + relName + " of " + suchThatSynAndType[1].at(i));
 				}
 			}
 			else {
 				if (!std::regex_match(suchThatSynAndType[1].at(i), synonym.at(ag2))) {
-					throw ParserException("Grammar is wrong for " + suchThatSynAndType[0].at(0) + " of " + suchThatSynAndType[0].at(i));
+					throw ParserException("Grammar is wrong for " + relName + " of " + suchThatSynAndType[1].at(i));
 				}
 			}
 		}
@@ -61,10 +59,10 @@ void Validation::patternValidation(vector<vector<string>> patternSynAndType)
 
 
 			if (!std::regex_match(patternSynAndType[1].at(i + 1), synonym.at(ag1))) {
-				throw ParserException("Grammar is wrong for " + patternSynAndType[0].at(0) + " of " + patternSynAndType[0].at(i));
+				throw ParserException("Grammar is wrong for pattern of" + patternSynAndType[1].at(i) + " of " + patternSynAndType[0].at(i + 1));
 			}
 			else if (!std::regex_match(patternSynAndType[1].at(i + 2), synonym.at(ag2))) {
-				throw ParserException("Grammar is wrong for pattern of " + patternSynAndType[0].at(0));
+				throw ParserException("Grammar is wrong for pattern of " + patternSynAndType[1].at(i));
 
 			}
 			else if (patternSynAndType[1].at(i).compare("if") == 0 && !std::regex_match(patternSynAndType[1].at(i + 3), synonym.at(ag2))) {
@@ -76,6 +74,16 @@ void Validation::patternValidation(vector<vector<string>> patternSynAndType)
 				i++;
 			}
 		}
+	}
+}
+
+void Validation::withValidation(string declaredType, string userType)
+{
+	string relName = "With" + userType;
+	RelTable relTableClass(relName);
+	int ag1 = relTableClass.getAg1Synonym();
+	if (!std::regex_match(declaredType, synonym.at(ag1))) {
+		throw ParserException("Grammar is wrong for with");
 	}
 }
 

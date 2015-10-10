@@ -20,32 +20,49 @@ ParserForWith::~ParserForWith()
 }
 
 void ParserForWith::parseWith(vector<vector<string>> type, vector<vector<string>> synonym, int pos)
-{
-	vector<string> equalSubset;
-	std::size_t foundFullStop = synonym[0].at(pos).find(".");
-	if (foundFullStop != std::string::npos) {
-		equalSubset = split(synonym[0].at(pos), '.');
-		withSynonym.push_back(equalSubset.at(0));
-		std::size_t found = equalSubset.at(1).find("=");
+{ 
+	vector<string> withSubset;
+	std::string toBeSplit = synonym[0].at(pos);
+	for (std::size_t i = 0; i < 2; i++) {
+		char charSplitWith = toBeSplitWith[i];
+		std::size_t found = synonym[0].at(pos).find(charSplitWith);
+		
 		if (found != std::string::npos) {
-			equalSubset = split(equalSubset.at(1), '=');
-			withSynonym.insert(withSynonym.end(), equalSubset.begin(), equalSubset.end());
+			withSubset = split(toBeSplit, charSplitWith);
+			toBeSplit = getToBeSplit(withSubset, i);
 		}
-		else {
-			throw ParserException("Wrong synax for with");
+		if (toBeSplit.compare("") == 0) {
+			toBeSplit = synonym[0].at(pos);
 		}
 	}
-	else {
-		std::size_t found = synonym[0].at(pos).find("=");
-		if (found != std::string::npos) {
-			equalSubset = split(synonym[0].at(pos), '=');
-			withSynonym = equalSubset;
-		}
-		else {
-			throw ParserException("Wrong synax for with");
-		}
-	}
+
 	withSynonym = removeUnwanted(withSynonym);
+	if(withSynonym.size() == 0) {
+		throw ParserException("Wrong synax for writting pattern.");
+	}
+	//for (int j = 0; j < withSynonym.size(); j++) {
+		//std::cout << "withSyn = " << withSynonym.at(j) << '\n';
+	//}
+}
+
+string ParserForWith::getToBeSplit(vector<string> patternSubset, int i)
+{
+	string toBeSplit = "";
+	if (patternSubset.size() == 2 && i != 1) {
+		toBeSplit = patternSubset.at(1);
+		withSynonym.push_back(patternSubset.at(0));
+	}
+	else if (patternSubset.size() == 3) {
+		toBeSplit = patternSubset.at(1);
+		withSynonym.push_back(patternSubset.at(0));
+		withSynonym.push_back(patternSubset.at(2));
+	}
+	else if (i == 1) {
+		withSynonym.push_back(patternSubset.at(0));
+		withSynonym.push_back(patternSubset.at(1));
+	}
+	
+	return toBeSplit;
 }
 
 vector<string> ParserForWith::removeUnwanted(vector<string> withSynonym)

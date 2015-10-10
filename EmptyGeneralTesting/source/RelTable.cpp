@@ -61,7 +61,7 @@ int RelTable::getAg2Synonym()
 void RelTable::addRelIntoTable()
 {
 
-	Relationship follow, parent, modifies, use, followT, parentT, useT, While, If, assign, call, next, affect;
+	Relationship follow, parent, modifies, use, followT, parentT, useT, While, If, assign, call, next, affect, procName, varName, stmt, value, digitOfWith, stringOfWith;
 
 	call.noArgs = 2;
 	call.ag1Synonym = 8;
@@ -122,6 +122,27 @@ void RelTable::addRelIntoTable()
 	If.ag1Synonym = 5;
 	If.ag2Synonym = 6;
 	relTable.insert(std::pair<string, Relationship>("Patternif", If));
+
+	stmt.ag1Synonym = 10;
+	relTable.insert(std::pair<string, Relationship>("Withstmt#", stmt));
+
+	procName.ag1Synonym = 11;
+	relTable.insert(std::pair<string, Relationship>("WithprocName", procName));
+
+	varName.ag1Synonym = 5;
+	relTable.insert(std::pair<string, Relationship>("WithvarName", varName));
+
+	value.ag1Synonym = 12;
+	relTable.insert(std::pair<string, Relationship>("Withvalue", value));
+
+	digitOfWith.ag1Synonym = 13;
+	relTable.insert(std::pair<string, Relationship>("Withconstant", digitOfWith));
+	relTable.insert(std::pair<string, Relationship>("Withstmt", digitOfWith));
+
+	stringOfWith.ag1Synonym = 14;
+	relTable.insert(std::pair<string, Relationship>("Withprocedure", stringOfWith));
+	relTable.insert(std::pair<string, Relationship>("Withvariable", stringOfWith));
+
 
 }
 

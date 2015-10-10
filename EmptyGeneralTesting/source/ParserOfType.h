@@ -12,8 +12,12 @@ public:
 	ParserOfType();
 	~ParserOfType();
 
-	vector<vector<string>> setType(PKB & pkb, int clauseType, string synonym, vector<string> type, vector<string> synonymType);
+	vector<vector<string>> setType(PKB & querypkb, int clauseType, string synonym, vector<string> type, vector<string> synonymType, string indication);
 	vector<vector<string>> setClauseType(int clauseType, string synonym, vector<string> type, vector<string> synonymType);
+	vector<vector<string>> setDigitTypeAndSyn(string clauseType, string synonym);
+	vector<vector<string>> setVariableTypeAndSyn(PKB & querypkb, string synonym);
+	vector<vector<string>> setProcedureTypeAndSyn(PKB & querypkb, string synonym, string clauseType);
+	vector<vector<string>> setDeclaredSynAndType(string synonym, vector<string> type, vector<string> synonymType);
 	bool isSynDigit(string syn);
 	int isBeingDeclared(string syn, vector<string> synType);
 	string checkSubExpression(string arg2);

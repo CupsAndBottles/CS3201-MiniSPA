@@ -12,10 +12,13 @@ public:
 	vector<string> withSynonym;
 
 	void parseWith(vector<vector<string> > type, vector<vector<string> > synonym, int pos);
+	string getToBeSplit(vector<string> patternSubset, int i);
 	vector<string> split(const string &s, char delim);
 	vector<string> &split(const string &s, char delim, vector<string> &elems);
 
 	vector<string> getWithSynonym();
 	vector<string> removeUnwanted(vector<string> withSynonym);
+	
+	char toBeSplitWith[2] = { '.', '=' };
 };
 

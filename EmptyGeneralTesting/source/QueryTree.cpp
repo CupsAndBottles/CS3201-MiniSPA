@@ -22,7 +22,7 @@ QueryTree & QueryTree::return_created_Object()
 
 
 
-void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<string>> suchThatData, vector<vector<string>> patternData)
+void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<string>> suchThatData, vector<vector<string>> patternData, vector<vector<string>> withData)
 {
 	if (resultData.size() > 0) {
 		addResultTree(resultData[0], resultData[1]);
@@ -32,6 +32,10 @@ void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<s
 	}
 	if (patternData.size() > 0) {
 		addPatternTree(patternData[0], patternData[1], patternData[2], patternData[3]);
+	}
+
+	if (withData.size() > 0) {
+		addWithTree(withData[0], withData[1], withData[2]);
 	}
 }
 
@@ -51,6 +55,11 @@ vector<Clauses> QueryTree::getResultTree()
 	return resultTree;
 }
 
+vector<Clauses> QueryTree::getWithTree()
+{
+	return withTree;
+}
+
 bool QueryTree::getIsValid()
 {
 	return isValid;
@@ -66,6 +75,31 @@ void QueryTree::addResultTree(vector<string> syn, vector<string> type)
 	}
 }
 
+void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vector<string> intVal)
+{
+	int z = 0;
+
+	for (std::size_t i = 0; i < stringVal.size(); i = i + 2) {
+		std::cout << "type.at(i) = " << intVal.at(i) << '\n';
+
+		std::cout << "type.at(i + 1) = " << intVal.at(i + 1) << '\n';
+		withTree.push_back(Clauses());
+		withTree.at(z).setLeftCType(type.at(i));
+		withTree.at(z).setLeftCIsExpression(false);
+		withTree.at(z).setLeftCIntValue(atoi(intVal.at(i).c_str()));
+		withTree.at(z).setLeftCStringValue(stringVal.at(i));
+
+		withTree.at(z).setRightCType(type.at(i + 1));
+		withTree.at(z).setRightCIsExpression(false);
+		withTree.at(z).setRightCIntValue(atoi(intVal.at(i + 1).c_str()));
+		withTree.at(z).setRightCStringValue(stringVal.at(i + 1));
+		z++;
+	}
+//	for (int j = 0; j < withTree.size(); j++) {
+	
+	//	std::cout << "withTreeLeft = " << withTree.at(j).getLeftCStringValue() << '\n';
+//	}
+}
 
 void QueryTree::addSuchThatTree(vector<string> stringVal, vector<string> type, vector<string> intVal)
 {

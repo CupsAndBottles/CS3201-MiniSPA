@@ -16,7 +16,7 @@ namespace UnitTesting
 			pkb->setVarName("x");
 			pkb->setVarName("y");
 
-			string input = "while w1, w2, w3; stmt s, n; Select <w1,w2, w3> with n = 10 pattern w1(\"x\", _) such that Follows(n, s)";
+			string input = "while w1, w2, w3; stmt s, n; Select <w1,w2, w3> pattern w1(\"x\", _) such that Follows(n, s)";
 			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
 			ParserForPQL parser(input, *pkb);
 			QueryTree queryTree = parser.getQueryTree();
@@ -36,18 +36,20 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParent().getType()), 4);
 		}
 
-		TEST_METHOD(testSuchThatTree)
+		TEST_METHOD(TestSuchThatTree)
 		{
 			PKB *pkb = new PKB();
 			pkb->setVarName("x");
 			pkb->setVarName("y");
 			pkb->setProcNameInProcTable("Main");
+			pkb->setProcNameInProcTable("y");
+			pkb->setProcNameInProcTable("x");
 
-			string input = "while w1, w2, w3; assign a, n, s; Select <w1,w2, w3> with n = 10 pattern a(\"x\", _) such that follows(n, s)";
+			string input = "while w1, w2, w3; assign a, n, s; Select <w1,w2, w3> with n = 10 pattern a(\"x\", _) such that Follows(n, s) ";
 			ParserForPQL parser2(input, *pkb);
 			QueryTree queryTree = parser2.getQueryTree();
 
-			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getParentStringVal(), string("follows"));
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getParentStringVal(), string("Follows"));
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCStringValue(), string("n"));
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCIntValue(), -1);
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getLeftCType()), 0);
@@ -117,7 +119,7 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCIntValue(), 2);
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("2"));
 
-			input = "while w1; assign a; prog_line n; Select w1 such that Uses(\"Main\", \"x\")";
+			input = "while w1; assign a; prog_line n; Select w1 such that Uses(\"Main\", \"y\")";
 			ParserForPQL parser8(input, *pkb);
 			queryTree = parser8.getQueryTree();
 
@@ -126,8 +128,8 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getLeftCType()), 2);
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCIntValue(), 0);
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getRightCType()), 6);
-			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCIntValue(), 0);
-			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("x"));
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCIntValue(), 1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("y"));
 
 			input = "while w; Select w such that Parent(w, 7)";
 			ParserForPQL parser9(input, *pkb);
@@ -142,7 +144,7 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("7"));
 		}
 	
- 		TEST_METHOD(testPatternTree) {
+ 		TEST_METHOD(TestPatternTree) {
 			PKB *pkb = new PKB();
 			pkb->setVarName("x");
 			pkb->setVarName("y");
@@ -269,9 +271,9 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), true);
 
 		}
-		TEST_METHOD(testAnd) {
+		TEST_METHOD(TestAnd) {
 			PKB *pkb = new PKB();
-			string input = "while w1, w2, w3; assign a, n; Select w1 such that Parent*(w1, w2) and Follows(n, a)";
+			string input = "while w1, w2, w3; assign a, n, a1, n1; variable v; Select w1 such that Parent*(w1, w2) and Follows(n, a) and Parent(w2, a) pattern a1(_, _) and n1(v, _)";
 			ParserForPQL parser4(input, *pkb);
 			QueryTree queryTree = parser4.getQueryTree();
 			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCStringValue(), string("w1"));
@@ -291,14 +293,45 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getRightCType()), 0);
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getSuchThatTree().at(1).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getSuchThatTree().at(2).getLeftCStringValue(), string("w2"));
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(2).getLeftCType()), 4);
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(2).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(2).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(2).getRightCStringValue(), string("a"));
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(2).getRightCType()), 0);
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(2).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(2).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getParentStringVal(), string("a1"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getParentType()), 0);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCStringValue(), string("_"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCType()), 3);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCStringValue(), string("_"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCType()), 3);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getPatternTree().at(1).getParentStringVal(), string("n1"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(1).getParentType()), 0);
+			Assert::AreEqual(queryTree.getPatternTree().at(1).getLeftCStringValue(), string("v"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(1).getLeftCType()), 6);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(1).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(1).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getPatternTree().at(1).getRightCStringValue(), string("_"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(1).getRightCType()), 3);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(1).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(1).getRightCIsExpression(), false);
 		}
-		TEST_METHOD(testMultipleClauses) {
+		TEST_METHOD(TestMultipleClauses) {
 			PKB *pkb = new PKB();
 			pkb->setVarName("x");
 			pkb->setVarName("y");
 
 			//test multiple such that
-			string input = "while w1, w2, w3; assign a, n, a1; Select w1 such that Parent*(w1, w2) and Follows(n, a) and Uses(a1, \"x\")";
+			string input = "while w1, w2, w3; assign a, n, a1; Select w1 such that Parent*(w1, w2) such that Follows(n, a) such that Uses(a1, \"x\")";
 			ParserForPQL parser4(input, *pkb);
 			QueryTree queryTree = parser4.getQueryTree();
 
@@ -330,7 +363,7 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getSuchThatTree().at(2).getRightCIsExpression(), false);
 
 			//test multiple pattern
-			input = "while w1, w2, w3; assign a; variable v; if if; Select w1 pattern if(\"x\", _, _) and pattern a(v, \"2\")";
+			input = "while w1, w2, w3; assign a; variable v; if if; Select w1 pattern if(\"x\", _, _) pattern a(v, \"2\")";
 			ParserForPQL parser5(input, *pkb);
 			queryTree = parser5.getQueryTree();
 
@@ -391,14 +424,96 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getSuchThatTree().at(1).getRightCIsExpression(), false);
 		}
 
-		TEST_METHOD(testGetVarName) {
+		TEST_METHOD(TestGetVarName) {
 			PKB *pkb = new PKB();
 			pkb->setVarName("x");
 			pkb->setVarName("y");
 
 			Assert::AreEqual(pkb->getVarIndex("x"), 0);
+		}
 
+		TEST_METHOD(TestWithTree) {
+			PKB *pkb = new PKB();
+			pkb->setVarName("x");
+			pkb->setVarName("y");
+			pkb->setProcNameInProcTable("Second");
+			pkb->setProcNameInProcTable("Main");
 
+			string input = "stmt s; constant c; while w1; Select w1 with s.stmt# = c.value";
+			ParserForPQL parser1(input, *pkb);
+			QueryTree queryTree = parser1.getQueryTree();
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("s"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("c"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 7);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
+
+			input = "procedure p; variable v; while w1; prog_line n; Select w1 with v.varName = \"x\" with p.procName= \"Second\"";
+			ParserForPQL parser3(input, *pkb);
+			queryTree = parser3.getQueryTree();
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("v"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 6);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("x"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 6);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), 0);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCStringValue(), string("p"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCType()), 2);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCStringValue(), string("Second"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCType()), 2);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCIntValue()), 0);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCIsExpression(), false);
+
+			input = "stmt s; constant c; while w1; prog_line n; Select w1 with s.stmt# = c.value and n = 10";
+			ParserForPQL parser2(input, *pkb);
+			queryTree = parser2.getQueryTree();
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("s"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("c"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 7);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCStringValue(), string("n"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCStringValue(), string("10"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCIntValue()), 10);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCIsExpression(), false);
+
+			input = "assign a; stmt s; prog_line n; procedure p; variable v; Select a such that Follows*(s, n) pattern a(\"x\", _) with n = 10 and p.procName = \"Main\"";
+
+			ParserForPQL parser4(input, *pkb);
+			queryTree = parser4.getQueryTree();
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("n"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("10"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), 10);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCStringValue(), string("p"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCType()), 2);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCStringValue(), string("Main"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCType()), 2);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCIntValue()), 1);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCIsExpression(), false);
 		}
 		};
 }

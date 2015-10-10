@@ -16,16 +16,18 @@ public:
 	vector<vector<string>> selectSynAndType;
 	vector<vector<string>> suchThatSynAndType;
 	vector<vector<string>> patternSynAndType;
+	vector<vector<string>> withSynAndType;
 	vector<vector<string>> getSelectSynAndType();
 	vector<vector<string>> getSuchThatSynAndType();
 	vector<vector<string>> getPatternSynAndType();
+	vector<vector<string>> getWithSynAndType();
 
 	void parseSelectTypeWithSyn(vector<string> selectSynonym, vector<string> type, vector<string> synonym);
 	void parseSuchThatTypeWithSyn(vector<vector<string>> suchThatSynonym, vector<string> type, vector<string> synonym);
 	void parseWithTypeWithSyn(vector<vector<string>> withSynonym, vector<string> type, vector<string> synonym);
 	void parsePatternTypeWithSyn(vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
-	void checkType(string syn, vector<string> arguments, vector<string> typeSyn, vector<string> type);
 	void checkCommonSynonym();
+	vector<string> arrangeSyn(vector<string> syn);
 	PKB *pkb;
 };
 

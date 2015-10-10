@@ -45,7 +45,7 @@ void ParserForPQL::parse(string input)
 
 	QueryTree queryTree;
 
-	queryTree.startPlotting(selectSynAndType, suchThatSynAndType, patternSynAndType);
+	queryTree.startPlotting(selectSynAndType, suchThatSynAndType, patternSynAndType, withSynAndType);
 
 	setQueryTree(queryTree);
 }
@@ -138,6 +138,7 @@ void ParserForPQL::parseTypeWithSyn(vector<string> selectSynonym, vector<vector<
 	selectSynAndType = parserTypeWithSyn.getSelectSynAndType();
 	suchThatSynAndType = parserTypeWithSyn.getSuchThatSynAndType();
 	patternSynAndType = parserTypeWithSyn.getPatternSynAndType();
+	withSynAndType = parserTypeWithSyn.getWithSynAndType();
 }
 
 void ParserForPQL::validateType()
@@ -152,30 +153,39 @@ void ParserForPQL::parseRespectively()
 {
 	vector<vector<string> >::const_iterator row = type.begin();
 	vector<string>::const_iterator col;
-	int numberOfSuchThat = 0, numberOfWith = 0, numberOfPattern = 0;
 	vector<vector<string>> suchThatSynonym;
 	vector<vector<string>> withSynonym;
 	vector<vector<string>> patternSynonym;
 	vector<string> selectSynonym;
 
-	for (col = row->begin(); col != row->end(); ++col) {
-		string oneType = *col;
-		size_t index = std::distance(row->begin(), col);
+	for (int i = 0; i < type[0].size(); i++) {
+		string oneType = type[0].at(i);
+		int tempCol = i - 1;
+		while (oneType.compare("and") == 0) {
+			if (tempCol >= 0) {
+				oneType = type[0].at(tempCol);
+			}
+			else {
+				throw ParserException("Invalid input! There must have a 'such that/Pattern/with' condi before a 'and' condi.");
+			}
+			tempCol -= 1;
+		}
+		
 		if (oneType.compare("Select") == 0) {
 
-			ParserForSelect parserForSelect(type, synonym, index);
+			ParserForSelect parserForSelect(type, synonym, i);
 			selectSynonym = parserForSelect.getSelectSynonym();
 		}
-		else if (oneType.compare("such that") == 0 || oneType.compare("and") == 0 || oneType.compare("and such that") == 0) {
-			ParserForSuchThat parserForSuchThat(type, synonym, index);
+		else if (oneType.compare("such that") == 0 || oneType.compare("and such that") == 0) {
+			ParserForSuchThat parserForSuchThat(type, synonym, i);
 			suchThatSynonym.push_back(parserForSuchThat.getSuchThatSynonym());
 		}
 		else if (oneType.compare("with") == 0 || oneType.compare("and with") == 0) {
-			ParserForWith parserForWith(type, synonym, index);
+			ParserForWith parserForWith(type, synonym, i);
 			withSynonym.push_back(parserForWith.getWithSynonym());
 		}
 		else if (oneType.compare("pattern") == 0 || oneType.compare("and pattern") == 0) {
-			ParserForPattern parserForPattern(type, synonym, index);
+			ParserForPattern parserForPattern(type, synonym, i);
 			patternSynonym.push_back(parserForPattern.getPatternSynonym());
 
 		}
@@ -195,7 +205,9 @@ void ParserForPQL::parseKeyword()
 
 void ParserForPQL::startValidate()
 {
-	Validation validation(suchThatSynAndType, patternSynAndType);
+	Validation validation;
+	validation.grammarValidation(suchThatSynAndType);
+	validation.patternValidation(patternSynAndType);
 }
 
 
