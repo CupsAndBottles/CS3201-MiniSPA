@@ -22,6 +22,7 @@ public:
 	void setFollowedByT(vector<int> followedByTList);
 	void setParentT(vector<int> parentTList);
 	void setChildrenT(vector<int> childrenTList);
+	void setControlVar(int varIndex);
 
 	void setNext(vector<int> nList);
 
@@ -48,7 +49,7 @@ public:
 	vector<int> getNext();
 
 	vector<int> getNextT();
-
+	int getControlVarIndex();
 	int getFollows();
 
 	int getFollowedBy();
@@ -57,6 +58,7 @@ private:
 	int index;
 	Enum::TYPE type;
 	int parent=0;
+	int controlVar=0;
 	vector<int> parentT;
 	vector<int> childrenList;
 	vector<int> childrenT;

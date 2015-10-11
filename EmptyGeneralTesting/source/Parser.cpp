@@ -386,7 +386,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
 		int index = pkb->setVarName(varInWhile);
-	
+		pkb->setControlVar(i-numOfProc,index);
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
 			int parentUse = pairedParent.first - numOfProc-containerElements.size()+1;
@@ -403,6 +403,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInIf = stmt.substr(stmt.find("if") + 2);
 		int index = pkb->setVarName(varInIf);
+		pkb->setControlVar(i - numOfProc, index);
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
 			int parentUse = pairedParent.first - numOfProc - containerElements.size()+1;

@@ -62,6 +62,7 @@ public:
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts); 
 	void setModifies(int index,string modifiedVar);//working
+	void setControlVar(int index, int varIndex);
 	//void setConstant(int index, vector<int> usesStmts);
 	void setUsedVar(int index, string usedVar);//working
 	void setRightExpr(int index, string rightExpression);  //tested //working

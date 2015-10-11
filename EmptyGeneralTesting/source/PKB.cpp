@@ -278,6 +278,12 @@ void PKB::setModifies(int index, string modifiedVar)
 	cout << "---------------------------------------\n";*/
 }
 
+void PKB::setControlVar(int index, int varIndex)
+{
+	stmtTable[index].setControlVar(varIndex);
+	cout << "Index : " << varIndex << "\n";
+}
+
 /* G: Constants here or in another table?
 void PKB::setConstant(int index, vector<int> usedConstant)
 {

@@ -75,6 +75,10 @@ void Stmt::setParentT(vector<int> parentTList) {
 void Stmt::setChildrenT(vector<int> childrenTList) {
 	childrenT = childrenTList;
 }
+void Stmt::setControlVar(int varIndex)
+{
+	controlVar = varIndex;
+}
 //---------------set next and next*----------------
 void Stmt::setNext(vector<int> nList) {
 	nextList = nList;
@@ -146,4 +150,9 @@ vector<int> Stmt::getNext() {
 
 vector<int> Stmt::getNextT() {
 	return nextTList;
+}
+
+int Stmt::getControlVarIndex()
+{
+	return controlVar;
 }
