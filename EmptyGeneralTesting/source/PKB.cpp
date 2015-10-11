@@ -1047,7 +1047,6 @@ int PKB::getNoOfVar() {
 	return varTable.size();
 }
 
-<<<<<<< HEAD
 int PKB::getConstantIndex(int constant)
 {
 	for (int i = 0; i < constantTable.size(); i++) {
@@ -1058,10 +1057,7 @@ int PKB::getConstantIndex(int constant)
 
 	return NOT_FOUND;
 }
-=======
 int PKB::getControlVar(int stmtIndex)
 {
 	return stmtTable[stmtIndex].getControlVarIndex();
 }
-
->>>>>>> f1c43e3395f34c50f700424f780e169f906ebb65
