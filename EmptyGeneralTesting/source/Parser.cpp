@@ -162,8 +162,8 @@ void Parser::setRelationsInTable() {
 	while (!callsLink.empty()) {
 		pair<int, string> paired = callsLink.back();
 		callsLink.pop_back();
-		cout << "First: " << paired.first << "\n";
-		cout << "Second: " << paired.second << "\n";
+	//	cout << "First: " << paired.first << "\n";
+	//	cout << "Second: " << paired.second << "\n";
 	}
 }
 
@@ -375,7 +375,13 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
 		int index = pkb->setVarName(varInWhile);
-
+	
+		if (!containerElements.empty()) {
+			pair<int, string> pairedParent = containerElements.back();
+			int parentUse = pairedParent.first - numOfProc-containerElements.size()+1;
+			pkb->setUsedBy(varInWhile, parentUse);
+			pkb->setUsedVar(parentUse, varInWhile);
+		}
 		pkb->setProcNames(index, currProcName);
 		pkb->setUsedBy(varInWhile, i - numOfProc);
 		pkb->setUsedVar(i - numOfProc, varInWhile);
@@ -384,20 +390,30 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 	else if (stmt.find("if") != std::string::npos) {
 		size_t bracketPos = stmt.find("{");
 		stmt.replace(bracketPos, string("{").length(), "");
-		string varInWhile = stmt.substr(stmt.find("if") + 2);
-		int index = pkb->setVarName(varInWhile);
-
+		string varInIf = stmt.substr(stmt.find("if") + 2);
+		int index = pkb->setVarName(varInIf);
+		if (!containerElements.empty()) {
+			pair<int, string> pairedParent = containerElements.back();
+			int parentUse = pairedParent.first - numOfProc - containerElements.size()+1;
+			pkb->setUsedBy(varInIf, parentUse);
+			pkb->setUsedVar(parentUse, varInIf);
+		}
 		pkb->setProcNames(index, currProcName);
-		pkb->setUsedBy(varInWhile, i - numOfProc);
-		pkb->setUsedVar(i - numOfProc, varInWhile);
-		varUsedInProc.push_back(varInWhile);
+		pkb->setUsedBy(varInIf, i - numOfProc);
+		pkb->setUsedVar(i - numOfProc, varInIf);
+		varUsedInProc.push_back(varInIf);
 	}
 
 	else {
 		size_t equal = stmt.find("=");
 		string modified = stmt.substr(0, equal);
 		string s;
-
+		if (!containerElements.empty()) {
+			pair<int, string> pairedParent = containerElements.back();
+			int parentMod = pairedParent.first-numOfProc;
+			pkb->setModifiedBy(modified, parentMod);
+			pkb->setModifies(parentMod, modified);
+		}
 		pkb->setModifiedBy(modified, i - numOfProc);
 		pkb->setModifies(i - numOfProc, modified);
 		varModifiedInProc.push_back(modified);
@@ -405,6 +421,12 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
 			if (isOperator(c) || c == '}' || c == ';') {
 				if (!s.empty()) {
+					if (!containerElements.empty()) {
+						pair<int, string> pairedParent = containerElements.back();
+						int parentUse = pairedParent.first-numOfProc;
+						pkb->setUsedBy(s,parentUse);
+						pkb->setUsedVar(parentUse, s);
+					}
 					pkb->setUsedBy(s, i - numOfProc);
 					pkb->setUsedVar(i - numOfProc, s);
 					varUsedInProc.push_back(s);
