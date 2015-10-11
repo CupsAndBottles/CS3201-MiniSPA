@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Clauses.h" />
+    <ClInclude Include="..\source\Constant.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\Details.h" />
     <ClInclude Include="..\source\Enum.h" />
@@ -41,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\Clauses.cpp" />
+    <ClCompile Include="..\source\Constant.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\Details.cpp" />
     <ClCompile Include="..\source\Enum.cpp" />

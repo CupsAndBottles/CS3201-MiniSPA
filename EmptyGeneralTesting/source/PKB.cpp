@@ -193,6 +193,23 @@ void PKB::setParent(int index, int parentStmt)
 	stmtTable[index].setParent(parentStmt);
 }
 
+int PKB::setConstant(int constantValue)
+{
+	int index = getConstantIndex(constantValue);
+	if (index == -1) {
+		constantTable.push_back(Constant());
+		int size = constantTable.size() - OFFSET;
+		constantTable[size].setConstantValue(constantValue);
+		index = getConstantIndex(constantValue);
+	}
+	return index;
+}
+
+void PKB::setStmtUsed(int index, int stmtNum)
+{
+	constantTable[index].insertIntoStmtUsed(stmtNum);	
+}
+
 //V: set parents
 void PKB::setParentT(int index, vector<int> parents)
 {
@@ -281,7 +298,7 @@ void PKB::setModifies(int index, string modifiedVar)
 void PKB::setControlVar(int index, int varIndex)
 {
 	stmtTable[index].setControlVar(varIndex);
-	cout << "Index : " << varIndex << "\n";
+	//cout << "Index : " << varIndex << "\n";
 }
 
 /* G: Constants here or in another table?
@@ -1027,4 +1044,15 @@ int PKB::getNoOfProc() {
 //ZH
 int PKB::getNoOfVar() {
 	return varTable.size();
+}
+
+int PKB::getConstantIndex(int constant)
+{
+	for (int i = 0; i < constantTable.size(); i++) {
+		if (constantTable[i].getConstant() == constant) {
+			return i;
+		}
+	}
+
+	return NOT_FOUND;
 }

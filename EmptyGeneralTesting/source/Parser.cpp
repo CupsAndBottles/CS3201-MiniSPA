@@ -142,7 +142,6 @@ void Parser::Procedure() {
 			processIfElse((*i).first, (*i).second);
 		}
 		else if (stmt.find("call") != std::string::npos) {
-			cout << "call run\n";
 			pkb->setType(Enum::CALLS);
 			processCalls((*i).first, (*i).second);
 			
@@ -439,14 +438,20 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 						pkb->setUsedBy(s,parentUse);
 						pkb->setUsedVar(parentUse, s);
 					}
+					if (isConstant(s)) {
+						int constant = atoi(s.c_str());
+						int constantInd = pkb->setConstant(constant);
+						pkb->setStmtUsed(constantInd,i-numOfProc);
+					}
 					pkb->setUsedBy(s, i - numOfProc);
 					pkb->setUsedVar(i - numOfProc, s);
 					varUsedInProc.push_back(s);
 				}
 				s = "";
 			}
-			else {
-				s.push_back(c);
+			else {			
+					s.push_back(c);
+				
 			}
 		}
 	}
@@ -566,12 +571,13 @@ bool Parser::isVariable(char c) {
 }
 
 
-bool Parser::isConstant(char c) {
-	bool isConstant = false;
-	if (isdigit(c)) {
-		isConstant = true;
+bool Parser::isConstant(string s) {
+	string::const_iterator it = s.begin();
+	while (it != s.end() && isdigit(*it))
+	{
+		++it;
 	}
-	return isConstant;
+	return !s.empty() && it == s.end();
 }
 //why crashing here when multiple procs?
 void Parser::handleFollows(int index, string stmt) {
