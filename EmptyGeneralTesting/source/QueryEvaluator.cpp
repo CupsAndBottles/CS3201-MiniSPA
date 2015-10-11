@@ -295,13 +295,80 @@ bool QueryEvaluator::evaluatePattern(Clauses clause) {
 		return evaluateAssign(clause);
 		break;
 	case Enum::TYPE::IF :
+		return evaluateIf(clause);
 		break;
 	case Enum::TYPE::WHILE :
+		return evaluateWhile(clause);
 		break;
 	default:
 		break;
 	}
 }
+
+bool QueryEvaluator::evaluateWhile(Clauses clause) {
+	vector<int> intermediateResult;
+
+	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
+		//pattern if(_, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::WHILE) {
+				intermediateResult.push_back(i);
+			}
+		}
+	}
+	else if (clause.getLeftCIntValue() != NOT_FOUND) {
+		//pattern if (x, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::WHILE) {
+				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
+					intermediateResult.push_back(i);
+				}
+			}
+		}
+	}
+
+	if (intermediateResult.size() != 0) {
+		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::WHILE);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool QueryEvaluator::evaluateIf(Clauses clause) {
+	vector<int> intermediateResult;
+
+	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
+		//pattern if(_, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::IF) {
+				intermediateResult.push_back(i);
+			}
+		}
+	}
+	else if (clause.getLeftCIntValue() != NOT_FOUND) {
+		//pattern if (x, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::IF) {
+				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
+					intermediateResult.push_back(i);
+				}
+			}
+		}
+	}
+
+	if (intermediateResult.size() != 0) {
+		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::IF);
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+
 
 bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	vector<int> intermediateResult;
