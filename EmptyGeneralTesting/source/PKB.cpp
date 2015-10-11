@@ -536,8 +536,10 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 	else if (stmtNum2 != -1) { // Parent(s/w,_ , 4)
 		parentStmtNo = stmtTable.at(stmtNum2).getParent();
 
-		if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
-			results.push_back(std::make_pair(parentStmtNo, stmtNum2));
+		if (parentStmtNo > 0) {
+			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
+				results.push_back(std::make_pair(parentStmtNo, stmtNum2));
+			}
 		}
 	}
 	else { // Parent(s/w/_, s/w/a/_/c)

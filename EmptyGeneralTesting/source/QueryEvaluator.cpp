@@ -166,31 +166,38 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 		switch (type) {
 		case Enum::TYPE::STATEMENT:
 			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
-				resultForSyn.push_back(to_string(i));
+				resultForSyn.push_back(convertToString(i, type));
 			}
 			break;
 		case Enum::TYPE::ASSIGN:
 			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 				if (pkb->getType(i) == Enum::TYPE::ASSIGN) {
-					resultForSyn.push_back(to_string(i));
+					resultForSyn.push_back(convertToString(i, type));
 				}
 			}
 			break;
 		case Enum::TYPE::WHILE:
 			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 				if (pkb->getType(i) == Enum::TYPE::WHILE) {
-					resultForSyn.push_back(to_string(i));
+					resultForSyn.push_back(convertToString(i, type));
+				}
+			}
+			break;
+		case Enum::TYPE::IF:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				if (pkb->getType(i) == Enum::TYPE::IF) {
+					resultForSyn.push_back(convertToString(i, type));
 				}
 			}
 			break;
 		case Enum::TYPE::PROCEDURE:
 			for (int i = 0; i < pkb->getNoOfProc(); i++) {
-				resultForSyn.push_back(pkb->getProcName(i));
+				resultForSyn.push_back(convertToString(i, type));
 			}
 			break;
 		case Enum::TYPE::VARIABLE:
 			for (int i = 0; i < pkb->getNoOfVar(); i++) {
-				resultForSyn.push_back(pkb->getVarName(i));
+				resultForSyn.push_back(convertToString(i, type));
 			}
 		default:
 			break;
@@ -244,17 +251,11 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	int indexForFirstParam = firstParam.getIntValue();
 	int indexForSecondParam = secondParam.getIntValue();
 
-	if (indexForFirstParam == Enum::TYPE::UNDERSCORE) {
-		indexForFirstParam = WILDCARD;
-	}
-
-	if (indexForSecondParam == Enum::TYPE::UNDERSCORE) {
-		indexForSecondParam = WILDCARD;
-	}
-
 	if (relationship == RELATIONSHIP_CALLS) {
 		results = this->pkb->getCalls(indexForFirstParam, indexForSecondParam);
-	}
+	} /*else if (relationship == RELATIONSHIP_CALLST {
+	  results = this->pkb->getCalls*(indexForFirstParam, indexForSecondParam);
+	}*/
 	else if (relationship == RELATIONSHIP_FOLLOWS) {
 		results = this->pkb->getFollows(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
 	}
@@ -273,6 +274,11 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	else if (relationship == RELATIONSHIP_USES) {
 		results = this->pkb->getUses(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
 	}
+/*	else if (relationship == RELATIONSHIP_NEXT) {
+		results = this->pkb->getNext(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	} else if (relationship == RELATIONSHIP_NEXT*) {
+		results = this->pkb->getNext*(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}*/
 	else {
 
 	}
@@ -473,7 +479,7 @@ void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, En
 		this->results.push_back(Synonym(type, syn, intermediateResult));
 	}
 
-	cout << "storing results";
+	cout << "storing results\n";
 
 }
 
