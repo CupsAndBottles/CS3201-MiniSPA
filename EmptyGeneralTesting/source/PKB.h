@@ -118,6 +118,7 @@ public:
 
 	int getNoOfProc();
 	int getNoOfVar();
+	int getControlVar(int stmtIndex);
 	//While table
 	//int getWholeStmt(int, int);
 

@@ -1027,3 +1027,9 @@ int PKB::getNoOfProc() {
 int PKB::getNoOfVar() {
 	return varTable.size();
 }
+
+int PKB::getControlVar(int stmtIndex)
+{
+	return stmtTable[stmtIndex].getControlVarIndex();
+}
+
