@@ -89,6 +89,11 @@ string Parser::linesSplitted(list<pair<int, string>> linesToTest) {
 
 list<pair<int, string>> Parser::splitLines(string lines)
 {
+	size_t elseStmt = lines.find("}else{");
+	if (lines.find("}else{") != std::string::npos) {
+			lines.replace(elseStmt, string("}else{").length(), "");
+		}
+
 	list<pair<int, string>> result;
 	size_t position = 0;
 	pair <int, string> pair;
@@ -141,7 +146,6 @@ void Parser::Procedure() {
 			processCalls((*i).first, (*i).second);
 		}
 		else {
-
 			pkb->setType(Enum::ASSIGN);
 			processExpressions((*i).first, (*i).second);
 			handleModifyAndUses((*i).first, (*i).second);
@@ -235,8 +239,22 @@ void Parser::processWhile(int index, string statement) {
 	handleFollows(pair.first, pair.second);
 }
 
-void Parser::processIfElse(int index, string stmt)
+void Parser::processIfElse(int index, string statement)
 {
+	pushOpenBracket();
+	pair <int, int> parentPair;
+	pair <int, string> pair;
+	pair.first = index;
+	pair.second = statement;
+	if (!containerElements.empty()) {
+		parentPair.first = containerElements.back().first - numOfProc;
+		parentPair.second = index - numOfProc;
+		parentLink.push_back(parentPair);
+	}
+	containerElements.push_back(pair);
+	addToParent(pair.first);
+	handleModifyAndUses(pair.first, pair.second);
+	handleFollows(pair.first, pair.second);
 }
 
 bool Parser::isOperator(char o) {
@@ -363,6 +381,18 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		pkb->setUsedVar(i - numOfProc, varInWhile);
 		varUsedInProc.push_back(varInWhile);
 	}
+	else if (stmt.find("if") != std::string::npos) {
+		size_t bracketPos = stmt.find("{");
+		stmt.replace(bracketPos, string("{").length(), "");
+		string varInWhile = stmt.substr(stmt.find("if") + 2);
+		int index = pkb->setVarName(varInWhile);
+
+		pkb->setProcNames(index, currProcName);
+		pkb->setUsedBy(varInWhile, i - numOfProc);
+		pkb->setUsedVar(i - numOfProc, varInWhile);
+		varUsedInProc.push_back(varInWhile);
+	}
+
 	else {
 		size_t equal = stmt.find("=");
 		string modified = stmt.substr(0, equal);

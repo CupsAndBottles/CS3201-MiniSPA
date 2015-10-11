@@ -56,9 +56,10 @@ void PKB::setProcModified(int index, vector<string> modifiedVar)
 	vector<int> modifiedVarIndex;
 	while (!modifiedVar.empty()) {
 		int i = getVarIndex(modifiedVar.back());
-		//cout << "------------------------------------\n";
-		//cout << "index: " << i << "\n";
-		//cout << "modified var: "<<modifiedVar.back()<<"\n";
+		/*cout << "------------------------------------\n";
+		cout << "proc index: " << index << "\n";
+		cout << "index: " << i << "\n";
+		cout << "modified var: "<<modifiedVar.back()<<"\n";*/
 		modifiedVar.pop_back();
 		modifiedVarIndex.push_back(i);
 	}
@@ -71,9 +72,10 @@ void PKB::setProcUses(int index, vector<string> usesVar)
 	vector<int> usesVarIndex;
 	while (!usesVar.empty()) {
 		int i = getVarIndex(usesVar.back());
-	//	cout << "------------------------------------\n";
-	//	cout << "index: " << i << "\n";
-	//	cout << "uses var: " << usesVar.back() << "\n";
+	/*	cout << "------------------------------------\n";
+		cout << "proc index: " << index << "\n";
+		cout << "index: " << i << "\n";
+		cout << "uses var: " << usesVar.back() << "\n";*/
 		usesVar.pop_back();
 		usesVarIndex.push_back(i);
 	}
@@ -237,6 +239,8 @@ void PKB::setFollows(vector<pair<int,int>> follows)
 		int firstStmt = paired.first;
 		int secondStmt = paired.second;
 		follows.pop_back();
+		//cout << "first: " << firstStmt << "\n";
+		//cout << "second: " << secondStmt << "\n";
 		stmtTable[secondStmt].setFollows(firstStmt);
 		setFollowedBy(firstStmt,secondStmt);
 	}
