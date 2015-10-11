@@ -45,7 +45,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	pattern = tree.getPatternTree();
 	select = tree.getResultTree();
 
-	for (int i = 0; i < suchThat.size(); i++) {
+	for (size_t i = 0; i < suchThat.size(); i++) {
 		isTrueClause = evaluateSuchThat(suchThat[i]);
 		if (!isTrueClause) {
 			list<string> emptyResult{ EMPTY_STRING };
@@ -53,7 +53,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		}
 	}
 
-	for (int i = 0; i < pattern.size(); i++) {
+	for (size_t i = 0; i < pattern.size(); i++) {
 		isTrueClause = evaluatePattern(pattern[i]);
 		if (!isTrueClause) {
 			list<string> emptyResult{ EMPTY_STRING };
@@ -61,7 +61,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		}
 	}
 
-	for (int i = 0; i < select.size(); i++) {
+	for (size_t i = 0; i < select.size(); i++) {
 		intermediateResult.push_back(evaluateSelect(select[i]));
 	}
 
@@ -82,8 +82,8 @@ vector<string> QueryEvaluator::permutateResultPair(vector<string> firstSet, vect
 	string toBeDisplayed = string();
 	vector<string> mergedPair;
 
-	for (int i = 0; i < firstSet.size(); i++) {
-		for (int j = 0; j < secondSet.size(); j++) {
+	for (size_t i = 0; i < firstSet.size(); i++) {
+		for (size_t j = 0; j < secondSet.size(); j++) {
 			toBeDisplayed = string();
 			toBeDisplayed = firstSet.at(i) + ", " + secondSet.at(j);
 			mergedPair.push_back(toBeDisplayed);
@@ -139,7 +139,7 @@ list<string> QueryEvaluator::permutateResultSubset(vector<vector<string>> interm
 list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
 	list<string> listedResults;
 
-	for (int i = 0; i < mergedResults.size(); i++) {
+	for (size_t i = 0; i < mergedResults.size(); i++) {
 		listedResults.push_back(mergedResults.at(i));
 	}
 
@@ -153,10 +153,10 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	string synonym = select.getParentStringVal();
 	Enum::TYPE type = select.getParent().getType();
 
-	for (int i = 0; i < this->results.size(); i++) {
+	for (size_t i = 0; i < this->results.size(); i++) {
 		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
 			hasCommonSyn = true;
-			for (int j = 0; j < results[i].getResult().size(); j++) {
+			for (size_t j = 0; j < results[i].getResult().size(); j++) {
 				resultForSyn.push_back(convertToString(results[i].getResult().at(j), type));
 			}
 		}
@@ -331,21 +331,21 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	else { //left child is a variable
 		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftChild().getIntValue());
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
-			for (int i = 0; i < stmtLst.size(); i++) {
+			for (size_t i = 0; i < stmtLst.size(); i++) {
 					intermediateResult.push_back(stmtLst[i].first);
 			}
 		}
 		else {
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
 			if (!clause.getRightCIsExpression()) { // a(v, x + y)
-				for (int i = 0; i < stmtLst.size(); i++) {  
+				for (size_t i = 0; i < stmtLst.size(); i++) {  
 					if (this->pkb->getRightExpr(stmtLst[i].first) == expr) {
 							intermediateResult.push_back(stmtLst[i].first);
 					}
 				}
 			}
 			else { // a(v, _x+y_)
-				for (int i = 0; i < stmtLst.size(); i++) {
+				for (size_t i = 0; i < stmtLst.size(); i++) {
 					if (this->pkb->getRightExpr(stmtLst[i].first).find(expr) != NOT_FOUND) {
 							intermediateResult.push_back(stmtLst[i].first);
 					}
@@ -371,7 +371,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	Details secondParam = clause.getRightChild();
 
 	if (firstParam.getIntValue() == WILDCARD) {
-		for (int i = 0; i < results.size(); i++) {
+		for (size_t i = 0; i < results.size(); i++) {
 			firstSynResults.push_back(results[i].first);
 		}
 
@@ -381,7 +381,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	}
 
 	if (secondParam.getIntValue() == WILDCARD) {
-		for (int i = 0; i < results.size(); i++) {
+		for (size_t i = 0; i < results.size(); i++) {
 			secondSynResults.push_back(results[i].second);
 		}
 		sort(secondSynResults.begin(), secondSynResults.end());
@@ -393,7 +393,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, Enum::TYPE type) {
 	bool isPresentInResults = false;
 
-	for (int i = 0; i < this->results.size(); i++) {
+	for (size_t i = 0; i < this->results.size(); i++) {
 		// Syn found in vector<Synonym> results
 		if (this->results[i].getSyn() == syn) {
 			isPresentInResults = true;
