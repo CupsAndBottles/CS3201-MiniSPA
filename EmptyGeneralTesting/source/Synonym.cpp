@@ -18,13 +18,13 @@ void Synonym::addResult(vector<int> resultToBeStored) {
 	vector<int> intersect;
 
 	if (this->result.empty()) {
-		for (int i = 0; i < resultToBeStored.size(); i++) {
+		for (size_t i = 0; i < resultToBeStored.size(); i++) {
 			this->result.push_back(resultToBeStored[i]);
 		}
 	}
 	else {
-		for (int i = 0; i < resultToBeStored.size(); i++) {
-			for (int j = 0; j < this->result.size(); j++) {
+		for (size_t i = 0; i < resultToBeStored.size(); i++) {
+			for (size_t j = 0; j < this->result.size(); j++) {
 				if (resultToBeStored[i] == this->result[j]) {
 					intersect.push_back(this->result[j]);
 				}

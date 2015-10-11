@@ -28,7 +28,7 @@ public:
 	void processProcedure(int index, string statment);
 	void processCalls(int index, string stmt);
 	void processWhile(int index, string statment);
-	void processIfElse(int index, string stmt);
+	void processIfElse(int index, string statement);
 	void handleModifyAndUses(int i, string stmt);
 	string getParentChild();
 	string getExpression();
@@ -42,7 +42,6 @@ public:
 	void pushOpenBracket();
 	bool isVariable(char c);
 	//	void insertIntoVarTable(int stmtNum, char var);
-	bool isConstant(char c);
 	bool constantValue;
 
 	string userInput;
@@ -61,6 +60,7 @@ private:
 	string procName;
 	list<pair<int, string >> lines;
 	int cBrack;
+	bool isConstant(string s);
 	void handleFollows(int index, string stmt);
 	PKB *pkb = new PKB();
 };

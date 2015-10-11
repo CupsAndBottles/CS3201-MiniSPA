@@ -7,6 +7,7 @@
 #include "Procedure.h"
 #include "Stmt.h"
 #include "Variable.h"
+#include "Constant.h"
 #include "Enum.h"
 
 using namespace std;
@@ -19,6 +20,7 @@ private:
 	vector<Stmt> stmtTable;
 	vector<Variable> varTable;
 	vector<Procedure> procTable;
+	vector<Constant> constantTable;
 	
 public:
 	//	string procNum;
@@ -62,11 +64,14 @@ public:
 	void setFollowsT(int index, vector<int> followsTStmts);
 	void setFollowedByT(int index, vector<int> followsByStmts); 
 	void setModifies(int index,string modifiedVar);//working
-	//void setConstant(int index, vector<int> usesStmts);
+	void setControlVar(int index, int varIndex);
 	void setUsedVar(int index, string usedVar);//working
 	void setRightExpr(int index, string rightExpression);  //tested //working
 	void setParent(int index, int parentStmt);  //working
 
+	//constant table
+	int setConstant(int constantValue);
+	void setStmtUsed(int index,int stmtNum);
 
 	string getRightExpr(int index); //tested
 	int getNoOfStmt(); //tested
@@ -117,6 +122,14 @@ public:
 
 	int getNoOfProc();
 	int getNoOfVar();
+
+
+	//From ConstantTable
+	int getConstantIndex(int constant);
+
+
+	int getControlVar(int stmtIndex);
+
 	//While table
 	//int getWholeStmt(int, int);
 

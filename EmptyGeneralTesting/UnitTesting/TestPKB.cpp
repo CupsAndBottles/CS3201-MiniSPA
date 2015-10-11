@@ -751,5 +751,23 @@ namespace UnitTesting
 			delete pkb;
 		}
 
+		TEST_METHOD(PKB_getControlVar) {
+			PKB *pkb = new PKB();
+			string varX = "x";
+			string varY = "y";
+
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::WHILE);
+			pkb->setType(Enum::TYPE::IF);
+			pkb->setVarName(varX);
+			pkb->setVarName(varY);
+
+			pkb->setControlVar(2, 0);
+			pkb->setControlVar(3, 1);
+
+			Assert::AreEqual(0, pkb->getControlVar(2));
+			Assert::AreEqual(1, pkb->getControlVar(3));
+		}
+
 	};
 }

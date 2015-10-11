@@ -32,6 +32,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> suchThat;
 	vector<Clauses> pattern;
 	vector<Clauses> select;
+	vector<Clauses> with;
 	vector<vector<string>> intermediateResult;
 	list<string> result;
 	bool isTrueClause;
@@ -43,9 +44,10 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 
 	suchThat = tree.getSuchThatTree();
 	pattern = tree.getPatternTree();
+	with = tree.getWithTree();
 	select = tree.getResultTree();
 
-	for (int i = 0; i < suchThat.size(); i++) {
+	for (size_t i = 0; i < suchThat.size(); i++) {
 		isTrueClause = evaluateSuchThat(suchThat[i]);
 		if (!isTrueClause) {
 			list<string> emptyResult{ EMPTY_STRING };
@@ -53,7 +55,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		}
 	}
 
-	for (int i = 0; i < pattern.size(); i++) {
+	for (size_t i = 0; i < pattern.size(); i++) {
 		isTrueClause = evaluatePattern(pattern[i]);
 		if (!isTrueClause) {
 			list<string> emptyResult{ EMPTY_STRING };
@@ -61,7 +63,15 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		}
 	}
 
-	for (int i = 0; i < select.size(); i++) {
+	for (size_t i = 0; i < with.size(); i++) {
+		isTrueClause = evaluateWith(with[i]);
+		if (!isTrueClause) {
+			list<string> emptyResult{ EMPTY_STRING };
+			return emptyResult;
+		}
+	}
+
+	for (size_t i = 0; i < select.size(); i++) {
 		intermediateResult.push_back(evaluateSelect(select[i]));
 	}
 
@@ -82,8 +92,8 @@ vector<string> QueryEvaluator::permutateResultPair(vector<string> firstSet, vect
 	string toBeDisplayed = string();
 	vector<string> mergedPair;
 
-	for (int i = 0; i < firstSet.size(); i++) {
-		for (int j = 0; j < secondSet.size(); j++) {
+	for (size_t i = 0; i < firstSet.size(); i++) {
+		for (size_t j = 0; j < secondSet.size(); j++) {
 			toBeDisplayed = string();
 			toBeDisplayed = firstSet.at(i) + ", " + secondSet.at(j);
 			mergedPair.push_back(toBeDisplayed);
@@ -139,7 +149,7 @@ list<string> QueryEvaluator::permutateResultSubset(vector<vector<string>> interm
 list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
 	list<string> listedResults;
 
-	for (int i = 0; i < mergedResults.size(); i++) {
+	for (size_t i = 0; i < mergedResults.size(); i++) {
 		listedResults.push_back(mergedResults.at(i));
 	}
 
@@ -153,10 +163,10 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	string synonym = select.getParentStringVal();
 	Enum::TYPE type = select.getParent().getType();
 
-	for (int i = 0; i < this->results.size(); i++) {
+	for (size_t i = 0; i < this->results.size(); i++) {
 		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
 			hasCommonSyn = true;
-			for (int j = 0; j < results[i].getResult().size(); j++) {
+			for (size_t j = 0; j < results[i].getResult().size(); j++) {
 				resultForSyn.push_back(convertToString(results[i].getResult().at(j), type));
 			}
 		}
@@ -166,31 +176,38 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 		switch (type) {
 		case Enum::TYPE::STATEMENT:
 			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
-				resultForSyn.push_back(to_string(i));
+				resultForSyn.push_back(convertToString(i, type));
 			}
 			break;
 		case Enum::TYPE::ASSIGN:
 			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 				if (pkb->getType(i) == Enum::TYPE::ASSIGN) {
-					resultForSyn.push_back(to_string(i));
+					resultForSyn.push_back(convertToString(i, type));
 				}
 			}
 			break;
 		case Enum::TYPE::WHILE:
 			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 				if (pkb->getType(i) == Enum::TYPE::WHILE) {
-					resultForSyn.push_back(to_string(i));
+					resultForSyn.push_back(convertToString(i, type));
+				}
+			}
+			break;
+		case Enum::TYPE::IF:
+			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+				if (pkb->getType(i) == Enum::TYPE::IF) {
+					resultForSyn.push_back(convertToString(i, type));
 				}
 			}
 			break;
 		case Enum::TYPE::PROCEDURE:
 			for (int i = 0; i < pkb->getNoOfProc(); i++) {
-				resultForSyn.push_back(pkb->getProcName(i));
+				resultForSyn.push_back(convertToString(i, type));
 			}
 			break;
 		case Enum::TYPE::VARIABLE:
 			for (int i = 0; i < pkb->getNoOfVar(); i++) {
-				resultForSyn.push_back(pkb->getVarName(i));
+				resultForSyn.push_back(convertToString(i, type));
 			}
 		default:
 			break;
@@ -235,6 +252,56 @@ vector<Synonym> QueryEvaluator::getResults(){
 	return this->results;
 }
 
+// without consideration to constant
+bool QueryEvaluator::evaluateWith(Clauses clause) {
+	vector<int> results;
+
+	if (clause.getRightCIntValue() != NOT_FOUND) {
+		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE && clause.getLeftCType() != Enum::TYPE::CALLS) {
+			if (!evaluateValidStmtRefs(clause)) {
+				return false;
+			}
+		}
+
+		results.push_back(clause.getRightCIntValue());
+		storeResults(results, clause.getLeftCStringValue(), clause.getLeftCType());
+		return true;
+	}
+	else { // n = c.value / s/a/w/if.stmt# = c.value / v.varName/p.procName/call.procName = p.procName/v.varName/call.procName
+/*		if(clause.getLeftCType() == Enum::TYPE::VARIABLE || clause.getLeftCType() == Enum::TYPE::PROCEDURE || clause.getLeftCType() == Enum::TYPE::CALL) {
+			return checkForEqualStringNames(clause);
+		} else {
+		   return checkForEqualIntValues(clause);
+		}*/
+	}
+}
+
+bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
+	switch (clause.getLeftCType()) {
+	case Enum::TYPE::STATEMENT:
+		return (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt());
+		break;
+	case Enum::TYPE::ASSIGN:
+		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
+			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::ASSIGN);
+		}
+		break;
+	case Enum::TYPE::WHILE:
+		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
+			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::WHILE);
+		}
+		break;
+	case Enum::TYPE::IF:
+		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
+			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::IF);
+		}
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	vector<pair<int, int>> results;
 	string relationship = clause.getParentStringVal();
@@ -244,17 +311,11 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	int indexForFirstParam = firstParam.getIntValue();
 	int indexForSecondParam = secondParam.getIntValue();
 
-	if (indexForFirstParam == Enum::TYPE::UNDERSCORE) {
-		indexForFirstParam = WILDCARD;
-	}
-
-	if (indexForSecondParam == Enum::TYPE::UNDERSCORE) {
-		indexForSecondParam = WILDCARD;
-	}
-
 	if (relationship == RELATIONSHIP_CALLS) {
 		results = this->pkb->getCalls(indexForFirstParam, indexForSecondParam);
-	}
+	} /*else if (relationship == RELATIONSHIP_CALLST {
+	  results = this->pkb->getCalls*(indexForFirstParam, indexForSecondParam);
+	}*/
 	else if (relationship == RELATIONSHIP_FOLLOWS) {
 		results = this->pkb->getFollows(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
 	}
@@ -273,6 +334,11 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	else if (relationship == RELATIONSHIP_USES) {
 		results = this->pkb->getUses(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
 	}
+/*	else if (relationship == RELATIONSHIP_NEXT) {
+		results = this->pkb->getNext(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	} else if (relationship == RELATIONSHIP_NEXT*) {
+		results = this->pkb->getNext*(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	}*/
 	else {
 
 	}
@@ -295,13 +361,80 @@ bool QueryEvaluator::evaluatePattern(Clauses clause) {
 		return evaluateAssign(clause);
 		break;
 	case Enum::TYPE::IF :
+		return evaluateIf(clause);
 		break;
 	case Enum::TYPE::WHILE :
+		return evaluateWhile(clause);
 		break;
 	default:
 		break;
 	}
 }
+
+bool QueryEvaluator::evaluateWhile(Clauses clause) {
+	vector<int> intermediateResult;
+
+	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
+		//pattern if(_, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::WHILE) {
+				intermediateResult.push_back(i);
+			}
+		}
+	}
+	else if (clause.getLeftCIntValue() != NOT_FOUND) {
+		//pattern if (x, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::WHILE) {
+				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
+					intermediateResult.push_back(i);
+				}
+			}
+		}
+	}
+
+	if (intermediateResult.size() != 0) {
+		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::WHILE);
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool QueryEvaluator::evaluateIf(Clauses clause) {
+	vector<int> intermediateResult;
+
+	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
+		//pattern if(_, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::IF) {
+				intermediateResult.push_back(i);
+			}
+		}
+	}
+	else if (clause.getLeftCIntValue() != NOT_FOUND) {
+		//pattern if (x, _, _)
+		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::IF) {
+				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
+					intermediateResult.push_back(i);
+				}
+			}
+		}
+	}
+
+	if (intermediateResult.size() != 0) {
+		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::IF);
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+
 
 bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	vector<int> intermediateResult;
@@ -331,21 +464,21 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	else { //left child is a variable
 		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftChild().getIntValue());
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
-			for (int i = 0; i < stmtLst.size(); i++) {
+			for (size_t i = 0; i < stmtLst.size(); i++) {
 					intermediateResult.push_back(stmtLst[i].first);
 			}
 		}
 		else {
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
 			if (!clause.getRightCIsExpression()) { // a(v, x + y)
-				for (int i = 0; i < stmtLst.size(); i++) {  
+				for (size_t i = 0; i < stmtLst.size(); i++) {  
 					if (this->pkb->getRightExpr(stmtLst[i].first) == expr) {
 							intermediateResult.push_back(stmtLst[i].first);
 					}
 				}
 			}
 			else { // a(v, _x+y_)
-				for (int i = 0; i < stmtLst.size(); i++) {
+				for (size_t i = 0; i < stmtLst.size(); i++) {
 					if (this->pkb->getRightExpr(stmtLst[i].first).find(expr) != NOT_FOUND) {
 							intermediateResult.push_back(stmtLst[i].first);
 					}
@@ -371,7 +504,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	Details secondParam = clause.getRightChild();
 
 	if (firstParam.getIntValue() == WILDCARD) {
-		for (int i = 0; i < results.size(); i++) {
+		for (size_t i = 0; i < results.size(); i++) {
 			firstSynResults.push_back(results[i].first);
 		}
 
@@ -381,7 +514,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	}
 
 	if (secondParam.getIntValue() == WILDCARD) {
-		for (int i = 0; i < results.size(); i++) {
+		for (size_t i = 0; i < results.size(); i++) {
 			secondSynResults.push_back(results[i].second);
 		}
 		sort(secondSynResults.begin(), secondSynResults.end());
@@ -393,7 +526,7 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, Enum::TYPE type) {
 	bool isPresentInResults = false;
 
-	for (int i = 0; i < this->results.size(); i++) {
+	for (size_t i = 0; i < this->results.size(); i++) {
 		// Syn found in vector<Synonym> results
 		if (this->results[i].getSyn() == syn) {
 			isPresentInResults = true;
@@ -406,7 +539,7 @@ void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, En
 		this->results.push_back(Synonym(type, syn, intermediateResult));
 	}
 
-	cout << "storing results";
+	cout << "storing results\n";
 
 }
 
