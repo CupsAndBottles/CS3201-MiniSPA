@@ -303,7 +303,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Parent(s, _)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("while w; Select w such that Parent(w, _)", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 

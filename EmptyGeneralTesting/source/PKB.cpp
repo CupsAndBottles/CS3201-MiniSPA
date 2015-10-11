@@ -356,7 +356,7 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 	if (type1 == 2 && stmtNum != -1) {
 		varNos = procTable.at(stmtNum).getModified();
 		if (varIndex != -1) {
-			for (int i = 0; i < varNos.size(); i++) {
+			for (size_t i = 0; i < varNos.size(); i++) {
 				if (varNos.at(i) == varIndex) {
 					results.push_back(std::make_pair(stmtNum, varIndex));
 					break;
@@ -364,22 +364,22 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 			}
 		}
 		else {
-			for (int i = 0; i < varNos.size(); i++) {
+			for (size_t i = 0; i < varNos.size(); i++) {
 				results.push_back(std::make_pair(stmtNum, varNos.at(i)));
 			}
 		}
 	}
 	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
-		for (int i = 1; i < procTable.size(); i++) {
+		for (size_t i = 1; i < procTable.size(); i++) {
 			varNos = procTable.at(i).getModified();
-			for (int k = 0; k < varNos.size(); k++) {
+			for (size_t k = 0; k < varNos.size(); k++) {
 				results.push_back(std::make_pair(i, varNos.at(k)));
 			}
 		}
 	}
 	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getModifies();
-		for (int i = 0; i < varNos.size(); i++) {
+		for (size_t i = 0; i < varNos.size(); i++) {
 			if (varNos.at(i) == varIndex) {
 				results.push_back(std::make_pair(stmtNum, varIndex));
 				break;
@@ -388,23 +388,23 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 	}
 	else if (stmtNum != -1) {
 		varNos = stmtTable.at(stmtNum).getModifies();
-		for (int i = 0; i < varNos.size(); i++) {
+		for (size_t i = 0; i < varNos.size(); i++) {
 			results.push_back(std::make_pair(stmtNum, varNos.at(i)));
 		}
 	}
 	else if (varIndex != -1) {
 		stmtNos = varTable.at(varIndex).getModifiedBy();
-		for (int i = 0; i < stmtNos.size(); i++) {
+		for (size_t i = 0; i < stmtNos.size(); i++) {
 			if (type1 == stmtTable.at(stmtNos.at(i)).getType() || type1 == 1) {
 				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
 			}
 		}
 	}
 	else {
-		for (int i = 1; i < stmtTable.size(); i++) {
+		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == stmtTable.at(i).getType() || type1 == 1 || type2 == 3) {
 				varNos = stmtTable.at(i).getModifies();
-				for (int k = 0; k < varNos.size(); k++) {
+				for (size_t k = 0; k < varNos.size(); k++) {
 					results.push_back(std::make_pair(i, varNos.at(k)));
 				}
 			}
@@ -421,9 +421,9 @@ vector<pair<int, int>> PKB::getCalls(int procIndexFirst, int procIndexSecond) {
 	if (procIndexFirst == -1) {
 		if (procIndexSecond == -1) {
 			// Both undefined
-			for (int i = 0; i < procTable.size(); i++) {
+			for (size_t i = 0; i < procTable.size(); i++) {
 				call = procTable[i].getCalls();
-				for (int j = 0; j < call.size(); j++) {
+				for (size_t j = 0; j < call.size(); j++) {
 					result.push_back(make_pair(i, call[j]));
 				}
 			}
@@ -431,7 +431,7 @@ vector<pair<int, int>> PKB::getCalls(int procIndexFirst, int procIndexSecond) {
 		else {
 			// Only Second defined
 			call = procTable[procIndexSecond].getCalledBy();
-			for (int j = 0; j < call.size(); j++) {
+			for (size_t j = 0; j < call.size(); j++) {
 				result.push_back(make_pair(call[j], procIndexSecond));
 			}
 		}
@@ -440,14 +440,14 @@ vector<pair<int, int>> PKB::getCalls(int procIndexFirst, int procIndexSecond) {
 		if (procIndexSecond == -1) {
 			// Only first defined
 			call = procTable[procIndexFirst].getCalls();
-			for (int i = 0; i < call.size(); i++) {
+			for (size_t i = 0; i < call.size(); i++) {
 				result.push_back(make_pair(procIndexFirst, call[i]));
 			}
 		}
 		else {
 			// both defined
 			call = procTable[procIndexFirst].getCalls();
-			for (int i = 0; i < call.size(); i++) {
+			for (size_t i = 0; i < call.size(); i++) {
 				if (call[i] == procIndexSecond) {
 					result.push_back(make_pair(procIndexFirst, procIndexSecond));
 				}
@@ -468,7 +468,7 @@ std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TY
 	if (type1 == 2 && stmtNum != -1) {
 		varNos = procTable.at(stmtNum).getUsed();
 		if (varIndex != -1) {
-			for (int i = 0; i < varNos.size(); i++) {
+			for (size_t i = 0; i < varNos.size(); i++) {
 				if (varNos.at(i) == varIndex) {
 					results.push_back(std::make_pair(stmtNum, varIndex));
 					break;
@@ -476,22 +476,22 @@ std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TY
 			}
 		}
 		else {
-			for (int i = 0; i < varNos.size(); i++) {
+			for (size_t i = 0; i < varNos.size(); i++) {
 				results.push_back(std::make_pair(stmtNum, varNos.at(i)));
 			}
 		}
 	}
 	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
-		for (int i = 1; i < procTable.size(); i++) {
+		for (size_t i = 1; i < procTable.size(); i++) {
 				varNos = procTable.at(i).getUsed();
-				for (int k = 0; k < varNos.size(); k++) {
+				for (size_t k = 0; k < varNos.size(); k++) {
 					results.push_back(std::make_pair(i, varNos.at(k)));
 				}
 			}
 	}
 	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getUses();
-		for (int i = 0; i < varNos.size(); i++) {
+		for (size_t i = 0; i < varNos.size(); i++) {
 			if (varNos.at(i) == varIndex) {
 				results.push_back(std::make_pair(stmtNum, varIndex));
 				break;
@@ -500,23 +500,23 @@ std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TY
 	}	
 	else if(stmtNum != -1) {
 		varNos = stmtTable.at(stmtNum).getUses();
-		for (int i = 0; i < varNos.size(); i++) {
+		for (size_t i = 0; i < varNos.size(); i++) {
 			results.push_back(std::make_pair(stmtNum, varNos.at(i)));
 		}
 	}
 	else if (varIndex != -1) {
 		stmtNos = varTable.at(varIndex).getUsedBy();
-		for (int i = 0; i < stmtNos.size(); i++) {
+		for (size_t i = 0; i < stmtNos.size(); i++) {
 			if (type1 == stmtTable.at(stmtNos.at(i)).getType() || type1 == 1) {
 				results.push_back(std::make_pair(stmtNos.at(i), varIndex));
 			}
 		}
 	}
 	else {
-		for (int i = 1; i < stmtTable.size(); i++) {
+		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == stmtTable.at(i).getType() || type1 == 1 || type2 == 3) {
 				varNos = stmtTable.at(i).getUses();
-				for (int k = 0; k < varNos.size(); k++) {
+				for (size_t k = 0; k < varNos.size(); k++) {
 					results.push_back(std::make_pair(i, varNos.at(k)));
 				}
 			}
@@ -536,7 +536,7 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 	if (stmtNum1 != -1) {
 		childrenStmtNos = stmtTable.at(stmtNum1).getChildren();
 
-		for (int i = 0; i < childrenStmtNos.size(); i++) {
+		for (size_t i = 0; i < childrenStmtNos.size(); i++) {
 			if (stmtNum2 != -1) { // Parent(2, 6)
 				if (stmtNum2 == childrenStmtNos.at(i)) {
 					results.push_back(std::make_pair(stmtNum1, stmtNum2));
@@ -553,16 +553,18 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 	else if (stmtNum2 != -1) { // Parent(s/w,_ , 4)
 		parentStmtNo = stmtTable.at(stmtNum2).getParent();
 
-		if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
-			results.push_back(std::make_pair(parentStmtNo, stmtNum2));
+		if (parentStmtNo > 0) {
+			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(parentStmtNo).getType()) {
+				results.push_back(std::make_pair(parentStmtNo, stmtNum2));
+			}
 		}
 	}
 	else { // Parent(s/w/_, s/w/a/_/c)
-		for (int i = 1; i < stmtTable.size(); i++) {
+		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				childrenStmtNos = stmtTable.at(i).getChildren();
 
-				for (int j = 0; j < childrenStmtNos.size(); j++) {
+				for (size_t j = 0; j < childrenStmtNos.size(); j++) {
 					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(j)).getType()) {
 						results.push_back(std::make_pair(i, childrenStmtNos.at(j)));
 					}
@@ -577,8 +579,7 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 //ZH : tested
 std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::TYPE type2, int stmt2){
 	vector<pair<int, int>> follows;
-	int followedBy;
-	int follow;
+	size_t follow;
 
 	if (stmt1 == -1) {
 		if (stmt2 == -1){
@@ -681,7 +682,7 @@ std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum
 	//(num, )
 	if (stmtNum1 != -1) {
 		children = stmtTable.at(stmtNum1).getChildren();
-		for (int i = 0; i < children.size(); i++) {
+		for (size_t i = 0; i < children.size(); i++) {
 			if (stmtNum2 != -1) { // ParentT(2, 6)
 				if (stmtNum2 == children.at(i)) {
 					results.push_back(std::make_pair(stmtNum1, stmtNum2));					
@@ -693,7 +694,7 @@ std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum
 					extractChildrenT(stmtNum1);
 				}
 				childrenT = stmtTable.at(stmtNum1).getChildrenT();
-				for (int j = 0; j < childrenT.size(); j++) {
+				for (size_t j = 0; j < childrenT.size(); j++) {
 					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || stmtTable.at(childrenT.at(j)).getType() == type2) {
 						results.push_back(std::make_pair(stmtNum1, childrenT.at(j)));
 					}
@@ -705,13 +706,13 @@ std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum
 				extractParentT(stmtNum2);
 			}
 			parentT = stmtTable.at(stmtNum2).getParentT();
-			for (int i = 0; i < parentT.size();i++) {
+			for (size_t i = 0; i < parentT.size();i++) {
 				if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(parentT.at(i)).getType()) {
 					results.push_back(std::make_pair(parentT.at(i), stmtNum2));
 				}
 		}
 	} else { // ParentT(s/w/_, s/w/a/_/c)
-		for (int i = 1; i < stmtTable.size(); i++) {
+		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				if (stmtTable.at(i).getChildrenT().size() == 0) {
 					extractChildrenT(i);
@@ -720,7 +721,7 @@ std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum
 				if (childrenT.at(0) == 0) {
 					continue;
 				}	else {
-					for (int j = 0; j < childrenT.size(); j++) {
+					for (size_t j = 0; j < childrenT.size(); j++) {
 						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenT.at(j)).getType()) {
 							results.push_back(std::make_pair(i, childrenT.at(j)));
 						}
@@ -750,13 +751,13 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			if (type1 == Enum::TYPE::UNDERSCORE || type1 == Enum::TYPE::STATEMENT) {
 				if (type2 == Enum::TYPE::UNDERSCORE || type2 == Enum::TYPE::STATEMENT) {
 					// followsT(_,_) or followsT(s1,s2)
-					for (int i = OFFSET; i < stmtTable.size(); i++) {
+					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable.at(i).getFollowedByT().size() == 0) {
 							extractFollowedByT(i);
 						}
 						followedByT = stmtTable.at(i).getFollowedByT();
 						if (followedByT.size()>0) {
-						for (int j = 0; j < followedByT.size(); j++) {
+						for (size_t j = 0; j < followedByT.size(); j++) {
 								results.push_back(make_pair(i, followedByT.at(j)));
 							}
 						}
@@ -764,14 +765,14 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 				}
 				else {
 					// follows(_ ,call/if/assign/while) or follows(s1, call/if/assign/while)
-					for (int i = OFFSET; i < stmtTable.size(); i++) {
+					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type2) {
 							if (stmtTable.at(i).getFollowsT().size() == 0) {
 								extractFollowsT(i);
 							}
 							followsT = stmtTable.at(i).getFollowsT();
 							if (followsT.size() > 0) {
-								for (int j = 0; j < followsT.size(); j++) {
+								for (size_t j = 0; j < followsT.size(); j++) {
 									results.push_back(make_pair(followsT.at(j),i));
 								}
 							}
@@ -782,14 +783,14 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			else {
 				if (type2 == Enum::TYPE::UNDERSCORE || type2 == Enum::TYPE::STATEMENT) {
 					// follows(call/if/assign/while, _) or follows(call/if/assign/while, s1)
-					for (int i = OFFSET; i < stmtTable.size(); i++) {
+					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
 							if (stmtTable.at(i).getFollowedByT().size() == 0) {
 								extractFollowedByT(i);
 							}
 							followedByT = stmtTable.at(i).getFollowedByT();
 							if (followedByT.size() > 0) {
-								for (int j = 0; j < followedByT.size(); j++) {
+								for (size_t j = 0; j < followedByT.size(); j++) {
 									results.push_back(make_pair(i, followedByT.at(j)));
 								}
 							}
@@ -798,14 +799,14 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 				}
 				else {
 					// follws(call/if/assign/while, call/if/assign/while)
-					for (int i = OFFSET; i < stmtTable.size(); i++) {
+					for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 						if (stmtTable[i].getType() == type1) {
 							if (stmtTable.at(i).getFollowedByT().size() == 0) {
 								extractFollowedByT(i);
 							}
 							followedByT = stmtTable.at(i).getFollowedByT();
 							if (followedByT.size() > 0) {
-								for (int j = 0; j < followedByT.size(); j++) {
+								for (size_t j = 0; j < followedByT.size(); j++) {
 									if (stmtTable[followedByT.at(j)].getType() == type2) {
 										results.push_back(make_pair(i, followedByT.at(j)));
 									}
@@ -824,7 +825,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			}
 			followsT = stmtTable.at(stmt2).getFollowsT();
 			if (followsT.size() > 0) {
-				for (int i = 0; i < followsT.size(); i++) {
+				for (size_t i = 0; i < followsT.size(); i++) {
 					results.push_back(make_pair(followsT.at(i), stmt2));
 				}
 			}
@@ -839,7 +840,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			}
 			followedByT = stmtTable.at(stmt1).getFollowedByT();
 			if (followedByT.size() > 0) {
-				for (int i = 0; i < followedByT.size(); i++) {
+				for (size_t i = 0; i < followedByT.size(); i++) {
 					results.push_back(make_pair(stmt1, followedByT.at(i)));
 				}
 			}
@@ -851,7 +852,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			}
 			followedByT = stmtTable.at(stmt1).getFollowedByT();
 			if (followedByT.size() > 0) {
-				for (int i = 0; i < followedByT.size(); i++) {
+				for (size_t i = 0; i < followedByT.size(); i++) {
 					if (followedByT.at(i) == stmt2) {
 						results.push_back(make_pair(stmt1, stmt2));
 						break;
@@ -891,7 +892,7 @@ void PKB::extractParentT(int stmtNum)
 	vector<int> parentCol;
 	vector<int> parentT;
 
-	for (int i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = 0; i < stmtTable.size(); i++) {
 		parentCol.push_back(stmtTable.at(i).getParent());
 	}
 	
@@ -909,7 +910,7 @@ void PKB::extractChildrenT(int stmtNum)
 	vector<vector<int>> childrenCol;
 	vector<int> childrenT;
 
-	for (int i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = 0; i < stmtTable.size(); i++) {
 		childrenCol.push_back(stmtTable.at(i).getChildren());
 	}
 
@@ -928,7 +929,7 @@ void PKB::extractFollowsT(int stmtNum)
 	vector<int> followsCol;
 	vector<int> followsT;
 
-	for (int i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = 0; i < stmtTable.size(); i++) {
 		followsCol.push_back(stmtTable.at(i).getFollows());
 	}
 
@@ -946,7 +947,7 @@ void PKB::extractFollowedByT(int stmtNum)
 	vector<int> followedByCol;
 	vector<int> followedByT;
 
-	for (int i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = 0; i < stmtTable.size(); i++) {
 		followedByCol.push_back(stmtTable.at(i).getFollowedBy());
 	}
 
@@ -999,7 +1000,7 @@ int PKB::getProcIndex(string procName){
 		return NOT_FOUND;
 	}
 
-	for (int i = 0; i < procTable.size(); i++) {
+	for (size_t i = 0; i < procTable.size(); i++) {
 		if (procTable[i].getName() == procName) {
 			return i;
 		}
@@ -1017,7 +1018,7 @@ string PKB::getProcName(int procIndex)
 //ZH : tested
 int PKB::getVarIndex(string varName){
 
-	for (int i = 0; i < varTable.size(); i++) {
+	for (size_t i = 0; i < varTable.size(); i++) {
 		if (varTable[i].getVarName() == varName) {
 			return i;
 		}
@@ -1046,6 +1047,7 @@ int PKB::getNoOfVar() {
 	return varTable.size();
 }
 
+<<<<<<< HEAD
 int PKB::getConstantIndex(int constant)
 {
 	for (int i = 0; i < constantTable.size(); i++) {
@@ -1056,3 +1058,10 @@ int PKB::getConstantIndex(int constant)
 
 	return NOT_FOUND;
 }
+=======
+int PKB::getControlVar(int stmtIndex)
+{
+	return stmtTable[stmtIndex].getControlVarIndex();
+}
+
+>>>>>>> f1c43e3395f34c50f700424f780e169f906ebb65

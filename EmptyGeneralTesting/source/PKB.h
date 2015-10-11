@@ -122,10 +122,14 @@ public:
 
 	int getNoOfProc();
 	int getNoOfVar();
+<<<<<<< HEAD
 
 	//From ConstantTable
 	int getConstantIndex(int constant);
 
+=======
+	int getControlVar(int stmtIndex);
+>>>>>>> f1c43e3395f34c50f700424f780e169f906ebb65
 	//While table
 	//int getWholeStmt(int, int);
 
