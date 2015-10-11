@@ -32,6 +32,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> suchThat;
 	vector<Clauses> pattern;
 	vector<Clauses> select;
+	vector<Clauses> with;
 	vector<vector<string>> intermediateResult;
 	list<string> result;
 	bool isTrueClause;
@@ -43,6 +44,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 
 	suchThat = tree.getSuchThatTree();
 	pattern = tree.getPatternTree();
+	with = tree.getWithTree();
 	select = tree.getResultTree();
 
 	for (size_t i = 0; i < suchThat.size(); i++) {
@@ -55,6 +57,14 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 
 	for (size_t i = 0; i < pattern.size(); i++) {
 		isTrueClause = evaluatePattern(pattern[i]);
+		if (!isTrueClause) {
+			list<string> emptyResult{ EMPTY_STRING };
+			return emptyResult;
+		}
+	}
+
+	for (size_t i = 0; i < with.size(); i++) {
+		isTrueClause = evaluateWith(with[i]);
 		if (!isTrueClause) {
 			list<string> emptyResult{ EMPTY_STRING };
 			return emptyResult;
@@ -240,6 +250,56 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 
 vector<Synonym> QueryEvaluator::getResults(){
 	return this->results;
+}
+
+// without consideration to constant
+bool QueryEvaluator::evaluateWith(Clauses clause) {
+	vector<int> results;
+
+	if (clause.getRightCIntValue() != NOT_FOUND) {
+		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE && clause.getLeftCType() != Enum::TYPE::CALLS) {
+			if (!evaluateValidStmtRefs(clause)) {
+				return false;
+			}
+		}
+
+		results.push_back(clause.getRightCIntValue());
+		storeResults(results, clause.getLeftCStringValue(), clause.getLeftCType());
+		return true;
+	}
+	else { // n = c.value / s/a/w/if.stmt# = c.value / v.varName/p.procName/call.procName = p.procName/v.varName/call.procName
+/*		if(clause.getLeftCType() == Enum::TYPE::VARIABLE || clause.getLeftCType() == Enum::TYPE::PROCEDURE || clause.getLeftCType() == Enum::TYPE::CALL) {
+			return checkForEqualStringNames(clause);
+		} else {
+		   return checkForEqualIntValues(clause);
+		}*/
+	}
+}
+
+bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
+	switch (clause.getLeftCType()) {
+	case Enum::TYPE::STATEMENT:
+		return (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt());
+		break;
+	case Enum::TYPE::ASSIGN:
+		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
+			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::ASSIGN);
+		}
+		break;
+	case Enum::TYPE::WHILE:
+		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
+			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::WHILE);
+		}
+		break;
+	case Enum::TYPE::IF:
+		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
+			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::IF);
+		}
+		break;
+	default:
+		return false;
+		break;
+	}
 }
 
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {

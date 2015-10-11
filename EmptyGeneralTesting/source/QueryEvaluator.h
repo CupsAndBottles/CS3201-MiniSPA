@@ -23,6 +23,8 @@ public:
 private:
 	QueryTree tree;
 	vector<Synonym> results;
+	bool evaluateWith(Clauses clause);
+	bool evaluateValidStmtRefs(Clauses clause);
 	bool evaluateSuchThat(Clauses clause);
 	bool evaluatePattern(Clauses clause);
 	bool evaluateWhile(Clauses clause);
