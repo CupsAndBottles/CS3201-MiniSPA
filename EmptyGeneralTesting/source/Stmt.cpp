@@ -75,6 +75,14 @@ void Stmt::setParentT(vector<int> parentTList) {
 void Stmt::setChildrenT(vector<int> childrenTList) {
 	childrenT = childrenTList;
 }
+//---------------set next and next*----------------
+void Stmt::setNext(vector<int> nList) {
+	nextList = nList;
+}
+
+void Stmt::setNextT(vector<int> nTList) {
+	nextTList = nTList;
+}
 //---------------------------------------------------
 int Stmt::getType() {
 	return type;
@@ -129,4 +137,13 @@ vector<int> Stmt::setUsedConstant() {
 
 string Stmt::getRightExpression() {
 	return rightExpression;
+}
+
+//---------------get next and next*----------------
+vector<int> Stmt::getNext() {
+	return nextList;
+}
+
+vector<int> Stmt::getNextT() {
+	return nextTList;
 }

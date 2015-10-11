@@ -23,6 +23,10 @@ public:
 	void setParentT(vector<int> parentTList);
 	void setChildrenT(vector<int> childrenTList);
 
+	void setNext(vector<int> nList);
+
+	void setNextT(vector<int> nTList);
+
 	int getType();
 	int getParent();
 
@@ -40,6 +44,10 @@ public:
 	vector<int> setUsedConstant();
 
 	string getRightExpression();
+
+	vector<int> getNext();
+
+	vector<int> getNextT();
 
 	int getFollows();
 
@@ -59,6 +67,8 @@ private:
 	vector<int> followsT;
 	vector<int> usedVarList;
 	vector<int> modifiedVarList;
+	vector<int> nextList;
+	vector<int> nextTList;
 	string rightExpression;
 };
 
