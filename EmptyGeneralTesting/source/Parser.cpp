@@ -142,8 +142,10 @@ void Parser::Procedure() {
 			processIfElse((*i).first, (*i).second);
 		}
 		else if (stmt.find("call") != std::string::npos) {
+			cout << "call run\n";
 			pkb->setType(Enum::CALLS);
 			processCalls((*i).first, (*i).second);
+			
 		}
 		else {
 			pkb->setType(Enum::ASSIGN);
@@ -159,11 +161,10 @@ void Parser::Procedure() {
 void Parser::setRelationsInTable() {
 	pkb->setChildren(parentLink);
 	pkb->setFollows(followLink);
-	while (!callsLink.empty()) {
-		pair<int, string> paired = callsLink.back();
-		callsLink.pop_back();
-	//	cout << "First: " << paired.first << "\n";
-	//	cout << "Second: " << paired.second << "\n";
+	string procName = pkb->setProcCalls(callsLink);
+	if (!procName.empty()) {
+		cout << "ProcName: " << procName << " does not exist.\n";
+		exit(0);
 	}
 }
 
@@ -211,10 +212,20 @@ void Parser::processCalls(int index, string stmt)
 	pair<int, string> callsPair;
 	string procCalls = stmt.substr(stmt.find("call") + 4);
 	size_t semiColonPos = procCalls.find(";");
-	procCalls.replace(semiColonPos, string(";").length(), "");
-
+	if (semiColonPos != std::string::npos) {
+		procCalls.replace(semiColonPos, string(";").length(), "");
+	}
 	size_t bracketPos = procCalls.find("}");
-	procCalls.replace(bracketPos, string("}").length(), "");
+	if (bracketPos != std::string::npos) {
+		procCalls.replace(bracketPos, string("}").length(), "");
+
+	}
+	int procExist = pkb->getProcIndex(procCalls);
+	
+	if (procExist ==procNumInTble) {
+		cout << "\nError: Procedure " << procCalls << " calling itself!";
+		exit(0);
+	}
 
 	callsPair.first = procNumInTble;
 	callsPair.second = procCalls;
