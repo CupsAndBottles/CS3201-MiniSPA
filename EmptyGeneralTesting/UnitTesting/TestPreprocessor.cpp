@@ -549,6 +549,28 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCType()), 6);
 			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCIsExpression(), false);
+
+			input = "if ifs; assign a1, a2; variable v1, v2; stmt s; Select ifs with a2.stmt# = a1.stmt# and a1.stmt# = s.stmt#";
+
+			ParserForPQL parser6(input, *pkb);
+			queryTree = parser6.getQueryTree();
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("a2"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 0);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("a1"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 0);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCStringValue(), string("a1"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCType()), 0);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCStringValue(), string("s"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(1).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(1).getRightCIsExpression(), false);
 		}
 		};
 }

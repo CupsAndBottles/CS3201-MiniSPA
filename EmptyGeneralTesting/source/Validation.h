@@ -28,11 +28,16 @@ public:
 		std::regex("\\bvariable\\b|\\b_\\b|\\bequation\\b|\\bconstant\\b"), //7 for assign arg2 (7)
 		std::regex("\\bprocedure\\b|\\b_\\b"), //for calls (8)
 		std::regex("\\bassign\\b|\\b_\\b|\\bprog_line\\b"),//for affect (9)
-		std::regex("\\bassign\\b|\\bstmt\\b|\\bwhile\\b|\\bif\\b"), //for stmt# with(10)
+		std::regex("\\bassign\\b|\\bstmt\\b|\\bwhile\\b|\\bif\\b|\\bcall\\b"), //for stmt# with(10)
 		std::regex("\\bprocedure\\b|\\bcall\\b"), //for procName with (11)
 		std::regex("\\bconstant\\b"), //for value with (12)
-		std::regex("\\bconstant\\b|\\bstmt\\b"), //for size 4 of with cases of stmt and constant (13)
-		std::regex("\\bprocedure\\b|\\bvariable\\b") //for size 4 of with cases of proc and var (14)
+		std::regex("\\bconstant\\b|\\bstmt\\b|\\bassign\\b|\\bstmt\\b|\\bwhile\\b|\\bif\\b|\\bcall\\b"), //for size 4 of with cases of constant (13)
+		std::regex("\\bprocedure\\b|\\bvariable\\b|\\bcall\\b"), //for size 4 of with cases of proc and var (14)
+		std::regex("\\bassign\\b|\\bconstant\\b|\\bstmt\\b"), //for size 4 of with cases of assign (15)
+		std::regex("\\bassign\\b|\\bstmt\\b|\\bwhile\\b|\\bif\\b|\\bcall\\b|\\bconstant\\b"), // for size 4 of stmt (16)
+		std::regex("\\bwhile\\b|\\bconstant\\b|\\bstmt\\b"), // for size 4 of while (17)
+		std::regex("\\bif\\b|\\bconstant\\b|\\bstmt\\b"), // for size 4 of if (18)
+		//std::regex("\\bcall\\b|\\bconstant\\b|\\bstmt\\b") // for size 4 of call (19)
 	};
 };
 
