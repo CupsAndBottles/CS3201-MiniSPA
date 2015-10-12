@@ -161,7 +161,7 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	bool hasCommonSyn = false;
 
 	string synonym = select.getParentStringVal();
-	Enum::TYPE type = select.getParent().getType();
+	Enum::TYPE type = select.getParentType();
 
 	for (size_t i = 0; i < this->results.size(); i++) {
 		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
@@ -305,39 +305,39 @@ bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	vector<pair<int, int>> results;
 	string relationship = clause.getParentStringVal();
-	Details firstParam = clause.getLeftChild();
-	Details secondParam = clause.getRightChild();
 
-	int indexForFirstParam = firstParam.getIntValue();
-	int indexForSecondParam = secondParam.getIntValue();
+	Enum::TYPE firstParamType = clause.getLeftCType();
+	Enum::TYPE secondParamType = clause.getRightCType();
+	int firstParamIndex = clause.getLeftCIntValue();
+	int secondParamIndex = clause.getRightCIntValue();
 
 	if (relationship == RELATIONSHIP_CALLS) {
-		results = this->pkb->getCalls(indexForFirstParam, indexForSecondParam);
+		results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
 	} /*else if (relationship == RELATIONSHIP_CALLST {
-	  results = this->pkb->getCalls*(indexForFirstParam, indexForSecondParam);
+	  results = this->pkb->getCalls*(firstParamIndex, secondParamIndex);
 	}*/
 	else if (relationship == RELATIONSHIP_FOLLOWS) {
-		results = this->pkb->getFollows(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	}
 	else if (relationship == RELATIONSHIP_FOLLOWST) {
-		results = this->pkb->getFollowsT(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getFollowsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	}
 	else if (relationship == RELATIONSHIP_MODIFIES) {
-		results = this->pkb->getModifies(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getModifies(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	}
 	else if (relationship == RELATIONSHIP_PARENT) {
-		results = this->pkb->getParent(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getParent(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	}
 	else if (relationship == RELATIONSHIP_PARENTT) {
-		results = this->pkb->getParentT(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getParentT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	}
 	else if (relationship == RELATIONSHIP_USES) {
-		results = this->pkb->getUses(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getUses(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	}
 /*	else if (relationship == RELATIONSHIP_NEXT) {
-		results = this->pkb->getNext(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	} else if (relationship == RELATIONSHIP_NEXT*) {
-		results = this->pkb->getNext*(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+		results = this->pkb->getNext*(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 	}*/
 	else {
 
@@ -500,26 +500,23 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	vector<int> firstSynResults;
 	vector<int> secondSynResults;
 
-	Details firstParam = clause.getLeftChild();
-	Details secondParam = clause.getRightChild();
-
-	if (firstParam.getIntValue() == WILDCARD) {
+	if (clause.getLeftCIntValue() == WILDCARD) {
 		for (size_t i = 0; i < results.size(); i++) {
 			firstSynResults.push_back(results[i].first);
 		}
 
 		sort(firstSynResults.begin(), firstSynResults.end());
 		firstSynResults.erase(unique(firstSynResults.begin(), firstSynResults.end()), firstSynResults.end());
-		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
+		storeResults(firstSynResults, clause.getLeftCStringValue(), clause.getLeftCType());
 	}
 
-	if (secondParam.getIntValue() == WILDCARD) {
+	if (clause.getRightCIntValue() == WILDCARD) {
 		for (size_t i = 0; i < results.size(); i++) {
 			secondSynResults.push_back(results[i].second);
 		}
 		sort(secondSynResults.begin(), secondSynResults.end());
 		secondSynResults.erase(unique(secondSynResults.begin(), secondSynResults.end()), secondSynResults.end());
-		storeResults(secondSynResults, secondParam.getStringValue(), secondParam.getType());
+		storeResults(secondSynResults, clause.getRightCStringValue(), clause.getRightCType());
 	}
 }
 
