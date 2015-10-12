@@ -13,7 +13,6 @@ Details::~Details()
 bool Details::getIsExpression()
 {
 	return isExpression;
-	return false;
 }
 
 string Details::getStringValue()

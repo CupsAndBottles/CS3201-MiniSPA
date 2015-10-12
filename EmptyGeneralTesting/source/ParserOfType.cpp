@@ -41,9 +41,10 @@ vector<vector<string>> ParserOfType::setType(PKB &querypkb, int clauseType, stri
 		return synAndType;
 	}
 	else if (isSynDigit(synonym) && clauseType == 2) {
+		index = pkb->getConstantIndex(atoi(synonym.c_str()));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("constant");
-		synAndType[2].push_back(synonym);
+		synAndType[2].push_back(std::to_string(index));
 		synAndType[3].push_back(isSubExpression);
 	
 		return synAndType;
@@ -164,10 +165,18 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 	synAndType.push_back(vector <string>()); //intVal
 	synAndType.push_back(vector <string>()); //isExpression
 
-	if (isSynDigit(synonym)) {
+	if (isSynDigit(synonym) && clauseType == "prog_line") {
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back(clauseType);
 		synAndType[2].push_back(synonym);
+		synAndType[3].push_back("0");
+		return synAndType;
+	}
+	else if (isSynDigit(synonym) && clauseType == "constant") {
+		int index = pkb->getConstantIndex(atoi(synonym.c_str()));
+		synAndType[0].push_back(synonym);
+		synAndType[1].push_back("constant");
+		synAndType[2].push_back(std::to_string(index));
 		synAndType[3].push_back("0");
 		return synAndType;
 	}
