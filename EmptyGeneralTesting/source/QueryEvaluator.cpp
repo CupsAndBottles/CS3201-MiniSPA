@@ -12,6 +12,9 @@ const string RELATIONSHIP_MODIFIES = "Modifies";
 const string RELATIONSHIP_PARENT = "Parent";
 const string RELATIONSHIP_PARENTT = "Parent*";
 const string RELATIONSHIP_USES = "Uses";
+const string STRING_BOOLEAN = "BOOLEAN";
+const string STRING_FALSE = "FALSE";
+const string STRING_TRUE = "TRUE";
 
 QueryEvaluator::QueryEvaluator()
 {
@@ -36,6 +39,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<vector<string>> intermediateResult;
 	list<string> result;
 	bool isTrueClause;
+	//bool isTrueSuchThatClause, isTruePatternClause, isTrueWithClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
 		list<string> emptyResult{ EMPTY_STRING };
@@ -50,7 +54,13 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < suchThat.size(); i++) {
 		isTrueClause = evaluateSuchThat(suchThat[i]);
 		if (!isTrueClause) {
-			list<string> emptyResult{ EMPTY_STRING };
+			list<string> emptyResult;
+			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+				emptyResult = { STRING_FALSE };
+			}
+			else {
+				emptyResult = { EMPTY_STRING };
+			}
 			return emptyResult;
 		}
 	}
@@ -58,7 +68,13 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < pattern.size(); i++) {
 		isTrueClause = evaluatePattern(pattern[i]);
 		if (!isTrueClause) {
-			list<string> emptyResult{ EMPTY_STRING };
+			list<string> emptyResult;
+			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+				emptyResult = { STRING_FALSE };
+			}
+			else {
+				emptyResult = { EMPTY_STRING };
+			}
 			return emptyResult;
 		}
 	}
@@ -66,9 +82,20 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < with.size(); i++) {
 		isTrueClause = evaluateWith(with[i]);
 		if (!isTrueClause) {
-			list<string> emptyResult{ EMPTY_STRING };
+			list<string> emptyResult;
+			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+				emptyResult = { STRING_FALSE };
+			}
+			else {
+				emptyResult = { EMPTY_STRING };
+			}
 			return emptyResult;
 		}
+	}
+
+	if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+		list<string> trueResult = { STRING_TRUE };
+		return trueResult;
 	}
 
 	for (size_t i = 0; i < select.size(); i++) {
