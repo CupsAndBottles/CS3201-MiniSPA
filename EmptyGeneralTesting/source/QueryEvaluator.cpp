@@ -284,8 +284,9 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 	vector<int> results;
 
 	if (clause.getRightCIntValue() != NOT_FOUND) {
-		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE && clause.getLeftCType() != Enum::TYPE::CALLS) {
-			if (!evaluateValidStmtRefs(clause)) {
+		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE 
+			&& clause.getLeftCType() != Enum::TYPE::CALLS && clause.getLeftCType() != Enum::TYPE::CONSTANT) {
+			if (!evaluateValidStmtRefs(clause.getLeftCType(), clause.getRightCIntValue())) {
 				return false;
 			}
 		}
@@ -303,24 +304,24 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 	}
 }
 
-bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
-	switch (clause.getLeftCType()) {
+bool QueryEvaluator::evaluateValidStmtRefs(Enum::TYPE type, int index) {
+	switch (type) {
 	case Enum::TYPE::STATEMENT:
-		return (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt());
+		return (0 < index && index <= pkb->getNoOfStmt());
 		break;
 	case Enum::TYPE::ASSIGN:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::ASSIGN);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::ASSIGN);
 		}
 		break;
 	case Enum::TYPE::WHILE:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::WHILE);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::WHILE);
 		}
 		break;
 	case Enum::TYPE::IF:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::IF);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::IF);
 		}
 		break;
 	default:
@@ -330,6 +331,8 @@ bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
 }
 
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
+	bool hasValidFirstIndex = false;
+	bool hasValidSecondIndex = false;
 	vector<pair<int, int>> results;
 	string relationship = clause.getParentStringVal();
 
@@ -338,38 +341,65 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	int firstParamIndex = clause.getLeftCIntValue();
 	int secondParamIndex = clause.getRightCIntValue();
 
-	if (relationship == RELATIONSHIP_CALLS) {
-		results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
-	} /*else if (relationship == RELATIONSHIP_CALLST {
-	  results = this->pkb->getCalls*(firstParamIndex, secondParamIndex);
-	}*/
-	else if (relationship == RELATIONSHIP_FOLLOWS) {
-		results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+	if (firstParamType != Enum::TYPE::CALLS && firstParamType != Enum::TYPE::PROCEDURE
+		&& firstParamType != Enum::TYPE::VARIABLE && firstParamType != Enum::TYPE::CONSTANT) {
+		if (firstParamIndex != NOT_FOUND) {
+			hasValidFirstIndex = evaluateValidStmtRefs(firstParamType, firstParamIndex);
+		}
+		else {
+			hasValidFirstIndex = true;
+		}
 	}
-	else if (relationship == RELATIONSHIP_FOLLOWST) {
-		results = this->pkb->getFollowsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_MODIFIES) {
-		results = this->pkb->getModifies(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_PARENT) {
-		results = this->pkb->getParent(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_PARENTT) {
-		results = this->pkb->getParentT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_USES) {
-		results = this->pkb->getUses(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-/*	else if (relationship == RELATIONSHIP_NEXT) {
-		results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	} else if (relationship == RELATIONSHIP_NEXT*) {
-		results = this->pkb->getNext*(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}*/
 	else {
-
+		hasValidFirstIndex = true;
 	}
 
+	if (secondParamType != Enum::TYPE::CALLS && secondParamType != Enum::TYPE::PROCEDURE
+		&& secondParamType != Enum::TYPE::VARIABLE && secondParamType != Enum::TYPE::CONSTANT) {
+		if (secondParamIndex != NOT_FOUND) {
+			hasValidSecondIndex = evaluateValidStmtRefs(secondParamType, secondParamIndex);
+		}
+		else {
+			hasValidSecondIndex = true;
+		}
+	}
+	else {
+		hasValidSecondIndex = true;
+	}
+
+	if (hasValidFirstIndex && hasValidSecondIndex) {
+		if (relationship == RELATIONSHIP_CALLS) {
+			results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
+		} /*else if (relationship == RELATIONSHIP_CALLST {
+			results = this->pkb->getCalls*(firstParamIndex, secondParamIndex);
+		}*/
+		else if (relationship == RELATIONSHIP_FOLLOWS) {
+			results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_FOLLOWST) {
+			results = this->pkb->getFollowsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_MODIFIES) {
+			results = this->pkb->getModifies(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_PARENT) {
+			results = this->pkb->getParent(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_PARENTT) {
+			results = this->pkb->getParentT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_USES) {
+			results = this->pkb->getUses(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		/*	else if (relationship == RELATIONSHIP_NEXT) {
+				results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+			} else if (relationship == RELATIONSHIP_NEXT*) {
+				results = this->pkb->getNext*(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+			}*/
+		else {
+
+		}
+	}
 	storeResultsForSyn(clause, results);
 
 	if (!results.empty()) {
