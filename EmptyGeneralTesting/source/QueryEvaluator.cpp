@@ -188,7 +188,7 @@ vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
 	bool hasCommonSyn = false;
 
 	string synonym = select.getParentStringVal();
-	Enum::TYPE type = select.getParent().getType();
+	Enum::TYPE type = select.getParentType();
 
 	for (size_t i = 0; i < this->results.size(); i++) {
 		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
@@ -284,8 +284,9 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 	vector<int> results;
 
 	if (clause.getRightCIntValue() != NOT_FOUND) {
-		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE && clause.getLeftCType() != Enum::TYPE::CALLS) {
-			if (!evaluateValidStmtRefs(clause)) {
+		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE 
+			&& clause.getLeftCType() != Enum::TYPE::CALLS && clause.getLeftCType() != Enum::TYPE::CONSTANT) {
+			if (!evaluateValidStmtRefs(clause.getLeftCType(), clause.getRightCIntValue())) {
 				return false;
 			}
 		}
@@ -303,24 +304,24 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 	}
 }
 
-bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
-	switch (clause.getLeftCType()) {
+bool QueryEvaluator::evaluateValidStmtRefs(Enum::TYPE type, int index) {
+	switch (type) {
 	case Enum::TYPE::STATEMENT:
-		return (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt());
+		return (0 < index && index <= pkb->getNoOfStmt());
 		break;
 	case Enum::TYPE::ASSIGN:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::ASSIGN);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::ASSIGN);
 		}
 		break;
 	case Enum::TYPE::WHILE:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::WHILE);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::WHILE);
 		}
 		break;
 	case Enum::TYPE::IF:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::IF);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::IF);
 		}
 		break;
 	default:
@@ -330,46 +331,75 @@ bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
 }
 
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
+	bool hasValidFirstIndex = false;
+	bool hasValidSecondIndex = false;
 	vector<pair<int, int>> results;
 	string relationship = clause.getParentStringVal();
-	Details firstParam = clause.getLeftChild();
-	Details secondParam = clause.getRightChild();
 
-	int indexForFirstParam = firstParam.getIntValue();
-	int indexForSecondParam = secondParam.getIntValue();
+	Enum::TYPE firstParamType = clause.getLeftCType();
+	Enum::TYPE secondParamType = clause.getRightCType();
+	int firstParamIndex = clause.getLeftCIntValue();
+	int secondParamIndex = clause.getRightCIntValue();
 
-	if (relationship == RELATIONSHIP_CALLS) {
-		results = this->pkb->getCalls(indexForFirstParam, indexForSecondParam);
-	} /*else if (relationship == RELATIONSHIP_CALLST {
-	  results = this->pkb->getCalls*(indexForFirstParam, indexForSecondParam);
-	}*/
-	else if (relationship == RELATIONSHIP_FOLLOWS) {
-		results = this->pkb->getFollows(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
+	if (firstParamType != Enum::TYPE::CALLS && firstParamType != Enum::TYPE::PROCEDURE
+		&& firstParamType != Enum::TYPE::VARIABLE && firstParamType != Enum::TYPE::CONSTANT) {
+		if (firstParamIndex != NOT_FOUND) {
+			hasValidFirstIndex = evaluateValidStmtRefs(firstParamType, firstParamIndex);
+		}
+		else {
+			hasValidFirstIndex = true;
+		}
 	}
-	else if (relationship == RELATIONSHIP_FOLLOWST) {
-		results = this->pkb->getFollowsT(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
-	}
-	else if (relationship == RELATIONSHIP_MODIFIES) {
-		results = this->pkb->getModifies(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
-	}
-	else if (relationship == RELATIONSHIP_PARENT) {
-		results = this->pkb->getParent(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
-	}
-	else if (relationship == RELATIONSHIP_PARENTT) {
-		results = this->pkb->getParentT(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
-	}
-	else if (relationship == RELATIONSHIP_USES) {
-		results = this->pkb->getUses(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
-	}
-/*	else if (relationship == RELATIONSHIP_NEXT) {
-		results = this->pkb->getNext(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
-	} else if (relationship == RELATIONSHIP_NEXT*) {
-		results = this->pkb->getNext*(firstParam.getType(), indexForFirstParam, secondParam.getType(), indexForSecondParam);
-	}*/
 	else {
-
+		hasValidFirstIndex = true;
 	}
 
+	if (secondParamType != Enum::TYPE::CALLS && secondParamType != Enum::TYPE::PROCEDURE
+		&& secondParamType != Enum::TYPE::VARIABLE && secondParamType != Enum::TYPE::CONSTANT) {
+		if (secondParamIndex != NOT_FOUND) {
+			hasValidSecondIndex = evaluateValidStmtRefs(secondParamType, secondParamIndex);
+		}
+		else {
+			hasValidSecondIndex = true;
+		}
+	}
+	else {
+		hasValidSecondIndex = true;
+	}
+
+	if (hasValidFirstIndex && hasValidSecondIndex) {
+		if (relationship == RELATIONSHIP_CALLS) {
+			results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
+		} /*else if (relationship == RELATIONSHIP_CALLST {
+			results = this->pkb->getCalls*(firstParamIndex, secondParamIndex);
+		}*/
+		else if (relationship == RELATIONSHIP_FOLLOWS) {
+			results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_FOLLOWST) {
+			results = this->pkb->getFollowsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_MODIFIES) {
+			results = this->pkb->getModifies(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_PARENT) {
+			results = this->pkb->getParent(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_PARENTT) {
+			results = this->pkb->getParentT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_USES) {
+			results = this->pkb->getUses(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		/*	else if (relationship == RELATIONSHIP_NEXT) {
+				results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+			} else if (relationship == RELATIONSHIP_NEXT*) {
+				results = this->pkb->getNext*(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+			}*/
+		else {
+
+		}
+	}
 	storeResultsForSyn(clause, results);
 
 	if (!results.empty()) {
@@ -527,26 +557,23 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	vector<int> firstSynResults;
 	vector<int> secondSynResults;
 
-	Details firstParam = clause.getLeftChild();
-	Details secondParam = clause.getRightChild();
-
-	if (firstParam.getIntValue() == WILDCARD) {
+	if (clause.getLeftCIntValue() == WILDCARD) {
 		for (size_t i = 0; i < results.size(); i++) {
 			firstSynResults.push_back(results[i].first);
 		}
 
 		sort(firstSynResults.begin(), firstSynResults.end());
 		firstSynResults.erase(unique(firstSynResults.begin(), firstSynResults.end()), firstSynResults.end());
-		storeResults(firstSynResults, firstParam.getStringValue(), firstParam.getType());
+		storeResults(firstSynResults, clause.getLeftCStringValue(), clause.getLeftCType());
 	}
 
-	if (secondParam.getIntValue() == WILDCARD) {
+	if (clause.getRightCIntValue() == WILDCARD) {
 		for (size_t i = 0; i < results.size(); i++) {
 			secondSynResults.push_back(results[i].second);
 		}
 		sort(secondSynResults.begin(), secondSynResults.end());
 		secondSynResults.erase(unique(secondSynResults.begin(), secondSynResults.end()), secondSynResults.end());
-		storeResults(secondSynResults, secondParam.getStringValue(), secondParam.getType());
+		storeResults(secondSynResults, clause.getRightCStringValue(), clause.getRightCType());
 	}
 }
 
