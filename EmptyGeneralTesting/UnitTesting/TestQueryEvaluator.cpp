@@ -1845,6 +1845,7 @@ namespace UnitTesting
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
 			parent.push_back(make_pair(6, 7));
+			parent.push_back(make_pair(4, 8));
 			pkb->setChildren(parent);
 
 			// Statement 1 - set constant as variables?
