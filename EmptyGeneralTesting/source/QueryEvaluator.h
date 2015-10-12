@@ -25,6 +25,14 @@ private:
 	vector<Synonym> results;
 	bool evaluateWith(Clauses clause);
 	bool evaluateValidStmtRefs(Enum::TYPE type, int index);
+	bool evaluateNonGivenAttr(Clauses clause);
+	bool hasSameAttrNames(Clauses clause);
+	bool hasSameAttrValues(Clauses clause);
+	vector<string> getAllAttrNames(Enum::TYPE type);
+	vector<int> getAllAttrValues(Enum::TYPE type);
+	bool getCommonAttrNames(vector<string> leftResults, vector<string> rightResults, Clauses clause);
+	bool getCommonAttrValues(vector<int> leftResults, vector<int> rightResults, Clauses clause);
+	vector<int> convertNamesToIndexes(vector<string> stringResults, Enum::TYPE type);
 	bool evaluateSuchThat(Clauses clause);
 	bool evaluatePattern(Clauses clause);
 	bool evaluateWhile(Clauses clause);
