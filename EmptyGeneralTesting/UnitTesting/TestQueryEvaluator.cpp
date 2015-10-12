@@ -2578,8 +2578,8 @@ namespace UnitTesting
 
 
 			pkb->setProcUses(0, varUsed);
-
-			ParserForPQL parserPQL = ParserForPQL("stmt s; assign a; Select s with a.stmt# = s.stmt#", *pkb);
+			Assert::AreEqual(string("#"), string("2"));
+			ParserForPQL parserPQL = ParserForPQL("assign a; stmt s; Select s with a.stmt# = s.stmt#", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 

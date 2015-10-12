@@ -347,21 +347,36 @@ bool QueryEvaluator::evaluateNonGivenAttr(Clauses clause) {
 		return hasSameAttrNames(clause);
 		break;
 	case Enum::TYPE::ASSIGN:
-		return hasSameAttrValues(clause);
+		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT 
+			|| clause.getRightCType() == Enum::TYPE::ASSIGN) {
+			return hasSameAttrValues(clause);
+		}
+		else {
+			return false;
+		}
 		break;
 	case Enum::TYPE::STATEMENT:
 		return hasSameAttrValues(clause);
 		break;
 	case Enum::TYPE::IF:
-		return hasSameAttrValues(clause);
+		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
+			|| clause.getRightCType() == Enum::TYPE::IF) {
+			return hasSameAttrValues(clause);
+		}
+		else {
+			return false;
+		}
 		break;
 	case Enum::TYPE::WHILE:
+		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
+			|| clause.getRightCType() == Enum::TYPE::WHILE) {
+			return hasSameAttrValues(clause);
+		}
+		break;
+	case Enum::TYPE::CONSTANT:
 		return hasSameAttrValues(clause);
 		break;
-/*	case Enum::TYPE::CONSTANT:
-		return hasSameAttrNum(clause);
-		break;
-	case Enum::TYPE::PROG_LINE:
+/*	case Enum::TYPE::PROG_LINE:
 		return hasSameAttrNum(clause);
 		break; */
 	default:
@@ -420,6 +435,10 @@ vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CONSTANT:
+/*		for(int i = 0; i <= pkb->getNoOfConstants(); i++) {
+			allValues.push_back(pkb->getConstantIndex());
+		}		
+*/
 		break;
 	case Enum::TYPE::IF:
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
