@@ -284,8 +284,9 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 	vector<int> results;
 
 	if (clause.getRightCIntValue() != NOT_FOUND) {
-		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE && clause.getLeftCType() != Enum::TYPE::CALLS) {
-			if (!evaluateValidStmtRefs(clause)) {
+		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE 
+			&& clause.getLeftCType() != Enum::TYPE::CALLS && clause.getLeftCType() != Enum::TYPE::CONSTANT) {
+			if (!evaluateValidStmtRefs(clause.getLeftCType(), clause.getRightCIntValue())) {
 				return false;
 			}
 		}
@@ -295,32 +296,37 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 		return true;
 	}
 	else { // n = c.value / s/a/w/if.stmt# = c.value / v.varName/p.procName/call.procName = p.procName/v.varName/call.procName
-/*		if(clause.getLeftCType() == Enum::TYPE::VARIABLE || clause.getLeftCType() == Enum::TYPE::PROCEDURE || clause.getLeftCType() == Enum::TYPE::CALL) {
-			return checkForEqualStringNames(clause);
-		} else {
-		   return checkForEqualIntValues(clause);
-		}*/
+		return evaluateNonGivenAttr(clause);
 	}
 }
 
-bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
-	switch (clause.getLeftCType()) {
+bool QueryEvaluator::evaluateValidStmtRefs(Enum::TYPE type, int index) {
+	switch (type) {
 	case Enum::TYPE::STATEMENT:
-		return (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt());
+		return (0 < index && index <= pkb->getNoOfStmt());
 		break;
 	case Enum::TYPE::ASSIGN:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::ASSIGN);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::ASSIGN);
+		}
+		else {
+			return false;
 		}
 		break;
 	case Enum::TYPE::WHILE:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::WHILE);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::WHILE);
+		}
+		else {
+			return false;
 		}
 		break;
 	case Enum::TYPE::IF:
-		if (0 < clause.getRightCIntValue() && clause.getRightCIntValue() <= pkb->getNoOfStmt()) {
-			return (pkb->getType(clause.getRightCIntValue()) == Enum::TYPE::IF);
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::IF);
+		}
+		else {
+			return false;
 		}
 		break;
 	default:
@@ -329,7 +335,176 @@ bool QueryEvaluator::evaluateValidStmtRefs(Clauses clause) {
 	}
 }
 
+bool QueryEvaluator::evaluateNonGivenAttr(Clauses clause) {
+	switch (clause.getLeftCType()) {
+	case Enum::TYPE::PROCEDURE:
+		return hasSameAttrNames(clause); 
+		break;
+	case Enum::TYPE::VARIABLE:
+		return hasSameAttrNames(clause);
+		break;
+	case Enum::TYPE::CALLS:
+		return hasSameAttrNames(clause);
+		break;
+	case Enum::TYPE::ASSIGN:
+		return hasSameAttrValues(clause);
+		break;
+	case Enum::TYPE::STATEMENT:
+		return hasSameAttrValues(clause);
+		break;
+	case Enum::TYPE::IF:
+		return hasSameAttrValues(clause);
+		break;
+	case Enum::TYPE::WHILE:
+		return hasSameAttrValues(clause);
+		break;
+/*	case Enum::TYPE::CONSTANT:
+		return hasSameAttrNum(clause);
+		break;
+	case Enum::TYPE::PROG_LINE:
+		return hasSameAttrNum(clause);
+		break; */
+	default:
+		return false;
+	}
+}
+
+bool QueryEvaluator::hasSameAttrNames(Clauses clause) {
+	vector<string> leftSynResults;
+	vector<string> rightSynResults;
+
+	leftSynResults = getAllAttrNames(clause.getLeftCType());	
+	rightSynResults = getAllAttrNames(clause.getRightCType());
+	return getCommonAttrNames(leftSynResults, rightSynResults, clause);
+}
+
+bool QueryEvaluator::hasSameAttrValues(Clauses clause) {
+	vector<int> leftSynResults;
+	vector<int> rightSynResults;
+
+	leftSynResults = getAllAttrValues(clause.getLeftCType());
+	rightSynResults = getAllAttrValues(clause.getRightCType());
+	return getCommonAttrValues(leftSynResults, rightSynResults, clause);
+}
+
+vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
+	vector<string> allNames;
+	switch (type) {
+	case Enum::TYPE::PROCEDURE:
+		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+			allNames.push_back(pkb->getProcName(i));
+		}
+		break;
+	case Enum::TYPE::VARIABLE:
+		for (int i = 0; i < pkb->getNoOfVar(); i++) {
+			allNames.push_back(pkb->getVarName(i));
+		}
+		break;
+	case Enum::TYPE::CALLS:
+		break;
+	default:
+		break;
+	}
+
+	return allNames;
+}
+
+vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
+	vector<int> allValues;
+	switch (type) {
+	case Enum::TYPE::ASSIGN:
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::ASSIGN) {
+				allValues.push_back(i);
+			}
+		}
+		break;
+	case Enum::TYPE::CONSTANT:
+		break;
+	case Enum::TYPE::IF:
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::IF) {
+				allValues.push_back(i);
+			}
+		}
+		break;
+	case Enum::TYPE::STATEMENT:
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+			allValues.push_back(i);
+		}
+		break;
+	case Enum::TYPE::WHILE:
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::WHILE) {
+				allValues.push_back(i);
+			}
+		}
+		break;
+	default:
+		break;
+	}
+
+	return allValues;
+}
+
+bool QueryEvaluator::getCommonAttrNames(vector<string> leftResults, vector<string> rightResults, Clauses clause) {
+	vector<string> mergedResults;
+	for (size_t i = 0; i < leftResults.size(); i++) {
+		for (size_t r = 0; r < rightResults.size(); r++) {
+			if (leftResults[i] == rightResults[r]) {
+				mergedResults.push_back(leftResults[i]);
+			}
+		}
+	}
+
+	storeResults(convertNamesToIndexes(mergedResults, clause.getLeftCType()), clause.getLeftCStringValue(), clause.getLeftCType());
+	storeResults(convertNamesToIndexes(mergedResults, clause.getRightCType()), clause.getRightCStringValue(), clause.getRightCType());
+	return !mergedResults.empty();
+}
+
+bool QueryEvaluator::getCommonAttrValues(vector<int> leftResults, vector<int> rightResults, Clauses clause) {
+	vector<int> mergedResults;
+	for (size_t i = 0; i < leftResults.size(); i++) {
+		for (size_t r = 0; r < rightResults.size(); r++) {
+			if (leftResults[i] == rightResults[r]) {
+				mergedResults.push_back(leftResults[i]);
+			}
+		}
+	}
+
+	storeResults(mergedResults, clause.getLeftCStringValue(), clause.getLeftCType());
+	storeResults(mergedResults, clause.getRightCStringValue(), clause.getRightCType());
+	return !mergedResults.empty();
+}
+
+vector<int> QueryEvaluator::convertNamesToIndexes(vector<string> stringResults, Enum::TYPE type) {
+	vector<int> indexes;
+	switch (type) {
+	case Enum::TYPE::PROCEDURE:
+		for (size_t i = 0; i < stringResults.size(); i++) {
+			indexes.push_back(pkb->getProcIndex(stringResults[i]));
+		}
+		break;
+	case Enum::TYPE::VARIABLE:
+		for (size_t i = 0; i < stringResults.size(); i++) {
+			indexes.push_back(pkb->getVarIndex(stringResults[i]));
+		}
+		break;
+	case Enum::TYPE::CALLS:
+		for (size_t i = 0; i < stringResults.size(); i++) {
+			indexes.push_back(pkb->getProcIndex(stringResults[i]));
+		}
+		break;
+	default:
+		break;
+	}
+
+	return indexes;
+}
+
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
+	bool hasValidFirstIndex = false;
+	bool hasValidSecondIndex = false;
 	vector<pair<int, int>> results;
 	string relationship = clause.getParentStringVal();
 
@@ -338,38 +513,65 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	int firstParamIndex = clause.getLeftCIntValue();
 	int secondParamIndex = clause.getRightCIntValue();
 
-	if (relationship == RELATIONSHIP_CALLS) {
-		results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
-	} /*else if (relationship == RELATIONSHIP_CALLST {
-	  results = this->pkb->getCalls*(firstParamIndex, secondParamIndex);
-	}*/
-	else if (relationship == RELATIONSHIP_FOLLOWS) {
-		results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+	if (firstParamType != Enum::TYPE::CALLS && firstParamType != Enum::TYPE::PROCEDURE
+		&& firstParamType != Enum::TYPE::VARIABLE && firstParamType != Enum::TYPE::CONSTANT) {
+		if (firstParamIndex != NOT_FOUND) {
+			hasValidFirstIndex = evaluateValidStmtRefs(firstParamType, firstParamIndex);
+		}
+		else {
+			hasValidFirstIndex = true;
+		}
 	}
-	else if (relationship == RELATIONSHIP_FOLLOWST) {
-		results = this->pkb->getFollowsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_MODIFIES) {
-		results = this->pkb->getModifies(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_PARENT) {
-		results = this->pkb->getParent(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_PARENTT) {
-		results = this->pkb->getParentT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-	else if (relationship == RELATIONSHIP_USES) {
-		results = this->pkb->getUses(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}
-/*	else if (relationship == RELATIONSHIP_NEXT) {
-		results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	} else if (relationship == RELATIONSHIP_NEXT*) {
-		results = this->pkb->getNext*(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-	}*/
 	else {
-
+		hasValidFirstIndex = true;
 	}
 
+	if (secondParamType != Enum::TYPE::CALLS && secondParamType != Enum::TYPE::PROCEDURE
+		&& secondParamType != Enum::TYPE::VARIABLE && secondParamType != Enum::TYPE::CONSTANT) {
+		if (secondParamIndex != NOT_FOUND) {
+			hasValidSecondIndex = evaluateValidStmtRefs(secondParamType, secondParamIndex);
+		}
+		else {
+			hasValidSecondIndex = true;
+		}
+	}
+	else {
+		hasValidSecondIndex = true;
+	}
+
+	if (hasValidFirstIndex && hasValidSecondIndex) {
+		if (relationship == RELATIONSHIP_CALLS) {
+			results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
+		} /*else if (relationship == RELATIONSHIP_CALLST {
+			results = this->pkb->getCalls*(firstParamIndex, secondParamIndex);
+		}*/
+		else if (relationship == RELATIONSHIP_FOLLOWS) {
+			results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_FOLLOWST) {
+			results = this->pkb->getFollowsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_MODIFIES) {
+			results = this->pkb->getModifies(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_PARENT) {
+			results = this->pkb->getParent(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_PARENTT) {
+			results = this->pkb->getParentT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		else if (relationship == RELATIONSHIP_USES) {
+			results = this->pkb->getUses(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+		/*	else if (relationship == RELATIONSHIP_NEXT) {
+				results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+			} else if (relationship == RELATIONSHIP_NEXT*) {
+				results = this->pkb->getNext*(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+			}*/
+		else {
+
+		}
+	}
 	storeResultsForSyn(clause, results);
 
 	if (!results.empty()) {
