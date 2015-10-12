@@ -376,7 +376,7 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 
 	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
 		//pattern if(_, _, _)
-		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				intermediateResult.push_back(i);
 			}
@@ -384,7 +384,7 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 	}
 	else if (clause.getLeftCIntValue() != NOT_FOUND) {
 		//pattern if (x, _, _)
-		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
 					intermediateResult.push_back(i);
@@ -407,7 +407,7 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 
 	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
 		//pattern if(_, _, _)
-		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
 				intermediateResult.push_back(i);
 			}
@@ -415,7 +415,7 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 	}
 	else if (clause.getLeftCIntValue() != NOT_FOUND) {
 		//pattern if (x, _, _)
-		for (size_t i = 1; pkb->getNoOfStmt(); i++) {
+		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
 				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
 					intermediateResult.push_back(i);
@@ -447,13 +447,13 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		else{ 			
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
 			if (!clause.getRightChild().getIsExpression()) {		// pattern a(_, x ) 
-				for (int i = 1; i < this->pkb->getNoOfStmt(); i++) {
+				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);
 				}
 			}
 			else {		// pattern a(_, _x_)
-				for (int i = 1; i < this->pkb->getNoOfStmt(); i++) {
+				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
 						intermediateResult.push_back(i);
 					}
