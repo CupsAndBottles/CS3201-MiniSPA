@@ -269,7 +269,7 @@ void Parser::processIfElse(int index, string statement)
 
 bool Parser::isOperator(char o) {
 	bool isOp = false;
-	if (o == '+' || o == '-' || o == '/' || o == '*') {
+	if (o == '+' || o == '-' || o == '*') {
 		isOp = true;
 	}
 	return isOp;
@@ -400,7 +400,6 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			pkb->setUsedVar(i - numOfProc, varInWhile);
 			varUsedInProc.push_back(varInWhile);
 		}
-		
 	}
 	else if (stmt.find("if") != std::string::npos) {
 		size_t bracketPos = stmt.find("{");
@@ -422,7 +421,6 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			pkb->setUsedVar(i - numOfProc, varInIf);
 			varUsedInProc.push_back(varInIf);
 		}
-		
 	}
 
 	else {
@@ -442,6 +440,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			pkb->setModifies(i - numOfProc, modified);
 			varModifiedInProc.push_back(modified);
 		}
+
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
 			if (isOperator(c) || c == '}' || c == ';') {
 				if (!s.empty()) {
@@ -560,7 +559,7 @@ void Parser::pushCloseBracket(int stmtNum) {
 	if (!containerElements.empty()) {
 		containerElements.pop_back();
 	}
-	cout << "size: " << closeBracket.size();
+
 	setProcEndNum(stmtNum);
 }
 

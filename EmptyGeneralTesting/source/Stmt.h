@@ -24,11 +24,9 @@ public:
 	void setChildrenT(vector<int> childrenTList);
 	void setControlVar(int varIndex);
 
-	void setNext(int next);
-	void setPrev(int prev);
+	void setNext(vector<int> nList);
 
 	void setNextT(vector<int> nTList);
-	void setPrevT(vector<int> pTList);
 
 	int getType();
 	int getParent();
@@ -49,10 +47,8 @@ public:
 	string getRightExpression();
 
 	vector<int> getNext();
-	vector<int> getPrev();
 
 	vector<int> getNextT();
-	vector<int> getPrevT();
 	int getControlVarIndex();
 	int getFollows();
 
@@ -75,8 +71,6 @@ private:
 	vector<int> modifiedVarList;
 	vector<int> nextList;
 	vector<int> nextTList;
-	vector<int> prevList;
-	vector<int> prevTList;
 	string rightExpression;
 };
 
