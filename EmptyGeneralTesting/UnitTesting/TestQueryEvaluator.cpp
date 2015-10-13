@@ -598,7 +598,7 @@ namespace UnitTesting
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")", *pkb);
 			QueryTree queryTree = parserPQL.getQueryTree();
-			Assert::IsTrue(queryTree.getPatternTree().at(0).getLeftChild().getType() == Enum::TYPE::UNDERSCORE);
+			Assert::IsTrue(queryTree.getPatternTree().at(0).getLeftCType() == Enum::TYPE::UNDERSCORE);
 			Assert::IsTrue(queryTree.getPatternTree().at(0).getRightCIsExpression() == true);
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 

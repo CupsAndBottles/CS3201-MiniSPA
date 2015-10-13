@@ -42,11 +42,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	//bool isTrueSuchThatClause, isTruePatternClause, isTrueWithClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
-<<<<<<< HEAD
-		list<string> emptyResult{ };
-=======
 		list<string> emptyResult{};
->>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 		return emptyResult;
 	}
 
@@ -63,11 +59,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-<<<<<<< HEAD
-				emptyResult = { };
-=======
 				emptyResult = {};
->>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 			}
 			return emptyResult;
 		}
@@ -81,11 +73,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-<<<<<<< HEAD
-				emptyResult = { };
-=======
 				emptyResult = {};
->>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 			}
 			return emptyResult;
 		}
@@ -99,11 +87,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-<<<<<<< HEAD
-				emptyResult = { };
-=======
 				emptyResult = {};
->>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 			}
 			return emptyResult;
 		}
@@ -704,8 +688,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	vector<int> intermediateResult;
 	
 	// if left child is underscore
-	if (clause.getLeftChild().getType() == Enum::TYPE::UNDERSCORE) {
-		if (clause.getRightChild().getType() == Enum::TYPE::UNDERSCORE) {
+	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
+		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) {
 			return true;
 		}
 		else{ 			
@@ -726,7 +710,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 	}
 	else { //left child is a variable
-		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftChild().getIntValue());
+		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftCIntValue());
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (size_t i = 0; i < stmtLst.size(); i++) {
 					intermediateResult.push_back(stmtLst[i].first);
