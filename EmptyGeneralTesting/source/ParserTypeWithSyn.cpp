@@ -190,7 +190,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				withSynAndType[0].insert(withSynAndType[0].end(), temp[0].begin(), temp[0].end());
 				withSynAndType[1].insert(withSynAndType[1].end(), temp[1].begin(), temp[1].end());
 				withSynAndType[2].insert(withSynAndType[2].end(), temp[2].begin(), temp[2].end());
-				//withSynAndType[3].insert(withSynAndType[3].end(), temp[3].begin(), temp[3].end());
+				withSynAndType[3].insert(withSynAndType[3].end(), temp[3].begin(), temp[3].end());
 				//std::cout << "withSynAndType[0]1 = " << withSynAndType[0].at(1) << '\n';
 			}
 		}

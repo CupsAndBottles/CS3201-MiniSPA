@@ -172,7 +172,7 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("prog_line");
 		synAndType[2].push_back(synonym);
-		synAndType[3].push_back("0");
+		synAndType[3].push_back("1");
 		return synAndType;
 	}
 	else if (isSynDigit(synonym) && clauseType.compare("value") == 0) {
