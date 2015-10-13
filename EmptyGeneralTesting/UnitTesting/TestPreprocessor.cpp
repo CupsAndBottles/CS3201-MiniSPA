@@ -21,19 +21,19 @@ namespace UnitTesting
 			ParserForPQL parser(input, *pkb);
 			QueryTree queryTree = parser.getQueryTree();
 
-			Assert::AreEqual(queryTree.getResultTree().at(0).getParent().getStringValue(), string("w1"));
-			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParent().getType()), 4);
-			Assert::AreEqual(queryTree.getResultTree().at(1).getParent().getStringValue(), string("w2"));
-			Assert::AreEqual(int(queryTree.getResultTree().at(1).getParent().getType()), 4);
-			Assert::AreEqual(queryTree.getResultTree().at(2).getParent().getStringValue(), string("w3"));
-			Assert::AreEqual(int(queryTree.getResultTree().at(2).getParent().getType()), 4);
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("w1"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 4);
+			Assert::AreEqual(queryTree.getResultTree().at(1).getParentStringVal(), string("w2"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(1).getParentType()), 4);
+			Assert::AreEqual(queryTree.getResultTree().at(2).getParentStringVal(), string("w3"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(2).getParentType()), 4);
 
 			input = "while w1; prog_line n; stmt s; Select w1 such that Follows(n, s) pattern w1(\"x\", _)";
 			ParserForPQL parser1(input, *pkb);
 			queryTree = parser1.getQueryTree();
 
-			Assert::AreEqual(queryTree.getResultTree().at(0).getParent().getStringValue(), string("w1"));
-			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParent().getType()), 4);
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("w1"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 4);
 		}
 
 		TEST_METHOD(TestSuchThatTree)
