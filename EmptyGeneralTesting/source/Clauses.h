@@ -13,11 +13,6 @@ public:
 	Details parent;
 	//string stringVal;
 
-	Details getLeftChild();
-	Details getRightChild();
-	Details getParent();
-	//string getStringVal();
-
 	void setLeftChild(Details leftChild);
 	void setRightChild(Details rightChild);
 

@@ -15,13 +15,6 @@ Clauses & Clauses::return_created_Object()
 	return Clauses();
 }
 
-
-
-Details Clauses::getLeftChild()
-{
-	return leftChild;
-}
-
 void Clauses::setLeftChild(Details leftChild)
 {
 	this->leftChild = leftChild;
@@ -132,13 +125,5 @@ Enum::TYPE Clauses::getLeftCType()
 	return leftChild.getType();
 }
 
-Details Clauses::getRightChild()
-{
-	return rightChild;
-}
 
-Details Clauses::getParent()
-{
-	return parent;
-}
 
