@@ -1,0 +1,5 @@
+1 - All assignment
+assign a; stmt s; variable v;
+Select v such that Uses(4, v);
+coffee, beads, command, prize, x
+5000
