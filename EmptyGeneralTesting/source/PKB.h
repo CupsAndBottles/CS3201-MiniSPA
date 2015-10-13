@@ -50,9 +50,13 @@ public:
 	void setEndNum(int index, int endNum); //working
 	void setProcModified(int index, vector<string> modifiedVar);//working
 	void setProcUses(int index, vector<string> usesVar);//working
-	string setProcCalls(vector<pair<int,string>> procCalls); //not done yet
-	void setProcCalledBy(int index, int called);//not done yet
+	string setProcCalls(vector<pair<int,string>> procCalls); 
+	void setProcCalledBy(int index, int called);
 	
+	string setProcCallsT(vector<int> callsT);
+	void setProcCalledByT(vector<int> calledT);
+
+
 	//From StmtTable
 	void setType(Enum::TYPE type);	//tested //done
 	void setParentT(int index, vector<int> parentStmts); 

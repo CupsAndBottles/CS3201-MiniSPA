@@ -107,6 +107,7 @@ void PKB::setProcCalledBy(int index, int called)
 {
 	procTable[index].setCalledBy(called);
 }
+
 //----------------------------------------------------------------------------------------------
 //Vartable Setters:
 
