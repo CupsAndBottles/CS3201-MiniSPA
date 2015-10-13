@@ -328,7 +328,7 @@ void PKB::setRightExpr(int index, string expr)
 
 	stmtTable[index].setRightExpr(expr);
 }
-
+//PKB-DesignExtractor, called at start a
 //ZH - tested
 string PKB::getRightExpr(int index){
 	return stmtTable[index].getRightExpression();
@@ -826,7 +826,9 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			followsT = stmtTable.at(stmt2).getFollowsT();
 			if (followsT.size() > 0) {
 				for (size_t i = 0; i < followsT.size(); i++) {
-					results.push_back(make_pair(followsT.at(i), stmt2));
+					if (stmtTable.at(followsT.at(i)).getType() == type1) {
+						results.push_back(make_pair(followsT.at(i), stmt2));
+					}
 				}
 			}
 		}
@@ -841,6 +843,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			followedByT = stmtTable.at(stmt1).getFollowedByT();
 			if (followedByT.size() > 0) {
 				for (size_t i = 0; i < followedByT.size(); i++) {
+					if(stmtTable.at(followedByT.at(i)).getType()== type2)
 					results.push_back(make_pair(stmt1, followedByT.at(i)));
 				}
 			}
