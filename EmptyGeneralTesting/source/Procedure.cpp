@@ -54,6 +54,16 @@ void Procedure::setCalledBy(int procIndex)
 	calledByList.push_back(procIndex);
 }
 
+void Procedure::setCallsT(vector<int> callsT)
+{
+	callsTList = callsT;
+}
+
+void Procedure::setCalledByT(vector<int> calledByT)
+{
+	calledByList = calledByT;
+}
+
 vector<int> Procedure::getUsed() {
 	return varUsedList;
 }
@@ -85,6 +95,16 @@ vector<int> Procedure::getCalls()
 vector<int> Procedure::getCalledBy()
 {
 	return calledByList;
+}
+
+vector<int> Procedure::getCallsT()
+{
+	return callsTList;
+}
+
+vector<int> Procedure::getCalledByT()
+{
+	return calledByTList;
 }
 
 

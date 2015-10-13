@@ -69,6 +69,12 @@ public:
 	void setRightExpr(int index, string rightExpression);  //tested //working
 	void setParent(int index, int parentStmt);  //working
 
+	void setNext(int index, int next);
+	void setPrev(int index, int prev);
+
+	void setNextT(int index, vector<int> nextT);
+	void setPrevT(int index, vector<int> prevT);
+
 	//constant table
 	int setConstant(int constantValue);
 	void setStmtUsed(int index,int stmtNum);
@@ -105,6 +111,13 @@ public:
 	//From ProcTable
 	int getProcIndex(string procName);
 	string getProcName(int procIndex);
+	vector<int> getProcModified(int procIndex);
+	vector<int> getProcUsed(int procIndex);
+	vector<int> getProcCalls();
+	vector<int> getCalls(int procIndex);
+	vector<int> getCalledBy(int procIndex);
+	vector<int> getCallsT(int procIndex);
+	vector<int> getCalledByT(int procIndex);
 
 	//From VarTable
 	int getVarIndex(string varName); //tested

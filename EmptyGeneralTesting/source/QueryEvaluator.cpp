@@ -42,7 +42,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	//bool isTrueSuchThatClause, isTruePatternClause, isTrueWithClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
-		list<string> emptyResult{ EMPTY_STRING };
+		list<string> emptyResult{};
 		return emptyResult;
 	}
 
@@ -59,7 +59,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-				emptyResult = { EMPTY_STRING };
+				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -73,7 +73,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-				emptyResult = { EMPTY_STRING };
+				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -87,7 +87,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-				emptyResult = { EMPTY_STRING };
+				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -688,13 +688,13 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	vector<int> intermediateResult;
 	
 	// if left child is underscore
-	if (clause.getLeftChild().getType() == Enum::TYPE::UNDERSCORE) {
-		if (clause.getRightChild().getType() == Enum::TYPE::UNDERSCORE) {
+	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
+		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) {
 			return true;
 		}
 		else{ 			
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
-			if (!clause.getRightChild().getIsExpression()) {		// pattern a(_, x ) 
+			if (!clause.getRightCIsExpression()) {		// pattern a(_, x ) 
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);
@@ -710,7 +710,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 	}
 	else { //left child is a variable
-		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftChild().getIntValue());
+		vector<pair<int,int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD , Enum::TYPE::VARIABLE, clause.getLeftCIntValue());
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (size_t i = 0; i < stmtLst.size(); i++) {
 					intermediateResult.push_back(stmtLst[i].first);

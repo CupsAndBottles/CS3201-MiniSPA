@@ -26,7 +26,7 @@ private:
 	bool isValid;
 
 	void addResultTree(vector<string> syn, vector<string> type);
-	void addWithTree(vector<string> stringVal, vector<string> type, vector<string> intVal);
+	void addWithTree(vector<string> stringVal, vector<string> type, vector<string> intVal, vector<string> isStmt);
 	void addSuchThatTree(vector<string> stringVal, vector<string> type, vector<string> intVal);
 	void addPatternTree(vector<string> stringVal, vector<string> type, vector<string> intVal, vector<string> expression);
 	bool isItExpression(string expression);

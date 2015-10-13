@@ -1017,6 +1017,16 @@ string PKB::getProcName(int procIndex)
 	return procTable[procIndex].getName();
 }
 
+vector<int> PKB::getProcModified(int procIndex)
+{
+	return vector<int>();
+}
+
+vector<int> PKB::getProcUsed(int procIndex)
+{
+	return vector<int>();
+}
+
 
 //ZH : tested
 int PKB::getVarIndex(string varName){

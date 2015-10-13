@@ -61,7 +61,7 @@ int RelTable::getAg2Synonym()
 void RelTable::addRelIntoTable()
 {
 
-	Relationship follow, parent, modifies, use, followT, parentT, useT, While, If, assign, call, next, affect, procName, varName, stmt, value, constant, stringOfWith, stmt1, withWhile, withIf, withAssign;
+	Relationship follow, parent, modifies, use, followT, parentT, useT, While, If, assign, call, next, affect, procName, varName, stmt, value, constant, stringOfWith, stmt1, withWhile, withIf, withAssign, withCalls;
 
 	call.noArgs = 2;
 	call.ag1Synonym = 8;
@@ -153,6 +153,9 @@ void RelTable::addRelIntoTable()
 
 	withIf.ag1Synonym = 18;
 	relTable.insert(std::pair<string, Relationship>("Withif", withIf));
+
+	withCalls.ag1Synonym = 19 ;
+	relTable.insert(std::pair<string, Relationship>("Withcall", withCalls));
 
 }
 

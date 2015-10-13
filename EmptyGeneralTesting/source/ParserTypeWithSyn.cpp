@@ -92,7 +92,8 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			throw ParserException("unidentified such that synonym");
 		}
 		temp = parserOfType.setClauseType(1, suchThatSynonym[i].at(0), type, synonym);
-	
+		//std::cout << "suchThatSynonym[i].at(0) = " << suchThatSynonym[i].at(0) << '\n';
+		//std::cout << "temp1 = " << temp.size() << '\n';
 		if (temp.size() == 0) {
 			throw ParserException("SuchThat synonym unidentified");
 		}
@@ -111,6 +112,8 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			}
 			temp = parserOfType.setType(*pkb, 1, suchThatSynonym[i].at(k), type, synonym, indication);
 			if (temp.size() == 0) {
+			//	std::cout << "suchThatSynonym[i].at(0) = " << suchThatSynonym[i].at(k) << '\n';
+			//	std::cout << "temp2 = " << temp.size() << '\n';
 				throw ParserException("SuchThat synonym unidentified");
 			}
 
@@ -127,6 +130,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 {
 	ParserOfType parserOfType;
 	vector<vector<string>> temp;
+	withSynAndType.push_back(vector <string>());
 	withSynAndType.push_back(vector <string>());
 	withSynAndType.push_back(vector <string>());
 	withSynAndType.push_back(vector <string>());
@@ -150,26 +154,34 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 					withSynAndType[0].push_back(withSynonym[i].at(k));
 					withSynAndType[1].push_back(type.at(pos));
 					withSynAndType[2].push_back("-1");
-					withSynAndType[3].push_back("0");
 				}
 			//	std::cout << "withSynAndType[0] = " << withSynAndType[0].at(0) << '\n';
 			}
 			else if (withSynonym[i].size() > 2 && (k == 1 || k == 3)) {
 				int size = withSynAndType[1].size() - 1;
+				if (withSynonym[i].at(k).compare("stmt#") == 0) {
+					withSynAndType[3].push_back("1");
+				}
+				else {
+					withSynAndType[3].push_back("0");
+				}
 				validation.withValidation(withSynAndType[1].at(size), withSynonym[i].at(k));
 			}
 			else if ((withSynonym[i].size() == 2 && k == 1) || k == 2) {
 				int size = withSynAndType[1].size() - 1;
-				if (withSynAndType[1].at(size).compare("procedure") == 0 || withSynAndType[1].at(size).compare("call") == 0) {
+				if (withSynonym[i].at(k-1).compare("procName") == 0) {
 				//	std::cout << "withSynAndType[0]1.1 = " << withSynAndType[1].at(size) << '\n';
-					temp = parserOfType.setProcedureTypeAndSyn(*pkb, withSynonym[i].at(k), withSynAndType[1].at(size));
+					temp = parserOfType.setProcedureTypeAndSyn(*pkb, withSynonym[i].at(k), withSynonym[i].at(k - 1));
 				//	std::cout << "temp[0] = " << temp[0].at(0) << '\n';
 				}
-				else if (withSynAndType[1].at(size).compare("variable") == 0) {
+				else if (withSynonym[i].at(k - 1).compare("varName") == 0) {
 					temp = parserOfType.setVariableTypeAndSyn(*pkb, withSynonym[i].at(k));
 				}
-				else if (withSynAndType[1].at(size).compare("prog_line") == 0 || withSynAndType[1].at(size).compare("constant") == 0 || withSynAndType[1].at(size).compare("stmt") == 0 || withSynAndType[1].at(size).compare("while") == 0 || withSynAndType[1].at(size).compare("if") == 0 || withSynAndType[1].at(size).compare("assign") == 0) {
-					temp = parserOfType.setDigitTypeAndSyn(withSynAndType[1].at(size),  withSynonym[i].at(k));
+				else if (withSynonym[i].at(k - 1).compare("value") == 0 || withSynonym[i].at(k - 1).compare("stmt#") == 0) {
+					temp = parserOfType.setDigitTypeAndSyn(withSynonym[i].at(k - 1),  withSynonym[i].at(k));
+				}
+				else if (withSynAndType[1].at(size).compare("prog_line") == 0) {
+					temp = parserOfType.setDigitTypeAndSyn(withSynAndType[1].at(size), withSynonym[i].at(k));
 				}
 				if (temp.size() == 0) {
 					throw ParserException("With synonym unidentified");

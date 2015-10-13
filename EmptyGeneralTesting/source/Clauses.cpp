@@ -15,13 +15,6 @@ Clauses & Clauses::return_created_Object()
 	return Clauses();
 }
 
-
-
-Details Clauses::getLeftChild()
-{
-	return leftChild;
-}
-
 void Clauses::setLeftChild(Details leftChild)
 {
 	this->leftChild = leftChild;
@@ -72,9 +65,19 @@ void Clauses::setRightCType(string type)
 	rightChild.setType(type);
 }
 
+void Clauses::setRightCIsStmt(string isStmt)
+{
+	rightChild.setIsStmt(isStmt);
+}
+
 bool Clauses::getRightCIsExpression()
 {
 	return rightChild.getIsExpression();
+}
+
+bool Clauses::getRightCIsStmt()
+{
+	return rightChild.getIsStmt();
 }
 
 string Clauses::getRightCStringValue()
@@ -97,6 +100,11 @@ void Clauses::setLeftCIsExpression(bool isExpression)
 	leftChild.setIsExpression(isExpression);
 }
 
+void Clauses::setLeftCIsStmt(string isStmt)
+{
+	leftChild.setIsStmt(isStmt);
+}
+
 void Clauses::setLeftCStringValue(string stringVal)
 {
 	leftChild.setStringValue(stringVal);
@@ -117,6 +125,11 @@ bool Clauses::getLeftCIsExpression()
 	return leftChild.getIsExpression();
 }
 
+bool Clauses::getLeftCIsStmt()
+{
+	return leftChild.getIsStmt();
+}
+
 string Clauses::getLeftCStringValue()
 {
 	return leftChild.getStringValue();
@@ -132,13 +145,5 @@ Enum::TYPE Clauses::getLeftCType()
 	return leftChild.getType();
 }
 
-Details Clauses::getRightChild()
-{
-	return rightChild;
-}
 
-Details Clauses::getParent()
-{
-	return parent;
-}
 

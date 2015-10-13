@@ -389,13 +389,18 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
 			int parentUse = pairedParent.first - numOfProc-containerElements.size()+1;
-			pkb->setUsedBy(varInWhile, parentUse);
-			pkb->setUsedVar(parentUse, varInWhile);
+			if (!isConstant(varInWhile)) {
+				pkb->setUsedBy(varInWhile, parentUse);
+				pkb->setUsedVar(parentUse, varInWhile);
+			}
 		}
 		pkb->setProcNames(index, currProcName);
-		pkb->setUsedBy(varInWhile, i - numOfProc);
-		pkb->setUsedVar(i - numOfProc, varInWhile);
-		varUsedInProc.push_back(varInWhile);
+		if (!isConstant(varInWhile)) {
+			pkb->setUsedBy(varInWhile, i - numOfProc);
+			pkb->setUsedVar(i - numOfProc, varInWhile);
+			varUsedInProc.push_back(varInWhile);
+		}
+		
 	}
 	else if (stmt.find("if") != std::string::npos) {
 		size_t bracketPos = stmt.find("{");
@@ -406,13 +411,18 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
 			int parentUse = pairedParent.first - numOfProc - containerElements.size()+1;
-			pkb->setUsedBy(varInIf, parentUse);
-			pkb->setUsedVar(parentUse, varInIf);
+			if (!isConstant(varInIf)) {
+				pkb->setUsedBy(varInIf, parentUse);
+				pkb->setUsedVar(parentUse, varInIf);
+			}
 		}
 		pkb->setProcNames(index, currProcName);
-		pkb->setUsedBy(varInIf, i - numOfProc);
-		pkb->setUsedVar(i - numOfProc, varInIf);
-		varUsedInProc.push_back(varInIf);
+		if (!isConstant(varInIf)) {
+			pkb->setUsedBy(varInIf, i - numOfProc);
+			pkb->setUsedVar(i - numOfProc, varInIf);
+			varUsedInProc.push_back(varInIf);
+		}
+		
 	}
 
 	else {
@@ -422,30 +432,37 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
 			int parentMod = pairedParent.first-numOfProc;
-			pkb->setModifiedBy(modified, parentMod);
-			pkb->setModifies(parentMod, modified);
+			if (!isConstant(modified)) {
+				pkb->setModifiedBy(modified, parentMod);
+				pkb->setModifies(parentMod, modified);
+			}
 		}
-		pkb->setModifiedBy(modified, i - numOfProc);
-		pkb->setModifies(i - numOfProc, modified);
-		varModifiedInProc.push_back(modified);
-
+		if (!isConstant(modified)) {
+			pkb->setModifiedBy(modified, i - numOfProc);
+			pkb->setModifies(i - numOfProc, modified);
+			varModifiedInProc.push_back(modified);
+		}
 		for (char c : stmt.substr(equal + 1, stmt.size())) {
 			if (isOperator(c) || c == '}' || c == ';') {
 				if (!s.empty()) {
 					if (!containerElements.empty()) {
 						pair<int, string> pairedParent = containerElements.back();
 						int parentUse = pairedParent.first-numOfProc;
-						pkb->setUsedBy(s,parentUse);
-						pkb->setUsedVar(parentUse, s);
+						if (!isConstant(s)) {
+							pkb->setUsedBy(s, parentUse);
+							pkb->setUsedVar(parentUse, s);
+						}
 					}
 					if (isConstant(s)) {
 						int constant = atoi(s.c_str());
 						int constantInd = pkb->setConstant(constant);
 						pkb->setStmtUsed(constantInd,i-numOfProc);
 					}
-					pkb->setUsedBy(s, i - numOfProc);
-					pkb->setUsedVar(i - numOfProc, s);
-					varUsedInProc.push_back(s);
+					if (!isConstant(s)) {
+						pkb->setUsedBy(s, i - numOfProc);
+						pkb->setUsedVar(i - numOfProc, s);
+						varUsedInProc.push_back(s);
+					}
 				}
 				s = "";
 			}
@@ -543,7 +560,7 @@ void Parser::pushCloseBracket(int stmtNum) {
 	if (!containerElements.empty()) {
 		containerElements.pop_back();
 	}
-
+	cout << "size: " << closeBracket.size();
 	setProcEndNum(stmtNum);
 }
 

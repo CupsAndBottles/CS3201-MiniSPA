@@ -20,8 +20,11 @@ public:
 	string getStringValue();
 	int getIntValue();
 	Enum::TYPE getType();
+	bool isStmt;
+	bool getIsStmt();
 
 	void setIsExpression(bool isExpression);
+	void setIsStmt(string isstmt);
 	void setStringValue(string stringVal);
 	void setIntValue(int intVal);
 	void setType(string type);
