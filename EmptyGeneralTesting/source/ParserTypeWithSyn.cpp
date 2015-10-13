@@ -159,6 +159,8 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			}
 			else if (withSynonym[i].size() > 2 && (k == 1 || k == 3)) {
 				int size = withSynAndType[1].size() - 1;
+				//std::cout << "withSynonym[i].at(k) = " << withSynonym[i].at(k) << '\n';
+				//std::cout << "withSynAndType[1].at(size) = " << withSynAndType[1].at(size) << '\n';
 				if (withSynonym[i].at(k).compare("stmt#") == 0) {
 					withSynAndType[3].push_back("1");
 				}
@@ -169,6 +171,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			}
 			else if ((withSynonym[i].size() == 2 && k == 1) || k == 2) {
 				int size = withSynAndType[1].size() - 1;
+				
 				if (withSynonym[i].at(k-1).compare("procName") == 0) {
 				//	std::cout << "withSynAndType[0]1.1 = " << withSynAndType[1].at(size) << '\n';
 					temp = parserOfType.setProcedureTypeAndSyn(*pkb, withSynonym[i].at(k), withSynonym[i].at(k - 1));
@@ -197,6 +200,9 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 		if (withSynonym[i].size() == 4) {
 			int size1 = withSynAndType[1].size() - 1;
 			int size2 = withSynAndType[1].size() - 2;
+			if (withSynAndType[3].at(size1).compare("1") == 0 && withSynAndType[3].at(size1).compare(withSynAndType[3].at(size2)) != 0) {
+				throw ParserException("stmt# must be equal to stmt#, not equal to procName");
+			}
 			validation.withValidation(withSynAndType[1].at(size1), withSynAndType[1].at(size2));
 		}
 	}
