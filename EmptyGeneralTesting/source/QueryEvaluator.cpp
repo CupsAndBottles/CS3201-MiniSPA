@@ -42,7 +42,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	//bool isTrueSuchThatClause, isTruePatternClause, isTrueWithClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
-		list<string> emptyResult{ EMPTY_STRING };
+		list<string> emptyResult{ };
 		return emptyResult;
 	}
 
@@ -59,7 +59,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-				emptyResult = { EMPTY_STRING };
+				emptyResult = { };
 			}
 			return emptyResult;
 		}
@@ -73,7 +73,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-				emptyResult = { EMPTY_STRING };
+				emptyResult = { };
 			}
 			return emptyResult;
 		}
@@ -87,7 +87,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
-				emptyResult = { EMPTY_STRING };
+				emptyResult = { };
 			}
 			return emptyResult;
 		}
