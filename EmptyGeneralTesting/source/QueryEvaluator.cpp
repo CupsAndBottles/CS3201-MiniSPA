@@ -42,7 +42,11 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	//bool isTrueSuchThatClause, isTruePatternClause, isTrueWithClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
+<<<<<<< HEAD
 		list<string> emptyResult{ };
+=======
+		list<string> emptyResult{};
+>>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 		return emptyResult;
 	}
 
@@ -59,7 +63,11 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
+<<<<<<< HEAD
 				emptyResult = { };
+=======
+				emptyResult = {};
+>>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 			}
 			return emptyResult;
 		}
@@ -73,7 +81,11 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
+<<<<<<< HEAD
 				emptyResult = { };
+=======
+				emptyResult = {};
+>>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 			}
 			return emptyResult;
 		}
@@ -87,7 +99,11 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 				emptyResult = { STRING_FALSE };
 			}
 			else {
+<<<<<<< HEAD
 				emptyResult = { };
+=======
+				emptyResult = {};
+>>>>>>> d4cf38a474cbdf457189a0a973a5b6632489c15b
 			}
 			return emptyResult;
 		}
@@ -694,7 +710,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 		else{ 			
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
-			if (!clause.getRightChild().getIsExpression()) {		// pattern a(_, x ) 
+			if (!clause.getRightCIsExpression()) {		// pattern a(_, x ) 
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);

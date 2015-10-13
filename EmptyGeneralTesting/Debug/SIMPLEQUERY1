@@ -1,0 +1,40 @@
+1- comment
+Procedure p;
+Select p such that Calls(“Sea”,p)
+Earth
+5000
+2- comment 
+Stmt s;
+Select s such that Parent(12,s)
+13,14
+5000
+3- comment
+Assign a;
+Select a pattern a (“x”,_)
+Stmt #1,8,13
+5000
+4- comment
+Assign a;
+Select a such that Modifies(a,”y”)  
+Stmt# 6,9,14
+5000
+5-comment
+stmt s;
+Select s such that Modifies(s, ”x”) and Uses(s, “x”)
+None
+5000
+6- comment
+Next n1;
+Select n1 such that Next(12,n1)
+13
+5000
+7- comment
+Assign a;
+Select a such that Parent(ifs,a) and Modifies(a,”t”)  
+none 
+5000
+8- comment
+//no declaration
+Select BOOLEAN such that Next*(2,11)  
+True 
+5000

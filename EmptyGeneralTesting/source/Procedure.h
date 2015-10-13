@@ -20,6 +20,8 @@ public:
 	int getEndNo();
 	vector<int> getCalls();
 	vector<int> getCalledBy();
+	vector<int> getCallsT();
+	vector<int> getCalledByT();
 	void setStartNo(int stmtNum);
 	void setEndNo(int stmtNum);
 	vector<int> getUsed();
@@ -29,6 +31,8 @@ public:
 	void setUsedVar(vector<int> use);
 	void setCalls(int procIndex);
 	void setCalledBy(int procIndex);
+	void setCallsT(vector<int> callsT);
+	void setCalledByT(vector<int> calledByT);
 
 
 private:
@@ -42,5 +46,7 @@ private:
 	vector<int> varUsedList;
 	vector<int> callsList;
 	vector<int> calledByList;
+	vector<int> callsTList;
+	vector<int> calledByTList;
 };
 

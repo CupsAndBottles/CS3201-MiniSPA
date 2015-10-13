@@ -126,8 +126,9 @@ vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synony
 	synAndType.push_back(vector <string>()); //isExpression
 	if (clauseType == 0 || clauseType == 2 || clauseType == 3) {
 		int typeDeclared = isBeingDeclared(synonym, synonymType);
-	
-		if (typeDeclared != -1) {
+	//	std::cout << "typeDeclared = " << typeDeclared << '\n';
+	//	std::cout << "synonym = " << synonym << '\n';
+			if (typeDeclared != -1) {
 
 			synAndType[0].push_back(synonym);
 			synAndType[1].push_back(type.at(typeDeclared));
@@ -141,6 +142,7 @@ vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synony
 			synAndType[1].push_back("BOOLEAN");
 			synAndType[2].push_back("-1");
 			synAndType[3].push_back("0");
+			std::cout << "hello" << '\n';
 			return synAndType;
 		}
 	}
@@ -165,14 +167,15 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 	synAndType.push_back(vector <string>()); //intVal
 	synAndType.push_back(vector <string>()); //isExpression
 
-	if (isSynDigit(synonym) && clauseType == "prog_line") {
+	std::cout << "clauseType = " << clauseType << '\n';
+	if (isSynDigit(synonym) && clauseType == "stmt#") {
 		synAndType[0].push_back(synonym);
-		synAndType[1].push_back(clauseType);
+		synAndType[1].push_back("prog_line");
 		synAndType[2].push_back(synonym);
 		synAndType[3].push_back("0");
 		return synAndType;
 	}
-	else if (isSynDigit(synonym) && clauseType == "constant") {
+	else if (isSynDigit(synonym) && clauseType == "value") {
 		int index = pkb->getConstantIndex(atoi(synonym.c_str()));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("constant");
