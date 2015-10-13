@@ -154,21 +154,25 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 					withSynAndType[0].push_back(withSynonym[i].at(k));
 					withSynAndType[1].push_back(type.at(pos));
 					withSynAndType[2].push_back("-1");
+					if (withSynonym[i].at(k + 1).compare("stmt#") == 0) {
+						withSynAndType[3].push_back("1");
+					}
+					else {
+						withSynAndType[3].push_back("0");
+					}
 				}
 			//	std::cout << "withSynAndType[0] = " << withSynAndType[0].at(0) << '\n';
 			}
 			else if (withSynonym[i].size() > 2 && (k == 1 || k == 3)) {
 				int size = withSynAndType[1].size() - 1;
-				if (withSynonym[i].at(k).compare("stmt#") == 0) {
-					withSynAndType[3].push_back("1");
-				}
-				else {
-					withSynAndType[3].push_back("0");
-				}
+				//std::cout << "withSynonym[i].at(k) = " << withSynonym[i].at(k) << '\n';
+				//std::cout << "withSynAndType[1].at(size) = " << withSynAndType[1].at(size) << '\n';
+			
 				validation.withValidation(withSynAndType[1].at(size), withSynonym[i].at(k));
 			}
 			else if ((withSynonym[i].size() == 2 && k == 1) || k == 2) {
 				int size = withSynAndType[1].size() - 1;
+				
 				if (withSynonym[i].at(k-1).compare("procName") == 0) {
 				//	std::cout << "withSynAndType[0]1.1 = " << withSynAndType[1].at(size) << '\n';
 					temp = parserOfType.setProcedureTypeAndSyn(*pkb, withSynonym[i].at(k), withSynonym[i].at(k - 1));
@@ -197,6 +201,14 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 		if (withSynonym[i].size() == 4) {
 			int size1 = withSynAndType[1].size() - 1;
 			int size2 = withSynAndType[1].size() - 2;
+			std::cout << "withSynAndType[3]1 = " << withSynAndType[3].at(size1) << '\n';
+			std::cout << "withSynAndType[3]2 = " << withSynAndType[3].at(size2) << '\n';
+
+			if (withSynAndType[3].at(size1).compare("1") == 0 && withSynAndType[3].at(size2).compare("0") == 0 && withSynAndType[1].at(size2).compare("constant") != 0) {
+				throw ParserException("stmt# must be equal to stmt#, not equal to procName");
+			} else if (withSynAndType[3].at(size1).compare("0") == 0 && withSynAndType[3].at(size2).compare("1") == 0 && withSynAndType[1].at(size1).compare("constant") != 0) {
+				throw ParserException("stmt# must be equal to stmt#, not equal to procName");
+			}
 			validation.withValidation(withSynAndType[1].at(size1), withSynAndType[1].at(size2));
 		}
 	}

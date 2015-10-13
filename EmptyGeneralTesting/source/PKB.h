@@ -83,6 +83,7 @@ public:
 	int getNoOfStmt(); //tested
 
 	//PKB->DESIGNEXT
+	void setByDesignExtractor();
 	void extractParentT(int index);
 	void extractChildrenT(int index);
 	void extractFollowsT(int index);
