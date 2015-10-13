@@ -398,8 +398,9 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		if (!isConstant(varInWhile)) {
 			pkb->setUsedBy(varInWhile, i - numOfProc);
 			pkb->setUsedVar(i - numOfProc, varInWhile);
+			varUsedInProc.push_back(varInWhile);
 		}
-		varUsedInProc.push_back(varInWhile);
+		
 	}
 	else if (stmt.find("if") != std::string::npos) {
 		size_t bracketPos = stmt.find("{");
@@ -447,8 +448,10 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 					if (!containerElements.empty()) {
 						pair<int, string> pairedParent = containerElements.back();
 						int parentUse = pairedParent.first-numOfProc;
-						pkb->setUsedBy(s,parentUse);
-						pkb->setUsedVar(parentUse, s);
+						if (!isConstant(s)) {
+							pkb->setUsedBy(s, parentUse);
+							pkb->setUsedVar(parentUse, s);
+						}
 					}
 					if (isConstant(s)) {
 						int constant = atoi(s.c_str());
