@@ -134,6 +134,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 	withSynAndType.push_back(vector <string>());
 	withSynAndType.push_back(vector <string>());
 	withSynAndType.push_back(vector <string>());
+	withSynAndType.push_back(vector <string>());
 	int pos;
 	Validation validation;
 	
@@ -153,12 +154,17 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 					withSynAndType[0].push_back(withSynonym[i].at(k));
 					withSynAndType[1].push_back(type.at(pos));
 					withSynAndType[2].push_back("-1");
-					withSynAndType[3].push_back("0");
 				}
 			//	std::cout << "withSynAndType[0] = " << withSynAndType[0].at(0) << '\n';
 			}
 			else if (withSynonym[i].size() > 2 && (k == 1 || k == 3)) {
 				int size = withSynAndType[1].size() - 1;
+				if (withSynonym[i].at(k).compare("stmt#") == 0) {
+					withSynAndType[3].push_back("1");
+				}
+				else {
+					withSynAndType[3].push_back("0");
+				}
 				validation.withValidation(withSynAndType[1].at(size), withSynonym[i].at(k));
 			}
 			else if ((withSynonym[i].size() == 2 && k == 1) || k == 2) {
@@ -171,8 +177,11 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				else if (withSynonym[i].at(k - 1).compare("varName") == 0) {
 					temp = parserOfType.setVariableTypeAndSyn(*pkb, withSynonym[i].at(k));
 				}
-				else if (withSynAndType[1].at(size).compare("prog_line") == 0 || withSynonym[i].at(k - 1).compare("value") == 0 || withSynonym[i].at(k - 1).compare("stmt#") == 0) {
+				else if (withSynonym[i].at(k - 1).compare("value") == 0 || withSynonym[i].at(k - 1).compare("stmt#") == 0) {
 					temp = parserOfType.setDigitTypeAndSyn(withSynonym[i].at(k - 1),  withSynonym[i].at(k));
+				}
+				else if (withSynAndType[1].at(size).compare("prog_line") == 0) {
+					temp = parserOfType.setDigitTypeAndSyn(withSynAndType[1].at(size), withSynonym[i].at(k));
 				}
 				if (temp.size() == 0) {
 					throw ParserException("With synonym unidentified");
@@ -181,7 +190,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				withSynAndType[0].insert(withSynAndType[0].end(), temp[0].begin(), temp[0].end());
 				withSynAndType[1].insert(withSynAndType[1].end(), temp[1].begin(), temp[1].end());
 				withSynAndType[2].insert(withSynAndType[2].end(), temp[2].begin(), temp[2].end());
-				withSynAndType[3].insert(withSynAndType[3].end(), temp[3].begin(), temp[3].end());
+				//withSynAndType[3].insert(withSynAndType[3].end(), temp[3].begin(), temp[3].end());
 				//std::cout << "withSynAndType[0]1 = " << withSynAndType[0].at(1) << '\n';
 			}
 		}

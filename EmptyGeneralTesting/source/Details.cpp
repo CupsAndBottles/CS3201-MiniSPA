@@ -30,6 +30,11 @@ Enum::TYPE Details::getType()
 	return type;
 }
 
+bool Details::getIsStmt()
+{
+	return isStmt;
+}
+
 void Details::setIsExpression(bool isExpression)
 {
 	this->isExpression = isExpression;
@@ -49,6 +54,18 @@ void Details::setType(string typeInString)
 {
 	Enum::TYPE type = convertToType(typeInString);
 	this->type = type;
+}
+
+void Details::setIsStmt(string isStmtInString)
+{
+	
+	if (isStmtInString == "1") {
+		this->isStmt = true;
+	}
+	else if (isStmtInString == "0") {
+		this->isStmt = false;
+	}
+	
 }
 
 Enum::TYPE Details::convertToType(string typeInString)

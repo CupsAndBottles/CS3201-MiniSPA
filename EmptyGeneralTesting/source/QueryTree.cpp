@@ -35,7 +35,7 @@ void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<s
 	}
 
 	if (withData.size() > 0) {
-		addWithTree(withData[0], withData[1], withData[2]);
+		addWithTree(withData[0], withData[1], withData[2], withData[3]);
 	}
 }
 
@@ -75,7 +75,7 @@ void QueryTree::addResultTree(vector<string> syn, vector<string> type)
 	}
 }
 
-void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vector<string> intVal)
+void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vector<string> intVal, vector<string> isStmt)
 {
 	int z = 0;
 
@@ -85,11 +85,13 @@ void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vecto
 		withTree.at(z).setLeftCIsExpression(false);
 		withTree.at(z).setLeftCIntValue(atoi(intVal.at(i).c_str()));
 		withTree.at(z).setLeftCStringValue(stringVal.at(i));
+		withTree.at(z).setLeftCIsStmt(isStmt.at(i));
 
 		withTree.at(z).setRightCType(type.at(i + 1));
 		withTree.at(z).setRightCIsExpression(false);
 		withTree.at(z).setRightCIntValue(atoi(intVal.at(i + 1).c_str()));
 		withTree.at(z).setRightCStringValue(stringVal.at(i + 1));
+		withTree.at(z).setRightCIsStmt(isStmt.at(i));
 		z++;
 	}
 //	for (int j = 0; j < withTree.size(); j++) {

@@ -65,9 +65,19 @@ void Clauses::setRightCType(string type)
 	rightChild.setType(type);
 }
 
+void Clauses::setRightCIsStmt(string isStmt)
+{
+	rightChild.setIsStmt(isStmt);
+}
+
 bool Clauses::getRightCIsExpression()
 {
 	return rightChild.getIsExpression();
+}
+
+bool Clauses::getRightCIsStmt()
+{
+	return rightChild.getIsStmt();
 }
 
 string Clauses::getRightCStringValue()
@@ -90,6 +100,11 @@ void Clauses::setLeftCIsExpression(bool isExpression)
 	leftChild.setIsExpression(isExpression);
 }
 
+void Clauses::setLeftCIsStmt(string isStmt)
+{
+	leftChild.setIsStmt(isStmt);
+}
+
 void Clauses::setLeftCStringValue(string stringVal)
 {
 	leftChild.setStringValue(stringVal);
@@ -108,6 +123,11 @@ void Clauses::setLeftCType(string type)
 bool Clauses::getLeftCIsExpression()
 {
 	return leftChild.getIsExpression();
+}
+
+bool Clauses::getLeftCIsStmt()
+{
+	return leftChild.getIsStmt();
 }
 
 string Clauses::getLeftCStringValue()

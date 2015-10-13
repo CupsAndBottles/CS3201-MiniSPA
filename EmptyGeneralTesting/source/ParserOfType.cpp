@@ -168,14 +168,14 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 	synAndType.push_back(vector <string>()); //isExpression
 
 	std::cout << "clauseType = " << clauseType << '\n';
-	if (isSynDigit(synonym) && clauseType == "stmt#") {
+	if (isSynDigit(synonym) && (clauseType.compare("stmt#") == 0 || clauseType.compare("prog_line") == 0)) {
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("prog_line");
 		synAndType[2].push_back(synonym);
 		synAndType[3].push_back("0");
 		return synAndType;
 	}
-	else if (isSynDigit(synonym) && clauseType == "value") {
+	else if (isSynDigit(synonym) && clauseType.compare("value") == 0) {
 		int index = pkb->getConstantIndex(atoi(synonym.c_str()));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("constant");
@@ -229,7 +229,7 @@ vector<vector<string>> ParserOfType::setProcedureTypeAndSyn(PKB &querypkb, strin
 		int index = pkb->getProcIndex(synonym);
 		synAndType[2].push_back(std::to_string(index));
 		synAndType[0].push_back(synonym);
-		synAndType[1].push_back(clauseType);
+		synAndType[1].push_back("procedure");
 		synAndType[3].push_back("0");
 		return synAndType;
 	}
