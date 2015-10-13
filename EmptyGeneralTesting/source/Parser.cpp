@@ -543,7 +543,7 @@ void Parser::pushCloseBracket(int stmtNum) {
 	if (!containerElements.empty()) {
 		containerElements.pop_back();
 	}
-
+	cout << "size: " << closeBracket.size();
 	setProcEndNum(stmtNum);
 }
 
