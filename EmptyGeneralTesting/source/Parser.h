@@ -41,6 +41,7 @@ public:
 	void processExpressions(int index, string statement);
 	void pushOpenBracket();
 	bool isVariable(char c);
+	bool isString(string s);
 	//	void insertIntoVarTable(int stmtNum, char var);
 	bool constantValue;
 
