@@ -112,7 +112,7 @@ public:
 	string getProcName(int procIndex);
 	vector<int> getProcModified(int procIndex);
 	vector<int> getProcUsed(int procIndex);
-	vector<pair<int, string>> getProcCalls();
+	vector<int> getProcCalls();
 	vector<int> getCalls(int procIndex);
 	vector<int> getCalledBy(int procIndex);
 	vector<int> getCallsT(int procIndex);
