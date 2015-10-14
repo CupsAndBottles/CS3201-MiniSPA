@@ -123,7 +123,7 @@ std::vector<int> DesignExtractor::extractCalledByT(vector<vector<int>>col, int s
 	return CalledByT;
 }
 
-vector<int> DesignExtractor::setExtraProcModifies(vector<int> existingList, vector<int> callsT, vector<vector<int>> col) {
+vector<int> DesignExtractor::setExtraProcModifiesUses(vector<int> existingList, vector<int> callsT, vector<vector<int>> col) {
 	vector<int> result = existingList;
 	for (int i = 0; i < callsT.size(); i++) {
 		int proc = callsT.at(i);
