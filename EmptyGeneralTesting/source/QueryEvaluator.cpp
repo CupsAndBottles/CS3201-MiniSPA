@@ -139,8 +139,8 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 	Synonym syn;
 
 	for (size_t i = 0; i < group.size(); i++) {
-		for (size_t j = 0; j < group.at(i).size(); j++) {
-			mergeSyn(syn, this->results.at(group[i][j]));
+		for (size_t j = 0; j < (group.at(i).size()-1); j++) {
+			syn = mergeSyn(this->results.at(group[i][j]), this->results.at(group[i][j+1]));
 		}
 		mergedResult.push_back(syn);
 		syn = Synonym();
@@ -196,6 +196,11 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 			}
 		}
 	}
+
+	Synonym syn;
+	syn.addResult(resultSynType, resultSynName, result);
+
+	return syn;
 
 
 }
