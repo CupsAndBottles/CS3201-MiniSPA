@@ -308,9 +308,17 @@ void Parser::processExpressions(int index, string statement) {
 				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
+					
+					if (isOperator(o2)) {
+						
+						output.push_back(o2);
+						output.push_back(' ');
+					}
+					else {
+						output.push_back(o2);
+					}
 
-					output.push_back(o2);
-				
+
 					if (!stack.empty())
 						o2 = stack.top();
 					else
@@ -358,7 +366,9 @@ void Parser::processExpressions(int index, string statement) {
 
 			}
 			else {
-				output.push_back(charac);
+				
+					output.push_back(charac);
+				
 				s.push_back(charac);
 			}
 		}
@@ -370,7 +380,9 @@ void Parser::processExpressions(int index, string statement) {
 		{
 			Error();
 		}
+		output.push_back(' ');
 		output.push_back(stackTop);
+		output.push_back(' ');
 		stack.pop();
 	}
 	setExprInStmtTable(index, output);
