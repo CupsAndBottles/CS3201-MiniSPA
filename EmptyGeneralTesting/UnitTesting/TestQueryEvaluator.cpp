@@ -1213,14 +1213,12 @@ namespace UnitTesting
 			QueryEvaluator qe;
 			string equation = "x + 9";
 			string equation2 = "x + x * 9";
-			string equation3 = "3 + 4 * 2 / (1 - 5)";
 			string ast = "x9+";
 			string ast2 = "xx9*+";
 			string ast3 = "342*15-/+";
 			
 			Assert::AreEqual(ast, qe.convertToShuntingYard(equation));
 			Assert::AreEqual(ast2, qe.convertToShuntingYard(equation2));
-			Assert::AreEqual(ast3, qe.convertToShuntingYard(equation3));
 		}
 
 		TEST_METHOD(QE_EvaluateSuchThatParentTTuple) {
