@@ -296,7 +296,10 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 		}
 
 		results.push_back(clause.getRightCIntValue());
-		storeResults(results, clause.getLeftCStringValue(), clause.getLeftCType());
+		vector<Enum::TYPE> type = { clause.getLeftCType() };
+		vector<string> synString = { clause.getLeftCStringValue() };
+		vector<vector<int>> resultsToStore = { results };
+		storeResults(type, synString, resultsToStore);
 		return true;
 	}
 	else { // n = c.value / s/a/w/if.stmt# = c.value / v.varName/p.procName/call.procName = p.procName/v.varName/call.procName
@@ -487,9 +490,18 @@ bool QueryEvaluator::getCommonAttrNames(vector<string> leftResults, vector<strin
 		}
 	}
 
-	storeResults(convertNamesToIndexes(mergedResults, clause.getLeftCType()), clause.getLeftCStringValue(), clause.getLeftCType());
-	storeResults(convertNamesToIndexes(mergedResults, clause.getRightCType()), clause.getRightCStringValue(), clause.getRightCType());
-	return !mergedResults.empty();
+	vector<Enum::TYPE> type = { clause.getLeftCType(), clause.getRightCType() };
+	vector<string> synString = { clause.getLeftCStringValue(), clause.getRightCStringValue() };
+	if (mergedResults.empty()) {
+		return false;
+	}
+	else {
+		vector<int> resultsForLeftParam = convertNamesToIndexes(mergedResults, clause.getLeftCType());
+		vector<int> resultsForRightParam = convertNamesToIndexes(mergedResults, clause.getRightCType());
+		vector<vector<int>> resultsToStore = { resultsForLeftParam, resultsForRightParam };
+		storeResults(type, synString, resultsToStore);
+		return true;
+	}
 }
 
 bool QueryEvaluator::getCommonAttrValues(vector<int> leftResults, vector<int> rightResults, Clauses clause) {
@@ -502,9 +514,31 @@ bool QueryEvaluator::getCommonAttrValues(vector<int> leftResults, vector<int> ri
 		}
 	}
 
-	storeResults(mergedResults, clause.getLeftCStringValue(), clause.getLeftCType());
-	storeResults(mergedResults, clause.getRightCStringValue(), clause.getRightCType());
-	return !mergedResults.empty();
+	vector<Enum::TYPE> type = { clause.getLeftCType(), clause.getRightCType() };
+	vector<string> synString = { clause.getLeftCStringValue(), clause.getRightCStringValue() };
+	if (mergedResults.empty()) {
+		return false;
+	}
+	else {
+		vector<int> leftResults = mergedResults;
+		vector<int> rightResults = mergedResults;
+
+		if (clause.getLeftCType() == Enum::TYPE::CONSTANT) {
+			for (size_t i = 0; i < mergedResults.size(); i++) {
+				leftResults.push_back(pkb->getConstantIndex(mergedResults.at(i)));
+			}
+		} 
+
+		if (clause.getRightCType() == Enum::TYPE::CONSTANT) {
+			for (size_t i = 0; i < mergedResults.size(); i++) {
+				rightResults.push_back(pkb->getConstantIndex(mergedResults.at(i)));
+			}
+		}
+
+		vector<vector<int>> resultsToStore = { leftResults, rightResults };
+		storeResults(type, synString, resultsToStore);
+		return true;
+	}
 }
 
 vector<int> QueryEvaluator::convertNamesToIndexes(vector<string> stringResults, Enum::TYPE type) {
@@ -601,9 +635,9 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 
 		}
 	}
-	storeResultsForSyn(clause, results);
 
 	if (!results.empty()) {
+		storeResultsForSyn(clause, results);
 		return true;
 	}
 	else {
@@ -776,25 +810,37 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> results) {
 	vector<int> firstSynResults;
 	vector<int> secondSynResults;
+	vector<Enum::TYPE> type;
+	vector<string> synString;
+	vector<vector<int>> resultsToStore;
 
 	if (clause.getLeftCIntValue() == WILDCARD) {
 		for (size_t i = 0; i < results.size(); i++) {
 			firstSynResults.push_back(results[i].first);
 		}
 
-		sort(firstSynResults.begin(), firstSynResults.end());
-		firstSynResults.erase(unique(firstSynResults.begin(), firstSynResults.end()), firstSynResults.end());
-		storeResults(firstSynResults, clause.getLeftCStringValue(), clause.getLeftCType());
+		if (!firstSynResults.empty()) {
+			type.push_back(clause.getLeftCType());
+			synString.push_back(clause.getLeftCStringValue());
+			resultsToStore.push_back(firstSynResults);
+		}
+		
 	}
 
 	if (clause.getRightCIntValue() == WILDCARD) {
 		for (size_t i = 0; i < results.size(); i++) {
 			secondSynResults.push_back(results[i].second);
 		}
-		sort(secondSynResults.begin(), secondSynResults.end());
-		secondSynResults.erase(unique(secondSynResults.begin(), secondSynResults.end()), secondSynResults.end());
-		storeResults(secondSynResults, clause.getRightCStringValue(), clause.getRightCType());
+
+		if (!secondSynResults.empty()) {
+			type.push_back(clause.getRightCType());
+			synString.push_back(clause.getRightCStringValue());
+			resultsToStore.push_back(secondSynResults);
+		}
 	}
+
+	storeResults(type, synString, resultsToStore);
+
 }
 
 void QueryEvaluator::storeResults(vector<Enum::TYPE> type, vector<string> synString, vector<vector<int>> resultToStore) {
