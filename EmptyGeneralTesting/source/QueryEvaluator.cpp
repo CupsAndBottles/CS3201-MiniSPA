@@ -528,7 +528,6 @@ vector<int> QueryEvaluator::convertNamesToIndexes(vector<string> stringResults, 
 	default:
 		break;
 	}
-
 	return indexes;
 }
 
