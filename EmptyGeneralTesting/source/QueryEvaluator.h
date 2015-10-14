@@ -40,7 +40,6 @@ private:
 	bool evaluateAssign(Clauses clause);
 	void storeResultsForSyn(Clauses clause, vector<pair<int, int>> results);
 	void storeResults(vector<Enum::TYPE> type, vector<string> synString, vector<vector<int>> resultToStore);
-	void storeResults(vector<string> synString, vector<vector<int>> resultToStore);
 	bool isOperator(char o);
 	int isPriority(const char & c);
 	vector<string> evaluateSelect(Clauses select);
