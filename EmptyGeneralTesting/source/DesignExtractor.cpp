@@ -10,7 +10,7 @@ DesignExtractor::DesignExtractor()
 DesignExtractor::~DesignExtractor() {
 }
 
-std::vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
+vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
 	int index = stmtNum;
 	vector<int> parentCol = col;
 	int parent;
@@ -28,29 +28,35 @@ std::vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
 	return ParentT;
 }
 
-std::vector<int> DesignExtractor::extractChildrenT(vector<vector<int>> col,int stmtNum) {
-	std::vector<int> children = col.at(stmtNum);
+vector<int> DesignExtractor::extractChildrenT(vector<vector<int>> col,int stmtNum) {
+	vector<int> children = col.at(stmtNum);
 	int child;
-
+	
 	child = children.at(0);
 	if (child == 0) {	
 	} else {
-		extractChildrenTRec(children,col);
+		extractRec(children, col, "children");
 	}
 
 	return ChildrenT;
 }
 
-void DesignExtractor::extractChildrenTRec(std::vector<int> children, vector<vector<int>> col) {
-
-	for (int i = 0; i < (int)children.size(); i++) {
-		int child = children.at(i);
-		if (child == 0) {
+void DesignExtractor::extractRec(std::vector<int> row, vector<vector<int>> col, string type) {
+	for (int i = 0; i < (int)row.size(); i++) {
+		int	member = row.at(i);
+		if (member == 0) {
 			return;
 		}
 		else {
-			ChildrenT.push_back(child);
-			extractChildrenTRec(col.at(child), col);
+			if (type.compare("children") == 0) {
+				ChildrenT.push_back(member);
+			}
+			else if (type.compare("calls") == 0) {
+				CallsT.push_back(member);
+			} else { //"calledBy"
+				CalledByT.push_back(member);
+			}
+			extractRec(col.at(member), col,type);
 		}
 	}
 }
@@ -88,4 +94,80 @@ std::vector<int> DesignExtractor::extractFollowedByT(vector<int> col, int stmtNu
 	}
 
 	return FollowedByT;
+}
+
+std::vector<int> DesignExtractor::extractCallsT(vector<vector<int>> col, int stmtNum) {
+	std::vector<int> calledProcedures = col.at(stmtNum);
+	int proc;
+
+	proc = calledProcedures.at(0);
+	if (proc == 0) {
+	}
+	else {
+		extractRec(calledProcedures, col,"calls");
+	}
+	return CallsT;
+
+}
+
+std::vector<int> DesignExtractor::extractCalledByT(vector<vector<int>>col, int stmtNum) {
+	vector<int> callingProcedures = col.at(stmtNum);
+	int proc;
+
+	proc = callingProcedures.at(0);
+	if (proc == 0) {
+	}
+	else {
+		extractRec(callingProcedures, col, "calledBy");
+	}
+	return CalledByT;
+}
+
+vector<int> DesignExtractor::setExtraProcModifies(vector<int> existingList, vector<int> callsT, vector<vector<int>> col) {
+	vector<int> result = existingList;
+	for (int i = 0; i < callsT.size(); i++) {
+		int proc = callsT.at(i);
+		for (int j = 0; j < col.at(proc).size(); j++) {
+			int varIndex = col.at(proc).at(j);
+			if (find(existingList.begin(), existingList.end(), varIndex) != existingList.end()) {
+				existingList.push_back(varIndex);
+			}
+			
+		}
+	}
+	return result;
+}
+
+std::vector<int> DesignExtractor::extractNextT(vector<int> col, int stmtNum) {
+	int index = stmtNum;
+	int num;
+
+	while (true) {
+		num = col.at(stmtNum);
+		if (num == 0) {
+			break;
+		}
+		else {
+			NextT.push_back(num);
+			stmtNum = num;
+		}
+	}
+	return NextT;
+}
+
+std::vector<int> DesignExtractor::extractPrevT(vector<int> col, int stmtNum) {
+	int index = stmtNum;
+	int num;
+
+	while (true) {
+		num = col.at(stmtNum);
+		if (num == 0) {
+			break;
+		}
+		else {
+			PrevT.push_back(num);
+			stmtNum = num;
+		}
+	}
+	return PrevT;
 }
