@@ -157,25 +157,44 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 	vector<string> synName2 = syn1.getSyn();
 	vector<vector<int>> result2 = syn1.getResult();
 
-	int counter = checkCommonSyn(type1, type2, synName1, synName2);
+	vector<Enum::TYPE> resultSynType;
+	vector<string> resultSynName;
+	vector<vector<int>> result;
+
+	vector<pair<int,int>> counter = checkCommonSyn(type1, type2, synName1, synName2);
 	
-	if (counter == 2) {
-		int firstMatch;
-		int secondMatch;
+	if (counter.size() == 2) {
 		
-		for (size_t i = 0; i < type1.size(); i++) {
-			for (size_t j = 0; j < type2.size(); j++) {
-				if (type1[i] == type2[j]) {
-					if (synName1[i] == synName2[j]) {
-						counter++;
+	}
+	else if (counter.size() == 1) {
+		int row1 = counter[0].first;
+		int row2 = counter[0].second;
+
+		for (size_t i = 0; i < result1[row1].size(); i++) {
+			for (size_t j = 0; j < result2[row2].size(); i++) {
+				if (result1[row1][i] == result2[row2][j]) {
+					for (size_t k = 0; k < result1.size(); k++) {
+						result.at(k).push_back(result1[k][i]); // copy entire row 1
+					}
+					for (size_t k = 0; k < result2.size(); k++) {
+						if (k != row2) {
+							result.at(k).push_back(result2[k][j]);
+						}
 					}
 				}
 			}
 		}
 
-	}
-	else if (counter == 1) {
-
+		for (size_t k = 0; k < result1.size(); k++) {
+			resultSynType.push_back(type1[k]);
+			resultSynName.push_back(synName1[k]);
+		}
+		for (size_t k = 0; k < result2.size(); k++) {
+			if (k != row2) {
+				resultSynType.push_back(type2[k]);
+				resultSynName.push_back(synName2[k]);
+			}
+		}
 	}
 
 
