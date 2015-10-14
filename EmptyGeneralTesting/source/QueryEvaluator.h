@@ -18,6 +18,8 @@ public:
 	list<string> evaluateQuery(QueryTree tree);
 	vector<vector<int>> rearrangeSynonym(vector<vector<int>> syn);
 	vector<Synonym> mergeWithinGroup(vector<vector<int>> group);
+	Synonym mergeSyn(Synonym syn1, Synonym syn2);
+	vector<pair<int, int>> checkCommonSyn(vector<Enum::TYPE> type1, vector<Enum::TYPE> type2, vector<string> synName1, vector<string> synName2);
 	vector<vector<int>> groupSynonym(vector<Synonym> result);
 	vector<vector<int>> mergeSyn(vector<vector<int>> syn, int i, int j);
 	bool hasCommonSyn(vector<int> syn1, vector<int> syn2);

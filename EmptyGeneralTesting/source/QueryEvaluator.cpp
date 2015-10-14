@@ -113,20 +113,88 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 }
 
 vector<vector<int>> QueryEvaluator::rearrangeSynonym(vector<vector<int>> syn) {
+	vector<vector<int>> result;
 
+	for (size_t i = 0; i < syn.size(); i++) {
+		result.push_back({ syn.at(i).at(0) });
+		syn.at(i).erase(syn.at(i).begin());
+	}
+
+	for (size_t i = 0; i < syn.size(); i++) {
+		for (size_t j = 0; j < syn.at(i).size(); j++) {
+			if (hasCommonSyn(this->results.at(result.at(i).size() - 1), this->results.at(syn.at(i).at(j)))) {
+				result.at(i).push_back(syn.at(i).at(j));
+				syn.at(i).erase(syn.at(i).begin() + j);
+				j = 0;
+			}
+		}
+	}
+
+	return result;
 
 }
 
 vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 	vector<Synonym> mergedResult;
+	Synonym syn;
 
 	for (size_t i = 0; i < group.size(); i++) {
 		for (size_t j = 0; j < group.at(i).size(); j++) {
-
+			mergeSyn(syn, this->results.at(group[i][j]));
 		}
+		mergedResult.push_back(syn);
+		syn = Synonym();
 	}
 
 	return mergedResult;
+}
+
+Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
+	vector<Enum::TYPE> type1 = syn1.getType();
+	vector<string> synName1 = syn1.getSyn();
+	vector<vector<int>> result1 = syn1.getResult();
+	vector<Enum::TYPE> type2 = syn1.getType();
+	vector<string> synName2 = syn1.getSyn();
+	vector<vector<int>> result2 = syn1.getResult();
+
+	int counter = checkCommonSyn(type1, type2, synName1, synName2);
+	
+	if (counter == 2) {
+		int firstMatch;
+		int secondMatch;
+		
+		for (size_t i = 0; i < type1.size(); i++) {
+			for (size_t j = 0; j < type2.size(); j++) {
+				if (type1[i] == type2[j]) {
+					if (synName1[i] == synName2[j]) {
+						counter++;
+					}
+				}
+			}
+		}
+
+	}
+	else if (counter == 1) {
+
+	}
+
+
+}
+
+vector<pair<int, int>> QueryEvaluator::checkCommonSyn(vector<Enum::TYPE> type1, vector<Enum::TYPE> type2, vector<string> synName1, vector<string> synName2) {
+	vector<pair<int, int>> counter;
+
+	for (size_t i = 0; i < type1.size(); i++) {
+		for (size_t j = 0; j < type2.size(); j++) {
+			if (type1[i] == type2[j]) {
+				if (synName1[i] == synName2[j]) {
+					counter.push_back(make_pair(i, j));
+				}
+			}
+		}
+	}
+
+	return counter;
 }
 
 vector<vector<int>> QueryEvaluator::groupSynonym(vector<Synonym> result) {

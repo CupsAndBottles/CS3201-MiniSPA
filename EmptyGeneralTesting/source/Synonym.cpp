@@ -40,7 +40,7 @@ vector<vector<int>> Synonym::getResult() {
 
 bool Synonym::operator<(const Synonym & s2) const
 {
-	if (this->resultSize() < s2.resultSize()) {
+	if (this->getSize() < s2.getSize()) {
 		return true;
 	}
 
