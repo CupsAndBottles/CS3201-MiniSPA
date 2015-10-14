@@ -284,9 +284,14 @@ bool QueryEvaluator::evaluateWith(Clauses clause) {
 
 	if (clause.getRightCIntValue() != NOT_FOUND) {
 		if (clause.getLeftCType() != Enum::TYPE::VARIABLE && clause.getLeftCType() != Enum::TYPE::PROCEDURE 
-			&& clause.getLeftCType() != Enum::TYPE::CALLS && clause.getLeftCType() != Enum::TYPE::CONSTANT) {
-			if (!evaluateValidStmtRefs(clause.getLeftCType(), clause.getRightCIntValue())) {
-				return false;
+			&& clause.getLeftCType() != Enum::TYPE::CONSTANT) {
+			if (clause.getLeftCType() == Enum::TYPE::CALLS) {
+				if (clause.getLeftCIsStmt()) {
+					return evaluateValidStmtRefs(clause.getLeftCType(), clause.getRightCIntValue());
+				}
+			}
+			else {
+				return evaluateValidStmtRefs(clause.getLeftCType(), clause.getRightCIntValue());
 			}
 		}
 
@@ -328,6 +333,13 @@ bool QueryEvaluator::evaluateValidStmtRefs(Enum::TYPE type, int index) {
 			return false;
 		}
 		break;
+	case Enum::TYPE::CALLS:
+		if (0 < index && index <= pkb->getNoOfStmt()) {
+			return (pkb->getType(index) == Enum::TYPE::CALLS);
+		}
+		else {
+			return false;
+		}
 	default:
 		return false;
 		break;
