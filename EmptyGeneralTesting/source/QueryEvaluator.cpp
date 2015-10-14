@@ -39,7 +39,6 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<vector<string>> intermediateResult;
 	list<string> result;
 	bool isTrueClause;
-	//bool isTrueSuchThatClause, isTruePatternClause, isTrueWithClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
 		list<string> emptyResult{};
@@ -694,8 +693,11 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 		else{ 			
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
+			cout << expr << endl;
 			if (!clause.getRightCIsExpression()) {		// pattern a(_, x ) 
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
+					//cout << i << "." << endl;
+					//cout << pkb->getRightExpr(i) << endl;
 					if (this->pkb->getRightExpr(i) == expr)
 						intermediateResult.push_back(i);
 				}
@@ -704,6 +706,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
 						intermediateResult.push_back(i);
+						//cout << i << endl;
+						//cout << "RightExpr:" << pkb->getRightExpr(i) << endl;
 					}
 				}
 			}
@@ -722,6 +726,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 				for (size_t i = 0; i < stmtLst.size(); i++) {  
 					if (this->pkb->getRightExpr(stmtLst[i].first) == expr) {
 							intermediateResult.push_back(stmtLst[i].first);
+							//cout << i << endl;
+							//cout << pkb->getRightExpr(i);
 					}
 				}
 			}
@@ -890,7 +896,7 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 
 bool QueryEvaluator::isOperator(char o) {
 	bool isOp = false;
-	if (o == '+' || o == '-' || o == '/' || o == '*') {
+	if (o == '+' || o == '-' || o == '*') {
 		isOp = true;
 	}
 	return isOp;
