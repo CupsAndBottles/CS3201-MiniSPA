@@ -29,7 +29,7 @@ namespace UnitTesting
 
 		TEST_METHOD(TestExpression) {
 			string expr = parser.getExpression();
-			Assert::AreEqual(expr, string("1: i1 2: b200 3: ca 4: oSCar1beta+tmp+ 5: oSCarIk+j1k+chArlie+ 6: xx1+ 7: RomeoRomeo1+ 8: b0 9: cdeltal+width+Romeo+ 10: cc1+ 11: xx1+ 12: a2 13: ww1+ "));
+			Assert::AreEqual(expr, string("1: 1 2: 200 3: a 4: 1 beta +tmp+ 5: I k +j1k +chArlie+ 6: x 1+ 7: Romeo 1+ 8: 0 9: delta l +width +Romeo+ 10: c 1+ 11: x 1+ 12: 2 13: w 1+ "));
 		}
 
 		//follows is incorrect - bracket issues. 

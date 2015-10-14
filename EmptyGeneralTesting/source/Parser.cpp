@@ -62,6 +62,7 @@ string Parser::openFile(string fileName) {
 		allLines.erase(remove_if(allLines.begin(), allLines.end(), isspace), allLines.end());
 		lines = splitLines(allLines);
 		output = linesSplitted(lines);
+		cout << output;
 		Procedure();
 	}
 
@@ -299,7 +300,7 @@ void Parser::processExpressions(int index, string statement) {
 			int index = pkb->setVarName(s);
 			pkb->setProcNames(index, currProcName);
 			s = "";
-
+			output.push_back(' ');
 			if (!stack.empty())
 			{
 				char o2 = stack.top();
@@ -307,8 +308,9 @@ void Parser::processExpressions(int index, string statement) {
 				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
-					output.push_back(o2);
 
+					output.push_back(o2);
+				
 					if (!stack.empty())
 						o2 = stack.top();
 					else
@@ -348,6 +350,7 @@ void Parser::processExpressions(int index, string statement) {
 		else
 		{
 			if (charac == '=') {
+				output.clear();
 				handleModifyAndUses(index, statement);
 				int index = pkb->setVarName(s);
 				pkb->setProcNames(index, currProcName);
@@ -540,7 +543,7 @@ int Parser::isPriority(const char &c)
 	{
 		return 3;
 	}
-	if (c == '*' || c == '/')
+	if (c == '*')
 	{
 		return 2;
 	}
