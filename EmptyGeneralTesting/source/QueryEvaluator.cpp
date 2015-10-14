@@ -97,6 +97,8 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		return trueResult;
 	}
 
+	vector<vector<Synonym>> syn = groupSynonym(this->results);
+
 	for (size_t i = 0; i < select.size(); i++) {
 		intermediateResult.push_back(evaluateSelect(select[i]));
 	}
@@ -104,6 +106,37 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	result = permutateResult(intermediateResult);
 
 	return result;
+}
+
+vector<vector<Synonym>> QueryEvaluator::groupSynonym(vector<Synonym> result) {
+	vector<vector<Synonym>> syn;
+	Synonym temp;
+	bool isFound;
+
+	while (!result.empty()) {
+		temp = result.at(result.size() - 1);
+		for (size_t synIndex = 0; synIndex < syn.size(); synIndex++) {
+		
+		}
+	}
+
+}
+
+bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
+	vector<Enum::TYPE> type1 = syn1.getType();
+	vector<Enum::TYPE> type2 = syn2.getType();
+	vector<string> synName1 = syn1.getSyn();
+	vector<string> synName2 = syn2.getSyn();
+	
+	for (size_t i = 0; i < type1.size(); i++) {
+		if (type1.at(i) == type2.at(i)) {
+			if (synName1.at(i) == synName2.at(i)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 list<string> QueryEvaluator::permutateResult(vector<vector<string>> intermediateResult) {

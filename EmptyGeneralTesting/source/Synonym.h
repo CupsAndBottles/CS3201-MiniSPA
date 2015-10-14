@@ -12,6 +12,9 @@ public:
 	Synonym();
 	~Synonym();
 	void addResult(vector<Enum::TYPE> type, vector<string> syn, vector<vector<int>> resultsToStore);
+	vector<Enum::TYPE> getType();
+	vector<string> getSyn();
+	vector<vector<int>> getResult();
 
 private:
 	vector<string> syn;
@@ -19,8 +22,5 @@ private:
 	vector<Enum::TYPE> type;
 	void addSyn(vector<string> syn);
 	void storeResult(vector<vector<int>> resultsToStore);
-	vector<Enum::TYPE> getType();
-	vector<string> getSyn();
-	vector<vector<int>> getResult();
 	void addType(vector<Enum::TYPE> type);
 };
