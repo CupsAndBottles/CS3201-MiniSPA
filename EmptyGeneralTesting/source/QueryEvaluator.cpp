@@ -653,7 +653,11 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 	}
 
 	if (intermediateResult.size() != 0) {
-		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::WHILE);
+		vector<Enum::TYPE> type = { clause.getParentType() };
+		vector<string> syn = { clause.getParentStringVal() };
+		vector<vector<int>> resultsToStore;
+		resultsToStore.push_back(intermediateResult);
+		storeResults(type, syn, resultsToStore);
 		return true;
 	}
 	else {
@@ -684,7 +688,11 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 	}
 
 	if (intermediateResult.size() != 0) {
-		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::IF);
+		vector<Enum::TYPE> type = { clause.getParentType() };
+		vector<string> syn = { clause.getParentStringVal() };
+		vector<vector<int>> resultsToStore;
+		resultsToStore.push_back(intermediateResult);
+		storeResults(type, syn, resultsToStore);
 		return true;
 	}
 	else {
@@ -754,7 +762,11 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	}
 	
 	if (intermediateResult.size() != 0) {
-		storeResults(intermediateResult, clause.getParentStringVal(), Enum::TYPE::ASSIGN);
+		vector<Enum::TYPE> type = { clause.getParentType() };
+		vector<string> syn = { clause.getParentStringVal() };
+		vector<vector<int>> resultsToStore;
+		resultsToStore.push_back(intermediateResult);
+		storeResults(type, syn, resultsToStore);
 		return true;
 	}
 	else {
@@ -786,24 +798,12 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	}
 }
 
-void QueryEvaluator::storeResults(vector<int> intermediateResult, string syn, Enum::TYPE type) {
-	bool isPresentInResults = false;
+void QueryEvaluator::storeResults(vector<Enum::TYPE> type, vector<string> synString, vector<vector<int>> resultToStore) {
+	Synonym syn = Synonym();
 
-	for (size_t i = 0; i < this->results.size(); i++) {
-		// Syn found in vector<Synonym> results
-		if (this->results[i].getSyn() == syn) {
-			isPresentInResults = true;
-			results[i].addResult(intermediateResult);
-		}
-	}
-
-	// Syn not found in vector<Synonym> results
-	if (!isPresentInResults) {
-		this->results.push_back(Synonym(type, syn, intermediateResult));
-	}
-
-	cout << "storing results\n";
-
+	syn.addResult(type, synString, resultToStore);
+	
+	this->results.push_back(syn);
 }
 
 string QueryEvaluator::convertToShuntingYard(string statement) {

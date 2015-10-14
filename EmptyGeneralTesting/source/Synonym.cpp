@@ -4,60 +4,36 @@ Synonym::Synonym()
 {
 }
 
-Synonym::Synonym(Enum::TYPE type, string syn, vector<int> resultsToStore) {
-	this->type = type;
-	this->syn = syn;
-	addResult(resultsToStore);
-}
-
 Synonym::~Synonym()
 {
 }
 
-void Synonym::addResult(vector<int> resultToBeStored) {
-	vector<int> intersect;
-
-	if (this->result.empty()) {
-		for (size_t i = 0; i < resultToBeStored.size(); i++) {
-			this->result.push_back(resultToBeStored[i]);
-		}
-	}
-	else {
-		for (size_t i = 0; i < resultToBeStored.size(); i++) {
-			for (size_t j = 0; j < this->result.size(); j++) {
-				if (resultToBeStored[i] == this->result[j]) {
-					intersect.push_back(this->result[j]);
-				}
-			}
-		}
-		this->result.clear();
-		for (size_t i = 0; i < intersect.size(); i++) {
-			this->result.push_back(intersect[i]);
-		}
-	}
-
-
-
+void Synonym::addResult(vector<Enum::TYPE> type, vector<string> syn, vector<vector<int>> resultsToStore) {
+	addType(type);
+	addSyn(syn);
+	storeResult(resultsToStore);
 }
 
-void Synonym::setSyn(string syn) {
-	this->syn = syn;
-}
-
-void Synonym::setType(Enum::TYPE type) {
+void Synonym::addType(vector<Enum::TYPE> type) {
 	this->type = type;
 }
 
-vector<int> Synonym::getResult()
-{
-	return this->result;
+void Synonym::addSyn(vector<string> syn) {
+	this->syn = syn;
 }
 
-string Synonym::getSyn()
-{
+void Synonym::storeResult(vector<vector<int>> resultsToStore) {
+	this->result = resultsToStore;
+}
+
+vector<Enum::TYPE> Synonym::getType() {
+	return this->type;
+}
+
+vector<string> Synonym::getSyn() {
 	return this->syn;
 }
 
-Enum::TYPE Synonym::getType() {
-	return this->type;
+vector<vector<int>> Synonym::getResult() {
+	return this->result;
 }

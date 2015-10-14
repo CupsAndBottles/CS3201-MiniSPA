@@ -10,17 +10,17 @@ class Synonym
 {
 public:
 	Synonym();
-	Synonym(Enum::TYPE type, string syn, vector<int> resultsToStore);
 	~Synonym();
-	void addResult(vector<int> resultToBeAdded);
-	string getSyn();
-	vector<int> getResult();
-	void setSyn(string syn);
-	void setType(Enum::TYPE type);
-	Enum::TYPE getType();
+	void addResult(vector<Enum::TYPE> type, vector<string> syn, vector<vector<int>> resultsToStore);
 
 private:
-	string syn;
-	vector<int> result;
-	Enum::TYPE type;
+	vector<string> syn;
+	vector<vector<int>> result;
+	vector<Enum::TYPE> type;
+	void addSyn(vector<string> syn);
+	void storeResult(vector<vector<int>> resultsToStore);
+	vector<Enum::TYPE> getType();
+	vector<string> getSyn();
+	vector<vector<int>> getResult();
+	void addType(vector<Enum::TYPE> type);
 };
