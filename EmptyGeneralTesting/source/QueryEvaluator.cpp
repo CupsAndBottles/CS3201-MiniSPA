@@ -97,7 +97,11 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		return trueResult;
 	}
 
-	vector<vector<Synonym>> syn = groupSynonym(this->results);
+	sort(this->results.begin(), this->results.end());
+	vector<vector<int>> syn = groupSynonym(this->results);
+	vector<vector<int>> synGroup = rearrangeSynonym(syn);
+	vector<Synonym> afterMerging = mergeWithinGroup(synGroup);
+
 
 	for (size_t i = 0; i < select.size(); i++) {
 		intermediateResult.push_back(evaluateSelect(select[i]));
@@ -108,18 +112,77 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	return result;
 }
 
-vector<vector<Synonym>> QueryEvaluator::groupSynonym(vector<Synonym> result) {
-	vector<vector<Synonym>> syn;
-	Synonym temp;
-	bool isFound;
+vector<vector<int>> QueryEvaluator::rearrangeSynonym(vector<vector<int>> syn) {
 
-	while (!result.empty()) {
-		temp = result.at(result.size() - 1);
-		for (size_t synIndex = 0; synIndex < syn.size(); synIndex++) {
-		
+
+}
+
+vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
+	vector<Synonym> mergedResult;
+
+	for (size_t i = 0; i < group.size(); i++) {
+		for (size_t j = 0; j < group.at(i).size(); j++) {
+
 		}
 	}
 
+	return mergedResult;
+}
+
+vector<vector<int>> QueryEvaluator::groupSynonym(vector<Synonym> result) {
+	vector<vector<int>> syn;
+	bool isFound = false;
+
+	for (size_t i = 0; i < result.size(); i++) {
+		for (size_t groupIndex = 0; groupIndex < syn.size(); groupIndex++) {
+			for (size_t synIndex = 0; synIndex < syn.at(groupIndex).size(); synIndex++) {
+				if (hasCommonSyn(result.at(syn.at(groupIndex).at(synIndex)), result.at(i))) {
+					syn.at(groupIndex).push_back(i);
+					isFound = true;
+				}
+			}
+		}
+		if (!isFound) {
+			vector<int> newRow = { (int)i };
+			syn.push_back(newRow);
+		}
+
+		isFound = false;
+	}
+
+	for (size_t i = 0; i < syn.size(); i++) {
+		for (size_t j = i + 1; j < syn.size(); j++) {
+			if (hasCommonSyn(syn.at(i), syn.at(j))) {
+				syn = mergeSyn(syn, i, j);
+				i = 0;
+				break;
+			}
+		}
+	}
+
+	return syn;
+}
+
+vector<vector<int>> QueryEvaluator::mergeSyn(vector<vector<int>> syn, int first, int second) {
+	for (size_t i = 0; i < syn.at(second).size(); i++) {
+		syn.at(first).push_back(syn.at(second).at(i));
+	}
+	// Need to minus 1?
+	syn.erase(syn.begin() + first);
+
+	return syn;
+}
+
+bool QueryEvaluator::hasCommonSyn(vector<int> syn1, vector<int> syn2) {
+	for (size_t i = 0; i < syn1.size(); i++) {
+		for (size_t j = 0; j < syn2.size(); j++) {
+			if (hasCommonSyn(this->results.at(syn1.at(i)), this->results.at(syn2.at(i)))) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {

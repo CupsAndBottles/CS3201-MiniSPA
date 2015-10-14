@@ -16,6 +16,12 @@ public:
 	QueryEvaluator(PKB &pkb);
 	~QueryEvaluator();
 	list<string> evaluateQuery(QueryTree tree);
+	vector<vector<int>> rearrangeSynonym(vector<vector<int>> syn);
+	vector<Synonym> mergeWithinGroup(vector<vector<int>> group);
+	vector<vector<int>> groupSynonym(vector<Synonym> result);
+	vector<vector<int>> mergeSyn(vector<vector<int>> syn, int i, int j);
+	bool hasCommonSyn(vector<int> syn1, vector<int> syn2);
+	bool hasCommonSyn(Synonym synFirst, Synonym synSecond);
 	list<string> permutateResult(vector<vector<string>> intermediateResult);
 	vector<Synonym> getResults();
 	string convertToShuntingYard(string statement);
