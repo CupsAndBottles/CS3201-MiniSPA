@@ -17,7 +17,7 @@ public:
 	vector<vector<int>> getResult();
 	bool operator <(const Synonym& s2) const;
 	int resultSize();
-	int getSize() const { return result.size(); }
+	int getSize() const { return result.at(0).size(); }
 
 private:
 	vector<string> syn;
