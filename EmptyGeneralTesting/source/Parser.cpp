@@ -141,11 +141,13 @@ void Parser::Procedure() {
 		else if (stmt.find("if") != std::string::npos) {
 			pkb->setType(Enum::IF);
 			processIfElse((*i).first, (*i).second);
+
 		}
 		else if (stmt.find("call") != std::string::npos) {
 			pkb->setType(Enum::CALLS);
 			processCalls((*i).first, (*i).second);
-
+			handleModifyAndUses((*i).first, (*i).second);
+			handleFollows((*i).first, (*i).second);
 		}
 		else {
 			pkb->setType(Enum::ASSIGN);
@@ -230,6 +232,7 @@ void Parser::processCalls(int index, string stmt)
 	callsPair.first = procNumInTble;
 	callsPair.second = procCalls;
 	callsLink.push_back(callsPair);
+
 
 }
 
