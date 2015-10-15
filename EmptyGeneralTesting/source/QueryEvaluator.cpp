@@ -97,7 +97,11 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		return trueResult;
 	}
 
-	vector<vector<Synonym>> syn = groupSynonym(this->results);
+	sort(this->results.begin(), this->results.end());
+	vector<vector<int>> syn = groupSynonym(this->results);
+	vector<vector<int>> synGroup = rearrangeSynonym(syn);
+	vector<Synonym> afterMerging = mergeWithinGroup(synGroup);
+
 
 	for (size_t i = 0; i < select.size(); i++) {
 		intermediateResult.push_back(evaluateSelect(select[i]));
@@ -108,18 +112,169 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	return result;
 }
 
-vector<vector<Synonym>> QueryEvaluator::groupSynonym(vector<Synonym> result) {
-	vector<vector<Synonym>> syn;
-	Synonym temp;
-	bool isFound;
+vector<vector<int>> QueryEvaluator::rearrangeSynonym(vector<vector<int>> syn) {
+	vector<vector<int>> result;
 
-	while (!result.empty()) {
-		temp = result.at(result.size() - 1);
-		for (size_t synIndex = 0; synIndex < syn.size(); synIndex++) {
-		
+	for (size_t i = 0; i < syn.size(); i++) {
+		result.push_back({ syn.at(i).at(0) });
+		syn.at(i).erase(syn.at(i).begin());
+	}
+
+	for (size_t i = 0; i < syn.size(); i++) {
+		for (size_t j = 0; j < syn.at(i).size(); j++) {
+			if (hasCommonSyn(this->results.at(result.at(i).size() - 1), this->results.at(syn.at(i).at(j)))) {
+				result.at(i).push_back(syn.at(i).at(j));
+				syn.at(i).erase(syn.at(i).begin() + j);
+				j = 0;
+			}
 		}
 	}
 
+	return result;
+
+}
+
+vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
+	vector<Synonym> mergedResult;
+	Synonym syn;
+
+	for (size_t i = 0; i < group.size(); i++) {
+		for (size_t j = 0; j < (group.at(i).size()-1); j++) {
+			syn = mergeSyn(this->results.at(group[i][j]), this->results.at(group[i][j+1]));
+		}
+		mergedResult.push_back(syn);
+		syn = Synonym();
+	}
+
+	return mergedResult;
+}
+
+Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
+	vector<Enum::TYPE> type1 = syn1.getType();
+	vector<string> synName1 = syn1.getSyn();
+	vector<vector<int>> result1 = syn1.getResult();
+	vector<Enum::TYPE> type2 = syn1.getType();
+	vector<string> synName2 = syn1.getSyn();
+	vector<vector<int>> result2 = syn1.getResult();
+
+	vector<Enum::TYPE> resultSynType;
+	vector<string> resultSynName;
+	vector<vector<int>> result;
+
+	vector<pair<int,int>> counter = checkCommonSyn(type1, type2, synName1, synName2);
+	
+	if (counter.size() == 2) {
+		
+	}
+	else if (counter.size() == 1) {
+		int row1 = counter[0].first;
+		int row2 = counter[0].second;
+
+		for (size_t i = 0; i < result1[row1].size(); i++) {
+			for (size_t j = 0; j < result2[row2].size(); i++) {
+				if (result1[row1][i] == result2[row2][j]) {
+					for (size_t k = 0; k < result1.size(); k++) {
+						result.at(k).push_back(result1[k][i]); // copy entire row 1
+					}
+					for (size_t k = 0; k < result2.size(); k++) {
+						if (k != row2) {
+							result.at(k).push_back(result2[k][j]);
+						}
+					}
+				}
+			}
+		}
+
+		for (size_t k = 0; k < result1.size(); k++) {
+			resultSynType.push_back(type1[k]);
+			resultSynName.push_back(synName1[k]);
+		}
+		for (size_t k = 0; k < result2.size(); k++) {
+			if (k != row2) {
+				resultSynType.push_back(type2[k]);
+				resultSynName.push_back(synName2[k]);
+			}
+		}
+	}
+
+	Synonym syn;
+	syn.addResult(resultSynType, resultSynName, result);
+
+	return syn;
+
+
+}
+
+vector<pair<int, int>> QueryEvaluator::checkCommonSyn(vector<Enum::TYPE> type1, vector<Enum::TYPE> type2, vector<string> synName1, vector<string> synName2) {
+	vector<pair<int, int>> counter;
+
+	for (size_t i = 0; i < type1.size(); i++) {
+		for (size_t j = 0; j < type2.size(); j++) {
+			if (type1[i] == type2[j]) {
+				if (synName1[i] == synName2[j]) {
+					counter.push_back(make_pair(i, j));
+				}
+			}
+		}
+	}
+
+	return counter;
+}
+
+vector<vector<int>> QueryEvaluator::groupSynonym(vector<Synonym> result) {
+	vector<vector<int>> syn;
+	bool isFound = false;
+
+	for (size_t i = 0; i < result.size(); i++) {
+		for (size_t groupIndex = 0; groupIndex < syn.size(); groupIndex++) {
+			for (size_t synIndex = 0; synIndex < syn.at(groupIndex).size(); synIndex++) {
+				if (hasCommonSyn(result.at(syn.at(groupIndex).at(synIndex)), result.at(i))) {
+					syn.at(groupIndex).push_back(i);
+					isFound = true;
+				}
+			}
+		}
+		if (!isFound) {
+			vector<int> newRow = { (int)i };
+			syn.push_back(newRow);
+		}
+
+		isFound = false;
+	}
+
+	for (size_t i = 0; i < syn.size(); i++) {
+		for (size_t j = i + 1; j < syn.size(); j++) {
+			if (hasCommonSyn(syn.at(i), syn.at(j))) {
+				syn = mergeSyn(syn, i, j);
+				i = 0;
+				break;
+			}
+		}
+	}
+
+	return syn;
+}
+
+vector<vector<int>> QueryEvaluator::mergeSyn(vector<vector<int>> syn, int first, int second) {
+	for (size_t i = 0; i < syn.at(second).size(); i++) {
+		syn.at(first).push_back(syn.at(second).at(i));
+	}
+	// Need to minus 1?
+	syn.erase(syn.begin() + first);
+
+	return syn;
+}
+
+bool QueryEvaluator::hasCommonSyn(vector<int> syn1, vector<int> syn2) {
+	for (size_t i = 0; i < syn1.size(); i++) {
+		for (size_t j = 0; j < syn2.size(); j++) {
+			if (hasCommonSyn(this->results.at(syn1.at(i)), this->results.at(syn2.at(i)))) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {

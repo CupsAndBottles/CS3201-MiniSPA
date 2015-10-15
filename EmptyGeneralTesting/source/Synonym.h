@@ -15,6 +15,9 @@ public:
 	vector<Enum::TYPE> getType();
 	vector<string> getSyn();
 	vector<vector<int>> getResult();
+	bool operator <(const Synonym& s2) const;
+	int resultSize();
+	int getSize() const { return result.size(); }
 
 private:
 	vector<string> syn;
@@ -23,4 +26,5 @@ private:
 	void addSyn(vector<string> syn);
 	void storeResult(vector<vector<int>> resultsToStore);
 	void addType(vector<Enum::TYPE> type);
+
 };

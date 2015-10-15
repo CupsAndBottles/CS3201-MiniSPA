@@ -37,3 +37,16 @@ vector<string> Synonym::getSyn() {
 vector<vector<int>> Synonym::getResult() {
 	return this->result;
 }
+
+bool Synonym::operator<(const Synonym & s2) const
+{
+	if (this->getSize() < s2.getSize()) {
+		return true;
+	}
+
+	return false;
+}
+
+int Synonym::resultSize() {
+	return this->result.size();
+}
