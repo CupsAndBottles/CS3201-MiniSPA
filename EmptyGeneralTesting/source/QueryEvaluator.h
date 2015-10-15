@@ -50,9 +50,13 @@ private:
 	void storeResults(vector<Enum::TYPE> type, vector<string> synString, vector<vector<int>> resultToStore);
 	bool isOperator(char o);
 	int isPriority(const char & c);
-	vector<string> evaluateSelect(Clauses select);
-	vector<string> permutateResultPair(vector<string> firstSet, vector<string> secondSet);
-	list<string> permutateResultSubset(vector<vector<string>> intermediateResult);
+	list<string> evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select);
+	vector<pair<string, vector<int>>> findNonCommonSyn(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select);
+	vector<pair<Enum::TYPE, int>> QueryEvaluator::rearrangeSynOrder(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select);
+	list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, int>> arrangedSyns);
+	vector<pair<Enum::TYPE, string>> getSelectSyns(vector<Clauses> selectedSyns);
+	vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<pair<Enum::TYPE, string>> selectedSyns);
+	vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<string, vector<int>>> mergedValues, pair<string, vector<int>> toBeMerged);
 	list<string> convertVectorToList(vector<string> mergedResults);
 	string convertToString(int index, Enum::TYPE type);
 	PKB *pkb;

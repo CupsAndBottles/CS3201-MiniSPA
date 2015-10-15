@@ -36,7 +36,6 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> pattern;
 	vector<Clauses> select;
 	vector<Clauses> with;
-	vector<vector<string>> intermediateResult;
 	list<string> result;
 	bool isTrueClause;
 
@@ -102,12 +101,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<vector<int>> synGroup = rearrangeSynonym(syn);
 	vector<Synonym> afterMerging = mergeWithinGroup(synGroup);
 
-
-	for (size_t i = 0; i < select.size(); i++) {
-		intermediateResult.push_back(evaluateSelect(select[i]));
-	}
-
-	result = permutateResult(intermediateResult);
+	result = evaluateSelect(afterMerging, select);
 
 	return result;
 }
@@ -294,71 +288,7 @@ bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
 	return false;
 }
 
-list<string> QueryEvaluator::permutateResult(vector<vector<string>> intermediateResult) {
-	list<string> printedResults;
 
-	printedResults = permutateResultSubset(intermediateResult);
-
-	return printedResults;
-}
-
-vector<string> QueryEvaluator::permutateResultPair(vector<string> firstSet, vector<string> secondSet) {
-	string toBeDisplayed = string();
-	vector<string> mergedPair;
-
-	for (size_t i = 0; i < firstSet.size(); i++) {
-		for (size_t j = 0; j < secondSet.size(); j++) {
-			toBeDisplayed = string();
-			toBeDisplayed = firstSet.at(i) + ", " + secondSet.at(j);
-			mergedPair.push_back(toBeDisplayed);
-		}
-	}
-
-	return mergedPair;
-}
-
-list<string> QueryEvaluator::permutateResultSubset(vector<vector<string>> intermediateResult) {
-	list<string> stringedResults;
-
-	if (intermediateResult.size() == 0) {
-		return stringedResults;
-	}
-	if (intermediateResult.size() == 1) {
-		stringedResults = convertVectorToList(intermediateResult.front());
-		return stringedResults;
-	}
-	else {
-		int lastSetToMerge;
-		int numSyn = intermediateResult.size();
-		bool isOdd = false;
-		vector<vector<string>> mergedResults;
-
-		if (numSyn % 2 == 1) {
-			isOdd = true;
-		}
-		else {
-			isOdd = false;
-		}
-
-		if (isOdd) {
-			lastSetToMerge = intermediateResult.size() - 2; // leave the last set out.
-		}
-		else {
-			lastSetToMerge = intermediateResult.size() - 1;
-		}
-
-		for (int i = 0; i < lastSetToMerge; i+=2) {
-			mergedResults.push_back(permutateResultPair(intermediateResult.at(i), intermediateResult.at(i + 1)));
-		}
-
-
-		if (isOdd) {
-			mergedResults.push_back(intermediateResult.back()); // will terminate, eventually it will be 3 sets (if more than 3) which merge to become 1.
-		}
-
-		return permutateResultSubset(mergedResults);
-	}
-}
 
 list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
 	list<string> listedResults;
@@ -370,65 +300,99 @@ list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
 	return listedResults;
 }
 
-vector<string> QueryEvaluator::evaluateSelect(Clauses select) {
-	vector<string> resultForSyn;
-	bool hasCommonSyn = false;
+list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select) {
+	list<string> stringedResults;
 
-	string synonym = select.getParentStringVal();
-	Enum::TYPE type = select.getParentType();
+	vector<pair<Enum::TYPE, string>> selectedSyns = getSelectSyns(select);
+	vector<pair<string, vector<int>>> mergedSelectedSyns = getValuesOfSelectedSyns(groupedSyns, selectedSyns);
 
-	for (size_t i = 0; i < this->results.size(); i++) {
-		if ((results[i].getSyn() == synonym) && (results[i].getType() == type)) {
-			hasCommonSyn = true;
-			for (size_t j = 0; j < results[i].getResult().size(); j++) {
-				resultForSyn.push_back(convertToString(results[i].getResult().at(j), type));
-			}
-		}
-	}
-	
-	if (!hasCommonSyn) {
-		switch (type) {
-		case Enum::TYPE::STATEMENT:
-			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
-				resultForSyn.push_back(convertToString(i, type));
-			}
-			break;
-		case Enum::TYPE::ASSIGN:
-			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
-				if (pkb->getType(i) == Enum::TYPE::ASSIGN) {
-					resultForSyn.push_back(convertToString(i, type));
-				}
-			}
-			break;
-		case Enum::TYPE::WHILE:
-			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
-				if (pkb->getType(i) == Enum::TYPE::WHILE) {
-					resultForSyn.push_back(convertToString(i, type));
-				}
-			}
-			break;
-		case Enum::TYPE::IF:
-			for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
-				if (pkb->getType(i) == Enum::TYPE::IF) {
-					resultForSyn.push_back(convertToString(i, type));
-				}
-			}
-			break;
-		case Enum::TYPE::PROCEDURE:
-			for (int i = 0; i < pkb->getNoOfProc(); i++) {
-				resultForSyn.push_back(convertToString(i, type));
-			}
-			break;
-		case Enum::TYPE::VARIABLE:
-			for (int i = 0; i < pkb->getNoOfVar(); i++) {
-				resultForSyn.push_back(convertToString(i, type));
-			}
-		default:
-			break;
+	if (mergedSelectedSyns.size() != select.size()) {
+		vector<pair<string, vector<int>>> nonCommonSyn = findNonCommonSyn(mergedSelectedSyns, select);
+		for (size_t syn = 0; syn < nonCommonSyn.size(); syn++) {
+			mergedSelectedSyns = mergeSelectedSyns(mergedSelectedSyns, nonCommonSyn[syn]);
 		}
 	}
 
-	return resultForSyn;
+	vector<pair<Enum::TYPE, int>> arrangedSyns = rearrangeSynOrder(mergedSelectedSyns, select);
+	return convertResultsToString(arrangedSyns);
+}
+
+vector<pair<string, vector<int>>> QueryEvaluator::findNonCommonSyn(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select) {
+	return vector<pair<string, vector<int>>>();
+}
+
+vector<pair<Enum::TYPE, int>> QueryEvaluator::rearrangeSynOrder(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select) {
+	return vector<pair<Enum::TYPE, int>>();
+}
+
+list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, int>> arrangedSyns) {
+	return list<string>();
+}
+
+vector<pair<Enum::TYPE, string>> QueryEvaluator::getSelectSyns(vector<Clauses> selectedSyns) {
+	vector<pair<Enum::TYPE, string>> propertiesOfSelectedSyns;
+
+	for (size_t i = 0; i < selectedSyns.size(); i++) {
+		propertiesOfSelectedSyns.push_back(make_pair(selectedSyns[i].getParentType(), selectedSyns[i].getParentStringVal()));
+	}
+
+	return propertiesOfSelectedSyns;
+}
+
+vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<pair<Enum::TYPE, string>> selectedSyns) {
+	vector<pair<string, vector<int>>> mergedValues;
+
+	for (size_t groupIndex = 0; groupIndex < groupedSyns.size(); groupIndex++) { // in one group
+		vector<string> synsInAGroup = groupedSyns[groupIndex].getSyn();
+		vector<Enum::TYPE> typesInAGroup = groupedSyns[groupIndex].getType();
+		vector<vector<int>> synValuesInAGroup = groupedSyns[groupIndex].getResult();
+
+		int firstGroupIndexAdded = -1;
+		for (size_t groupPos = 0; groupPos < synsInAGroup.size(); groupPos++) { // a syn in a group
+			for (size_t syn = 0; syn < selectedSyns.size(); syn++) { // a selected syn from select tree
+				if (synsInAGroup[groupPos] == selectedSyns.at(syn).second && typesInAGroup[groupPos] == selectedSyns.at(syn).first) {
+					if (firstGroupIndexAdded == -1 || firstGroupIndexAdded == groupIndex) {
+						firstGroupIndexAdded = groupIndex;
+						mergedValues.push_back(make_pair(synsInAGroup[groupPos], synValuesInAGroup[groupPos]));
+						break;
+					}
+					else {
+						mergedValues = mergeSelectedSyns(mergedValues, make_pair(synsInAGroup[groupPos], synValuesInAGroup[groupPos]));
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	return mergedValues;
+}
+
+vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<string, vector<int>>> mergedValues, pair<string, vector<int>> toBeMerged) {
+	vector<pair<string, vector<int>>> newMergedGroup;
+	vector<vector<int>> newMergedValues;
+	vector<int> valuesFromToBeMerged = toBeMerged.second;
+	int newGroupSize = mergedValues.size() + 1;
+
+	for (size_t values = 0; values < valuesFromToBeMerged.size(); values++) {
+		for (size_t valueFromMerged = 0; valueFromMerged < mergedValues.front().second.size(); valueFromMerged++) {
+			for (size_t syn = 0; syn < mergedValues.size(); syn++) {
+				newMergedValues[syn].push_back(mergedValues[syn].second.at(valueFromMerged));
+			}
+			newMergedValues[mergedValues.size()].push_back(valuesFromToBeMerged[values]);
+		}
+	}
+
+	for (int i = 0; i < newGroupSize; i++) {
+		if (i == mergedValues.size()) {
+			newMergedGroup.push_back(make_pair(toBeMerged.first, newMergedValues[i]));
+		}
+		else {
+			newMergedGroup.push_back(make_pair(mergedValues[i].first, newMergedValues[i]));
+		}
+	}
+
+	return newMergedGroup;
 }
 
 string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
