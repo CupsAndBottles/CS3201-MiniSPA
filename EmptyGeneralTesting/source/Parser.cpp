@@ -62,7 +62,7 @@ string Parser::openFile(string fileName) {
 		allLines.erase(remove_if(allLines.begin(), allLines.end(), isspace), allLines.end());
 		lines = splitLines(allLines);
 		output = linesSplitted(lines);
-		cout << output;
+		//	cout << output;
 		Procedure();
 	}
 
@@ -92,8 +92,8 @@ list<pair<int, string>> Parser::splitLines(string lines)
 {
 	size_t elseStmt = lines.find("}else{");
 	if (lines.find("}else{") != std::string::npos) {
-			lines.replace(elseStmt, string("}else{").length(), "");
-		}
+		lines.replace(elseStmt, string("}else{").length(), "");
+	}
 
 	list<pair<int, string>> result;
 	size_t position = 0;
@@ -145,7 +145,7 @@ void Parser::Procedure() {
 		else if (stmt.find("call") != std::string::npos) {
 			pkb->setType(Enum::CALLS);
 			processCalls((*i).first, (*i).second);
-			
+
 		}
 		else {
 			pkb->setType(Enum::ASSIGN);
@@ -221,8 +221,8 @@ void Parser::processCalls(int index, string stmt)
 
 	}
 	int procExist = pkb->getProcIndex(procCalls);
-	
-	if (procExist ==procNumInTble) {
+
+	if (procExist == procNumInTble) {
 		cout << "\nError: Procedure " << procCalls << " calling itself!";
 		exit(0);
 	}
@@ -290,9 +290,8 @@ void Parser::processExpressions(int index, string statement) {
 			s = "";
 		}
 		if (c == '}') {
-
 			pushCloseBracket(index);
-			break;
+			//	break;
 		}
 		if (isOperator(charac))
 		{
@@ -308,13 +307,13 @@ void Parser::processExpressions(int index, string statement) {
 				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
-					
+
 					if (isOperator(o2)) {
-						
+
 						output.push_back(o2);
 						output.push_back(' ');
 					}
-					else {
+					else if (o2 != '}') {
 						output.push_back(o2);
 					}
 
@@ -338,8 +337,10 @@ void Parser::processExpressions(int index, string statement) {
 
 			while (topCharac != '(')
 			{
-				output.push_back(topCharac);
-				stack.pop();
+				if (topCharac != '}') {
+					output.push_back(topCharac);
+					stack.pop();
+				}
 
 				if (stack.empty()) {
 					break;
@@ -366,10 +367,10 @@ void Parser::processExpressions(int index, string statement) {
 
 			}
 			else {
-				
+				if (charac != '}') {
 					output.push_back(charac);
-				
-				s.push_back(charac);
+					s.push_back(charac);
+				}
 			}
 		}
 	}
@@ -380,9 +381,11 @@ void Parser::processExpressions(int index, string statement) {
 		{
 			Error();
 		}
-		output.push_back(' ');
-		output.push_back(stackTop);
-		output.push_back(' ');
+		if (stackTop != '}') {
+			output.push_back(' ');
+			output.push_back(stackTop);
+			output.push_back(' ');
+		}
 		stack.pop();
 	}
 	setExprInStmtTable(index, output);
@@ -400,10 +403,10 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
 		int index = pkb->setVarName(varInWhile);
-		pkb->setControlVar(i-numOfProc,index);
+		pkb->setControlVar(i - numOfProc, index);
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentUse = pairedParent.first - numOfProc-containerElements.size()+1;
+			int parentUse = pairedParent.first - numOfProc - containerElements.size() + 1;
 			if (!isConstant(varInWhile)) {
 				pkb->setUsedBy(varInWhile, parentUse);
 				pkb->setUsedVar(parentUse, varInWhile);
@@ -424,7 +427,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		pkb->setControlVar(i - numOfProc, index);
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentUse = pairedParent.first - numOfProc - containerElements.size()+1;
+			int parentUse = pairedParent.first - numOfProc - containerElements.size() + 1;
 			if (!isConstant(varInIf)) {
 				pkb->setUsedBy(varInIf, parentUse);
 				pkb->setUsedVar(parentUse, varInIf);
@@ -444,7 +447,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		string s;
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentMod = pairedParent.first-numOfProc;
+			int parentMod = pairedParent.first - numOfProc;
 			if (!isConstant(modified)) {
 				pkb->setModifiedBy(modified, parentMod);
 				pkb->setModifies(parentMod, modified);
@@ -461,7 +464,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 				if (!s.empty()) {
 					if (!containerElements.empty()) {
 						pair<int, string> pairedParent = containerElements.back();
-						int parentUse = pairedParent.first-numOfProc;
+						int parentUse = pairedParent.first - numOfProc;
 						if (!isConstant(s)) {
 							pkb->setUsedBy(s, parentUse);
 							pkb->setUsedVar(parentUse, s);
@@ -470,7 +473,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 					if (isConstant(s)) {
 						int constant = atoi(s.c_str());
 						int constantInd = pkb->setConstant(constant);
-						pkb->setStmtUsed(constantInd,i-numOfProc);
+						pkb->setStmtUsed(constantInd, i - numOfProc);
 					}
 					if (!isConstant(s)) {
 						pkb->setUsedBy(s, i - numOfProc);
@@ -480,9 +483,9 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 				}
 				s = "";
 			}
-			else {			
-					s.push_back(c);
-				
+			else {
+				s.push_back(c);
+
 			}
 		}
 	}
