@@ -15,9 +15,9 @@
 
 using namespace std;
 
-ParserForPQL::ParserForPQL(string input, PKB &querypkb)
+ParserForPQL::ParserForPQL(string input)
 {
-	this->pkb = &querypkb;
+	//this->pkb = &querypkb;
 	parse(input);
 
 }
@@ -133,7 +133,7 @@ void ParserForPQL::parseTypeWithSyn(vector<string> selectSynonym, vector<vector<
 	vector<vector<string>> withSynonym,
 	vector<vector<string>> patternSynonym)
 {
-	ParserTypeWithSyn parserTypeWithSyn(*pkb, selectSynonym, suchThatSynonym,
+	ParserTypeWithSyn parserTypeWithSyn(selectSynonym, suchThatSynonym,
 		withSynonym, patternSynonym, type[1], synonym[1]);
 	selectSynAndType = parserTypeWithSyn.getSelectSynAndType();
 	suchThatSynAndType = parserTypeWithSyn.getSuchThatSynAndType();

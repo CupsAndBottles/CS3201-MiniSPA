@@ -12,12 +12,12 @@
 
 using namespace std;
 
-ParserTypeWithSyn::ParserTypeWithSyn(PKB &querypkb, vector<string> selectSynonym, vector<vector<string>> suchThatSynonym,
+ParserTypeWithSyn::ParserTypeWithSyn(vector<string> selectSynonym, vector<vector<string>> suchThatSynonym,
 	
 	vector<vector<string>> withSynonym,
 	vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym)
 {
-	this->pkb = &querypkb;
+	//this->pkb = &querypkb;
 	parseSelectTypeWithSyn(selectSynonym, type, synonym);
 	parseSuchThatTypeWithSyn(suchThatSynonym, type, synonym);
 	parseWithTypeWithSyn(withSynonym, type, synonym);
