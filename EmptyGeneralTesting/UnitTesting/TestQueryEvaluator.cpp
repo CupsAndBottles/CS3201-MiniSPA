@@ -1213,7 +1213,7 @@ namespace UnitTesting
 			QueryEvaluator qe;
 			string equation = "x + 9";
 			string equation2 = "x + x * 9";
-			string ast = "x9+";
+			string ast = "x 9 + ";
 			string ast2 = "xx9*+";
 			string ast3 = "342*15-/+";
 			
@@ -1801,7 +1801,6 @@ namespace UnitTesting
 
 			ParserForPQL parserPQL = ParserForPQL("if ifstat; Select ifstat pattern ifstat(command, _, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
-			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIntValue(), pkb->getVarIndex("command"));
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);

@@ -40,10 +40,10 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> select;
 	vector<Clauses> with;
 	list<string> result;
+	list<string> emptyResult = {};
 	bool isTrueClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
-		list<string> emptyResult{};
 		return emptyResult;
 	}
 
@@ -59,9 +59,6 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
 			}
-			else {
-				emptyResult = {};
-			}
 			return emptyResult;
 		}
 	}
@@ -73,9 +70,6 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
 			}
-			else {
-				emptyResult = {};
-			}
 			return emptyResult;
 		}
 	}
@@ -86,9 +80,6 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			list<string> emptyResult;
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
-			}
-			else {
-				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -459,29 +450,30 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 }
 
 string QueryEvaluator::convertToShuntingYard(string statement) {
-	//modify and uses - modify => a = b+c, a is modified. Uses= b and c
+	string outputString;
 	list<char> output;
 	stack<char> stack;
-	string s = "";
 	output.clear();
-	string outputString;
-
-	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
-
+	string s;
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
 			//addToParent(index);
+			//int index = pkb->setVarName(s);
+			//pkb->setProcNames(index, currProcName);
+			s = "";
 		}
 		if (c == '}') {
-
 			//pushCloseBracket(index);
-			break;
+			//	break;
 		}
 		if (isOperator(charac))
 		{
 			char o1 = charac;
-
+		//	int index = pkb->setVarName(s);
+			//pkb->setProcNames(index, currProcName);
+			s = "";
+			output.push_back(' ');
 			if (!stack.empty())
 			{
 				char o2 = stack.top();
@@ -489,7 +481,16 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
-					output.push_back(o2);
+
+					if (isOperator(o2)) {
+
+						output.push_back(o2);
+						output.push_back(' ');
+					}
+					else if (o2 != '}') {
+						output.push_back(o2);
+					}
+
 
 					if (!stack.empty())
 						o2 = stack.top();
@@ -510,8 +511,10 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 
 			while (topCharac != '(')
 			{
-				output.push_back(topCharac);
-				stack.pop();
+				if (topCharac != '}') {
+					output.push_back(topCharac);
+					stack.pop();
+				}
 
 				if (stack.empty()) {
 					break;
@@ -524,18 +527,24 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			}
 			if (topCharac != '(')
 			{
-				cout << "error";
+				//Error();
 			}
 		}
 		else
 		{
 			if (charac == '=') {
-				//output.pop_back();
+				output.clear();
+				//handleModifyAndUses(index, statement);
+				//int index = pkb->setVarName(s);
+				//pkb->setProcNames(index, currProcName);
+				s = "";
 
 			}
 			else {
-				output.push_back(charac);
-				s = "" + charac;
+				if (charac != '}') {
+					output.push_back(charac);
+					s.push_back(charac);
+				}
 			}
 		}
 	}
@@ -546,7 +555,11 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		{
 			//Error();
 		}
-		output.push_back(stackTop);
+		if (stackTop != '}') {
+			output.push_back(' ');
+			output.push_back(stackTop);
+			output.push_back(' ');
+		}
 		stack.pop();
 	}
 
@@ -702,7 +715,7 @@ vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
 		break;
 	case Enum::TYPE::CALLS:
 		for (int i = 0; i < pkb->getNoOfProc(); i++) {
-			vector<int> procedureCalled = pkb->getProcCalls();
+			vector<int> procedureCalled = pkb->getProcCalls(i);
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				allNames.push_back(pkb->getProcName(procedureCalled.at(c)));
 			}
@@ -1152,7 +1165,7 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 		break;
 	case Enum::TYPE::CALLS:
 		for (int i = 0; i < pkb->getNoOfProc(); i++) {
-			vector<int> procedureCalled = pkb->getProcCalls();
+			vector<int> procedureCalled = pkb->getProcCalls(i);
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				stringedAttrIndexes.push_back(procedureCalled.at(c));
 			}
