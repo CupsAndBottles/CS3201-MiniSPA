@@ -61,5 +61,6 @@ private:
 	list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns);
 	vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select);
 	vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<string, vector<int>>> mergedValues, pair<string, vector<int>> toBeMerged);
+	void printResults();
 	PKB *pkb;
 };
