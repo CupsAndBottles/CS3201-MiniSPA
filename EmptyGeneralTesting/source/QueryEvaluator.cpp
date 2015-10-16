@@ -40,10 +40,10 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> select;
 	vector<Clauses> with;
 	list<string> result;
+	list<string> emptyResult = {};
 	bool isTrueClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
-		list<string> emptyResult{};
 		return emptyResult;
 	}
 
@@ -55,12 +55,8 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < suchThat.size(); i++) {
 		isTrueClause = evaluateSuchThat(suchThat[i]);
 		if (!isTrueClause) {
-			list<string> emptyResult;
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
-			}
-			else {
-				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -69,12 +65,8 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < pattern.size(); i++) {
 		isTrueClause = evaluatePattern(pattern[i]);
 		if (!isTrueClause) {
-			list<string> emptyResult;
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
-			}
-			else {
-				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -83,12 +75,8 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < with.size(); i++) {
 		isTrueClause = evaluateWith(with[i]);
 		if (!isTrueClause) {
-			list<string> emptyResult;
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
-			}
-			else {
-				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -99,10 +87,42 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		return trueResult;
 	}
 
+	printResults();
 	sort(this->results.begin(), this->results.end());
+	cout << "after sorting" << endl;
+	printResults();
+
 	vector<vector<int>> syn = groupSynonym(this->results);
+	
+	cout << "after grouping" << endl;
+
+	for (size_t i = 0; i < syn.size(); i++) {
+		for (size_t j = 0; j < syn[i].size(); j++) {
+			cout << syn[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+
 	vector<vector<int>> synGroup = rearrangeSynonym(syn);
+	
+	cout << "after rearranging" << endl;
+
+	for (size_t i = 0; i < synGroup.size(); i++) {
+		for (size_t j = 0; j < synGroup[i].size(); j++) {
+			cout << synGroup[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+
 	vector<Synonym> afterMerging = mergeWithinGroup(synGroup);
+
+	cout << "After merging" << endl; 
+
+	for (size_t i = 0; i < afterMerging.size(); i++) {
+		afterMerging.at(i).printSyn();
+	}
 
 	result = evaluateSelect(afterMerging, select);
 
@@ -313,20 +333,21 @@ bool QueryEvaluator::evaluatePattern(Clauses clause) {
 
 bool QueryEvaluator::evaluateWhile(Clauses clause) {
 	vector<int> intermediateResult;
+	int controlVariable = pkb->getVarIndex(clause.getLeftCStringValue());
 
 	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
-		//pattern if(_, _, _)
+		//pattern while(_, _)
 		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				intermediateResult.push_back(i);
 			}
 		}
 	}
-	else if (clause.getLeftCIntValue() != NOT_FOUND) {
-		//pattern if (x, _, _)
-		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+	else if (controlVariable != NOT_FOUND) {
+		//pattern while (x, _)
+		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
-				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
+				if (pkb->getControlVar(i) == controlVariable) {
 					intermediateResult.push_back(i);
 				}
 			}
@@ -348,6 +369,7 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 
 bool QueryEvaluator::evaluateIf(Clauses clause) {
 	vector<int> intermediateResult;
+	int controlVariable = pkb->getVarIndex(clause.getLeftCStringValue());
 
 	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
 		//pattern if(_, _, _)
@@ -357,11 +379,11 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 			}
 		}
 	}
-	else if (clause.getLeftCIntValue() != NOT_FOUND) {
+	else if (controlVariable != NOT_FOUND) {
 		//pattern if (x, _, _)
 		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
-				if (pkb->getControlVar(i) == clause.getLeftCIntValue()) {
+				if (pkb->getControlVar(i) == controlVariable) {
 					intermediateResult.push_back(i);
 				}
 			}
@@ -953,8 +975,14 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 	Synonym syn;
 
 	for (size_t i = 0; i < group.size(); i++) {
-		for (size_t j = 0; j < (group.at(i).size() - 1); j++) {
-			syn = mergeSyn(this->results.at(group[i][j]), this->results.at(group[i][j + 1]));
+		for (size_t j = 0; j < group.at(i).size() ; j++) {
+			syn = this->results.at(group[i][0]);
+			if (group.at(i).size() != 1) {
+				syn = mergeSyn(syn ,this->results.at(group[i][j]));
+			}
+			else {
+				syn = this->results.at(group[i][j]);
+			}
 		}
 		mergedResult.push_back(syn);
 		syn = Synonym();
@@ -1267,8 +1295,11 @@ vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<
 	return newMergedGroup;
 }
 
-
-
+void QueryEvaluator::printResults() {
+	for (size_t i = 0; i < this->results.size(); i++) {
+		results[i].printSyn();
+	}
+}
 
 
 
