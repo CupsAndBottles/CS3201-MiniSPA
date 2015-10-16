@@ -64,6 +64,16 @@ void Procedure::setCalledByT(vector<int> procList)
 	calledByTList = procList;
 }
 
+void Procedure::setStmtNum(int stmtNum)
+{
+	stmtsProcCalled.push_back(stmtNum);
+}
+
+vector<int> Procedure::getStmtNum()
+{
+	return stmtsProcCalled;
+}
+
 vector<int> Procedure::getUsed() {
 	return varUsedList;
 }
