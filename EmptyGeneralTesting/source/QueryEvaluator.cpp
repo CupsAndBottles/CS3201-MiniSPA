@@ -1194,7 +1194,18 @@ vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::rearrangeSynOrder(vector<p
 }
 
 list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns) {
-	return list<string>();
+	list<string> stringedResults;
+
+	for (size_t values = 0; values < arrangedSyns.front().second.size(); values++) {
+		string combinedValues = convertToString(arrangedSyns.front().second.at(values), arrangedSyns.front().first);
+		for (size_t syn = 1; syn < arrangedSyns.size(); syn++) {
+			combinedValues = ", " + convertToString(arrangedSyns[syn].second.at(values), arrangedSyns[syn].first);
+		}
+
+		stringedResults.push_back(combinedValues);
+	}
+
+	return stringedResults;
 }
 
 vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select) {
