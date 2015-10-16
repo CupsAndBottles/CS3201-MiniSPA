@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <set>
+#include <iostream>
 #include <vector>
 #include "Enum.h"
 
@@ -17,6 +18,7 @@ public:
 	vector<vector<int>> getResult();
 	bool operator <(const Synonym& s2) const;
 	int resultSize();
+	void printSyn();
 	int getSize() const { return result.at(0).size(); }
 
 private:

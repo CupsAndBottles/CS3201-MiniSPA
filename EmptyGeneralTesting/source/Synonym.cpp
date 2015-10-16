@@ -1,5 +1,7 @@
 #include "Synonym.h"
 
+using namespace std;
+
 Synonym::Synonym()
 {
 }
@@ -49,4 +51,24 @@ bool Synonym::operator<(const Synonym & s2) const
 
 int Synonym::resultSize() {
 	return this->result.size();
+}
+
+void Synonym::printSyn() {
+	for (size_t i = 0; i < syn.size(); i++) {
+		cout << syn[i] << " ";
+	}
+	cout << endl; 
+
+	for (size_t i = 0; i < type.size(); i++) {
+		cout << type[i] << " ";
+	}
+	cout << endl;
+
+	for (size_t i = 0; i < result.size(); i++) {
+		for (size_t j = 0; j < result[i].size(); j++) {
+			cout << result[i][j] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
 }
