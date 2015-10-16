@@ -20,7 +20,7 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
@@ -164,7 +164,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Follows(1, 2)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Follows(1, 2)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -307,7 +307,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("while w; Select w such that Parent(w, _)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("while w; Select w such that Parent(w, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -451,7 +451,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select p such that Uses(2, v)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select p such that Uses(2, v)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -596,7 +596,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			Assert::IsTrue(queryTree.getPatternTree().at(0).getLeftCType() == Enum::TYPE::UNDERSCORE);
 			Assert::IsTrue(queryTree.getPatternTree().at(0).getRightCIsExpression() == true);
@@ -749,7 +749,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, inspiration + 1)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, inspiration + 1)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -897,7 +897,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(x, \"_x * 9_\")", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(x, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIntValue(), 5 );
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
@@ -1049,7 +1049,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(beads, command + 10)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(beads, command + 10)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -1199,7 +1199,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; variable x; Select a such that Modifies(a, x) pattern a(_, \"_x * 9_\")", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable x; Select a such that Modifies(a, x) pattern a(_, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -1354,7 +1354,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("procedure p; stmt s1; Select <p, s1> such that Parent*(4, s1)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("procedure p; stmt s1; Select <p, s1> such that Parent*(4, s1)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -1497,7 +1497,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("stmt s, s1; Select s1 such that Follows*(s, s1)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("stmt s, s1; Select s1 such that Follows*(s, s1)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -1642,7 +1642,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("while w; Select w pattern w(\"coffee\", _)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("while w; Select w pattern w(\"coffee\", _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIntValue(), pkb->getVarIndex("coffee"));
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
@@ -1799,7 +1799,7 @@ namespace UnitTesting
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("if ifstat; Select ifstat pattern ifstat(command, _, _)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("if ifstat; Select ifstat pattern ifstat(command, _, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIntValue(), pkb->getVarIndex("command"));
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
@@ -1957,7 +1957,7 @@ namespace UnitTesting
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a;variable x; Select BOOLEAN such that Modifies(a,x)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a;variable x; Select BOOLEAN such that Modifies(a,x)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -2113,7 +2113,7 @@ namespace UnitTesting
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN pattern a(x, x + 9 + 9)", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN pattern a(x, x + 9 + 9)");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -2271,7 +2271,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -2427,7 +2427,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select v with v.varName = p.procName", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select v with v.varName = p.procName");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
@@ -2577,7 +2577,7 @@ namespace UnitTesting
 
 
 			pkb->setProcUses(0, varUsed);
-			ParserForPQL parserPQL = ParserForPQL("assign a; stmt s; Select s with a.stmt# = s.stmt#", *pkb);
+			ParserForPQL parserPQL = ParserForPQL("assign a; stmt s; Select s with a.stmt# = s.stmt#");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 

@@ -1195,7 +1195,7 @@ list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vect
 		stringedResults.push_back(combinedValues);
 	}
 
-	return stringedResultsc;
+	return stringedResults;
 }
 
 vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select) {

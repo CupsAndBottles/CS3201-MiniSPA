@@ -54,7 +54,6 @@ private:
 	void storeResultsForSyn(Clauses clause, vector<pair<int, int>> results);
 	void storeResults(vector<Enum::TYPE> type, vector<string> synString, vector<vector<int>> resultToStore);
 	string convertToString(int index, Enum::TYPE type);
-	list<string> convertVectorToList(vector<string> mergedResults);
 	list<string> evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select);
 	vector<pair<string, vector<int>>> getValuesOfNonCommonSyn(vector<Clauses> nonCommon);
 	vector<int> getStringedAttrIndexes(Enum::TYPE type);
