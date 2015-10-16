@@ -116,8 +116,8 @@ vector<Synonym> QueryEvaluator::getResults() {
 /**************************** Such That Clauses ****************************/
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	vector<pair<int, int>> results;
-	int firstParamIndex;
-	int secondParamIndex;
+	int firstParamIndex = NOT_FOUND;
+	int secondParamIndex = NOT_FOUND;
 
 	bool hasValidFirstIndex = false;
 	bool hasValidSecondIndex = false;
@@ -197,9 +197,7 @@ bool QueryEvaluator::isGivenParam(Clauses clause, int paramPos) {
 		else {
 			return (clause.getLeftCIntValue() != NOT_FOUND);
 		}
-	}
-
-	if (paramPos == POSITION_SECONDPARAM) {
+	} else {
 		if (clause.getRightCType() == Enum::TYPE::PROCEDURE || clause.getRightCType() == Enum::TYPE::VARIABLE) {
 			return (clause.getRightCStringValue() != EMPTY_STRING);
 		}
@@ -218,9 +216,7 @@ int QueryEvaluator::checkValidityOfEntities(Clauses clause, int paramPos) {
 		else {
 			return checkValidityOfIntEntities(clause.getLeftCType(), clause.getLeftCIntValue());
 		}
-	}
-
-	if (paramPos == POSITION_SECONDPARAM) {
+	} else {
 		if (clause.getRightCType() == Enum::TYPE::PROCEDURE || clause.getRightCType() == Enum::TYPE::VARIABLE
 			|| clause.getRightCType() == Enum::TYPE::CONSTANT || clause.getRightCType() == Enum::TYPE::CALLS) {
 			return checkValidityOfStringEntities(clause.getRightCType(), clause.getRightCStringValue());
@@ -243,6 +239,7 @@ int QueryEvaluator::checkValidityOfStringEntities(Enum::TYPE type, string entity
 		return pkb->getProcIndex(entityName);
 		break;
 	default:
+		return NOT_FOUND;
 		break;
 	}
 }
@@ -657,6 +654,9 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 			|| clause.getRightCType() == Enum::TYPE::WHILE) {
 			return hasSameAttrValues(clause);
 		}
+		else {
+			return false;
+		}
 		break;
 	case Enum::TYPE::CONSTANT:
 		return hasSameAttrValues(clause);
@@ -666,6 +666,7 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 		break; */
 	default:
 		return false;
+		break;
 	}
 }
 
@@ -701,7 +702,7 @@ vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CALLS:
-		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+/*		for (int i = 0; i < pkb->getNoOfProc(); i++) {
 			vector<int> procedureCalled = pkb->getProcCalls();
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				allNames.push_back(pkb->getProcName(procedureCalled.at(c)));
@@ -710,7 +711,7 @@ vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
 
 		sort(allNames.begin(), allNames.end());
 		allNames.erase(unique(allNames.begin(), allNames.end()), allNames.end());
-		break;
+		*/break;
 	default:
 		break;
 	}
@@ -918,6 +919,8 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 		break;
 	default:
 		cout << "Convert to String, no TYPE matches" << endl;
+		return EMPTY_STRING;
+		break;
 	}
 
 }
@@ -1107,10 +1110,12 @@ bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
 
 list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select) {
 	list<string> stringedResults;
+	nonCommonSyn = select;
+
 
 	vector<pair<string, vector<int>>> mergedSelectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
 
-	if (!this->nonCommonSyn.size()) {
+	if (!this->nonCommonSyn.empty()) {
 		vector<pair<string, vector<int>>> nonCommonSyn = getValuesOfNonCommonSyn(this->nonCommonSyn);
 		for (size_t syn = 0; syn < nonCommonSyn.size(); syn++) {
 			mergedSelectedSyns = mergeSelectedSyns(mergedSelectedSyns, nonCommonSyn[syn]);
@@ -1151,7 +1156,7 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CALLS:
-		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+/*		for (int i = 0; i < pkb->getNoOfProc(); i++) {
 			vector<int> procedureCalled = pkb->getProcCalls();
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				stringedAttrIndexes.push_back(procedureCalled.at(c));
@@ -1160,7 +1165,7 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 
 		sort(stringedAttrIndexes.begin(), stringedAttrIndexes.end());
 		stringedAttrIndexes.erase(unique(stringedAttrIndexes.begin(), stringedAttrIndexes.end()), stringedAttrIndexes.end());
-		break;
+	*/	break;
 	default:
 		break;
 	}
@@ -1185,9 +1190,11 @@ vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::rearrangeSynOrder(vector<p
 
 list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns) {
 	list<string> stringedResults;
+	int numOfValuesPerSyn = arrangedSyns.at(0).second.size();
 
-	for (size_t values = 0; values < arrangedSyns.front().second.size(); values++) {
-		string combinedValues = convertToString(arrangedSyns.front().second.at(values), arrangedSyns.front().first);
+	for (int values = 0; values < numOfValuesPerSyn; values++) {
+		vector<int> valuesOfSyn = arrangedSyns[0].second;
+		string combinedValues = convertToString(valuesOfSyn.at(values), arrangedSyns.at(0).first);
 		for (size_t syn = 1; syn < arrangedSyns.size(); syn++) {
 			combinedValues = ", " + convertToString(arrangedSyns[syn].second.at(values), arrangedSyns[syn].first);
 		}
@@ -1199,7 +1206,6 @@ list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vect
 }
 
 vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select) {
-	nonCommonSyn = select;
 	vector<pair<string, vector<int>>> mergedValues;
 
 	for (size_t groupIndex = 0; groupIndex < groupedSyns.size(); groupIndex++) { // in one group
@@ -1234,6 +1240,11 @@ vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<
 	vector<vector<int>> newMergedValues;
 	vector<int> valuesFromToBeMerged = toBeMerged.second;
 	int newGroupSize = mergedValues.size() + 1;
+
+	if (mergedValues.empty()) {
+		newMergedGroup.push_back(toBeMerged);
+		return newMergedGroup;
+	} 
 
 	for (size_t values = 0; values < valuesFromToBeMerged.size(); values++) {
 		for (size_t valueFromMerged = 0; valueFromMerged < mergedValues.front().second.size(); valueFromMerged++) {
