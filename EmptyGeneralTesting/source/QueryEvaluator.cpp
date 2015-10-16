@@ -1105,16 +1105,6 @@ bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
 	return false;
 }
 
-list<string> QueryEvaluator::convertVectorToList(vector<string> mergedResults) {
-	list<string> listedResults;
-
-	for (size_t i = 0; i < mergedResults.size(); i++) {
-		listedResults.push_back(mergedResults.at(i));
-	}
-
-	return listedResults;
-}
-
 list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select) {
 	list<string> stringedResults;
 
@@ -1205,7 +1195,7 @@ list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vect
 		stringedResults.push_back(combinedValues);
 	}
 
-	return stringedResults;
+	return stringedResultsc;
 }
 
 vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select) {
