@@ -33,6 +33,8 @@ public:
 	void setCalledBy(int procIndex);
 	void setCallsT(vector<int> procList);
 	void setCalledByT(vector<int> procList);
+	void setStmtNum(int stmtNum);
+	vector<int> getStmtNum();
 
 private:
 	int index;
@@ -47,4 +49,5 @@ private:
 	vector<int> calledByList;
 	vector<int> callsTList;
 	vector<int> calledByTList;
+	vector<int> stmtsProcCalled;
 };

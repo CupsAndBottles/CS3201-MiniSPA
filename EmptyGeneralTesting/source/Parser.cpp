@@ -15,6 +15,7 @@ vector<pair<int, int>> parentLink;
 vector<pair<int, int>> followLink;
 vector<pair<int, string>> callsLink;
 list<pair<int, string>> stmtNoAndExpr;
+vector<pair<int, string>> stmtNoAndCalls;
 string currProcName;
 int currIndex = 0;
 int numOfProc = 0;
@@ -168,6 +169,7 @@ void Parser::setRelationsInTable() {
 		cout << "ProcName: " << procName << " does not exist.\n";
 		exit(0);
 	}
+	pkb->setStmtNumProcCalled(stmtNoAndCalls);
 }
 
 void Parser::addToParent(int child) {
@@ -212,6 +214,7 @@ void Parser::processProcedure(int index, string statement) {
 void Parser::processCalls(int index, string stmt)
 {
 	pair<int, string> callsPair;
+	pair<int, string> stmtNoCallPair;
 	string procCalls = stmt.substr(stmt.find("call") + 4);
 	size_t semiColonPos = procCalls.find(";");
 	if (semiColonPos != std::string::npos) {
@@ -233,7 +236,9 @@ void Parser::processCalls(int index, string stmt)
 	callsPair.second = procCalls;
 	callsLink.push_back(callsPair);
 
-
+	stmtNoCallPair.first = index - numOfProc;
+	stmtNoCallPair.second = procCalls;
+	stmtNoAndCalls.push_back(stmtNoCallPair);
 }
 
 void Parser::processWhile(int index, string statement) {

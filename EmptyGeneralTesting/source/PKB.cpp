@@ -108,6 +108,18 @@ void PKB::setProcCalledBy(int index, int called)
 	procTable[index].setCalledBy(called);
 }
 
+void PKB::setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls)
+{
+	while (!stmtNoAndCalls.empty()) {
+		pair<int, string> paired = stmtNoAndCalls.back();
+		int index = getProcIndex(paired.second);
+		int stmtNum = paired.first;
+		cout << index << ":called \n";
+		cout << stmtNum << ":stmtNum \n";
+		procTable[index].setStmtNum(stmtNum);
+	}
+}
+
 //----------------------------------------------------------------------------------------------
 //Vartable Setters:
 
@@ -192,6 +204,16 @@ void PKB::setParent(int index, int parentStmt)
 	//cout << "Parent: " << parentStmt << "\n";
 	//cout << "Child: " << index << "\n\n";
 	stmtTable[index].setParent(parentStmt);
+}
+
+void PKB::setNext(int index, int next)
+{
+	stmtTable[index].setNext(next);
+}
+
+void PKB::setPrev(int index, int prev)
+{
+	stmtTable[index].setPrev(prev);
 }
 
 int PKB::setConstant(int constantValue)
@@ -1026,6 +1048,26 @@ vector<int> PKB::getProcModified(int procIndex)
 vector<int> PKB::getProcUsed(int procIndex)
 {
 	return vector<int>();
+}
+
+vector<int> PKB::getProcCalls(int procIndex)
+{
+	return procTable[procIndex].getCalls();
+}
+
+vector<int> PKB::getProcCalledBy(int procIndex)
+{
+	return procTable[procIndex].getCalledBy();
+}
+
+vector<int> PKB::getCallsT(int procIndex)
+{
+	return procTable[procIndex].getCallsT();
+}
+
+vector<int> PKB::getCalledByT(int procIndex)
+{
+	return procTable[procIndex].getCalledByT();
 }
 
 
