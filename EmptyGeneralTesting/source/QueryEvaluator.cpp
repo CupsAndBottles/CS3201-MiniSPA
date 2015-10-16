@@ -40,10 +40,10 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> select;
 	vector<Clauses> with;
 	list<string> result;
-	list<string> emptyResult = {};
 	bool isTrueClause;
 
 	if (!tree.getIsValid()) { // variables not found in program
+		list<string> emptyResult{};
 		return emptyResult;
 	}
 
@@ -59,6 +59,9 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
 			}
+			else {
+				emptyResult = {};
+			}
 			return emptyResult;
 		}
 	}
@@ -70,6 +73,9 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
 			}
+			else {
+				emptyResult = {};
+			}
 			return emptyResult;
 		}
 	}
@@ -80,6 +86,9 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 			list<string> emptyResult;
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
 				emptyResult = { STRING_FALSE };
+			}
+			else {
+				emptyResult = {};
 			}
 			return emptyResult;
 		}
@@ -107,8 +116,8 @@ vector<Synonym> QueryEvaluator::getResults() {
 /**************************** Such That Clauses ****************************/
 bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	vector<pair<int, int>> results;
-	int firstParamIndex;
-	int secondParamIndex;
+	int firstParamIndex = NOT_FOUND;
+	int secondParamIndex = NOT_FOUND;
 
 	bool hasValidFirstIndex = false;
 	bool hasValidSecondIndex = false;
@@ -188,9 +197,7 @@ bool QueryEvaluator::isGivenParam(Clauses clause, int paramPos) {
 		else {
 			return (clause.getLeftCIntValue() != NOT_FOUND);
 		}
-	}
-
-	if (paramPos == POSITION_SECONDPARAM) {
+	} else {
 		if (clause.getRightCType() == Enum::TYPE::PROCEDURE || clause.getRightCType() == Enum::TYPE::VARIABLE) {
 			return (clause.getRightCStringValue() != EMPTY_STRING);
 		}
@@ -209,9 +216,7 @@ int QueryEvaluator::checkValidityOfEntities(Clauses clause, int paramPos) {
 		else {
 			return checkValidityOfIntEntities(clause.getLeftCType(), clause.getLeftCIntValue());
 		}
-	}
-
-	if (paramPos == POSITION_SECONDPARAM) {
+	} else {
 		if (clause.getRightCType() == Enum::TYPE::PROCEDURE || clause.getRightCType() == Enum::TYPE::VARIABLE
 			|| clause.getRightCType() == Enum::TYPE::CONSTANT || clause.getRightCType() == Enum::TYPE::CALLS) {
 			return checkValidityOfStringEntities(clause.getRightCType(), clause.getRightCStringValue());
@@ -234,6 +239,7 @@ int QueryEvaluator::checkValidityOfStringEntities(Enum::TYPE type, string entity
 		return pkb->getProcIndex(entityName);
 		break;
 	default:
+		return NOT_FOUND;
 		break;
 	}
 }
@@ -450,30 +456,29 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 }
 
 string QueryEvaluator::convertToShuntingYard(string statement) {
-	string outputString;
+	//modify and uses - modify => a = b+c, a is modified. Uses= b and c
 	list<char> output;
 	stack<char> stack;
+	string s = "";
 	output.clear();
-	string s;
+	string outputString;
+
+	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
+
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
 			//addToParent(index);
-			//int index = pkb->setVarName(s);
-			//pkb->setProcNames(index, currProcName);
-			s = "";
 		}
 		if (c == '}') {
+
 			//pushCloseBracket(index);
-			//	break;
+			break;
 		}
 		if (isOperator(charac))
 		{
 			char o1 = charac;
-		//	int index = pkb->setVarName(s);
-			//pkb->setProcNames(index, currProcName);
-			s = "";
-			output.push_back(' ');
+
 			if (!stack.empty())
 			{
 				char o2 = stack.top();
@@ -481,16 +486,7 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
-
-					if (isOperator(o2)) {
-
-						output.push_back(o2);
-						output.push_back(' ');
-					}
-					else if (o2 != '}') {
-						output.push_back(o2);
-					}
-
+					output.push_back(o2);
 
 					if (!stack.empty())
 						o2 = stack.top();
@@ -511,10 +507,8 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 
 			while (topCharac != '(')
 			{
-				if (topCharac != '}') {
-					output.push_back(topCharac);
-					stack.pop();
-				}
+				output.push_back(topCharac);
+				stack.pop();
 
 				if (stack.empty()) {
 					break;
@@ -527,24 +521,18 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			}
 			if (topCharac != '(')
 			{
-				//Error();
+				cout << "error";
 			}
 		}
 		else
 		{
 			if (charac == '=') {
-				output.clear();
-				//handleModifyAndUses(index, statement);
-				//int index = pkb->setVarName(s);
-				//pkb->setProcNames(index, currProcName);
-				s = "";
+				//output.pop_back();
 
 			}
 			else {
-				if (charac != '}') {
-					output.push_back(charac);
-					s.push_back(charac);
-				}
+				output.push_back(charac);
+				s = "" + charac;
 			}
 		}
 	}
@@ -555,11 +543,7 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		{
 			//Error();
 		}
-		if (stackTop != '}') {
-			output.push_back(' ');
-			output.push_back(stackTop);
-			output.push_back(' ');
-		}
+		output.push_back(stackTop);
 		stack.pop();
 	}
 
@@ -670,6 +654,9 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 			|| clause.getRightCType() == Enum::TYPE::WHILE) {
 			return hasSameAttrValues(clause);
 		}
+		else {
+			return false;
+		}
 		break;
 	case Enum::TYPE::CONSTANT:
 		return hasSameAttrValues(clause);
@@ -679,6 +666,7 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 		break; */
 	default:
 		return false;
+		break;
 	}
 }
 
@@ -714,8 +702,8 @@ vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CALLS:
-		for (int i = 0; i < pkb->getNoOfProc(); i++) {
-			vector<int> procedureCalled = pkb->getProcCalls(i);
+/*		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+			vector<int> procedureCalled = pkb->getProcCalls();
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				allNames.push_back(pkb->getProcName(procedureCalled.at(c)));
 			}
@@ -723,7 +711,7 @@ vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
 
 		sort(allNames.begin(), allNames.end());
 		allNames.erase(unique(allNames.begin(), allNames.end()), allNames.end());
-		break;
+		*/break;
 	default:
 		break;
 	}
@@ -931,6 +919,8 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 		break;
 	default:
 		cout << "Convert to String, no TYPE matches" << endl;
+		return EMPTY_STRING;
+		break;
 	}
 
 }
@@ -1120,10 +1110,12 @@ bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
 
 list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select) {
 	list<string> stringedResults;
+	nonCommonSyn = select;
+
 
 	vector<pair<string, vector<int>>> mergedSelectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
 
-	if (!this->nonCommonSyn.size()) {
+	if (!this->nonCommonSyn.empty()) {
 		vector<pair<string, vector<int>>> nonCommonSyn = getValuesOfNonCommonSyn(this->nonCommonSyn);
 		for (size_t syn = 0; syn < nonCommonSyn.size(); syn++) {
 			mergedSelectedSyns = mergeSelectedSyns(mergedSelectedSyns, nonCommonSyn[syn]);
@@ -1164,8 +1156,8 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CALLS:
-		for (int i = 0; i < pkb->getNoOfProc(); i++) {
-			vector<int> procedureCalled = pkb->getProcCalls(i);
+/*		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+			vector<int> procedureCalled = pkb->getProcCalls();
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				stringedAttrIndexes.push_back(procedureCalled.at(c));
 			}
@@ -1173,7 +1165,7 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 
 		sort(stringedAttrIndexes.begin(), stringedAttrIndexes.end());
 		stringedAttrIndexes.erase(unique(stringedAttrIndexes.begin(), stringedAttrIndexes.end()), stringedAttrIndexes.end());
-		break;
+	*/	break;
 	default:
 		break;
 	}
@@ -1198,9 +1190,11 @@ vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::rearrangeSynOrder(vector<p
 
 list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns) {
 	list<string> stringedResults;
+	int numOfValuesPerSyn = arrangedSyns.at(0).second.size();
 
-	for (size_t values = 0; values < arrangedSyns.front().second.size(); values++) {
-		string combinedValues = convertToString(arrangedSyns.front().second.at(values), arrangedSyns.front().first);
+	for (int values = 0; values < numOfValuesPerSyn; values++) {
+		vector<int> valuesOfSyn = arrangedSyns[0].second;
+		string combinedValues = convertToString(valuesOfSyn.at(values), arrangedSyns.at(0).first);
 		for (size_t syn = 1; syn < arrangedSyns.size(); syn++) {
 			combinedValues = ", " + convertToString(arrangedSyns[syn].second.at(values), arrangedSyns[syn].first);
 		}
@@ -1212,7 +1206,6 @@ list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vect
 }
 
 vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select) {
-	nonCommonSyn = select;
 	vector<pair<string, vector<int>>> mergedValues;
 
 	for (size_t groupIndex = 0; groupIndex < groupedSyns.size(); groupIndex++) { // in one group
@@ -1247,6 +1240,11 @@ vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<
 	vector<vector<int>> newMergedValues;
 	vector<int> valuesFromToBeMerged = toBeMerged.second;
 	int newGroupSize = mergedValues.size() + 1;
+
+	if (mergedValues.empty()) {
+		newMergedGroup.push_back(toBeMerged);
+		return newMergedGroup;
+	} 
 
 	for (size_t values = 0; values < valuesFromToBeMerged.size(); values++) {
 		for (size_t valueFromMerged = 0; valueFromMerged < mergedValues.front().second.size(); valueFromMerged++) {
