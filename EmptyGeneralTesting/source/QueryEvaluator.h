@@ -57,8 +57,9 @@ private:
 	list<string> convertVectorToList(vector<string> mergedResults);
 	list<string> evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select);
 	vector<pair<string, vector<int>>> getValuesOfNonCommonSyn(vector<Clauses> nonCommon);
-	vector<pair<Enum::TYPE, int>> QueryEvaluator::rearrangeSynOrder(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select);
-	list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, int>> arrangedSyns);
+	vector<int> getStringedAttrIndexes(Enum::TYPE type);
+	vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::rearrangeSynOrder(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select);
+	list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns);
 	vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select);
 	vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<string, vector<int>>> mergedValues, pair<string, vector<int>> toBeMerged);
 	PKB *pkb;

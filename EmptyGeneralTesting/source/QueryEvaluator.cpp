@@ -1127,7 +1127,7 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 		}
 	}
 
-	vector<pair<Enum::TYPE, int>> arrangedSyns = rearrangeSynOrder(mergedSelectedSyns, select);
+	vector<pair<Enum::TYPE, vector<int>>> arrangedSyns = rearrangeSynOrder(mergedSelectedSyns, select);
 	return convertResultsToString(arrangedSyns);
 }
 
@@ -1138,20 +1138,62 @@ vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfNonCommonSyn(vector
 		Enum::TYPE typeOfSyn = nonCommon[syn].getParentType();
 
 		if (typeOfSyn == Enum::TYPE::VARIABLE || typeOfSyn == Enum::TYPE::PROCEDURE || typeOfSyn == Enum::TYPE::CALLS) {
-			valuesOfNonCommonSyn.push_back(make_pair(nonCommon[syn].getParentStringVal(), getAllAttrNames(type)));
+			valuesOfNonCommonSyn.push_back(make_pair(nonCommon[syn].getParentStringVal(), getStringedAttrIndexes(typeOfSyn)));
 		}
 		else {
-			valuesOfNonCommonSyn.push_back(make_pair(nonCommon[syn].getParentStringVal(), getAllAttrValues(type)));
+			valuesOfNonCommonSyn.push_back(make_pair(nonCommon[syn].getParentStringVal(), getAllAttrValues(typeOfSyn)));
 		}
 	}
-	return;
+	return valuesOfNonCommonSyn;
 }
 
-vector<pair<Enum::TYPE, int>> QueryEvaluator::rearrangeSynOrder(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select) {
-	return vector<pair<Enum::TYPE, int>>();
+vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
+	vector<int> stringedAttrIndexes;
+	switch (type) {
+	case Enum::TYPE::PROCEDURE:
+		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+			stringedAttrIndexes.push_back(i);
+		}
+		break;
+	case Enum::TYPE::VARIABLE:
+		for (int i = 0; i < pkb->getNoOfVar(); i++) {
+			stringedAttrIndexes.push_back(i);
+		}
+		break;
+	case Enum::TYPE::CALLS:
+		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+			vector<int> procedureCalled = pkb->getProcCalls();
+			for (size_t c = 0; c < procedureCalled.size(); c++) {
+				stringedAttrIndexes.push_back(procedureCalled.at(c));
+			}
+		}
+
+		sort(stringedAttrIndexes.begin(), stringedAttrIndexes.end());
+		stringedAttrIndexes.erase(unique(stringedAttrIndexes.begin(), stringedAttrIndexes.end()), stringedAttrIndexes.end());
+		break;
+	default:
+		break;
+	}
+
+	return stringedAttrIndexes;
 }
 
-list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, int>> arrangedSyns) {
+vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::rearrangeSynOrder(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select) {
+	vector<pair<Enum::TYPE, vector<int>>> arrangedSynValues;
+
+	for (size_t syn = 0; syn < select.size(); syn++) {
+		for (size_t mergedSyn = 0; mergedSyn < mergedSelectedSyns.size(); mergedSyn++) {
+			if (mergedSelectedSyns[mergedSyn].first == select[syn].getParentStringVal()) {
+				arrangedSynValues.push_back(make_pair(select[syn].getParentType(), mergedSelectedSyns[mergedSyn].second));
+				break;
+			}
+		}
+	}
+
+	return arrangedSynValues;
+}
+
+list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns) {
 	return list<string>();
 }
 
