@@ -23,7 +23,7 @@ public:
 	vector<regex> regexForBoth = { std::regex("\\band pattern\\b|\\band with\\b|\\band such that\\b|\\bSelect\\b|\\bsuch that\\b|\\bwith\\b|\\bpattern\\b|\\band\\b"),
 		std::regex("\\bassign\\b|\\bstmt\\b|\\bprog_line\\b|\\bconstant\\b|\\bwhile\\b|\\bif\\b|\\bprocedure\\b|\\bcall\\b|\\bvariable\\b") };
 
-	ParserForPQL(string input, PKB &pkb);
+	ParserForPQL(string input);
 	~ParserForPQL();
 
 	QueryTree getQueryTree();
@@ -45,7 +45,7 @@ private:
 	void parseRespectively();
 	void parseKeyword();
 	void startValidate();
-	PKB *pkb;
+//	PKB *pkb;
 
 };
 
