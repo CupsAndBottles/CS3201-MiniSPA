@@ -73,7 +73,7 @@ vector<vector<string>> ParserOfType::setType(PKB &querypkb, int clauseType, stri
 	}
 	else if (indication.compare("variable") == 0) {
 			//index = pkb->getVarIndex(synonym);
-			synAndType[2].push_back("-1");
+			synAndType[2].push_back("0");
 			synAndType[0].push_back(synonym);
 			synAndType[1].push_back("variable");
 			synAndType[3].push_back(isSubExpression);
@@ -81,7 +81,7 @@ vector<vector<string>> ParserOfType::setType(PKB &querypkb, int clauseType, stri
 		}
 		else if (indication.compare("procedure") == 0) {
 		//	index = pkb->getProcIndex(synonym);
-			synAndType[2].push_back("-1");
+			synAndType[2].push_back("0");
 			synAndType[0].push_back(synonym);
 			synAndType[1].push_back("procedure");
 			synAndType[3].push_back(isSubExpression);
@@ -89,7 +89,7 @@ vector<vector<string>> ParserOfType::setType(PKB &querypkb, int clauseType, stri
 		}
 		else if(found != std::string::npos) {
 		//	index = pkb->getProcIndex(synonym);
-			synAndType[2].push_back("-1");
+			synAndType[2].push_back("0");
 			synAndType[0].push_back(synonym);
 			synAndType[1].push_back("procedure");
 			synAndType[3].push_back(isSubExpression);
@@ -172,8 +172,7 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 	return vector<vector<string>>();
 }
 
-vector<vector<string>> ParserOfType::setVariableTypeAndSyn(PKB &querypkb, string synonym) {
-	this->pkb = &querypkb;
+vector<vector<string>> ParserOfType::setVariableTypeAndSyn(string synonym) {
 	vector<vector<string>> synAndType;
 	int index;
 	synAndType.push_back(vector <string>()); //stringVal
@@ -185,7 +184,7 @@ vector<vector<string>> ParserOfType::setVariableTypeAndSyn(PKB &querypkb, string
 	
 	if (found != std::string::npos) {
 	//	int index = pkb->getVarIndex(synonym);
-		synAndType[2].push_back("-1");
+		synAndType[2].push_back("0");
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("variable");
 		synAndType[3].push_back("0");
@@ -197,8 +196,7 @@ vector<vector<string>> ParserOfType::setVariableTypeAndSyn(PKB &querypkb, string
 	return vector<vector<string>>();
 }
 
-vector<vector<string>> ParserOfType::setProcedureTypeAndSyn(PKB &querypkb, string synonym, string clauseType) {
-	this->pkb = &querypkb;
+vector<vector<string>> ParserOfType::setProcedureTypeAndSyn(string synonym, string clauseType) {
 	vector<vector<string>> synAndType;
 	int index;
 	synAndType.push_back(vector <string>()); //stringVal
@@ -210,7 +208,7 @@ vector<vector<string>> ParserOfType::setProcedureTypeAndSyn(PKB &querypkb, strin
 	
 	if (found != std::string::npos) {
 		//int index = pkb->getProcIndex(synonym);
-		synAndType[2].push_back("-1");
+		synAndType[2].push_back("0");
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("procedure");
 		synAndType[3].push_back("0");

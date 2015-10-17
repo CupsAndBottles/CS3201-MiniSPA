@@ -37,6 +37,7 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
   // ...code to evaluate query...
 	
 	//TO 
+	cout << "Begin evaluation" << endl;
 	try {
 		ParserForPQL parserForPQL(query);
 
