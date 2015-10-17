@@ -1042,6 +1042,9 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 	return mergedResult;
 }
 
+/**
+Precondition: syn2 is at most containing 2 synonyms
+**/
 Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 	vector<Enum::TYPE> type1 = syn1.getType();
 	vector<string> synName1 = syn1.getSyn();
@@ -1050,6 +1053,8 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 	vector<string> synName2 = syn2.getSyn();
 	vector<vector<int>> result2 = syn2.getResult();
 
+	vector<int> empty;
+
 	vector<Enum::TYPE> resultSynType;
 	vector<string> resultSynName;
 	vector<vector<int>> result;
@@ -1057,6 +1062,33 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 	vector<pair<int, int>> counter = checkCommonSyn(type1, type2, synName1, synName2);
 
 	if (counter.size() == 2) {
+		int syn1row1 = counter.at(0).first;
+		int syn2row1 = counter.at(0).second;
+		int syn1row2 = counter.at(1).first;
+		int syn2row2 = counter.at(1).second;
+
+		for (size_t i = 0; i < result1.size(); i++) {
+			result.push_back(empty);
+		}
+
+		for (size_t i = 0; i < result1[syn1row1].size(); i++) {
+			for (size_t j = 0; j < result2[syn2row1].size(); j++) {
+						if (result1[syn1row1][i] == result2[syn2row1][j]) {
+							if (result1[syn1row2][i] == result2[syn2row2][j]) {
+								for (size_t k = 0; k < result1.size(); k++) {
+									cout << result1[k][i] << endl;
+									result.at(k).push_back(result1[k][i]); // copy entire column
+								}
+						}
+				}
+			}
+		}
+
+		for (size_t k = 0; k < result1.size(); k++) {
+			cout << "add type 1" << endl;
+			resultSynType.push_back(type1[k]);
+			resultSynName.push_back(synName1[k]);
+		}
 
 	}
 	else if (counter.size() == 1) {
@@ -1069,7 +1101,6 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 		// initialize rows1
 		size_t numRow1 = 0;
 		while (numRow1 < (result1.size())) {
-			vector<int> empty;
 			result.push_back(empty);
 			numRow1++;
 		}
@@ -1077,7 +1108,6 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 		//initialize rows2
 		size_t numRow2 = 0;
 		while (numRow2 < (result2.size() - 1)) {
-			vector<int> empty;
 			result.push_back(empty);
 			numRow2++;
 		}
