@@ -1021,6 +1021,10 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 	Synonym syn;
 
 	for (size_t i = 0; i < group.size(); i++) {
+		if (this->results.empty()) {
+			break;
+		}
+
 		syn = this->results.at(group[i][0]);
 		for (size_t j = 1; j < group.at(i).size() ; j++) {
 			if (group.at(i).size() != 1) {
