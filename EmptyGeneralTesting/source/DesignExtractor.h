@@ -18,7 +18,8 @@ private:
 	vector<int> NextT;
 	vector<int> PrevT;
 	void extractRec(vector<int>, vector<vector<int>>,string);
-	
+	void extractRecCallsTCalledByT(vector<int>, vector<vector<int>>, string);
+
 public:
 	DesignExtractor();
 	~DesignExtractor();

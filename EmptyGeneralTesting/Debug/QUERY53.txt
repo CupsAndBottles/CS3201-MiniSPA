@@ -1,0 +1,50 @@
+1- comment
+procedure p;
+Select p such that Calls("Game",p)
+City
+5000
+2- comment 
+assign a;
+Select a such that Modifies(a, "train")
+3, 8, 11, 18, 24, 26, 28, 33, 35
+5000
+3- comment
+assign a;
+Select a pattern a ("bus", _)
+5, 14, 23, 30, 34
+5000
+4- comment
+Stmt s;
+Select s such that Parent(s, 7)  
+6
+5000
+5- comment
+Assign a;
+Select a such that Follows(a, 10)
+none
+5000
+6- comment
+Stmt s;
+Select s such that Follows(a, 10)
+none
+5000
+7-comment
+Stmt s;
+progline n ;
+Select s such that Uses(n, "man")
+5, 9, 14
+5000
+8-comment
+Select BOOLEAN such that Next(1, 2)
+true
+5000
+9-comment
+procedure p;
+Select p such that Calls*("Game", p)
+City
+5000
+10-comment
+procedure p;
+Select p such that Calls*(p, "Game")
+none
+5000

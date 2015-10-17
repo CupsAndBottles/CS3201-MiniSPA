@@ -162,7 +162,7 @@ void Parser::Procedure() {
 		}
 	}
 	setRelationsInTable();
-	pkb->setByDesignExtractor();
+//	pkb->setByDesignExtractor();
 }
 
 void Parser::setRelationsInTable() {
