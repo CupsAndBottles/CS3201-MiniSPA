@@ -1021,7 +1021,7 @@ void PKB::extractCallsT(int stmtNum) {
 	vector<int> callsT;
 
 	for (size_t i = 0; i < procTable.size(); i++) {
-		callsCol.push_back(getCalls(i));
+		callsCol.push_back(getProcCalls(i));
 	}
 
 	if (callsCol.size() == 0) {
@@ -1030,7 +1030,7 @@ void PKB::extractCallsT(int stmtNum) {
 	else {
 		callsT = design.extractCallsT(callsCol, stmtNum);
 	}
-	setCallsT(stmtNum, callsT);
+	setProcCallsT(stmtNum, callsT);
 }
 
 void PKB::extractCalledByT(int stmtNum) {
@@ -1039,7 +1039,7 @@ void PKB::extractCalledByT(int stmtNum) {
 	vector<int> calledByT;
 
 	for (size_t i = 0; i < procTable.size(); i++) {
-		calledByCol.push_back(getCalledBy(i));
+		calledByCol.push_back(getProcCalledBy(i));
 	}
 
 	if (calledByCol.size() == 0) {
@@ -1048,7 +1048,7 @@ void PKB::extractCalledByT(int stmtNum) {
 	else {
 		calledByT = design.extractCalledByT(calledByCol, stmtNum);
 	}
-	setCalledByT(stmtNum, calledByT);
+	setProcCalledByT(stmtNum, calledByT);
 }
 
 void PKB::extractProcExtraModifiesUses() {

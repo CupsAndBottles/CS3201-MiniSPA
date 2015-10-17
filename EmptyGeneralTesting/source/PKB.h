@@ -56,8 +56,8 @@ public:
 	void setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls);
 
 	
-	string setProcCallsT(vector<int> callsT);
-	void setProcCalledByT(vector<int> calledT);
+	void setProcCallsT(int index, vector<int> callsT);
+	void setProcCalledByT(int index, vector<int> calledT);
 
 
 	//From StmtTable
@@ -75,7 +75,7 @@ public:
 	void setUsedVar(int index, string usedVar);//working
 	void setRightExpr(int index, string rightExpression);  //tested //working
 	void setParent(int index, int parentStmt);  //working
-	void setCallsT(int index, vector<int> callsTStmts);
+	//void setCallsT(int index, vector<int> callsTStmts);
 
 	void setNext(int index, int next);
 	void setPrev(int index, int prev);
