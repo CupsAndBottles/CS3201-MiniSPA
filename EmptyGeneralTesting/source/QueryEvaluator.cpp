@@ -1186,9 +1186,9 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 
 
 	vector<pair<string, vector<int>>> mergedSelectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
-
 	if (!this->nonCommonSyn.empty()) {
 		vector<pair<string, vector<int>>> nonCommonSyn = getValuesOfNonCommonSyn(this->nonCommonSyn);
+
 		for (size_t syn = 0; syn < nonCommonSyn.size(); syn++) {
 			mergedSelectedSyns = mergeSelectedSyns(mergedSelectedSyns, nonCommonSyn[syn]);
 		}
@@ -1268,7 +1268,7 @@ list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vect
 		vector<int> valuesOfSyn = arrangedSyns[0].second;
 		string combinedValues = convertToString(valuesOfSyn.at(values), arrangedSyns.at(0).first);
 		for (size_t syn = 1; syn < arrangedSyns.size(); syn++) {
-			combinedValues = ", " + convertToString(arrangedSyns[syn].second.at(values), arrangedSyns[syn].first);
+			combinedValues = combinedValues + " " + convertToString(arrangedSyns[syn].second.at(values), arrangedSyns[syn].first);
 		}
 
 		stringedResults.push_back(combinedValues);
@@ -1318,10 +1318,13 @@ vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<
 		return newMergedGroup;
 	} 
 
+	newMergedValues.assign(newGroupSize, vector<int>());
 	for (size_t values = 0; values < valuesFromToBeMerged.size(); values++) {
 		for (size_t valueFromMerged = 0; valueFromMerged < mergedValues.front().second.size(); valueFromMerged++) {
+
 			for (size_t syn = 0; syn < mergedValues.size(); syn++) {
-				newMergedValues[syn].push_back(mergedValues[syn].second.at(valueFromMerged));
+				vector<int> valuesOfSyn = mergedValues[syn].second;
+				newMergedValues[syn].push_back(valuesOfSyn.at(valueFromMerged));
 			}
 			newMergedValues[mergedValues.size()].push_back(valuesFromToBeMerged[values]);
 		}
