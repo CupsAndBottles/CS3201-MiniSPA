@@ -4,9 +4,11 @@
 const string EMPTY_STRING = "";
 const int WILDCARD = -1;
 const int NOT_FOUND = -1;
+const int STRING_NOT_FOUND = 0;
 
 const int POSITION_FIRSTPARAM = 1;
 const int POSITION_SECONDPARAM = 2;
+
 
 const string RELATIONSHIP_CALLS = "Calls";
 const string RELATIONSHIP_FOLLOWS = "Follows";
@@ -212,14 +214,24 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 bool QueryEvaluator::isGivenParam(Clauses clause, int paramPos) {
 	if (paramPos == POSITION_FIRSTPARAM) {
 		if (clause.getLeftCType() == Enum::TYPE::PROCEDURE) {
-			return (clause.getLeftCStringValue() != EMPTY_STRING);
+			if (clause.getLeftCIntValue() == STRING_NOT_FOUND) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 		else {
 			return (clause.getLeftCIntValue() != NOT_FOUND);
 		}
 	} else {
 		if (clause.getRightCType() == Enum::TYPE::PROCEDURE || clause.getRightCType() == Enum::TYPE::VARIABLE) {
-			return (clause.getRightCStringValue() != EMPTY_STRING);
+			if (clause.getRightCIntValue() == STRING_NOT_FOUND) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 		else {
 			return (clause.getRightCIntValue() != NOT_FOUND);
@@ -877,9 +889,15 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	vector<string> synString;
 	vector<vector<int>> resultsToStore;
 
-	if (clause.getLeftCIntValue() == WILDCARD) {
+	if ((clause.getLeftCIntValue() == STRING_NOT_FOUND && clause.getLeftCType() != Enum::TYPE::UNDERSCORE)
+		|| (clause.getLeftCIntValue() == NOT_FOUND && clause.getLeftCType() != Enum::TYPE::UNDERSCORE)) { // store only when syn is not given and not underscore
 		for (size_t i = 0; i < results.size(); i++) {
 			firstSynResults.push_back(results[i].first);
+		}
+
+		if (clause.getRightCIntValue() != STRING_NOT_FOUND && clause.getRightCIntValue() != NOT_FOUND) { // remove duplicates when syn is given
+			sort(firstSynResults.begin(), firstSynResults.end());
+			firstSynResults.erase(unique(firstSynResults.begin(), firstSynResults.end()), firstSynResults.end());
 		}
 
 		if (!firstSynResults.empty()) {
@@ -890,9 +908,15 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 
 	}
 
-	if (clause.getRightCIntValue() == WILDCARD) {
+	if ((clause.getRightCIntValue() == STRING_NOT_FOUND && clause.getRightCType() != Enum::TYPE::UNDERSCORE)
+		|| (clause.getRightCIntValue() == NOT_FOUND && clause.getRightCType() != Enum::TYPE::UNDERSCORE)) { // store only when syn is not given and not underscore
 		for (size_t i = 0; i < results.size(); i++) {
 			secondSynResults.push_back(results[i].second);
+		}
+
+		if (clause.getLeftCIntValue() != STRING_NOT_FOUND && clause.getLeftCIntValue() != NOT_FOUND) { // remove duplicates when syn is given
+			sort(secondSynResults.begin(), secondSynResults.end());
+			secondSynResults.erase(unique(secondSynResults.begin(), secondSynResults.end()), secondSynResults.end());
 		}
 
 		if (!secondSynResults.empty()) {
