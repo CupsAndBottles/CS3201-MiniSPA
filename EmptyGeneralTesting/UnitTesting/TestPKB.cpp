@@ -106,6 +106,43 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
 			}
 		}
+
+		TEST_METHOD(PKB_setByDesignExtractor) {
+			PKB *pkb = new PKB();
+			pkb->setType(Enum::TYPE::WHILE);
+			pkb->setType(Enum::TYPE::WHILE);
+			pkb->setType(Enum::TYPE::ASSIGN);
+
+			vector<pair<int, int>> children; 
+			vector<int> expectedResults;
+			vector<int> actualResults;
+			
+			children.push_back(make_pair(1, 2));
+			children.push_back(make_pair(2, 3));
+			pkb->setChildren(3, 0);
+			pkb->setChildren(children);
+			pkb->setByDesignExtractor();
+			
+			//test if parentT
+			expectedResults = { 2,1 };
+			actualResults = pkb->getParentT(3);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+
+			for (int i = 0; i < expectedResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+
+			//test for childrenT
+			expectedResults.clear();
+			expectedResults = { 2,3 };
+			actualResults = pkb->getChildrenT(1);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+
+			for (int i = 0; i < expectedResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+		}
+
 		TEST_METHOD(PKB_getParentT) {
 			/*Source eg.
 			1. while x {
@@ -125,13 +162,9 @@ namespace UnitTesting
 			children.push_back(make_pair(1, 2));
 			children.push_back(make_pair(2, 3));
 			pkb->setChildren(3, 0);
-			//pkb->setParent(1, 0);
-			//pkb->setParent(2, 1);
-			//pkb->setParent(3, 2);
-			//pkb->setParent(0, 3);
 			pkb->setChildren(children);
-			vector<int> childrenStmt = { 0 };
-			pkb->setChildrenT(3, childrenStmt);
+			
+			pkb->setByDesignExtractor();
 
 			expectedResults.push_back(make_pair(1, 2));
 			expectedResults.push_back(make_pair(1, 3));
@@ -523,7 +556,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(4, 0));
 
-			
 			expectedResult.push_back(make_pair(1, 2));
 			expectedResult.push_back(make_pair(1, 3));
 			expectedResult.push_back(make_pair(1, 4));
@@ -532,12 +564,11 @@ namespace UnitTesting
 			expectedResult.push_back(make_pair(3, 4));
 
 			pkb->setFollows(follows);
-			int actual = pkb->getFollowedBy(1);
-			int expected = 2;
-			Assert::AreEqual(expected, actual);
+			pkb->setByDesignExtractor();
 			
 			// followsT (s1, s2)
 			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
+
 			Assert::AreEqual(expectedResult.size(), actualResult.size());
 			for (size_t i = 0; i < expectedResult.size(); i++) {
 				
