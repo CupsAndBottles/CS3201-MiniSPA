@@ -175,11 +175,11 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				
 				if (withSynonym[i].at(k-1).compare("procName") == 0) {
 				//	std::cout << "withSynAndType[0]1.1 = " << withSynAndType[1].at(size) << '\n';
-					temp = parserOfType.setProcedureTypeAndSyn(*pkb, withSynonym[i].at(k), withSynonym[i].at(k - 1));
+					temp = parserOfType.setProcedureTypeAndSyn(withSynonym[i].at(k), withSynonym[i].at(k - 1));
 				//	std::cout << "temp[0] = " << temp[0].at(0) << '\n';
 				}
 				else if (withSynonym[i].at(k - 1).compare("varName") == 0) {
-					temp = parserOfType.setVariableTypeAndSyn(*pkb, withSynonym[i].at(k));
+					temp = parserOfType.setVariableTypeAndSyn(withSynonym[i].at(k));
 				}
 				else if (withSynonym[i].at(k - 1).compare("value") == 0 || withSynonym[i].at(k - 1).compare("stmt#") == 0) {
 					temp = parserOfType.setDigitTypeAndSyn(withSynonym[i].at(k - 1),  withSynonym[i].at(k));
@@ -190,7 +190,9 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				if (temp.size() == 0) {
 					throw ParserException("With synonym unidentified");
 				}
-				
+				if (withSynonym.size() == 4) {
+					temp[2].at(0) = string("-1");
+				}
 				withSynAndType[0].insert(withSynAndType[0].end(), temp[0].begin(), temp[0].end());
 				withSynAndType[1].insert(withSynAndType[1].end(), temp[1].begin(), temp[1].end());
 				withSynAndType[2].insert(withSynAndType[2].end(), temp[2].begin(), temp[2].end());
