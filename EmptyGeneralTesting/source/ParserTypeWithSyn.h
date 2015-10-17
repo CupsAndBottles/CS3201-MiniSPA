@@ -10,7 +10,7 @@ using namespace std;
 class ParserTypeWithSyn
 {
 public:
-	ParserTypeWithSyn(PKB & querypkb, vector<string> selectSynonym, vector<vector<string>> suchThatSynonym, vector<vector<string>> withSynonym, vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
+	ParserTypeWithSyn(vector<string> selectSynonym, vector<vector<string>> suchThatSynonym, vector<vector<string>> withSynonym, vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
 	~ParserTypeWithSyn();
 
 	vector<vector<string>> selectSynAndType;

@@ -54,14 +54,24 @@ void Procedure::setCalledBy(int procIndex)
 	calledByList.push_back(procIndex);
 }
 
-void Procedure::setCallsT(vector<int> callsT)
+void Procedure::setCallsT(vector<int> procList)
 {
-	callsTList = callsT;
+	callsTList = procList;
 }
 
-void Procedure::setCalledByT(vector<int> calledByT)
+void Procedure::setCalledByT(vector<int> procList)
 {
-	calledByList = calledByT;
+	calledByTList = procList;
+}
+
+void Procedure::setStmtNum(int stmtNum)
+{
+	stmtsProcCalled.push_back(stmtNum);
+}
+
+vector<int> Procedure::getStmtNum()
+{
+	return stmtsProcCalled;
 }
 
 vector<int> Procedure::getUsed() {

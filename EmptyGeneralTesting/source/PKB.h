@@ -51,9 +51,15 @@ public:
 	void setEndNum(int index, int endNum); //working
 	void setProcModified(int index, vector<string> modifiedVar);//working
 	void setProcUses(int index, vector<string> usesVar);//working
-	string setProcCalls(vector<pair<int,string>> procCalls); //not done yet
-	void setProcCalledBy(int index, int called);//not done yet
+	string setProcCalls(vector<pair<int,string>> procCalls); 
+	void setProcCalledBy(int index, int called);
+	void setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls);
+
 	
+	string setProcCallsT(vector<int> callsT);
+	void setProcCalledByT(vector<int> calledT);
+
+
 	//From StmtTable
 	void setType(Enum::TYPE type);	//tested //done
 	void setParentT(int index, vector<int> parentStmts); 
@@ -118,9 +124,8 @@ public:
 	string getProcName(int procIndex);
 	vector<int> getProcModified(int procIndex);
 	vector<int> getProcUsed(int procIndex);
-	vector<int> getProcCalls();
-	vector<int> getCalls(int procIndex);
-	vector<int> getCalledBy(int procIndex);
+	vector<int> getProcCalls(int procIndex);
+	vector<int> getProcCalledBy(int procIndex);
 	vector<int> getCallsT(int procIndex);
 	vector<int> getCalledByT(int procIndex);
 
@@ -149,10 +154,5 @@ public:
 
 	int getControlVar(int stmtIndex);
 
-	//While table
-	//int getWholeStmt(int, int);
-
-	//If table
-	//void getIfStmt(int, int);
 
 };

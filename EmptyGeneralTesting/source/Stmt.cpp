@@ -83,18 +83,15 @@ void Stmt::setControlVar(int varIndex)
 void Stmt::setNext(int next) {
 	nextList.push_back(next);
 }
-
-void Stmt::setPrev(int prev)
-{
+void Stmt::setPrev(int prev) {
 	prevList.push_back(prev);
 }
 
-void Stmt::setNextT(vector<int> nTList) {
-	nextTList = nTList;
+void Stmt::setPrevT(int prev) {
+	prevTList.push_back(prev);
 }
-void Stmt::setPrevT(vector<int> pTList)
-{
-	prevTList = pTList;
+void Stmt::setNextT(int next) {
+	nextTList.push_back(next);
 }
 //---------------------------------------------------
 int Stmt::getType() {
@@ -157,8 +154,7 @@ vector<int> Stmt::getNext() {
 	return nextList;
 }
 
-vector<int> Stmt::getPrev()
-{
+vector<int> Stmt::getPrev() {
 	return prevList;
 }
 
@@ -166,10 +162,10 @@ vector<int> Stmt::getNextT() {
 	return nextTList;
 }
 
-vector<int> Stmt::getPrevT()
-{
+vector<int> Stmt::getPrevT() {
 	return prevTList;
 }
+
 
 int Stmt::getControlVarIndex()
 {

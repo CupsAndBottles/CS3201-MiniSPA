@@ -27,8 +27,8 @@ public:
 	void setNext(int next);
 	void setPrev(int prev);
 
-	void setNextT(vector<int> nTList);
-	void setPrevT(vector<int> pTList);
+	void setPrevT(int prev);
+	void setNextT(int next);
 
 	int getType();
 	int getParent();
@@ -49,6 +49,7 @@ public:
 	string getRightExpression();
 
 	vector<int> getNext();
+
 	vector<int> getPrev();
 
 	vector<int> getNextT();

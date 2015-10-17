@@ -8,7 +8,6 @@ using namespace std;
 class Validation
 {
 public:
-	Validation(vector<vector<string>> suchThatSynAndType, vector<vector<string>> patternSynAndType);
 	Validation();
 	~Validation();
 
@@ -37,7 +36,7 @@ public:
 		std::regex("\\bassign\\b|\\bstmt\\b|\\bwhile\\b|\\bif\\b|\\bcall\\b|\\bconstant\\b"), // for size 4 of stmt (16)
 		std::regex("\\bwhile\\b|\\bconstant\\b|\\bstmt\\b"), // for size 4 of while (17)
 		std::regex("\\bif\\b|\\bconstant\\b|\\bstmt\\b"), // for size 4 of if (18)
-		std::regex("\\bcall\\b|\\bconstant\\b|\\bstmt\\b") // for size 4 of call (19)
+		std::regex("\\bcall\\b|\\bconstant\\b|\\bstmt\\b|\\bprocedure\\b") // for size 4 of call (19)
 	};
 };
 
