@@ -8,6 +8,7 @@ const int NOT_FOUND = -1;
 const int POSITION_FIRSTPARAM = 1;
 const int POSITION_SECONDPARAM = 2;
 
+
 const string RELATIONSHIP_CALLS = "Calls";
 const string RELATIONSHIP_FOLLOWS = "Follows";
 const string RELATIONSHIP_FOLLOWST = "Follows*";
@@ -212,14 +213,24 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 bool QueryEvaluator::isGivenParam(Clauses clause, int paramPos) {
 	if (paramPos == POSITION_FIRSTPARAM) {
 		if (clause.getLeftCType() == Enum::TYPE::PROCEDURE) {
-			return (clause.getLeftCStringValue() != EMPTY_STRING);
+			if (clause.getLeftCIntValue() == NOT_FOUND) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 		else {
 			return (clause.getLeftCIntValue() != NOT_FOUND);
 		}
 	} else {
 		if (clause.getRightCType() == Enum::TYPE::PROCEDURE || clause.getRightCType() == Enum::TYPE::VARIABLE) {
-			return (clause.getRightCStringValue() != EMPTY_STRING);
+			if (clause.getRightCIntValue() == NOT_FOUND) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 		else {
 			return (clause.getRightCIntValue() != NOT_FOUND);
@@ -417,7 +428,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		else {
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
 			cout << expr << endl;
-			if (!clause.getRightCIsExpression()) {		// pattern a(_, x ) 
+			if (!clause.getRightCIsExpression()) {		
+				// pattern a(_, x ) 
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					//cout << i << "." << endl;
 					//cout << pkb->getRightExpr(i) << endl;
@@ -425,7 +437,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 						intermediateResult.push_back(i);
 				}
 			}
-			else {		// pattern a(_, _x_)
+			else {		
+				// pattern a(_, _x_)
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
 						intermediateResult.push_back(i);
@@ -437,7 +450,9 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 	}
 	else { //left child is a variable
-		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, clause.getLeftCIntValue());
+		int leftExpression = pkb->getVarIndex(clause.getLeftCStringValue());
+		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, leftExpression);
+		
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (size_t i = 0; i < stmtLst.size(); i++) {
 				intermediateResult.push_back(stmtLst[i].first);
@@ -478,29 +493,28 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 }
 
 string QueryEvaluator::convertToShuntingYard(string statement) {
-	//modify and uses - modify => a = b+c, a is modified. Uses= b and c
-	list<char> output;
-	stack<char> stack;
-	string s = "";
-	output.clear();
+	
 	string outputString;
 
 	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
 
+	list<char> output;
+	stack<char> stack;
+	output.clear();
+	string s;
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
-			//addToParent(index);
+			s = "";
 		}
 		if (c == '}') {
-
-			//pushCloseBracket(index);
-			break;
+			//	break;
 		}
 		if (isOperator(charac))
 		{
 			char o1 = charac;
-
+			s = "";
+			output.push_back(' ');
 			if (!stack.empty())
 			{
 				char o2 = stack.top();
@@ -508,7 +522,16 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
-					output.push_back(o2);
+
+					if (isOperator(o2)) {
+
+						output.push_back(o2);
+						output.push_back(' ');
+					}
+					else if (o2 != '}') {
+						output.push_back(o2);
+					}
+
 
 					if (!stack.empty())
 						o2 = stack.top();
@@ -529,8 +552,10 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 
 			while (topCharac != '(')
 			{
-				output.push_back(topCharac);
-				stack.pop();
+				if (topCharac != '}') {
+					output.push_back(topCharac);
+					stack.pop();
+				}
 
 				if (stack.empty()) {
 					break;
@@ -543,18 +568,20 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			}
 			if (topCharac != '(')
 			{
-				cout << "error";
 			}
 		}
 		else
 		{
 			if (charac == '=') {
-				//output.pop_back();
+				output.clear();
+				s = "";
 
 			}
 			else {
-				output.push_back(charac);
-				s = "" + charac;
+				if (charac != '}') {
+					output.push_back(charac);
+					s.push_back(charac);
+				}
 			}
 		}
 	}
@@ -563,9 +590,12 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		char stackTop = stack.top();
 		if (stackTop == ')' || stackTop == '(')
 		{
-			//Error();
 		}
-		output.push_back(stackTop);
+		if (stackTop != '}') {
+			output.push_back(' ');
+			output.push_back(stackTop);
+			//	output.push_back('\\');
+		}
 		stack.pop();
 	}
 
@@ -877,9 +907,14 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 	vector<string> synString;
 	vector<vector<int>> resultsToStore;
 
-	if (clause.getLeftCIntValue() == WILDCARD) {
+	if (clause.getLeftCIntValue() == NOT_FOUND && clause.getLeftCType() != Enum::TYPE::UNDERSCORE) { // store only when syn is not given and not underscore
 		for (size_t i = 0; i < results.size(); i++) {
 			firstSynResults.push_back(results[i].first);
+		}
+
+		if (clause.getRightCIntValue() != NOT_FOUND) { // remove duplicates when syn is given
+			sort(firstSynResults.begin(), firstSynResults.end());
+			firstSynResults.erase(unique(firstSynResults.begin(), firstSynResults.end()), firstSynResults.end());
 		}
 
 		if (!firstSynResults.empty()) {
@@ -890,9 +925,14 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 
 	}
 
-	if (clause.getRightCIntValue() == WILDCARD) {
+	if (clause.getRightCIntValue() == NOT_FOUND && clause.getRightCType() != Enum::TYPE::UNDERSCORE) { // store only when syn is not given and not underscore
 		for (size_t i = 0; i < results.size(); i++) {
 			secondSynResults.push_back(results[i].second);
+		}
+
+		if (clause.getLeftCIntValue() != NOT_FOUND) { // remove duplicates when syn is given
+			sort(secondSynResults.begin(), secondSynResults.end());
+			secondSynResults.erase(unique(secondSynResults.begin(), secondSynResults.end()), secondSynResults.end());
 		}
 
 		if (!secondSynResults.empty()) {
