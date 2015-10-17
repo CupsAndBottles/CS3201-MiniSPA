@@ -22,8 +22,8 @@
  man = 3 + bus;
  if car then {
  car = car + 2;
- bus = 1; } 
- train = train * 3;
+ bus = 1;  
+ train = train * 3;}
  else{
  car = 5 * bus; 
  train = bus + 9 ;}
