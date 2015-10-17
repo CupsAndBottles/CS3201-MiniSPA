@@ -17,8 +17,8 @@ const string RELATIONSHIP_PARENT = "Parent";
 const string RELATIONSHIP_PARENTT = "Parent*";
 const string RELATIONSHIP_USES = "Uses";
 const string STRING_BOOLEAN = "BOOLEAN";
-const string STRING_FALSE = "FALSE";
-const string STRING_TRUE = "TRUE";
+const string STRING_FALSE = "false";
+const string STRING_TRUE = "true";
 
 QueryEvaluator::QueryEvaluator()
 {
