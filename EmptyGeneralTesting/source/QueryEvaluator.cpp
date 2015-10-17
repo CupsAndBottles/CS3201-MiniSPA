@@ -429,7 +429,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		else {
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
 			cout << expr << endl;
-			if (!clause.getRightCIsExpression()) {		// pattern a(_, x ) 
+			if (!clause.getRightCIsExpression()) {		
+				// pattern a(_, x ) 
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					//cout << i << "." << endl;
 					//cout << pkb->getRightExpr(i) << endl;
@@ -437,7 +438,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 						intermediateResult.push_back(i);
 				}
 			}
-			else {		// pattern a(_, _x_)
+			else {		
+				// pattern a(_, _x_)
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
 						intermediateResult.push_back(i);
@@ -449,7 +451,9 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 	}
 	else { //left child is a variable
-		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, clause.getLeftCIntValue());
+		int leftExpression = pkb->getVarIndex(clause.getLeftCStringValue());
+		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, leftExpression);
+		
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (size_t i = 0; i < stmtLst.size(); i++) {
 				intermediateResult.push_back(stmtLst[i].first);

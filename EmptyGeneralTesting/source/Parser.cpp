@@ -91,10 +91,6 @@ string Parser::linesSplitted(list<pair<int, string>> linesToTest) {
 
 list<pair<int, string>> Parser::splitLines(string lines)
 {
-	size_t elseStmt = lines.find("}else{");
-	if (lines.find("}else{") != std::string::npos) {
-		lines.replace(elseStmt, string("}else{").length(), "");
-	}
 
 	list<pair<int, string>> result;
 	size_t position = 0;
@@ -392,7 +388,7 @@ void Parser::processExpressions(int index, string statement) {
 		if (stackTop != '}') {
 			output.push_back(' ');
 			output.push_back(stackTop);
-			output.push_back(' ');
+		//	output.push_back('\\');
 		}
 		stack.pop();
 	}
