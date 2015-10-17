@@ -153,8 +153,8 @@ int PKB::setVarName(string varName){
 		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
-	//	cout << "set varName: " << varName << "\n";
-	//	cout << "set varIndex: " << index << "\n";
+		//cout << "set varName: " << varName << "\n";
+		//cout << "set varIndex: " << index << "\n";
 	}
 	return index;
 }
@@ -322,8 +322,8 @@ void PKB::setFollows(vector<pair<int,int>> follows)
 		int firstStmt = paired.first;
 		int secondStmt = paired.second;
 		follows.pop_back();
-		//cout << "first: " << firstStmt << "\n";
-		//cout << "second: " << secondStmt << "\n";
+	//	cout << "first: " << firstStmt << "\n";
+	//	cout << "second: " << secondStmt << "\n\n";
 		stmtTable[secondStmt].setFollows(firstStmt);
 		setFollowedBy(firstStmt,secondStmt);
 	}
@@ -398,19 +398,20 @@ void PKB::setRightExpr(int index, string expr)
 // V: Parser - PKB, called at start by parser
 void PKB::setByDesignExtractor() {
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
-		extractParentT(i);
-		extractChildrenT(i);
+	extractParentT(i);
+	//extractChildrenT(i);
 		extractFollowsT(i);
 		extractFollowedByT(i);
 	}
 	 
 	for (int j = 0; j < procTable.size(); j++) {
-		extractCallsT(j);
-		extractCalledByT(j);
+		//extractCallsT(j);
+		//extractCalledByT(j);
 	}
 	extractProcExtraModifiesUses();
 	setCallsStmtModifiesUses();
 }
+
 //ZH - tested
 string PKB::getRightExpr(int index){
 	return stmtTable[index].getRightExpression();

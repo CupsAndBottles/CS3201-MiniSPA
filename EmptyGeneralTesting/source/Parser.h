@@ -28,7 +28,8 @@ public:
 	void processProcedure(int index, string statment);
 	void processCalls(int index, string stmt);
 	void processWhile(int index, string statment);
-	void processIfElse(int index, string statement);
+	void processIf(int index, string statement);
+	void processElse(int index, string statement);
 	void handleModifyAndUses(int i, string stmt);
 	string getParentChild();
 	string getExpression();
@@ -41,7 +42,6 @@ public:
 	void processExpressions(int index, string statement);
 	void pushOpenBracket();
 	bool isVariable(char c);
-	bool isString(string s);
 	//	void insertIntoVarTable(int stmtNum, char var);
 	bool constantValue;
 
