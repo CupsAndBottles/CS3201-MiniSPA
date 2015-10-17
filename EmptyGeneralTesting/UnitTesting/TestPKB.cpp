@@ -74,7 +74,7 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].first, actualResults[i].first);
 				Assert::AreEqual(expectedResult[i].second, actualResults[i].second);
 			}
-			
+
 			// Parent( w, a) - failed
 			actualResults = pkb->getParent(Enum::TYPE::WHILE, UNDEFINED, Enum::TYPE::ASSIGN, UNDEFINED);
 			for (size_t i = 0; i < expectedResult.size(); i++) {
@@ -98,10 +98,10 @@ namespace UnitTesting
 			pkb->setParent(1, 0);
 			pkb->setParent(2, 1);
 			pkb->setParent(3, 2);
-				
+
 			pkb->extractParentT(3);
 			actualResults = pkb->getParentT(3);
-			
+
 			for (int i = 0; i < actualResults.size(); i++) {
 				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
 			}
@@ -113,16 +113,16 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE);
 			pkb->setType(Enum::TYPE::ASSIGN);
 
-			vector<pair<int, int>> children; 
+			vector<pair<int, int>> children;
 			vector<int> expectedResults;
 			vector<int> actualResults;
-			
+
 			children.push_back(make_pair(1, 2));
 			children.push_back(make_pair(2, 3));
 			pkb->setChildren(3, 0);
 			pkb->setChildren(children);
 			pkb->setByDesignExtractor();
-			
+
 			//test if parentT
 			expectedResults = { 2,1 };
 			actualResults = pkb->getParentT(3);
@@ -141,6 +141,9 @@ namespace UnitTesting
 			for (int i = 0; i < expectedResults.size(); i++) {
 				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
 			}
+
+			//test for callsT
+
 		}
 
 		TEST_METHOD(PKB_getParentT) {
@@ -155,23 +158,23 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE);
 			pkb->setType(Enum::TYPE::ASSIGN);
 
-			vector<pair<int, int>> children; 
+			vector<pair<int, int>> children;
 			vector<pair<int, int>> expectedResults;
 			vector<pair<int, int>> actualResults;
-			
+
 			children.push_back(make_pair(1, 2));
 			children.push_back(make_pair(2, 3));
 			pkb->setChildren(3, 0);
 			pkb->setChildren(children);
-			
+
 			pkb->setByDesignExtractor();
 
 			expectedResults.push_back(make_pair(1, 2));
 			expectedResults.push_back(make_pair(1, 3));
 			expectedResults.push_back(make_pair(2, 3));
-			
+
 			//Assert::AreEqual(0, pkb->getChildren(3).at(0));
-			
+
 			// ParentT(s1, s2)
 			actualResults = pkb->getParentT(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
@@ -179,22 +182,22 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
 				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
-			
-			
+
+
 			//Parent( _, _)
 			actualResults = pkb->getParentT(Enum::TYPE::UNDERSCORE, UNDEFINED, Enum::TYPE::UNDERSCORE, UNDEFINED);
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
 			for (size_t i = 0; i < expectedResults.size(); i++) {
-			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
-			Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
+				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
-	
-	
+
+
 			// ParentT ( 1, 2)
 			expectedResults.clear();
 			actualResults.clear();
 			expectedResults.push_back(make_pair(1, 2));
-			
+
 			actualResults = pkb->getParentT(Enum::TYPE::WHILE, 1, Enum::TYPE::WHILE, 2);
 			for (size_t i = 0; i < expectedResults.size(); i++) {
 				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
@@ -213,52 +216,52 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
 
-			
+
 			expectedResults.clear();
-			expectedResults.push_back(make_pair(1,2));
-			expectedResults.push_back(make_pair(1,3));
-			
-			
+			expectedResults.push_back(make_pair(1, 2));
+			expectedResults.push_back(make_pair(1, 3));
+
+
 			// Parent( 1, s)
 			actualResults = pkb->getParentT(Enum::TYPE::WHILE, 1, Enum::TYPE::STATEMENT, UNDEFINED);
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
 			for (size_t i = 0; i < expectedResults.size(); i++) {
-			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
-			Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
+				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
-			
-			
+
+
 			vector<pair<int, int>> empty;
 			// Empty result
 			actualResults = pkb->getParentT(Enum::TYPE::STATEMENT, 2, Enum::TYPE::STATEMENT, 1);
 			for (size_t i = 0; i < actualResults.size(); i++) {
-			Assert::AreEqual(empty[i].first, actualResults[i].first);
-			Assert::AreEqual(empty[i].second, actualResults[i].second);
+				Assert::AreEqual(empty[i].first, actualResults[i].first);
+				Assert::AreEqual(empty[i].second, actualResults[i].second);
 			}
-			
+
 			// Parent( w, a)
 			expectedResults.clear();
-			expectedResults.push_back(make_pair(1,3));
+			expectedResults.push_back(make_pair(1, 3));
 			expectedResults.push_back(make_pair(2, 3));
 			actualResults = pkb->getParentT(Enum::TYPE::WHILE, UNDEFINED, Enum::TYPE::ASSIGN, UNDEFINED);
-	
+
 			for (size_t i = 0; i < expectedResults.size(); i++) {
-			Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
-			Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
+				Assert::AreEqual(expectedResults[i].first, actualResults[i].first);
+				Assert::AreEqual(expectedResults[i].second, actualResults[i].second);
 			}
-			
+
 
 			delete pkb;
 		}
 
 		TEST_METHOD(PKB_getFollows) {
 			PKB *pkb = new PKB();
-			
+
 			vector<pair<int, int>> expectedResult;
 			vector<pair<int, int>> expectedResult2;
 			vector<pair<int, int>> emptyResult;
 			vector<pair<int, int>> actualResult;
-			
+
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
@@ -271,7 +274,7 @@ namespace UnitTesting
 			expectedResult2.push_back(make_pair(2, 3));
 
 			pkb->setFollows(follows);
-			
+
 			// follows (s1, s2)
 			actualResult = pkb->getFollows(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
 			for (size_t i = 0; i < expectedResult.size(); i++) {
@@ -285,9 +288,9 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
-			
+
 			// follows( s1, a)
-			actualResult = pkb->getFollows(Enum::TYPE::STATEMENT, UNDEFINED,Enum::TYPE::ASSIGN, UNDEFINED);
+			actualResult = pkb->getFollows(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::ASSIGN, UNDEFINED);
 			for (size_t i = 0; i < expectedResult.size(); i++) {
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
@@ -306,14 +309,14 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
-			
+
 			// follows(a, 3)
 			actualResult = pkb->getFollows(Enum::TYPE::ASSIGN, UNDEFINED, Enum::TYPE::STATEMENT, 3);
 			for (size_t i = 0; i < expectedResult2.size(); i++) {
 				Assert::AreEqual(expectedResult2[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult2[i].first, actualResult[i].first);
 			}
-			
+
 			// follows(2, a)
 			actualResult = pkb->getFollows(Enum::TYPE::STATEMENT, 2, Enum::TYPE::ASSIGN, -1);
 			for (size_t i = 0; i < expectedResult2.size(); i++) {
@@ -403,7 +406,7 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
 
-			
+
 			expectedResult.clear();
 			expectedResult.push_back(make_pair(1, 0));
 			actualResult = pkb->getModifies(Enum::TYPE::STATEMENT, 1, Enum::TYPE::VARIABLE, 0);
@@ -418,7 +421,7 @@ namespace UnitTesting
 				Assert::AreEqual(emptyResult[i].first, actualResult[i].first);
 			}
 
-			
+
 		}
 
 		TEST_METHOD(PKB_getUses) {
@@ -527,7 +530,7 @@ namespace UnitTesting
 			//int follows3 = pkb->getFollows(3);
 			//Assert::AreEqual(2, follows3);
 			//int follows4 =
- 			//pkb->extractFollowsT(3);
+			//pkb->extractFollowsT(3);
 			//vector<int> expectedResults = { 3,2,1 };
 			//vector<int> actualResults = pkb->getFollowsT(4);
 
@@ -537,20 +540,20 @@ namespace UnitTesting
 		//	}
 		}
 		*/
-		
+
 		TEST_METHOD(PKB_getFollowsT) {
 			PKB *pkb = new PKB();
 			vector<pair<int, int>> expectedResult;
 			vector<pair<int, int>> actualResult;
 			vector<pair<int, int>> emptyResult;
-			
+
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::WHILE);
 			pkb->setType(Enum::TYPE::ASSIGN);
-			
+
 			vector<pair<int, int>> follows;
-			follows.push_back(make_pair(0,1));
+			follows.push_back(make_pair(0, 1));
 			follows.push_back(make_pair(1, 2));
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
@@ -559,19 +562,19 @@ namespace UnitTesting
 			expectedResult.push_back(make_pair(1, 2));
 			expectedResult.push_back(make_pair(1, 3));
 			expectedResult.push_back(make_pair(1, 4));
-			expectedResult.push_back(make_pair(2 ,3));
+			expectedResult.push_back(make_pair(2, 3));
 			expectedResult.push_back(make_pair(2, 4));
 			expectedResult.push_back(make_pair(3, 4));
 
 			pkb->setFollows(follows);
 			pkb->setByDesignExtractor();
-			
+
 			// followsT (s1, s2)
 			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, UNDEFINED, Enum::TYPE::STATEMENT, UNDEFINED);
 
 			Assert::AreEqual(expectedResult.size(), actualResult.size());
 			for (size_t i = 0; i < expectedResult.size(); i++) {
-				
+
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
@@ -611,7 +614,7 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
-			
+
 			expectedResult.clear();
 			expectedResult.push_back(make_pair(1, 2));
 			expectedResult.push_back(make_pair(1, 4));
@@ -622,11 +625,11 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
-			
+
 			expectedResult.clear();
 			//expectedResult.push_back(make_pair(2, 3));
 			//expectedResult.push_back(make_pair(1, 3));
-			
+
 			// followsT(w, 3)
 			actualResult = pkb->getFollowsT(Enum::TYPE::WHILE, UNDEFINED, Enum::TYPE::STATEMENT, 3);
 			Assert::AreEqual(expectedResult.size(), actualResult.size());
@@ -634,7 +637,7 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
-			
+
 			expectedResult.clear();
 			expectedResult.push_back(make_pair(2, 4));
 			// followsT(2, a)
@@ -643,7 +646,7 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
-			
+
 			expectedResult.pop_back();
 			//followsT(2, 3)
 			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, 2, Enum::TYPE::STATEMENT, 3);
@@ -651,11 +654,11 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResult[i].second, actualResult[i].second);
 				Assert::AreEqual(expectedResult[i].first, actualResult[i].first);
 			}
-			
+
 			//follows(5, 4) - non existent entry
 			actualResult = pkb->getFollowsT(Enum::TYPE::STATEMENT, 4, Enum::TYPE::STATEMENT, 3);
 			Assert::IsTrue(actualResult == emptyResult);
-			
+
 			delete pkb;
 		}
 
@@ -668,7 +671,7 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);
 			pkb->setType(Enum::TYPE::ASSIGN);
 
-			vector<pair<int,int>>followedBy;
+			vector<pair<int, int>>followedBy;
 			followedBy.push_back(make_pair(0, 1));
 			followedBy.push_back(make_pair(1, 2));
 			followedBy.push_back(make_pair(2, 3));
@@ -681,12 +684,19 @@ namespace UnitTesting
 			//Assert::AreEqual(4, pkb->getFollowedBy(3));
 			//Assert::AreEqual(0,pkb->getFollowedBy(4));
 
-				pkb->extractFollowedByT(1);
+			pkb->extractFollowedByT(1);
 			actualResults = pkb->getFollowedByT(1);
 
 			for (int i = 0; i < actualResults.size(); i++) {
 				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
 			}
+		}
+
+		TEST_METHOD(PKB_getCallsT) {
+			PKB *pkb = new PKB();
+			vector<pair<int,int>> expectedResults;
+			vector<pair<int,int>> actualResults;
+
 		}
 
 		TEST_METHOD(PKB_getUsedByStmtNum) {

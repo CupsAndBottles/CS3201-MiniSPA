@@ -86,6 +86,22 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
 			}
 		}
+
+		TEST_METHOD(DE_TestExtractCallsT) {
+			DesignExtractor designE;
+			vector<int> expectedResults = { 1,3,7 };
+			vector<int> actualResults;
+
+			vector<vector<int>> callsCol = { {1,3}, {}, {}, {7}, {}, {}, {}, {} };
+	
+			actualResults = designE.extractCallsT(callsCol,0);
+
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+			for (int i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+
+		}
 	
 	};
 }
