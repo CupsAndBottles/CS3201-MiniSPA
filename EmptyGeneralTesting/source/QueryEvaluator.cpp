@@ -439,12 +439,15 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 			}
 			else {		
 				// pattern a(_, _x_)
+				cout << "here" << endl;
+				cout << this->pkb->getNoOfStmt() << endl;
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
 						intermediateResult.push_back(i);
-						//cout << i << endl;
-						//cout << "RightExpr:" << pkb->getRightExpr(i) << endl;
 					}
+					cout << "there" << endl;
+					cout << i << endl;
+					cout << "RightExpr:" << pkb->getRightExpr(i) << endl;
 				}
 			}
 		}
@@ -452,7 +455,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	else { //left child is a variable
 		int leftExpression = pkb->getVarIndex(clause.getLeftCStringValue());
 		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, leftExpression);
-		
+		cout << clause.getLeftCStringValue() << endl;
+		cout << leftExpression << endl;
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (size_t i = 0; i < stmtLst.size(); i++) {
 				intermediateResult.push_back(stmtLst[i].first);
@@ -495,13 +499,13 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 string QueryEvaluator::convertToShuntingYard(string statement) {
 	
 	string outputString;
-
-	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
-
 	list<char> output;
 	stack<char> stack;
 	output.clear();
 	string s;
+
+	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
+
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
@@ -594,7 +598,7 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		if (stackTop != '}') {
 			output.push_back(' ');
 			output.push_back(stackTop);
-			//	output.push_back('\\');
+			//output.push_back('');
 		}
 		stack.pop();
 	}
