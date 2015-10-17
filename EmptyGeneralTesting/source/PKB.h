@@ -58,7 +58,8 @@ public:
 	
 	void setProcCallsT(int index, vector<int> callsT);
 	void setProcCalledByT(int index, vector<int> calledT);
-
+	void setProcModifies(int index, vector<int> modifiesVar);
+	void setProcUses(int index, vector<int> usesVar);
 
 	//From StmtTable
 	void setType(Enum::TYPE type);	//tested //done
@@ -128,6 +129,7 @@ public:
 	vector<int> getProcCalledBy(int procIndex);
 	vector<int> getCallsT(int procIndex);
 	vector<int> getCalledByT(int procIndex);
+	vector<int> getStmtNumProcCalled(int procIndex);
 
 	//From VarTable
 	int getVarIndex(string varName); //tested

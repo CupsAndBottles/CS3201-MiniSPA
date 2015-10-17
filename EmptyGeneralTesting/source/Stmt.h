@@ -23,6 +23,8 @@ public:
 	void setParentT(vector<int> parentTList);
 	void setChildrenT(vector<int> childrenTList);
 	void setControlVar(int varIndex);
+	void setCallsStmtModifiesVar(vector<int> modifies);
+	void setCallsStmtUsesVar(vector<int> uses);
 
 	void setNext(int next);
 	void setPrev(int prev);

@@ -121,6 +121,25 @@ void PKB::setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls)
 	}
 }
 
+//V
+void PKB::setProcCallsT(int index, vector<int> callsT) {
+	procTable[index].setCallsT(callsT);
+}
+
+//V
+void PKB::setProcCalledByT(int index, vector<int> calledByT) {
+	procTable[index].setCalledByT(calledByT);
+}
+
+//V
+void PKB::setProcModifies(int index, vector<int> modifies) {
+	procTable[index].setUpdatedModifies(modifies);
+}
+
+//V
+void PKB::setProcUses(int index, vector<int> uses) {
+	procTable[index].setUpdatedUses(uses);
+}
 //----------------------------------------------------------------------------------------------
 //Vartable Setters:
 
@@ -243,7 +262,7 @@ void PKB::setCallsStmtModifiesUses() {
 		stmtNumbers = getStmtNumProcCalled(i);
 		for (int j = 0; j < stmtNumbers.size(); j++) {
 			int stmtNum = stmtNumbers.at(j);
-			stmtTable.at(stmtNum).setModifies();
+			stmtTable.at(stmtNum).setCallsStmtModifiesVar();
 		}
 	}
 }
@@ -366,7 +385,8 @@ void PKB::setRightExpr(int index, string expr)
 
 	stmtTable[index].setRightExpr(expr);
 }
-//PKB-DesignExtractor, called at start by parser
+
+// V: Parser - PKB, called at start by parser
 void PKB::setByDesignExtractor() {
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
 		extractParentT(i);
@@ -374,7 +394,7 @@ void PKB::setByDesignExtractor() {
 		extractFollowsT(i);
 		extractFollowedByT(i);
 	}
-
+	 
 	for (int j = 0; j < procTable.size(); j++) {
 		extractCallsT(j);
 		extractCalledByT(j);
@@ -1016,6 +1036,7 @@ void PKB::extractFollowedByT(int stmtNum)
 
 }
 
+//V
 void PKB::extractCallsT(int stmtNum) {
 	DesignExtractor design;
 	vector<vector<int>> callsCol;
@@ -1034,6 +1055,7 @@ void PKB::extractCallsT(int stmtNum) {
 	setProcCallsT(stmtNum, callsT);
 }
 
+//V
 void PKB::extractCalledByT(int stmtNum) {
 	DesignExtractor design;
 	vector<vector<int>> calledByCol;
@@ -1074,6 +1096,11 @@ void PKB::extractProcExtraModifiesUses() {
 		updatedUses = design.extractExtraProcModifiesUses(existingList, callsT, usesCol);
 		setProcUses(j, updatedUses);
 	}
+}
+
+//V
+vector<int> PKB::getStmtNumProcCalled(int index) {
+	return procTable[index].getStmtNum();
 }
 
 vector<int> PKB::getFollowedByT(int stmtNum) {
