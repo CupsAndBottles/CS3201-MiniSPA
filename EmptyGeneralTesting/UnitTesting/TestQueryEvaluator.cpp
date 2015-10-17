@@ -504,22 +504,20 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
-			follows.push_back(make_pair(6, 8));
+			follows.push_back(make_pair(7, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
-			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
 			pkb->setVarName("command");
-			pkb->setRightExpr(1, "command10+");
+			pkb->setRightExpr(1, "command 10 +");
 			pkb->setModifies(1, "beads");
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
@@ -531,7 +529,7 @@ namespace UnitTesting
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
-			pkb->setRightExpr(3, "inspiration1+");
+			pkb->setRightExpr(3, "inspiration 1 +");
 			pkb->setModifies(3, "command");
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
@@ -570,7 +568,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9*+");
+			pkb->setRightExpr(7, "x x 9 * +");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -591,7 +589,7 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setRightExpr(8, "beads command +");
 
 
 			pkb->setProcUses(0, varUsed);
@@ -657,22 +655,20 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
-			follows.push_back(make_pair(6, 8));
+			follows.push_back(make_pair(7, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
-			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
 			pkb->setVarName("command");
-			pkb->setRightExpr(1, "command10+");
+			pkb->setRightExpr(1, "command 10 +");
 			pkb->setModifies(1, "beads");
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
@@ -684,7 +680,7 @@ namespace UnitTesting
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
-			pkb->setRightExpr(3, "inspiration1+");
+			pkb->setRightExpr(3, "inspiration 1 +");
 			pkb->setModifies(3, "command");
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
@@ -723,7 +719,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9*+");
+			pkb->setRightExpr(7, "x x 9 * +");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -744,7 +740,7 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setRightExpr(8, "beads command +");
 
 
 			pkb->setProcUses(0, varUsed);
@@ -820,7 +816,7 @@ namespace UnitTesting
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
 			pkb->setVarName("command");
-			pkb->setRightExpr(1, "command10+");
+			pkb->setRightExpr(1, "command 10 +");
 			pkb->setModifies(1, "beads");
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
@@ -832,7 +828,7 @@ namespace UnitTesting
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
-			pkb->setRightExpr(3, "inspiration1+");
+			pkb->setRightExpr(3, "inspiration 1 +");
 			pkb->setModifies(3, "command");
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
@@ -871,7 +867,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9*+");
+			pkb->setRightExpr(7, "x x 9 * +");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -892,7 +888,7 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setRightExpr(8, "beads command +");
 
 
 			pkb->setProcUses(0, varUsed);
@@ -956,22 +952,20 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
-			follows.push_back(make_pair(6, 8));
+			follows.push_back(make_pair(7, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
-			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
 			pkb->setVarName("command");
-			pkb->setRightExpr(1, "command10+");
+			pkb->setRightExpr(1, "command 10 +");
 			pkb->setModifies(1, "beads");
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
@@ -983,7 +977,7 @@ namespace UnitTesting
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
-			pkb->setRightExpr(3, "inspiration1+");
+			pkb->setRightExpr(3, "inspiration 1 +");
 			pkb->setModifies(3, "command");
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
@@ -1022,7 +1016,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9*+");
+			pkb->setRightExpr(7, "x x 9 * +");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -1043,7 +1037,7 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setRightExpr(8, "beads command +");
 
 
 			pkb->setProcUses(0, varUsed);
@@ -1216,9 +1210,8 @@ namespace UnitTesting
 			QueryEvaluator qe;
 			string equation = "x + 9";
 			string equation2 = "x + x * 9";
-			string ast = "x 9 + ";
-			string ast2 = "xx9*+";
-			string ast3 = "342*15-/+";
+			string ast = "x 9 +";
+			string ast2 = "x x 9 * +";
 			
 			Assert::AreEqual(ast, qe.convertToShuntingYard(equation));
 			Assert::AreEqual(ast2, qe.convertToShuntingYard(equation2));

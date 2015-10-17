@@ -482,29 +482,28 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 }
 
 string QueryEvaluator::convertToShuntingYard(string statement) {
-	//modify and uses - modify => a = b+c, a is modified. Uses= b and c
-	list<char> output;
-	stack<char> stack;
-	string s = "";
-	output.clear();
+	
 	string outputString;
 
 	statement.erase(remove_if(statement.begin(), statement.end(), isspace), statement.end());
 
+	list<char> output;
+	stack<char> stack;
+	output.clear();
+	string s;
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
-			//addToParent(index);
+			s = "";
 		}
 		if (c == '}') {
-
-			//pushCloseBracket(index);
-			break;
+			//	break;
 		}
 		if (isOperator(charac))
 		{
 			char o1 = charac;
-
+			s = "";
+			output.push_back(' ');
 			if (!stack.empty())
 			{
 				char o2 = stack.top();
@@ -512,7 +511,16 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 				while (isOperator(o2) && isPriority(o2) >= isPriority(o1))
 				{
 					stack.pop();
-					output.push_back(o2);
+
+					if (isOperator(o2)) {
+
+						output.push_back(o2);
+						output.push_back(' ');
+					}
+					else if (o2 != '}') {
+						output.push_back(o2);
+					}
+
 
 					if (!stack.empty())
 						o2 = stack.top();
@@ -533,8 +541,10 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 
 			while (topCharac != '(')
 			{
-				output.push_back(topCharac);
-				stack.pop();
+				if (topCharac != '}') {
+					output.push_back(topCharac);
+					stack.pop();
+				}
 
 				if (stack.empty()) {
 					break;
@@ -547,18 +557,20 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			}
 			if (topCharac != '(')
 			{
-				cout << "error";
 			}
 		}
 		else
 		{
 			if (charac == '=') {
-				//output.pop_back();
+				output.clear();
+				s = "";
 
 			}
 			else {
-				output.push_back(charac);
-				s = "" + charac;
+				if (charac != '}') {
+					output.push_back(charac);
+					s.push_back(charac);
+				}
 			}
 		}
 	}
@@ -567,9 +579,12 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		char stackTop = stack.top();
 		if (stackTop == ')' || stackTop == '(')
 		{
-			//Error();
 		}
-		output.push_back(stackTop);
+		if (stackTop != '}') {
+			output.push_back(' ');
+			output.push_back(stackTop);
+			//	output.push_back('\\');
+		}
 		stack.pop();
 	}
 
