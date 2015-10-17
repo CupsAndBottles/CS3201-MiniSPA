@@ -1955,7 +1955,7 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			string actualResults = string("TRUE");
+			string actualResults = string("true");
 			string outputString;
 
 			Assert::AreEqual(results.size(), (size_t)1);
@@ -2111,7 +2111,7 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			string actualResults = string("FALSE");
+			string actualResults = string("false");
 			string outputString;
 
 			Assert::AreEqual(results.size(), (size_t)1);
@@ -2269,7 +2269,7 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			string expectedResults = "FALSE" ;
+			string expectedResults = "false" ;
 			string outputString;
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
 				outputString = outputString + *it;
