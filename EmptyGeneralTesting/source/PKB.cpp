@@ -540,6 +540,51 @@ vector<pair<int, int>> PKB::getCalls(int procIndexFirst, int procIndexSecond) {
 	return result;
 }
 
+//V
+vector<pair<int, int>> PKB::getCallsT(int procIndexFirst, int procIndexSecond) {
+	vector<pair<int, int>> result;
+	vector<int> callsT;
+
+	if (procIndexFirst == -1) {
+		if (procIndexSecond == -1) {
+			// Both undefined
+			for (size_t i = 0; i < procTable.size(); i++) {
+				callsT = procTable[i].getCallsT();
+				for (size_t j = 0; j < callsT.size(); j++) {
+					result.push_back(make_pair(i, callsT[j]));
+				}
+			}
+		}
+		else {
+			// Only Second defined
+			callsT = procTable[procIndexSecond].getCalledByT();
+			for (size_t j = 0; j < callsT.size(); j++) {
+				result.push_back(make_pair(callsT[j], procIndexSecond));
+			}
+		}
+	}
+	else {
+		if (procIndexSecond == -1) {
+			// Only first defined
+			callsT	= procTable[procIndexFirst].getCallsT();
+			for (size_t i = 0; i < callsT.size(); i++) {
+				result.push_back(make_pair(procIndexFirst, callsT[i]));
+			}
+		}
+		else {
+			// both defined
+			callsT = procTable[procIndexFirst].getCallsT();
+			for (size_t i = 0; i < callsT.size(); i++) {
+				if (callsT[i] == procIndexSecond) {
+					result.push_back(make_pair(procIndexFirst, procIndexSecond));
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
 //WL
 std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex)
 {

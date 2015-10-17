@@ -121,6 +121,7 @@ public:
 	vector<pair<int, int>> getFollows(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2); // tested
 	vector<pair<int, int>> getParentT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	vector<pair<int, int>> getFollowsT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getCallsT(int stmtNum, int stmtNum2);
 
 	//From ProcTable
 	int getProcIndex(string procName);
