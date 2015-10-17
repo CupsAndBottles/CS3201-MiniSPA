@@ -1355,8 +1355,8 @@ namespace UnitTesting
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			list<string> expectedResults = { "dream, 5", "dream, 6", "dream, 7", "dream, 8" };
-
+			list<string> expectedResults = { "dream 5", "dream 6", "dream 7", "dream 8" };
+			
 			Assert::IsTrue(expectedResults == results);
 		}
 
