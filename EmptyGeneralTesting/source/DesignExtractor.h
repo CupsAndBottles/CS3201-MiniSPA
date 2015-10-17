@@ -30,7 +30,7 @@ public:
 	vector<int> extractCalledByT(vector<vector<int>>, int);
 	vector<int> extractPrevT(vector<int>, int);
 	vector<int> extractNextT(vector<int>, int);
-	vector<int> setExtraProcModifiesUses(vector<int>,vector<int>,vector<vector<int>>);
+	vector<int> extractExtraProcModifiesUses(vector<int>,vector<int>,vector<vector<int>>);
 };
 
 #endif

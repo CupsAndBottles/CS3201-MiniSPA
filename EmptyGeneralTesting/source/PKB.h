@@ -44,6 +44,7 @@ public:
 	//DesignExtractor design;
 
 	//PARSER->PKB
+	void setByDesignExtractor();
 	//From ProcTable
 	int setProcNameInProcTable(string procName); //tested // working
 	void setStartNum(int index, int startNum);  //working
@@ -68,12 +69,12 @@ public:
 	void setUsedVar(int index, string usedVar);//working
 	void setRightExpr(int index, string rightExpression);  //tested //working
 	void setParent(int index, int parentStmt);  //working
+	void setCallsT(int index, vector<int> callsTStmts);
 
 	void setNext(int index, int next);
 	void setPrev(int index, int prev);
 
-	void setNextT(int index, vector<int> nextT);
-	void setPrevT(int index, vector<int> prevT);
+	void setCallsStmtModifiesUses();
 
 	//constant table
 	int setConstant(int constantValue);
@@ -83,11 +84,15 @@ public:
 	int getNoOfStmt(); //tested
 
 	//PKB->DESIGNEXT
-	void setByDesignExtractor();
 	void extractParentT(int index);
 	void extractChildrenT(int index);
 	void extractFollowsT(int index);
 	void extractFollowedByT(int index);
+	void extractCallsT(int index);
+	void extractCalledByT(int index);
+	void extractProcExtraModifiesUses();
+	void extractNextT(int index, vector<int> nextT);
+	void extractPrevT(int index, vector<int> prevT);
 
 	//DESIGNEXT->PKB
 	int getParent(int index);

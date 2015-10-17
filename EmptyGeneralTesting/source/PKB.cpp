@@ -210,6 +210,20 @@ void PKB::setStmtUsed(int index, int stmtNum)
 	constantTable[index].insertIntoStmtUsed(stmtNum);	
 }
 
+//V
+void PKB::setCallsStmtModifiesUses() {
+	int stmtNum;
+	vector<int> stmtNumbers;
+
+	for (int i = 0; i < procTable.size(); i++) {
+		stmtNumbers = getStmtNumProcCalled(i);
+		for (int j = 0; j < stmtNumbers.size(); j++) {
+			int stmtNum = stmtNumbers.at(j);
+			stmtTable.at(stmtNum).setModifies();
+		}
+	}
+}
+
 //V: set parents
 void PKB::setParentT(int index, vector<int> parents)
 {
@@ -328,7 +342,22 @@ void PKB::setRightExpr(int index, string expr)
 
 	stmtTable[index].setRightExpr(expr);
 }
-//PKB-DesignExtractor, called at start a
+//PKB-DesignExtractor, called at start by parser
+void PKB::setByDesignExtractor() {
+	for (int i = OFFSET; i < stmtTable.size(); i++) {
+		extractParentT(i);
+		extractChildrenT(i);
+		extractFollowsT(i);
+		extractFollowedByT(i);
+	}
+
+	for (int j = 0; j < procTable.size(); j++) {
+		extractCallsT(j);
+		extractCalledByT(j);
+	}
+	extractProcExtraModifiesUses();
+	setCallsStmtModifiesUses();
+}
 //ZH - tested
 string PKB::getRightExpr(int index){
 	return stmtTable[index].getRightExpression();
@@ -962,6 +991,67 @@ void PKB::extractFollowedByT(int stmtNum)
 	setFollowedByT(stmtNum, followedByT);
 
 }
+
+void PKB::extractCallsT(int stmtNum) {
+	DesignExtractor design;
+	vector<vector<int>> callsCol;
+	vector<int> callsT;
+
+	for (size_t i = 0; i < procTable.size(); i++) {
+		callsCol.push_back(getCalls(i));
+	}
+
+	if (callsCol.size() == 0) {
+		callsT.push_back(0);
+	}
+	else {
+		callsT = design.extractCallsT(callsCol, stmtNum);
+	}
+	setCallsT(stmtNum, callsT);
+}
+
+void PKB::extractCalledByT(int stmtNum) {
+	DesignExtractor design;
+	vector<vector<int>> calledByCol;
+	vector<int> calledByT;
+
+	for (size_t i = 0; i < procTable.size(); i++) {
+		calledByCol.push_back(getCalledBy(i));
+	}
+
+	if (calledByCol.size() == 0) {
+		calledByT.push_back(0);
+	}
+	else {
+		calledByT = design.extractCalledByT(calledByCol, stmtNum);
+	}
+	setCalledByT(stmtNum, calledByT);
+}
+
+void PKB::extractProcExtraModifiesUses() {
+	DesignExtractor design;
+	vector<int> existingList;
+	vector<int> callsT;
+	vector<vector<int>> modifiesCol;
+	vector<vector<int>> usesCol;
+	vector<int> updatedModifies, updatedUses;
+
+	for (int i = 0; i < procTable.size(); i++) {
+		modifiesCol.push_back(getProcModified(i));
+		usesCol.push_back(getProcUsed(i));
+	}
+
+	for (int j = 0; j < procTable.size(); j++) {
+		existingList = getProcModified(j);
+		callsT = getCallsT(j);
+		updatedModifies = design.extractExtraProcModifiesUses(existingList, callsT, modifiesCol);
+		setProcModifies(j, updatedModifies);
+		existingList = getProcUsed(j);
+		updatedUses = design.extractExtraProcModifiesUses(existingList, callsT, usesCol);
+		setProcUses(j, updatedUses);
+	}
+}
+
 vector<int> PKB::getFollowedByT(int stmtNum) {
 	return stmtTable.at(stmtNum).getFollowedByT();
 }
