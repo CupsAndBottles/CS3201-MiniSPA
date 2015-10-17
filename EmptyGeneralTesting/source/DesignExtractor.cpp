@@ -53,8 +53,12 @@ void DesignExtractor::extractRec(std::vector<int> row, vector<vector<int>> col, 
 			}
 			else if (type.compare("calls") == 0) {
 				CallsT.push_back(member);
-			} else { //"calledBy"
+			} else if(type.compare("calledBy")== 0) {
 				CalledByT.push_back(member);
+			} else if (type.compare("next")) {
+				NextT.push_back(member);
+			} else {
+				PrevT.push_back(member);
 			}
 			extractRec(col.at(member), col,type);
 		}
@@ -138,36 +142,30 @@ vector<int> DesignExtractor::extractExtraProcModifiesUses(vector<int> existingLi
 	return result;
 }
 
-std::vector<int> DesignExtractor::extractNextT(vector<int> col, int stmtNum) {
-	int index = stmtNum;
-	int num;
+std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmtNum) {
+	vector<int> next = col.at(stmtNum);
+	int nextStmtNum;
 
-	while (true) {
-		num = col.at(stmtNum);
-		if (num == 0) {
-			break;
-		}
-		else {
-			NextT.push_back(num);
-			stmtNum = num;
-		}
+	nextStmtNum = next.at(0);
+	if (nextStmtNum == 0) {
 	}
+	else {
+		extractRec(next, col, "next");
+	}
+
 	return NextT;
 }
 
-std::vector<int> DesignExtractor::extractPrevT(vector<int> col, int stmtNum) {
-	int index = stmtNum;
-	int num;
+std::vector<int> DesignExtractor::extractPrevT(vector<vector<int>> col, int stmtNum) {
+	vector<int> prev = col.at(stmtNum);
+	int prevStmtNum;
 
-	while (true) {
-		num = col.at(stmtNum);
-		if (num == 0) {
-			break;
-		}
-		else {
-			PrevT.push_back(num);
-			stmtNum = num;
-		}
+	prevStmtNum = prev.at(0);
+	if (prevStmtNum == 0) {
 	}
+	else {
+		extractRec(prev, col, "prev");
+	}
+
 	return PrevT;
 }

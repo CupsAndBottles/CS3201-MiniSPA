@@ -28,8 +28,8 @@ public:
 	vector<int> extractFollowedByT(vector<int>,int);
 	vector<int> extractCallsT(vector<vector<int>>, int);
 	vector<int> extractCalledByT(vector<vector<int>>, int);
-	vector<int> extractPrevT(vector<int>, int);
-	vector<int> extractNextT(vector<int>, int);
+	vector<int> extractPrevT(vector<vector<int>>, int);
+	vector<int> extractNextT(vector<vector<int>>, int);
 	vector<int> extractExtraProcModifiesUses(vector<int>,vector<int>,vector<vector<int>>);
 };
 
