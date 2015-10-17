@@ -1194,7 +1194,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; variable x; Select a such that Modifies(a, x) pattern a(_, \"_x * 9_\")");
+			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Modifies(a, v) pattern a(_, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
