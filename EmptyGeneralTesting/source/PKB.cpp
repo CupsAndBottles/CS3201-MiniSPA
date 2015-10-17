@@ -671,8 +671,10 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 				}
 			}
 			else { // Parent(2, s/w/a/_/c)
-				if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
-					results.push_back(std::make_pair(stmtNum1, childrenStmtNos.at(i)));
+				if (childrenStmtNos.at(i) > 0) {
+					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(i)).getType()) {
+						results.push_back(std::make_pair(stmtNum1, childrenStmtNos.at(i)));
+					}
 				}
 			}
 		}
@@ -692,8 +694,10 @@ std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum:
 				childrenStmtNos = stmtTable.at(i).getChildren();
 
 				for (size_t j = 0; j < childrenStmtNos.size(); j++) {
-					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(j)).getType()) {
-						results.push_back(std::make_pair(i, childrenStmtNos.at(j)));
+					if (childrenStmtNos.at(j) > 0) {
+						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(childrenStmtNos.at(j)).getType()) {
+							results.push_back(std::make_pair(i, childrenStmtNos.at(j)));
+						}
 					}
 				}
 			}
