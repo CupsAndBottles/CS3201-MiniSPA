@@ -143,7 +143,7 @@ void Parser::Procedure() {
 		else if (stmt.find("call") != std::string::npos) {
 			pkb->setType(Enum::CALLS);
 			processCalls((*i).first, (*i).second);
-			handleModifyAndUses((*i).first, (*i).second);
+			//handleModifyAndUses((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
 		}
 		else {
@@ -426,7 +426,9 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 	else if (stmt.find("if") != std::string::npos) {
 		size_t bracketPos = stmt.find("{");
 		stmt.replace(bracketPos, string("{").length(), "");
-		string varInIf = stmt.substr(stmt.find("if") + 2);
+		size_t ifstmt = stmt.find("if") + 2;
+		size_t thenstmt = stmt.find("then")-2;
+		string varInIf = stmt.substr(ifstmt, thenstmt);
 		int index = pkb->setVarName(varInIf);
 		pkb->setControlVar(i - numOfProc, index);
 		if (!containerElements.empty()) {
