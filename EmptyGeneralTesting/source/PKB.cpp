@@ -114,6 +114,7 @@ void PKB::setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls)
 		pair<int, string> paired = stmtNoAndCalls.back();
 		int index = getProcIndex(paired.second);
 		int stmtNum = paired.first;
+		stmtNoAndCalls.pop_back();
 		cout << index << ":called \n";
 		cout << stmtNum << ":stmtNum \n";
 		procTable[index].setStmtNum(stmtNum);
