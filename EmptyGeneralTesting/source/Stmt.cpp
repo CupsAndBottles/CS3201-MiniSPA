@@ -79,6 +79,18 @@ void Stmt::setControlVar(int varIndex)
 {
 	controlVar = varIndex;
 }
+
+//V
+void Stmt::setCallsStmtModifiesVar(vector<int> modifies)
+{
+	modifiedVarList = modifies;
+}
+
+//V
+void Stmt::setCallsStmtUsesVar(vector<int> uses) {
+	usedVarList = uses;
+}
+
 //---------------set next and next*----------------
 void Stmt::setNext(int next) {
 	nextList.push_back(next);

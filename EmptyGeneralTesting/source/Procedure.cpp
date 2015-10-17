@@ -74,6 +74,18 @@ vector<int> Procedure::getStmtNum()
 	return stmtsProcCalled;
 }
 
+//V
+void Procedure::setUpdatedModifies(vector<int> modifies)
+{
+	varModifiedList = modifies;
+}
+
+//V
+void Procedure::setUpdatedUses(vector<int> uses)
+{
+	varUsedList = uses;
+}
+
 vector<int> Procedure::getUsed() {
 	return varUsedList;
 }

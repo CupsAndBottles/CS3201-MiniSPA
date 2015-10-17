@@ -35,6 +35,9 @@ public:
 	void setCalledByT(vector<int> procList);
 	void setStmtNum(int stmtNum);
 	vector<int> getStmtNum();
+	
+	void setUpdatedModifies(vector<int> modifies);
+	void setUpdatedUses(vector<int> uses);
 
 private:
 	int index;

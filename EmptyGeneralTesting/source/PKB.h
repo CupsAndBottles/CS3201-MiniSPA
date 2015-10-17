@@ -44,6 +44,7 @@ public:
 	//DesignExtractor design;
 
 	//PARSER->PKB
+	void setByDesignExtractor();
 	//From ProcTable
 	int setProcNameInProcTable(string procName); //tested // working
 	void setStartNum(int index, int startNum);  //working
@@ -55,9 +56,10 @@ public:
 	void setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls);
 
 	
-	string setProcCallsT(vector<int> callsT);
-	void setProcCalledByT(vector<int> calledT);
-
+	void setProcCallsT(int index, vector<int> callsT);
+	void setProcCalledByT(int index, vector<int> calledT);
+	void setProcModifies(int index, vector<int> modifiesVar);
+	void setProcUses(int index, vector<int> usesVar);
 
 	//From StmtTable
 	void setType(Enum::TYPE type);	//tested //done
@@ -74,12 +76,12 @@ public:
 	void setUsedVar(int index, string usedVar);//working
 	void setRightExpr(int index, string rightExpression);  //tested //working
 	void setParent(int index, int parentStmt);  //working
+	//void setCallsT(int index, vector<int> callsTStmts);
 
 	void setNext(int index, int next);
 	void setPrev(int index, int prev);
 
-	void setNextT(int index, vector<int> nextT);
-	void setPrevT(int index, vector<int> prevT);
+	void setCallsStmtModifiesUses();
 
 	//constant table
 	int setConstant(int constantValue);
@@ -89,11 +91,15 @@ public:
 	int getNoOfStmt(); //tested
 
 	//PKB->DESIGNEXT
-	void setByDesignExtractor();
 	void extractParentT(int index);
 	void extractChildrenT(int index);
 	void extractFollowsT(int index);
 	void extractFollowedByT(int index);
+	void extractCallsT(int index);
+	void extractCalledByT(int index);
+	void extractProcExtraModifiesUses();
+	void extractNextT(int index, vector<int> nextT);
+	void extractPrevT(int index, vector<int> prevT);
 
 	//DESIGNEXT->PKB
 	int getParent(int index);
@@ -123,6 +129,7 @@ public:
 	vector<int> getProcCalledBy(int procIndex);
 	vector<int> getCallsT(int procIndex);
 	vector<int> getCalledByT(int procIndex);
+	vector<int> getStmtNumProcCalled(int procIndex);
 
 	//From VarTable
 	int getVarIndex(string varName); //tested
