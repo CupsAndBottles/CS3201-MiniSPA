@@ -114,8 +114,9 @@ void PKB::setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls)
 		pair<int, string> paired = stmtNoAndCalls.back();
 		int index = getProcIndex(paired.second);
 		int stmtNum = paired.first;
-		cout << index << ":called \n";
-		cout << stmtNum << ":stmtNum \n";
+		stmtNoAndCalls.pop_back();
+	//	cout << index << ":called \n";
+	//	cout << stmtNum << ":stmtNum \n";
 		procTable[index].setStmtNum(stmtNum);
 	}
 }
@@ -133,8 +134,8 @@ int PKB::setVarName(string varName){
 		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
-		//cout << "set varName: " << varName << "\n";
-		//cout << "set varIndex: " << index << "\n";
+	//	cout << "set varName: " << varName << "\n";
+	//	cout << "set varIndex: " << index << "\n";
 	}
 	return index;
 }
