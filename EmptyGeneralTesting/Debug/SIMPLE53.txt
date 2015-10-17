@@ -1,0 +1,59 @@
+Procedure City{
+1. car = 5 ;
+2. down = car + 8;
+3. train = 7 ;
+4. man = 11 ;
+5. bus = man + 1 ;
+6.  while bus{
+7. man = 4 ;
+8. train = 6 + bus;
+9.  if man then {
+10. car = 8;
+11. train = 2 ;
+12. man = bus + 1; }
+       else{
+13. car = 9 ;
+14. bus = train + man;
+15. house = 4 ;
+16. man = 7 + house ; } 
+17. car = 1;
+18. train = house + 7 ;
+19. house = 4; } 
+20. man = 3 + bus;
+21. if car then {
+22. car = car + 2;
+23. bus = 1; } 
+24. train = train * 3 ;
+      else{
+25. car = 5*bus;}  
+26. train = bus + 9 ;
+27.  while train{
+28. train = 4+bus ;
+29. car = 3; 
+30. bus = car + bus * 2;
+31. man = train + 5;
+32. house = car + 3 ;
+33. train = 12;
+34. bus = 2*car ; } 
+35. train = train * 5 ;
+Procedure Game{
+36. left = 4 ;
+37. right = 5*left ;
+38. up = 7 ;
+39. down = up + 1;
+40. while up {
+41. left = 2 + right;
+42. down = 7;
+43. if right then{
+44. right = 3 ;
+45. left = 8 * right; }
+     else{
+46. left = 4 ;
+47. up = 3 + down; }}
+48. right = up * 2 ;
+49. up = down + 5 ;
+50. left = left + 4 ;
+51. down = left + right + 2 ;
+52. call City;
+53. up = 6 ; }
+

@@ -117,6 +117,8 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	}
 	cout << endl;
 
+	cout << "Before merging" << endl;
+
 	vector<Synonym> afterMerging = mergeWithinGroup(synGroup);
 
 	cout << "After merging" << endl; 
@@ -427,7 +429,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 		}
 		else {
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
-			cout << expr << endl;
+			//cout << expr << endl;
 			if (!clause.getRightCIsExpression()) {		
 				// pattern a(_, x ) 
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
@@ -439,15 +441,15 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 			}
 			else {		
 				// pattern a(_, _x_)
-				cout << "here" << endl;
-				cout << this->pkb->getNoOfStmt() << endl;
+				//cout << "here" << endl;
+				// cout << this->pkb->getNoOfStmt() << endl;
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
 						intermediateResult.push_back(i);
 					}
-					cout << "there" << endl;
-					cout << i << endl;
-					cout << "RightExpr:" << pkb->getRightExpr(i) << endl;
+					//cout << "there" << endl;
+					//cout << i << endl;
+					//cout << "RightExpr:" << pkb->getRightExpr(i) << endl;
 				}
 			}
 		}
@@ -455,8 +457,8 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 	else { //left child is a variable
 		int leftExpression = pkb->getVarIndex(clause.getLeftCStringValue());
 		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, leftExpression);
-		cout << clause.getLeftCStringValue() << endl;
-		cout << leftExpression << endl;
+		//cout << clause.getLeftCStringValue() << endl;
+		//cout << leftExpression << endl;
 		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
 			for (size_t i = 0; i < stmtLst.size(); i++) {
 				intermediateResult.push_back(stmtLst[i].first);
@@ -1019,10 +1021,15 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 	Synonym syn;
 
 	for (size_t i = 0; i < group.size(); i++) {
-		for (size_t j = 0; j < group.at(i).size() ; j++) {
-			syn = this->results.at(group[i][0]);
+		if (this->results.empty()) {
+			break;
+		}
+
+		syn = this->results.at(group[i][0]);
+		for (size_t j = 1; j < group.at(i).size() ; j++) {
 			if (group.at(i).size() != 1) {
 				syn = mergeSyn(syn ,this->results.at(group[i][j]));
+				cout << "mergeSyn" << endl;
 			}
 			else {
 				syn = this->results.at(group[i][j]);
@@ -1039,9 +1046,9 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 	vector<Enum::TYPE> type1 = syn1.getType();
 	vector<string> synName1 = syn1.getSyn();
 	vector<vector<int>> result1 = syn1.getResult();
-	vector<Enum::TYPE> type2 = syn1.getType();
-	vector<string> synName2 = syn1.getSyn();
-	vector<vector<int>> result2 = syn1.getResult();
+	vector<Enum::TYPE> type2 = syn2.getType();
+	vector<string> synName2 = syn2.getSyn();
+	vector<vector<int>> result2 = syn2.getResult();
 
 	vector<Enum::TYPE> resultSynType;
 	vector<string> resultSynName;
@@ -1056,22 +1063,61 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 		int row1 = counter[0].first;
 		int row2 = counter[0].second;
 
+		cout << result1[row1].size() << endl;
+		cout << result2[row2].size() << endl;
+
+		// initialize rows1
+		size_t numRow1 = 0;
+		while (numRow1 < (result1.size())) {
+			vector<int> empty;
+			result.push_back(empty);
+			numRow1++;
+		}
+
+		//initialize rows2
+		size_t numRow2 = 0;
+		while (numRow2 < (result2.size() - 1)) {
+			vector<int> empty;
+			result.push_back(empty);
+			numRow2++;
+		}
+		cout << "result size is " << result.size() << endl;
+
 		for (size_t i = 0; i < result1[row1].size(); i++) {
-			for (size_t j = 0; j < result2[row2].size(); i++) {
+			for (size_t j = 0; j < result2[row2].size(); j++) {
 				if (result1[row1][i] == result2[row2][j]) {
+					cout << "equal" << endl;
+					cout << result1.size() << endl;
+
 					for (size_t k = 0; k < result1.size(); k++) {
-						result.at(k).push_back(result1[k][i]); // copy entire row 1
+						cout << result1[k][i] << endl;
+						result.at(k).push_back(result1[k][i]); // copy entire column
 					}
+
 					for (size_t k = 0; k < result2.size(); k++) {
+						cout << "results 2" << endl;
+						cout << result2.size() << endl;
 						if (k != row2) {
-							result.at(k).push_back(result2[k][j]);
+							result.at(k + numRow1 -1).push_back(result2[k][j]);
+							cout << result2[k][j] << endl;
 						}
 					}
 				}
 			}
 		}
+		
+		cout << "done" << endl;
+
+		for (size_t i = 0; i < result.size(); i++) {
+			for (size_t j = 0; j < result.at(i).size(); j++) {
+				cout << "huh" << endl;
+				cout << result[i][j] << " ";
+				}
+			cout << endl;
+		}
 
 		for (size_t k = 0; k < result1.size(); k++) {
+			cout << "add type 1" << endl;
 			resultSynType.push_back(type1[k]);
 			resultSynName.push_back(synName1[k]);
 		}
@@ -1094,15 +1140,24 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 vector<pair<int, int>> QueryEvaluator::checkCommonSyn(vector<Enum::TYPE> type1, vector<Enum::TYPE> type2, vector<string> synName1, vector<string> synName2) {
 	vector<pair<int, int>> counter;
 
+	cout << "check common syn" << endl;
+
 	for (size_t i = 0; i < type1.size(); i++) {
 		for (size_t j = 0; j < type2.size(); j++) {
+			cout << type1[i] << endl;
+			cout << type2[j] << endl;
 			if (type1[i] == type2[j]) {
+				cout << synName1[i] << endl;
+				cout << synName2[j] << endl;
 				if (synName1[i] == synName2[j]) {
+					cout << "true" << endl;
 					counter.push_back(make_pair(i, j));
 				}
 			}
 		}
 	}
+
+	cout << "finish checking common syn" << endl;
 
 	return counter;
 }
@@ -1110,21 +1165,24 @@ vector<pair<int, int>> QueryEvaluator::checkCommonSyn(vector<Enum::TYPE> type1, 
 vector<vector<int>> QueryEvaluator::groupSynonym(vector<Synonym> result) {
 	vector<vector<int>> syn;
 	bool isFound = false;
+	vector<int> newRow = { 0 };
+	syn.push_back(newRow);
 
-	for (size_t i = 0; i < result.size(); i++) {
+	for (size_t i = 1; i < result.size(); i++) {
 		for (size_t groupIndex = 0; groupIndex < syn.size(); groupIndex++) {
 			for (size_t synIndex = 0; synIndex < syn.at(groupIndex).size(); synIndex++) {
 				if (hasCommonSyn(result.at(syn.at(groupIndex).at(synIndex)), result.at(i))) {
 					syn.at(groupIndex).push_back(i);
 					isFound = true;
+					break;
 				}
 			}
 		}
 		if (!isFound) {
 			vector<int> newRow = { (int)i };
 			syn.push_back(newRow);
+			i++;
 		}
-
 		isFound = false;
 	}
 
@@ -1170,9 +1228,11 @@ bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
 	vector<string> synName2 = syn2.getSyn();
 
 	for (size_t i = 0; i < type1.size(); i++) {
-		if (type1.at(i) == type2.at(i)) {
-			if (synName1.at(i) == synName2.at(i)) {
-				return true;
+		for (size_t j = 0; j < type2.size();j++){
+			if (type1.at(i) == type2.at(j)) {
+				if (synName1.at(i) == synName2.at(j)) {
+					return true;
+				}
 			}
 		}
 	}
