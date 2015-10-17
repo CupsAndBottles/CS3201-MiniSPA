@@ -99,11 +99,11 @@ void Stmt::setPrev(int prev) {
 	prevList.push_back(prev);
 }
 
-void Stmt::setPrevT(int prev) {
-	prevTList.push_back(prev);
+void Stmt::setPrevT(vector<int> prevT) {
+	prevTList = prevT;
 }
-void Stmt::setNextT(int next) {
-	nextTList.push_back(next);
+void Stmt::setNextT(vector<int> nextT) {
+	nextTList = nextT;
 }
 //---------------------------------------------------
 int Stmt::getType() {

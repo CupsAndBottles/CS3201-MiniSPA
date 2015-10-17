@@ -236,6 +236,14 @@ void PKB::setPrev(int index, int prev)
 	stmtTable[index].setPrev(prev);
 }
 
+void PKB::setNextT(int index, vector<int> nextT) {
+	stmtTable[index].setNextT(nextT);
+}
+
+void PKB::setPrevT(int index, vector<int> prevT) {
+	stmtTable[index].setPrevT(prevT);
+}
+
 int PKB::setConstant(int constantValue)
 {
 	int index = getConstantIndex(constantValue);
@@ -1073,6 +1081,43 @@ void PKB::extractCalledByT(int stmtNum) {
 		calledByT = design.extractCalledByT(calledByCol, stmtNum);
 	}
 	setProcCalledByT(stmtNum, calledByT);
+}
+
+//V
+void PKB::extractNextT(int stmtNum) {
+	DesignExtractor design;
+	vector<vector<int>> nextCol;
+	vector<int> nextT;
+
+	for (size_t i = 0; i < stmtTable.size(); i++) {
+		nextCol.push_back(stmtTable.at(i).getNext());
+	}
+
+	if (nextCol.size() == 0) {
+		nextT.push_back(0);
+	}	else {
+		nextT = design.extractNextT(nextCol, stmtNum);
+	}
+	setNextT(stmtNum, nextT);
+}
+
+//V
+void PKB::extractPrevT(int stmtNum) {
+	DesignExtractor design;
+	vector<vector<int>> prevCol;
+	vector<int> prevT;
+
+	for (size_t i = 0; i < stmtTable.size(); i++) {
+		prevCol.push_back(stmtTable.at(i).getPrev());
+	}
+
+	if (prevCol.size() == 0) {
+		prevT.push_back(0);
+	}
+	else {
+		prevT = design.extractPrevT(prevCol, stmtNum);
+	}
+	setPrevT(stmtNum, prevT);
 }
 
 void PKB::extractProcExtraModifiesUses() {

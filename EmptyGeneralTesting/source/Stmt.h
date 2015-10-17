@@ -29,8 +29,8 @@ public:
 	void setNext(int next);
 	void setPrev(int prev);
 
-	void setPrevT(int prev);
-	void setNextT(int next);
+	void setPrevT(vector<int> prevT);
+	void setNextT(vector<int> nextT);
 
 	int getType();
 	int getParent();

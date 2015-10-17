@@ -82,6 +82,8 @@ public:
 	void setPrev(int index, int prev);
 
 	void setCallsStmtModifiesUses();
+	void setNextT(int index, vector<int> nextT);
+	void setPrevT(int index, vector<int> prevT);
 
 	//constant table
 	int setConstant(int constantValue);
@@ -98,8 +100,8 @@ public:
 	void extractCallsT(int index);
 	void extractCalledByT(int index);
 	void extractProcExtraModifiesUses();
-	void extractNextT(int index, vector<int> nextT);
-	void extractPrevT(int index, vector<int> prevT);
+	void extractNextT(int index);
+	void extractPrevT(int index);
 
 	//DESIGNEXT->PKB
 	int getParent(int index);
