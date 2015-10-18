@@ -10,11 +10,11 @@ Select a such that Modifies(a, "train")
 5000
 3- Pattern
 assign a;
-Select a pattern a("bus", _)
+Select a pattern a("bus", _)
 5, 14, 23, 30, 34
 5000
 4- Parent
-Stmt s;
+stmt s;
 Select s such that Parent(s, 7)  
 6
 5000
