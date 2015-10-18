@@ -10,6 +10,7 @@ const int POSITION_SECONDPARAM = 2;
 
 
 const string RELATIONSHIP_CALLS = "Calls";
+const string RELATIONSHIP_CALLST = "Calls*";
 const string RELATIONSHIP_FOLLOWS = "Follows";
 const string RELATIONSHIP_FOLLOWST = "Follows*";
 const string RELATIONSHIP_MODIFIES = "Modifies";
@@ -172,9 +173,9 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	if (hasValidFirstIndex && hasValidSecondIndex) {
 		if (relationship == RELATIONSHIP_CALLS) {
 			results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
-		} /*else if (relationship == RELATIONSHIP_CALLST {
-		  results = this->pkb->getCalls*(firstParamIndex, secondParamIndex);
-		  }*/
+		} else if (relationship == RELATIONSHIP_CALLST) {
+		  results = this->pkb->getCallsT(firstParamIndex, secondParamIndex);
+		  }
 		else if (relationship == RELATIONSHIP_FOLLOWS) {
 			results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 		}
@@ -760,8 +761,8 @@ vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CALLS:
-/*		for (int i = 0; i < pkb->getNoOfProc(); i++) {
-			vector<int> procedureCalled = pkb->getProcCalls();
+		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+			vector<int> procedureCalled = pkb->getProcCalls(i);
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				allNames.push_back(pkb->getProcName(procedureCalled.at(c)));
 			}
@@ -769,7 +770,7 @@ vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
 
 		sort(allNames.begin(), allNames.end());
 		allNames.erase(unique(allNames.begin(), allNames.end()), allNames.end());
-		*/break;
+		break;
 	default:
 		break;
 	}
@@ -788,10 +789,10 @@ vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CONSTANT:
-		/*		for(int i = 0; i <= pkb->getNoOfConstants(); i++) {
+				for(int i = 0; i <= pkb->getNoOfConstants(); i++) {
 		allValues.push_back(pkb->getConstantValue(i));
 		}
-		*/
+		
 		break;
 	case Enum::TYPE::IF:
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
@@ -1039,6 +1040,15 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 		syn = Synonym();
 	}
 
+	cout << "Before returning from mergeWithinGroup" << endl;
+
+	for (size_t i = 0; i < mergedResult.size(); i++) {
+		cout << "this is syn: " << i << endl;
+		mergedResult.at(i).printSyn();
+		cout << endl;
+		cout << endl;
+	}
+
 	return mergedResult;
 }
 
@@ -1124,12 +1134,17 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 						result.at(k).push_back(result1[k][i]); // copy entire column
 					}
 
+
+					int offset = 0;
 					for (size_t k = 0; k < result2.size(); k++) {
 						cout << "results 2" << endl;
 						cout << result2.size() << endl;
 						if (k != row2) {
-							result.at(k + numRow1 -1).push_back(result2[k][j]);
+							result.at(k + numRow1 - offset).push_back(result2[k][j]);
 							cout << result2[k][j] << endl;
+						}
+						else {
+							offset++;
 						}
 					}
 				}
@@ -1318,8 +1333,8 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CALLS:
-/*		for (int i = 0; i < pkb->getNoOfProc(); i++) {
-			vector<int> procedureCalled = pkb->getProcCalls();
+		for (int i = 0; i < pkb->getNoOfProc(); i++) {
+			vector<int> procedureCalled = pkb->getProcCalls(i);
 			for (size_t c = 0; c < procedureCalled.size(); c++) {
 				stringedAttrIndexes.push_back(procedureCalled.at(c));
 			}
@@ -1327,7 +1342,7 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 
 		sort(stringedAttrIndexes.begin(), stringedAttrIndexes.end());
 		stringedAttrIndexes.erase(unique(stringedAttrIndexes.begin(), stringedAttrIndexes.end()), stringedAttrIndexes.end());
-	*/	break;
+		break;
 	default:
 		break;
 	}
