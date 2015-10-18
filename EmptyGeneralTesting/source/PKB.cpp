@@ -958,7 +958,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			followsT = stmtTable.at(stmt2).getFollowsT();
 			if (followsT.size() > 0) {
 				for (size_t i = 0; i < followsT.size(); i++) {
-					if (stmtTable.at(followsT.at(i)).getType() == type1) {
+					if (stmtTable.at(followsT.at(i)).getType() == type1||(type1 == Enum::TYPE::STATEMENT)) {
 						results.push_back(make_pair(followsT.at(i), stmt2));
 					}
 				}
