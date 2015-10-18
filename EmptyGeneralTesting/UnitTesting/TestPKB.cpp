@@ -121,6 +121,18 @@ namespace UnitTesting
 			children.push_back(make_pair(2, 3));
 			pkb->setChildren(3, 0);
 			pkb->setChildren(children);
+
+			vector<pair<int, string>> procCalls;
+
+			pkb->setProcNameInProcTable("Main");
+			pkb->setProcNameInProcTable("Planet");
+			pkb->setProcNameInProcTable("La");
+			pkb->setProcNameInProcTable("Sun");
+
+			procCalls.push_back(make_pair(0, "Planet"));
+			procCalls.push_back(make_pair(1, "Sun"));
+			pkb->setProcCalls(procCalls);
+
 			pkb->setByDesignExtractor();
 
 			//test if parentT
@@ -143,7 +155,15 @@ namespace UnitTesting
 			}
 
 			//test for callsT
+			expectedResults.clear();
+			expectedResults = { 1,3 };
 
+			actualResults = pkb->getCallsT(0);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+
+			for (int i = 0; i < expectedResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
 		}
 
 		TEST_METHOD(PKB_getParentT) {

@@ -405,12 +405,13 @@ void PKB::setByDesignExtractor() {
 	}
 	 
 	for (int j = 0; j < procTable.size(); j++) {
-		//extractCallsT(j);
-		//extractCalledByT(j);
+		extractCallsT(j);
+		extractCalledByT(j);
 	}
 	//extractProcExtraModifiesUses();
 	//setCallsStmtModifiesUses();
 }
+
 //ZH - tested
 string PKB::getRightExpr(int index){
 	return stmtTable[index].getRightExpression();
