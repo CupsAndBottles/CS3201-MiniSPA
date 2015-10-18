@@ -206,7 +206,7 @@ Select ifstat such that Follows* (ifstat, 8)
 42 - Question 12b
 if ifstat;
 Select ifstat such that Follows* (ifstat, 18)
-
+9
 5000
 43 - Question 12c
 if ifstat;
@@ -351,7 +351,7 @@ Select a such that Modifies(a, "z") and Uses(a, "z")
 71 - Question 21
 assign a; while w;
 Select a such that Modifies(a, "x") and Parent(w,a)
-13, 25, 26, 31
+13, 20
 5000
 72 - Question 22
 assign a; while w;
@@ -366,7 +366,7 @@ Select a such that Modifies(a, "x") such that Parent(w,a)
 74 - Question 24
 procedure p;
 Select p such that Calls*(p, "Sun")
-Planet
+Planet, Earth
 5000
 75 - Question 25
 procedure p;
