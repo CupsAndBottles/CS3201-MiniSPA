@@ -479,7 +479,7 @@ Select BOOLEAN pattern w("t",_) with c.value = 1
 true
 5000
 96 - Question 47
-stmt s;constant c;
+stmt s; constant c;
 Select s with s.stmt# = c.value
 1, 2, 4, 5, 6, 8, 30
 5000
@@ -488,13 +488,23 @@ stmt s, s1; constant c;
 Select s1 with s.stmt# = c.value
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
 5000
-98 - Follows (10, s)
-stmt s;
-Select s such that Follows(10,s)
-11
+98 - Calls planet
+procedure p;
+Select p such that Calls("Planet", p)
+Sun, Moon, Earth
 5000
-99 - Follows (s, 13)
-stmt s;
-Select s such that Follows(s,13)
-12
+99 - 4 clauses with Uses
+assign a; if ifstat; while w;
+Select a such that Parent(ifstat, w) and Parent(w, a) and Uses(a, "x") pattern ifstat("m",_, _)
+12, 13
+5000
+100 - 4 clauses with Modifies
+assign a; if ifstat; while w;
+Select a such that Parent(ifstat, w) and Parent(w, a) and Modifies(a, "x") pattern ifstat("m",_, _)
+13
+5000
+101 - 5 clauses with 2 groups
+assign a, a1; while w;if ifstat;
+Select a pattern ifstat("a",_, _) such that Modifies(a,"x") and Uses(a,"x") and Parent(w, a) and Parent(ifstat, a1)
+13, 31
 5000
