@@ -1,49 +1,48 @@
-1- comment
+1- Calls
 procedure p;
-Select p such that Calls("Game",p)
+Select p such that Calls("Game", p)
 City
 5000
-2- comment 
+2- Modifies 
 assign a;
 Select a such that Modifies(a, "train")
 3, 8, 11, 18, 24, 26, 28, 33, 35
 5000
-3- comment
+3- Pattern
 assign a;
-Select a pattern a ("bus", _)
+Select a pattern a("bus", _)
 5, 14, 23, 30, 34
 5000
-4- comment
-Stmt s;
+4- Parent
+stmt s;
 Select s such that Parent(s, 7)  
 6
 5000
-5- comment
-Assign a;
+5- Follows
+assign a;
 Select a such that Follows(a, 10)
 none
 5000
-6- comment
-Stmt s;
+6- Follows
+stmt s;
 Select s such that Follows(a, 10)
 none
 5000
-7-comment
-Stmt s;
-progline n ;
+7-Uses
+prog_line n; stmt s;
 Select s such that Uses(n, "man")
 5, 9, 14
 5000
-8-comment
+8-Boolean
 Select BOOLEAN such that Next(1, 2)
 true
 5000
-9-comment
+9-Calls*
 procedure p;
 Select p such that Calls*("Game", p)
 City
 5000
-10-comment
+10-Calls*
 procedure p;
 Select p such that Calls*(p, "Game")
 none
