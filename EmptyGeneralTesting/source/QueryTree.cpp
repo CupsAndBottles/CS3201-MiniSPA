@@ -91,12 +91,12 @@ void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vecto
 		withTree.at(z).setRightCIsExpression(false);
 		withTree.at(z).setRightCIntValue(atoi(intVal.at(i + 1).c_str()));
 		withTree.at(z).setRightCStringValue(stringVal.at(i + 1));
-		withTree.at(z).setRightCIsStmt(isStmt.at(i));
+		withTree.at(z).setRightCIsStmt(isStmt.at(i + 1));
 		z++;
 	}
-//	for (int j = 0; j < withTree.size(); j++) {
+	//for (int j = 0; j < withTree.size(); j++) {
 	
-	//	std::cout << "withTreeLeft = " << withTree.at(j).getLeftCStringValue() << '\n';
+		//std::cout << "withTreeLeft = " << withTree.at(j).getLeftCStringValue() << '\n';
 //	}
 }
 
