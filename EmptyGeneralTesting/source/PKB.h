@@ -156,6 +156,7 @@ public:
 
 	//From ConstantTable
 	int getConstantIndex(int constant);
+	int getNoOfConstants();
 
 
 	int getControlVar(int stmtIndex);

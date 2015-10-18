@@ -1306,6 +1306,11 @@ int PKB::getConstantIndex(int constant)
 
 	return NOT_FOUND;
 }
+
+int PKB::getNoOfConstants() {
+	return constantTable.size();
+}
+
 int PKB::getControlVar(int stmtIndex)
 {
 	return stmtTable[stmtIndex].getControlVarIndex();
