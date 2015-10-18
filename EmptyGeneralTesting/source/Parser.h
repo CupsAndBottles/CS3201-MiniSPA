@@ -22,6 +22,8 @@ public:
 	string linesSplitted(list<pair<int, string>> linesToTest);
 	list<pair<int, string>>splitLines(string lines);
 	void Procedure();
+	void addModifies();
+	void addUses();
 	void setRelationsInTable();
 	void addToParent(int child);
 	string toLowerCase(string s);
