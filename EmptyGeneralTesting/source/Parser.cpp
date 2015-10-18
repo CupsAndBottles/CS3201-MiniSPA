@@ -170,6 +170,7 @@ void Parser::setRelationsInTable() {
 	pkb->setFollows(followLink);
 	string procName = pkb->setProcCalls(callsLink);
 	if (!procName.empty()) {
+		//throw "ProcName: " + procName +" does not exist.\n";
 		cout << "ProcName: " << procName << " does not exist.\n";
 		exit(0);
 	}
@@ -645,27 +646,19 @@ bool Parser::isConstant(string s) {
 void Parser::handleFollows(int index, string stmt) {
 	string currStmt = stmt;
 	pair<int, int> paired;
-	int indexForIf = 0;
 	if (prevStmt.empty()) {
 		prevStmt = stmt;
 		currFollows.push_back(index - numOfProc - numOfElse);
 	}
 	else
 	{
-		if (currStmt.find("else") != std::string::npos) {
-			//cout <<"current stmt: " <<currStmt <<"\n";
-			currFollows.push_back(index - numOfProc - numOfElse-1);
-		//	prevStmt = currStmt;
-		}
-		else if (prevStmt.find("{") != std::string::npos) {
-			if (currStmt.find("else") == std::string::npos) {
+		if (prevStmt.find("{") != std::string::npos) {
 				currFollows.push_back(index - numOfProc - numOfElse);
-			}
-			prevStmt = currStmt;
+				prevStmt = currStmt;
+		
 		}
 		else if (prevStmt.find("}") != std::string::npos) {
-			indexForIf = index - numOfProc - numOfElse;
-			size_t n = std::count(prevStmt.begin(), prevStmt.end(), '}');
+			size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
 			for (int i = 0; i < n;i++) {
 				if (!currFollows.empty()) {
 					currFollows.pop_back();
@@ -681,13 +674,15 @@ void Parser::handleFollows(int index, string stmt) {
 			prevStmt = currStmt;
 		}
 		else {
-			paired.first = currFollows.back();
-			paired.second = index - numOfProc - numOfElse;
-			if (!currFollows.empty()) {
-				currFollows.pop_back();
-			}
-			currFollows.push_back(index - numOfProc - numOfElse);
-			followLink.push_back(paired);
+
+				paired.first = currFollows.back();
+				paired.second = index - numOfProc - numOfElse;
+
+				if (!currFollows.empty()) {
+					currFollows.pop_back();
+				}
+				currFollows.push_back(index - numOfProc - numOfElse);
+				followLink.push_back(paired);
 			prevStmt = currStmt;
 		}
 	}
