@@ -1124,12 +1124,16 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 						result.at(k).push_back(result1[k][i]); // copy entire column
 					}
 
+					int offset = 0;
 					for (size_t k = 0; k < result2.size(); k++) {
 						cout << "results 2" << endl;
 						cout << result2.size() << endl;
 						if (k != row2) {
-							result.at(k + numRow1 -1).push_back(result2[k][j]);
+							result.at(k + numRow1 - offset).push_back(result2[k][j]);
 							cout << result2[k][j] << endl;
+						}
+						else {
+							offset = offset + 1;
 						}
 					}
 				}
