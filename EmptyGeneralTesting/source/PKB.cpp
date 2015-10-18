@@ -1307,6 +1307,14 @@ int PKB::getConstantIndex(int constant)
 	return NOT_FOUND;
 }
 
+int PKB::getConstantValue(int index) {
+	if (!constantTable.empty()) {
+		return constantTable[index].getConstant();
+	} 
+
+	return NOT_FOUND;
+}
+
 int PKB::getNoOfConstants() {
 	return constantTable.size();
 }
