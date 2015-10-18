@@ -164,6 +164,8 @@ void PKB::setProcNames(int index, string procName)
 {
 	int procIndex = getProcIndex(procName);
 	varTable[index].insertIntoProc(procIndex);
+	//cout << "Procname in vartable: " << procName <<"\n";
+	//cout << "Proc Index: " << procIndex<< "\n";
 
 }
 
@@ -253,12 +255,15 @@ int PKB::setConstant(int constantValue)
 		constantTable[size].setConstantValue(constantValue);
 		index = getConstantIndex(constantValue);
 	}
+	//cout << "constant val: " << constantValue << "\n";
 	return index;
 }
 
 void PKB::setStmtUsed(int index, int stmtNum)
 {
-	constantTable[index].insertIntoStmtUsed(stmtNum);	
+	constantTable[index].insertIntoStmtUsed(stmtNum);
+	//cout << "index of constant: " << index << "\n";
+	//cout << "stmt num: " << stmtNum << "\n";
 }
 
 //V
@@ -322,8 +327,8 @@ void PKB::setFollows(vector<pair<int,int>> follows)
 		int firstStmt = paired.first;
 		int secondStmt = paired.second;
 		follows.pop_back();
-	//	cout << "first: " << firstStmt << "\n";
-	//	cout << "second: " << secondStmt << "\n\n";
+		cout << "first: " << firstStmt << "\n";
+		cout << "second: " << secondStmt << "\n\n";
 		stmtTable[secondStmt].setFollows(firstStmt);
 		setFollowedBy(firstStmt,secondStmt);
 	}
@@ -364,7 +369,9 @@ void PKB::setModifies(int index, string modifiedVar)
 void PKB::setControlVar(int index, int varIndex)
 {
 	stmtTable[index].setControlVar(varIndex);
-	//cout << "Index : " << varIndex << "\n";
+	/*cout << "Index : " << varIndex << "\n";
+	string varName = getVarName(varIndex);
+	cout << "Varname: " << varName << "\n";*/
 }
 
 /* G: Constants here or in another table?
