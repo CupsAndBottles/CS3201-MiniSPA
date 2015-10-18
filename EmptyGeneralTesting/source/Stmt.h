@@ -12,6 +12,7 @@ public:
 	void setStmtType(Enum::TYPE t);
 	void setParent(int p);
 	void setChildren(int child);
+	void sortVectors(vector<int> list);
 	void setUsedVar(int usedVar);
 	void setUsedConstant(vector<int> usedConstant);
 	void setModifiedVar(int modifiedVar);
