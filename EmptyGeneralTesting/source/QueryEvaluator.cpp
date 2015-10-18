@@ -75,7 +75,6 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	}
 
 	for (size_t i = 0; i < with.size(); i++) {
-		cout << with[i].getLeftCType();
 		isTrueClause = evaluateWith(with[i]);
 		if (!isTrueClause) {
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
@@ -794,7 +793,7 @@ vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CONSTANT:
-		for(int i = 0; i <= pkb->getNoOfConstants(); i++) {
+		for(int i = 0; i < pkb->getNoOfConstants(); i++) {
 			allValues.push_back(pkb->getConstantValue(i));
 		}
 		break;
