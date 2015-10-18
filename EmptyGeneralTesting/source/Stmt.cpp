@@ -1,5 +1,8 @@
 #include "Stmt.h"
+#include <algorithm>
 #include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
 
 Stmt::Stmt()
@@ -28,9 +31,19 @@ void Stmt::setChildren(int child)
 
 }
 
+void Stmt::sortVectors(vector<int> list) {
+	sort(list.begin(), list.end());
+}
+
+
 void Stmt::setUsedVar(int usedVar)
 {
-	usedVarList.push_back(usedVar);
+	sortVectors(usedVarList);
+	if (!binary_search(usedVarList.begin(), usedVarList.end(), usedVar)) {
+		usedVarList.push_back(usedVar);
+	}
+	usedVarList.erase(unique(usedVarList.begin(), usedVarList.end()), usedVarList.end());
+
 }
 
 void Stmt::setUsedConstant(vector<int> usedConstant)
@@ -40,7 +53,12 @@ void Stmt::setUsedConstant(vector<int> usedConstant)
 
 void Stmt::setModifiedVar(int modifiedList)
 {
-	modifiedVarList.push_back(modifiedList);
+	sortVectors(modifiedVarList);
+	if (!binary_search(modifiedVarList.begin(), modifiedVarList.end(), modifiedList)) {
+		modifiedVarList.push_back(modifiedList);
+	}
+	modifiedVarList.erase(unique(modifiedVarList.begin(), modifiedVarList.end()), modifiedVarList.end());
+
 }
 
 void Stmt::setRightExpr(string rightExpr)

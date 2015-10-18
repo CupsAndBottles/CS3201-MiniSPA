@@ -175,7 +175,7 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 			results = this->pkb->getCalls(firstParamIndex, secondParamIndex);
 		} else if (relationship == RELATIONSHIP_CALLST) {
 		  results = this->pkb->getCallsT(firstParamIndex, secondParamIndex);
-		  }
+		}
 		else if (relationship == RELATIONSHIP_FOLLOWS) {
 			results = this->pkb->getFollows(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 		}
@@ -789,10 +789,9 @@ vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
 		}
 		break;
 	case Enum::TYPE::CONSTANT:
-				for(int i = 0; i <= pkb->getNoOfConstants(); i++) {
-		allValues.push_back(pkb->getConstantValue(i));
+		for(int i = 0; i <= pkb->getNoOfConstants(); i++) {
+			allValues.push_back(pkb->getConstantValue(i));
 		}
-		
 		break;
 	case Enum::TYPE::IF:
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
@@ -1040,15 +1039,6 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 		syn = Synonym();
 	}
 
-	cout << "Before returning from mergeWithinGroup" << endl;
-
-	for (size_t i = 0; i < mergedResult.size(); i++) {
-		cout << "this is syn: " << i << endl;
-		mergedResult.at(i).printSyn();
-		cout << endl;
-		cout << endl;
-	}
-
 	return mergedResult;
 }
 
@@ -1134,17 +1124,12 @@ Synonym QueryEvaluator::mergeSyn(Synonym syn1, Synonym syn2) {
 						result.at(k).push_back(result1[k][i]); // copy entire column
 					}
 
-
-					int offset = 0;
 					for (size_t k = 0; k < result2.size(); k++) {
 						cout << "results 2" << endl;
 						cout << result2.size() << endl;
 						if (k != row2) {
-							result.at(k + numRow1 - offset).push_back(result2[k][j]);
+							result.at(k + numRow1 -1).push_back(result2[k][j]);
 							cout << result2[k][j] << endl;
-						}
-						else {
-							offset++;
 						}
 					}
 				}
@@ -1289,8 +1274,8 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 	list<string> stringedResults;
 	nonCommonSyn = select;
 
-
 	vector<pair<string, vector<int>>> mergedSelectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
+
 	if (!this->nonCommonSyn.empty()) {
 		vector<pair<string, vector<int>>> nonCommonSyn = getValuesOfNonCommonSyn(this->nonCommonSyn);
 
@@ -1378,7 +1363,7 @@ list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vect
 
 		stringedResults.push_back(combinedValues);
 	}
-
+	
 	return stringedResults;
 }
 
