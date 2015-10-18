@@ -1229,7 +1229,6 @@ vector<vector<int>> QueryEvaluator::groupSynonym(vector<Synonym> result) {
 		if (!isFound) {
 			vector<int> newRow = { (int)i };
 			syn.push_back(newRow);
-			i++;
 		}
 		isFound = false;
 	}
