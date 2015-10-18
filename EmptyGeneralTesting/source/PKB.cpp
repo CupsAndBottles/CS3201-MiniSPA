@@ -406,14 +406,14 @@ void PKB::setRightExpr(int index, string expr)
 void PKB::setByDesignExtractor() {
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
 	extractParentT(i);
-	//extractChildrenT(i);
-		extractFollowsT(i);
-		extractFollowedByT(i);
+	extractChildrenT(i);
+	extractFollowsT(i);
+	extractFollowedByT(i);
 	}
 	 
 	for (int j = 0; j < procTable.size(); j++) {
-		//extractCallsT(j);
-		//extractCalledByT(j);
+		extractCallsT(j);
+		extractCalledByT(j);
 	}
 	//extractProcExtraModifiesUses();
 	//setCallsStmtModifiesUses();
@@ -965,7 +965,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			followsT = stmtTable.at(stmt2).getFollowsT();
 			if (followsT.size() > 0) {
 				for (size_t i = 0; i < followsT.size(); i++) {
-					if (stmtTable.at(followsT.at(i)).getType() == type1) {
+					if (stmtTable.at(followsT.at(i)).getType() == type1||(type1 == Enum::TYPE::STATEMENT)) {
 						results.push_back(make_pair(followsT.at(i), stmt2));
 					}
 				}
@@ -1313,6 +1313,19 @@ int PKB::getConstantIndex(int constant)
 
 	return NOT_FOUND;
 }
+
+int PKB::getConstantValue(int index) {
+	if (!constantTable.empty()) {
+		return constantTable[index].getConstant();
+	} 
+
+	return NOT_FOUND;
+}
+
+int PKB::getNoOfConstants() {
+	return constantTable.size();
+}
+
 int PKB::getControlVar(int stmtIndex)
 {
 	return stmtTable[stmtIndex].getControlVarIndex();
