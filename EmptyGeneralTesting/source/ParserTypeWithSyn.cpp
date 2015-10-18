@@ -22,7 +22,7 @@ ParserTypeWithSyn::ParserTypeWithSyn(vector<string> selectSynonym, vector<vector
 	parseSuchThatTypeWithSyn(suchThatSynonym, type, synonym);
 	parseWithTypeWithSyn(withSynonym, type, synonym);
 	parsePatternTypeWithSyn(patternSynonym, type, synonym);
-	checkCommonSynonym();
+	//checkCommonSynonym();
 }
 
 ParserTypeWithSyn::~ParserTypeWithSyn()
@@ -139,12 +139,12 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 	Validation validation;
 	
 	for (std::size_t i = 0; i < withSynonym.size(); i++) {
-		//std::cout << "size = " << withSynonym[i].size() << '\n';
 		if (withSynonym[i].size() == 4) {
 			withSynonym[i] = arrangeSyn(withSynonym[i]);
 		}
 		for (int k = 0; k < withSynonym[i].size(); k++) {
 			if (k == 0 || (withSynonym[i].size() == 4 && k == 2)) {
+
 				pos = parserOfType.isBeingDeclared(withSynonym[i].at(k), synonym);
 
 				if (pos == -1) {
@@ -161,22 +161,16 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 						withSynAndType[3].push_back("0");
 					}
 				}
-			//	std::cout << "withSynAndType[0] = " << withSynAndType[0].at(0) << '\n';
 			}
 			else if (withSynonym[i].size() > 2 && (k == 1 || k == 3)) {
 				int size = withSynAndType[1].size() - 1;
-				//std::cout << "withSynonym[i].at(k) = " << withSynonym[i].at(k) << '\n';
-				//std::cout << "withSynAndType[1].at(size) = " << withSynAndType[1].at(size) << '\n';
-			
 				validation.withValidation(withSynAndType[1].at(size), withSynonym[i].at(k));
 			}
 			else if ((withSynonym[i].size() == 2 && k == 1) || k == 2) {
 				int size = withSynAndType[1].size() - 1;
-				
+			
 				if (withSynonym[i].at(k-1).compare("procName") == 0) {
-				//	std::cout << "withSynAndType[0]1.1 = " << withSynAndType[1].at(size) << '\n';
 					temp = parserOfType.setProcedureTypeAndSyn(withSynonym[i].at(k), withSynonym[i].at(k - 1));
-				//	std::cout << "temp[0] = " << temp[0].at(0) << '\n';
 				}
 				else if (withSynonym[i].at(k - 1).compare("varName") == 0) {
 					temp = parserOfType.setVariableTypeAndSyn(withSynonym[i].at(k));
@@ -203,9 +197,9 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 		if (withSynonym[i].size() == 4) {
 			int size1 = withSynAndType[1].size() - 1;
 			int size2 = withSynAndType[1].size() - 2;
-			std::cout << "withSynAndType[3]1 = " << withSynAndType[3].at(size1) << '\n';
-			std::cout << "withSynAndType[3]2 = " << withSynAndType[3].at(size2) << '\n';
-
+//			std::cout << "withSynAndType[3]1 = " << withSynAndType[3].at(size1) << '\n';
+			//std::cout << "withSynAndType[3]2 = " << withSynAndType[3].at(size2) << '\n';
+			
 			if (withSynAndType[3].at(size1).compare("1") == 0 && withSynAndType[3].at(size2).compare("0") == 0 && withSynAndType[1].at(size2).compare("constant") != 0) {
 				throw ParserException("stmt# must be equal to stmt#, not equal to procName");
 			} else if (withSynAndType[3].at(size1).compare("0") == 0 && withSynAndType[3].at(size2).compare("1") == 0 && withSynAndType[1].at(size1).compare("constant") != 0) {
@@ -214,6 +208,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			validation.withValidation(withSynAndType[1].at(size1), withSynAndType[1].at(size2));
 		}
 	}
+	
 }
 
 void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym)
