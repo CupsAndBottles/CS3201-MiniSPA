@@ -75,6 +75,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	}
 
 	for (size_t i = 0; i < with.size(); i++) {
+		cout << with[i].getLeftCType();
 		isTrueClause = evaluateWith(with[i]);
 		if (!isTrueClause) {
 			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
@@ -244,7 +245,7 @@ bool QueryEvaluator::isGivenParam(Clauses clause, int paramPos) {
 int QueryEvaluator::checkValidityOfEntities(Clauses clause, int paramPos) {
 	if (paramPos == POSITION_FIRSTPARAM) {
 		if (clause.getLeftCType() == Enum::TYPE::PROCEDURE || clause.getLeftCType() == Enum::TYPE::VARIABLE
-			|| clause.getLeftCType() == Enum::TYPE::CONSTANT || clause.getLeftCType() == Enum::TYPE::CALLS) {
+			|| clause.getLeftCType() == Enum::TYPE::CALLS) {
 			return checkValidityOfStringEntities(clause.getLeftCType(), clause.getLeftCStringValue());
 		}
 		else {
@@ -252,7 +253,7 @@ int QueryEvaluator::checkValidityOfEntities(Clauses clause, int paramPos) {
 		}
 	} else {
 		if (clause.getRightCType() == Enum::TYPE::PROCEDURE || clause.getRightCType() == Enum::TYPE::VARIABLE
-			|| clause.getRightCType() == Enum::TYPE::CONSTANT || clause.getRightCType() == Enum::TYPE::CALLS) {
+			|| clause.getRightCType() == Enum::TYPE::CALLS) {
 			return checkValidityOfStringEntities(clause.getRightCType(), clause.getRightCStringValue());
 		}
 		else {
@@ -319,6 +320,10 @@ int QueryEvaluator::checkValidityOfIntEntities(Enum::TYPE type, int entityInt) {
 		else {
 			return NOT_FOUND;
 		}
+		break;
+	case Enum::TYPE::CONSTANT:
+		return pkb->getConstantIndex(entityInt) != NOT_FOUND;
+		break;
 	default:
 		return NOT_FOUND;
 		break;
