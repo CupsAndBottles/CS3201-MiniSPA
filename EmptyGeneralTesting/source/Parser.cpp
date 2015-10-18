@@ -655,23 +655,32 @@ void Parser::handleFollows(int index, string stmt) {
 		if (prevStmt.find("{") != std::string::npos) {
 				currFollows.push_back(index - numOfProc - numOfElse);
 				prevStmt = currStmt;
-		
 		}
 		else if (prevStmt.find("}") != std::string::npos) {
-			size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
-			for (int i = 0; i < n;i++) {
+			if (currStmt.find("else") != std::string::npos) {
+				prevStmt = currStmt;
+				currFollows.pop_back();
+			}
+			
+			else {
+				size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
+				//cout << prevStmt << "\n";
+				for (int i = 0; i < n;i++) {
+					if (!currFollows.empty()) {
+						currFollows.pop_back();
+					}
+				}
+
+				paired.first = currFollows.back();
+				paired.second = index - numOfProc - numOfElse;
+
 				if (!currFollows.empty()) {
 					currFollows.pop_back();
 				}
+				currFollows.push_back(index - numOfProc - numOfElse);
+				followLink.push_back(paired);
+				prevStmt = currStmt;
 			}
-			paired.first = currFollows.back();
-			paired.second = index - numOfProc - numOfElse;
-			if (!currFollows.empty()) {
-				currFollows.pop_back();
-			}
-			currFollows.push_back(index - numOfProc - numOfElse);
-			followLink.push_back(paired);
-			prevStmt = currStmt;
 		}
 		else {
 
