@@ -1000,24 +1000,34 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 
 /**************************** Merging and Sorting Results ****************************/
 vector<vector<int>> QueryEvaluator::rearrangeSynonym(vector<vector<int>> syn) {
-	vector<vector<int>> result;
+	vector<vector<int>> rearrangeResult;
 
 	for (size_t i = 0; i < syn.size(); i++) {
-		result.push_back({ syn.at(i).at(0) });
+		cout << "erase" << i << endl;
+		rearrangeResult.push_back({ syn.at(i).at(0) });
 		syn.at(i).erase(syn.at(i).begin());
 	}
 
+	for (size_t i = 0; i < syn.at(0).size(); i++) {
+		cout << syn.at(0).at(i) << " ";
+	}
+	cout << endl;
+
 	for (size_t i = 0; i < syn.size(); i++) {
 		for (size_t j = 0; j < syn.at(i).size(); j++) {
-			if (hasCommonSyn(this->results.at(result.at(i).size() - 1), this->results.at(syn.at(i).at(j)))) {
-				result.at(i).push_back(syn.at(i).at(j));
-				syn.at(i).erase(syn.at(i).begin() + j);
-				j = 0;
+			for (size_t k = 0; k < rearrangeResult.at(i).size(); k++) {
+				if (hasCommonSyn(this->results.at(rearrangeResult.at(i).at(k)), this->results.at(syn.at(i).at(j)))) {
+					rearrangeResult.at(i).push_back(syn.at(i).at(j));
+					syn.at(i).erase(syn.at(i).begin() + j);
+					cout << "i is " << i << " " << endl;
+					j = -1;
+					break;
+				}
 			}
 		}
 	}
 
-	return result;
+	return rearrangeResult;
 
 }
 
