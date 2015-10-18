@@ -399,9 +399,9 @@ void PKB::setRightExpr(int index, string expr)
 void PKB::setByDesignExtractor() {
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
 	extractParentT(i);
-	//extractChildrenT(i);
-		extractFollowsT(i);
-		extractFollowedByT(i);
+	extractChildrenT(i);
+	extractFollowsT(i);
+	extractFollowedByT(i);
 	}
 	 
 	for (int j = 0; j < procTable.size(); j++) {
