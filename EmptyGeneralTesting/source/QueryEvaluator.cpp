@@ -489,7 +489,9 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 
 
 bool QueryEvaluator::evaluateAssign(Clauses clause) {
-	vector<int> intermediateResult;
+	vector <vector<int>> intermediateResult;
+	vector<int> assignResult;
+	vector<int> varResult;
 
 	// if left child is underscore
 	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
@@ -505,7 +507,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 					//cout << i << "." << endl;
 					//cout << pkb->getRightExpr(i) << endl;
 					if (this->pkb->getRightExpr(i) == expr)
-						intermediateResult.push_back(i);
+						assignResult.push_back(i);
 				}
 			}
 			else {		
@@ -514,52 +516,89 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 				// cout << this->pkb->getNoOfStmt() << endl;
 				for (int i = 1; i <= this->pkb->getNoOfStmt(); i++) {
 					if (this->pkb->getRightExpr(i).find(expr) != NOT_FOUND) {
-						intermediateResult.push_back(i);
+						assignResult.push_back(i);
 					}
 					//cout << "there" << endl;
 					//cout << i << endl;
 					//cout << "RightExpr:" << pkb->getRightExpr(i) << endl;
 				}
 			}
+			intermediateResult = { assignResult };
 		}
 	}
-	else { //left child is a variable
-		int leftExpression = pkb->getVarIndex(clause.getLeftCStringValue());
-		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, leftExpression);
-		//cout << clause.getLeftCStringValue() << endl;
-		//cout << leftExpression << endl;
-		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a(v, _)
+	else if (clause.getLeftCIntValue() == IS_SYN) {
+		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, WILDCARD);
+		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) {
+			// a(v, _)
 			for (size_t i = 0; i < stmtLst.size(); i++) {
-				intermediateResult.push_back(stmtLst[i].first);
+				assignResult.push_back(stmtLst[i].first);
+				varResult.push_back(stmtLst[i].second);
 			}
 		}
 		else {
 			string expr = convertToShuntingYard(clause.getRightCStringValue());
-			if (!clause.getRightCIsExpression()) { // a(v, x + y)
+			if (!clause.getRightCIsExpression()) {
+				// a(v, "x + y")
 				for (size_t i = 0; i < stmtLst.size(); i++) {
 					if (this->pkb->getRightExpr(stmtLst[i].first) == expr) {
-						intermediateResult.push_back(stmtLst[i].first);
+						assignResult.push_back(stmtLst[i].first);
+						varResult.push_back(stmtLst[i].second);
+					}
+				}
+			}
+			else {
+				// a(v, "_x + y_")
+				for (size_t i = 0; i < stmtLst.size(); i++) {
+					if (this->pkb->getRightExpr(stmtLst[i].first).find(expr) != NOT_FOUND) {
+						assignResult.push_back(stmtLst[i].first);
+						varResult.push_back(stmtLst[i].second);
+					}
+					}
+				}
+		}
+		intermediateResult = { assignResult, varResult };
+
+	}
+	else { //left child is a declared synonym
+		int leftExpression = pkb->getVarIndex(clause.getLeftCStringValue());
+		vector<pair<int, int>> stmtLst = this->pkb->getModifies(Enum::TYPE::ASSIGN, WILDCARD, Enum::TYPE::VARIABLE, leftExpression);
+		//cout << clause.getLeftCStringValue() << endl;
+		//cout << leftExpression << endl;
+		if (clause.getRightCType() == Enum::TYPE::UNDERSCORE) { // a("v", _)
+			for (size_t i = 0; i < stmtLst.size(); i++) {
+				assignResult.push_back(stmtLst[i].first);
+			}
+		}
+		else {
+			string expr = convertToShuntingYard(clause.getRightCStringValue());
+			if (!clause.getRightCIsExpression()) { // a("v", x + y)
+				for (size_t i = 0; i < stmtLst.size(); i++) {
+					if (this->pkb->getRightExpr(stmtLst[i].first) == expr) {
+						assignResult.push_back(stmtLst[i].first);
 						//cout << i << endl;
 						//cout << pkb->getRightExpr(i);
 					}
 				}
 			}
-			else { // a(v, _x+y_)
+			else { // a("v", _x+y_)
 				for (size_t i = 0; i < stmtLst.size(); i++) {
 					if (this->pkb->getRightExpr(stmtLst[i].first).find(expr) != NOT_FOUND) {
-						intermediateResult.push_back(stmtLst[i].first);
+						assignResult.push_back(stmtLst[i].first);
 					}
 				}
 			}
 		}
+		intermediateResult = { assignResult };
 	}
 
-	if (intermediateResult.size() != 0) {
+	if (!intermediateResult.at(0).empty()) {
 		vector<Enum::TYPE> type = { clause.getParentType() };
 		vector<string> syn = { clause.getParentStringVal() };
-		vector<vector<int>> resultsToStore;
-		resultsToStore.push_back(intermediateResult);
-		storeResults(type, syn, resultsToStore);
+		if (intermediateResult.size() == 2) {
+			type.push_back(Enum::TYPE::VARIABLE);
+			syn.push_back(clause.getLeftCStringValue());
+		}
+		storeResults(type, syn, intermediateResult);
 		return true;
 	}
 	else {
