@@ -453,17 +453,17 @@ namespace UnitTesting
 			pkb->setProcNameInProcTable("Second");
 			pkb->setProcNameInProcTable("Main");
 
-			string input = "stmt s; constant c; while w1; Select w1 with s.stmt# = c.value";
+			string input = "stmt s; constant c; while w1; Select s with s.stmt# = c.value";
 			ParserForPQL parser1(input);
 			QueryTree queryTree = parser1.getQueryTree();
 			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("s"));
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 1);
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
-			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsStmt(), true);
 			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("c"));
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 7);
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), -1);
-			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsStmt(), false);
 
 			input = "procedure p; variable v; while w1; prog_line n; Select w1 with v.varName = \"x\" with p.procName= \"Second\"";
 			ParserForPQL parser3(input);
@@ -471,11 +471,11 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("v"));
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 6);
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
-			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsStmt(), false);
 			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("x"));
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 6);
 			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), 0);
-			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsExpression(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsStmt(), false);
 
 			Assert::AreEqual(queryTree.getWithTree().at(1).getLeftCStringValue(), string("p"));
 			Assert::AreEqual(int(queryTree.getWithTree().at(1).getLeftCType()), 2);
