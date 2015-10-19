@@ -419,7 +419,7 @@ void PKB::setByDesignExtractor() {
 		extractCalledByT(j);
 	}
 	extractProcExtraModifiesUses();
-	//setCallsStmtModifiesUses();
+	setCallsStmtModifiesUses();
 }
 
 //V
