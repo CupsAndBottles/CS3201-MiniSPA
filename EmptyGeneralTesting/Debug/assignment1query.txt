@@ -505,6 +505,36 @@ Select a such that Parent(ifstat, w) and Parent(w, a) and Modifies(a, "x") patte
 5000
 101 - 5 clauses with 2 groups
 assign a, a1; while w;if ifstat;
-Select a pattern ifstat("a",_, _) such that Modifies(a,"x") and Uses(a,"x") and Parent(w, a) and Parent(ifstat, a1)
+Select a pattern ifstat("a",_, _) such that Modifies(a,"x") and Uses(a,"x") and Parent*(w, a) and Parent(ifstat, a1)
 13, 31
+5000
+102 - query 101 with single synonym
+assign a; while w;
+Select a such that Modifies(a,"x") and Uses(a,"x") and Parent*(w, a)
+13, 31
+5000
+103 - 10 clauses with same synonym
+stmt s, s1;
+Select s such that Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 20, 21, 19, 24
+5000
+104 - pattern while control variable syn
+while w; variable v;
+Select w pattern w(v, _)
+11, 19, 28
+5000
+105 - pattern while select control variable syn
+while w; variable v;
+Select v pattern w(v, _)
+t, y
+5000
+106 - pattern if control variable syn
+if ifstat; variable v;
+Select ifstat pattern ifstat(v, _, _)
+9, 24, 29
+5000
+107 - pattern if select control variable syn
+if ifstat; variable v;
+Select v pattern ifstat(v, _, _)
+m, a, t
 5000
