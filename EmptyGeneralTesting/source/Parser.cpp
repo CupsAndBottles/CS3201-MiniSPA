@@ -162,9 +162,10 @@ void Parser::Procedure() {
 		}
 	}
 	setRelationsInTable();
-	pkb->setByDesignExtractor();
+	pkb->setParentTChildrenT();
 	addModifies();
 	addUses();
+	pkb->setByDesignExtractor();
 
 }
 void Parser::addModifies() {

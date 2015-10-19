@@ -1348,6 +1348,7 @@ namespace UnitTesting
 
 			pkb->setProcUses(0, varUsed);
 			pkb->setByDesignExtractor();
+			pkb->setParentTChildrenT();
 
 			ParserForPQL parserPQL = ParserForPQL("procedure p; stmt s1; Select <p, s1> such that Parent*(4, s1)");
 			QueryTree queryTree = parserPQL.getQueryTree();
