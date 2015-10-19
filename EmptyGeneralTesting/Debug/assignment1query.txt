@@ -538,3 +538,18 @@ if ifstat; variable v;
 Select v pattern ifstat(v, _, _)
 m, a, t
 5000
+108 - pattern assign variable syn
+assign a; variable v;
+Select a pattern a(v, "x + a")
+14, 15, 26
+5000
+109 - pattern assign variable syn subexpression
+assign a; variable v;
+Select a pattern a(v, "_x_")
+2, 3, 4, 6, 8, 12, 13, 14, 15, 23, 25, 26, 27, 30, 31
+5000
+111 - pattern assign select variable syn
+assign a; variable v;
+Select v pattern a(v, "_x_")
+z, m, d, a, y, x
+5000
