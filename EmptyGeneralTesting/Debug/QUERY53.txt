@@ -13,3 +13,8 @@ assign a; if ifstat;
 Select a such that Uses(a, "train") and Parent(ifstat, a)
 14, 24
 5000
+4 -Pattern and Parent 
+assign a; while w;
+Select a pattern a("train", _) such that Parent(w, a)
+8, 18, 28, 33
+5000
