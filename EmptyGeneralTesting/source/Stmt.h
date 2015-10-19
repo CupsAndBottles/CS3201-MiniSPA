@@ -26,6 +26,8 @@ public:
 	void setControlVar(int varIndex);
 	void setCallsStmtModifiesVar(vector<int> modifies);
 	void setCallsStmtUsesVar(vector<int> uses);
+	void setModifies(vector<int> var);
+	void setUses(vector<int> var);
 
 	void setNext(int next);
 	void setPrev(int prev);

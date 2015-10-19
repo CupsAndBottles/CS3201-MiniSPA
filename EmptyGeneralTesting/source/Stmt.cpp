@@ -109,6 +109,16 @@ void Stmt::setCallsStmtUsesVar(vector<int> uses) {
 	usedVarList = uses;
 }
 
+//V
+void Stmt::setModifies(vector<int> var) {
+	modifiedVarList = var;
+}
+
+//V
+void Stmt::setUses(vector<int> var) {
+	usedVarList = var;
+}
+
 //---------------set next and next*----------------
 void Stmt::setNext(int next) {
 	nextList.push_back(next);
