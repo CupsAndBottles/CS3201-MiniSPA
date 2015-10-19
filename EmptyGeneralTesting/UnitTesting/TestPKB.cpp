@@ -719,6 +719,41 @@ namespace UnitTesting
 			vector<pair<int,int>> actualResults;
 		}
 
+		TEST_METHOD(PKB_ExtractProcExtraModifiesUses) {
+			PKB *pkb = new PKB();
+
+			pkb->setProcNameInProcTable("Main");
+			pkb->setProcNameInProcTable("La");
+			pkb->setProcNameInProcTable("Sun");
+			pkb->setProcNameInProcTable("Planet");
+
+			pkb->setVarName("w");
+			pkb->setVarName("x");
+			pkb->setVarName("y");
+			pkb->setVarName("z");
+			pkb->setVarName("v");
+			pkb->setVarName("m");
+			pkb->setVarName("n");
+			pkb->setVarName("r");
+
+			pkb->setProcModified(0, { "y", "x"});
+			pkb->setProcModified(1, { "x","y","z"});
+			pkb->setProcModified(3, { "x","y","r","v","m" });
+
+			pkb->setProcCallsT(0, { 1,3 });
+			pkb->setProcCallsT(1, { 3 });
+			pkb->extractProcExtraModifiesUses();
+			
+			vector<int> actualResults = pkb->getProcModified(0);
+			vector<int> expectedResults = { 1,2,3,5,4,7 };
+
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+			for (int i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+
+		}
+
 		TEST_METHOD(PKB_getUsedByStmtNum) {
 			PKB *pkb = new PKB();
 			vector<int> used;

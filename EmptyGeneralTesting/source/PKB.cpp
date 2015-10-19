@@ -413,7 +413,7 @@ void PKB::setByDesignExtractor() {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
-	//extractProcExtraModifiesUses();
+	extractProcExtraModifiesUses();
 	//setCallsStmtModifiesUses();
 }
 
@@ -1172,6 +1172,7 @@ void PKB::extractPrevT(int stmtNum) {
 	setPrevT(stmtNum, prevT);
 }
 
+//V
 void PKB::extractProcExtraModifiesUses() {
 	DesignExtractor design;
 	vector<int> existingList;
@@ -1258,12 +1259,12 @@ string PKB::getProcName(int procIndex)
 
 vector<int> PKB::getProcModified(int procIndex)
 {
-	return vector<int>();
+	return procTable[procIndex].getModified();
 }
 
 vector<int> PKB::getProcUsed(int procIndex)
 {
-	return vector<int>();
+	return procTable[procIndex].getUsed();
 }
 
 vector<int> PKB::getProcCalls(int procIndex)

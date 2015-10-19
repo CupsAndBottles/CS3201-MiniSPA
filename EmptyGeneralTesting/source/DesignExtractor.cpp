@@ -164,8 +164,8 @@ vector<int> DesignExtractor::extractExtraProcModifiesUses(vector<int> existingLi
 		int proc = callsT.at(i);
 		for (int j = 0; j < col.at(proc).size(); j++) {
 			int varIndex = col.at(proc).at(j);
-			if (find(existingList.begin(), existingList.end(), varIndex) != existingList.end()) {
-				existingList.push_back(varIndex);
+			if (find(result.begin(), result.end(), varIndex) == result.end()) {
+				result.push_back(varIndex);
 			}
 		
 		}
