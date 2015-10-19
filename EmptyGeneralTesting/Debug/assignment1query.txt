@@ -206,7 +206,7 @@ Select ifstat such that Follows* (ifstat, 8)
 42 - Question 12b
 if ifstat;
 Select ifstat such that Follows* (ifstat, 18)
-
+9
 5000
 43 - Question 12c
 if ifstat;
@@ -351,7 +351,7 @@ Select a such that Modifies(a, "z") and Uses(a, "z")
 71 - Question 21
 assign a; while w;
 Select a such that Modifies(a, "x") and Parent(w,a)
-13, 25, 26, 31
+13, 20
 5000
 72 - Question 22
 assign a; while w;
@@ -366,7 +366,7 @@ Select a such that Modifies(a, "x") such that Parent(w,a)
 74 - Question 24
 procedure p;
 Select p such that Calls*(p, "Sun")
-Planet
+Planet, Earth
 5000
 75 - Question 25
 procedure p;
@@ -479,7 +479,7 @@ Select BOOLEAN pattern w("t",_) with c.value = 1
 true
 5000
 96 - Question 47
-stmt s;constant c;
+stmt s; constant c;
 Select s with s.stmt# = c.value
 1, 2, 4, 5, 6, 8, 30
 5000
@@ -488,13 +488,68 @@ stmt s, s1; constant c;
 Select s1 with s.stmt# = c.value
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
 5000
-98 - Follows (10, s)
-stmt s;
-Select s such that Follows(10,s)
-11
+98 - Calls planet
+procedure p;
+Select p such that Calls("Planet", p)
+Sun, Moon, Earth
 5000
-99 - Follows (s, 13)
-stmt s;
-Select s such that Follows(s,13)
-12
+99 - 4 clauses with Uses
+assign a; if ifstat; while w;
+Select a such that Parent(ifstat, w) and Parent(w, a) and Uses(a, "x") pattern ifstat("m",_, _)
+12, 13
+5000
+100 - 4 clauses with Modifies
+assign a; if ifstat; while w;
+Select a such that Parent(ifstat, w) and Parent(w, a) and Modifies(a, "x") pattern ifstat("m",_, _)
+13
+5000
+101 - 5 clauses with 2 groups
+assign a, a1; while w;if ifstat;
+Select a pattern ifstat("a",_, _) such that Modifies(a,"x") and Uses(a,"x") and Parent*(w, a) and Parent(ifstat, a1)
+13, 31
+5000
+102 - query 101 with single synonym
+assign a; while w;
+Select a such that Modifies(a,"x") and Uses(a,"x") and Parent*(w, a)
+13, 31
+5000
+103 - 10 clauses with same synonym
+stmt s, s1;
+Select s such that Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1) and Follows(s,s1) and Follows*(s,s1)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 16, 20, 21, 19, 24
+5000
+104 - pattern while control variable syn
+while w; variable v;
+Select w pattern w(v, _)
+11, 19, 28
+5000
+105 - pattern while select control variable syn
+while w; variable v;
+Select v pattern w(v, _)
+t, y
+5000
+106 - pattern if control variable syn
+if ifstat; variable v;
+Select ifstat pattern ifstat(v, _, _)
+9, 24, 29
+5000
+107 - pattern if select control variable syn
+if ifstat; variable v;
+Select v pattern ifstat(v, _, _)
+m, a, t
+5000
+108 - pattern assign variable syn
+assign a; variable v;
+Select a pattern a(v, "x + a")
+14, 15, 26
+5000
+109 - pattern assign variable syn subexpression
+assign a; variable v;
+Select a pattern a(v, "_x_")
+2, 3, 4, 6, 8, 12, 13, 14, 15, 23, 25, 26, 27, 30, 31
+5000
+111 - pattern assign select variable syn
+assign a; variable v;
+Select v pattern a(v, "_x_")
+z, m, d, a, y, x
 5000

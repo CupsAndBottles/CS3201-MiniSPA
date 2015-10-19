@@ -1,6 +1,6 @@
  procedure City{
  car = 5 ;
- down = car + 8;
+ man = car + 8;
  train = 7;
  man = 11;
  bus = man + 1;

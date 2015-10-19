@@ -223,8 +223,8 @@ void PKB::setType(Enum::TYPE type) {
 //G: parent set from setChildren method.
 void PKB::setParent(int index, int parentStmt)
 {
-	//cout << "Parent: " << parentStmt << "\n";
-	//cout << "Child: " << index << "\n\n";
+	cout << "Parent: " << parentStmt << "\n";
+	cout << "Child: " << index << "\n\n";
 	stmtTable[index].setParent(parentStmt);
 }
 
@@ -327,8 +327,8 @@ void PKB::setFollows(vector<pair<int,int>> follows)
 		int firstStmt = paired.first;
 		int secondStmt = paired.second;
 		follows.pop_back();
-		cout << "first: " << firstStmt << "\n";
-		cout << "second: " << secondStmt << "\n\n";
+		//cout << "first: " << firstStmt << "\n";
+		//cout << "second: " << secondStmt << "\n\n";
 		stmtTable[secondStmt].setFollows(firstStmt);
 		setFollowedBy(firstStmt,secondStmt);
 	}
@@ -405,8 +405,6 @@ void PKB::setRightExpr(int index, string expr)
 // V: Parser - PKB, called at start by parser
 void PKB::setByDesignExtractor() {
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
-	extractParentT(i);
-	extractChildrenT(i);
 	extractFollowsT(i);
 	extractFollowedByT(i);
 	}
@@ -417,6 +415,14 @@ void PKB::setByDesignExtractor() {
 	}
 	//extractProcExtraModifiesUses();
 	//setCallsStmtModifiesUses();
+}
+
+//V
+void PKB::setParentTChildrenT() {
+	for (int i = OFFSET; i < stmtTable.size(); i++) {
+		extractParentT(i);
+		extractChildrenT(i);
+	}
 }
 
 //ZH - tested
@@ -875,6 +881,16 @@ std::vector<pair<int, int>> PKB::getParentT(Enum::TYPE type1, int stmtNum1, Enum
 
 vector<int> PKB::getChildrenT(int stmtNum) {
 	return stmtTable[stmtNum].getChildrenT();
+}
+
+vector<int> PKB::getModifiesForParser(int stmtNum)
+{
+	return stmtTable[stmtNum].getModifies();
+}
+
+vector<int> PKB::getUsesForParser(int stmtNum)
+{
+	return stmtTable[stmtNum].getUses();
 }
 
 //V

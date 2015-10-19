@@ -134,6 +134,7 @@ namespace UnitTesting
 			pkb->setProcCalls(procCalls);
 
 			pkb->setByDesignExtractor();
+			pkb->setParentTChildrenT();
 
 			//test if parentT
 			expectedResults = { 2,1 };
@@ -187,7 +188,7 @@ namespace UnitTesting
 			pkb->setChildren(3, 0);
 			pkb->setChildren(children);
 
-			pkb->setByDesignExtractor();
+			pkb->setParentTChildrenT();
 
 			expectedResults.push_back(make_pair(1, 2));
 			expectedResults.push_back(make_pair(1, 3));

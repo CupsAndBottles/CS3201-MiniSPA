@@ -162,8 +162,46 @@ void Parser::Procedure() {
 		}
 	}
 	setRelationsInTable();
+	pkb->setParentTChildrenT();
+	addModifies();
+	addUses();
 	pkb->setByDesignExtractor();
+
 }
+void Parser::addModifies() {
+	vector<int> children;
+	for (int i = 1;i < pkb->getNoOfStmt(); i++) {
+		children = pkb->getChildrenT(i);
+		while (!children.empty()) {
+			vector<int> modifiesList = pkb->getModifiesForParser(children.back());
+			while (!modifiesList.empty()) {
+				string varName = pkb->getVarName(modifiesList.back());
+				pkb->setModifies(i,varName);
+				pkb->setModifiedBy(varName,i);
+				modifiesList.pop_back();
+			}
+			children.pop_back();
+		}
+	}
+}
+
+void Parser::addUses() {
+	vector<int> children;
+	for (int i = 1;i < pkb->getNoOfStmt(); i++) {
+		children = pkb->getChildrenT(i);
+		while (!children.empty()) {
+			vector<int> usesList = pkb->getUsesForParser(children.back());
+			while (!usesList.empty()) {
+				string varName = pkb->getVarName(usesList.back());
+				pkb->setUsedBy(varName,i);
+				pkb->setUsedVar(i,varName);
+				usesList.pop_back();
+			}
+			children.pop_back();
+		}
+	}
+}
+
 
 void Parser::setRelationsInTable() {
 	pkb->setChildren(parentLink);
@@ -422,6 +460,7 @@ void Parser::processExpressions(int index, string statement) {
 
 void Parser::handleModifyAndUses(int i, string stmt) {
 	int bracket = 0;
+	list<pair<int, string>> tempList;
 	if (!closeBracket.size()) {
 		bracket = closeBracket.size();
 	}

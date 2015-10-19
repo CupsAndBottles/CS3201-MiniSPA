@@ -45,6 +45,7 @@ public:
 
 	//PARSER->PKB
 	void setByDesignExtractor();
+	void setParentTChildrenT();
 
 	//From ProcTable
 	int setProcNameInProcTable(string procName); //tested // working
@@ -76,6 +77,7 @@ public:
 	void setControlVar(int index, int varIndex);
 	void setUsedVar(int index, string usedVar);//working
 	void setRightExpr(int index, string rightExpression);  //tested //working
+
 	void setParent(int index, int parentStmt);  //working
 	//void setCallsT(int index, vector<int> callsTStmts);
 
@@ -114,6 +116,9 @@ public:
 	vector<int> getFollowedByT(int stmtNum);
 	vector<int>getChildrenT(int stmtNum);
 
+	//parser
+	vector<int> getModifiesForParser(int stmtNum);
+	vector<int> getUsesForParser(int stmtNum);
 	//PQL-PKB
 	vector<pair<int, int>> getModifies(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int varIndex);
 	vector<pair<int, int>> getCalls(int stmtNum, int stmtNum2);
