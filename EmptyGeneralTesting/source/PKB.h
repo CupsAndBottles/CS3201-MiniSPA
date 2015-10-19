@@ -45,6 +45,7 @@ public:
 
 	//PARSER->PKB
 	void setByDesignExtractor();
+	void setParentTChildrenT();
 
 	//From ProcTable
 	int setProcNameInProcTable(string procName); //tested // working

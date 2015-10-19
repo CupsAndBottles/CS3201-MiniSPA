@@ -405,8 +405,6 @@ void PKB::setRightExpr(int index, string expr)
 // V: Parser - PKB, called at start by parser
 void PKB::setByDesignExtractor() {
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
-	extractParentT(i);
-	extractChildrenT(i);
 	extractFollowsT(i);
 	extractFollowedByT(i);
 	}
@@ -417,6 +415,14 @@ void PKB::setByDesignExtractor() {
 	}
 	//extractProcExtraModifiesUses();
 	//setCallsStmtModifiesUses();
+}
+
+//V
+void PKB::setParentTChildrenT() {
+	for (int i = OFFSET; i < stmtTable.size(); i++) {
+		extractParentT(i);
+		extractChildrenT(i);
+	}
 }
 
 //ZH - tested
