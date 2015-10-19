@@ -273,10 +273,15 @@ void PKB::setCallsStmtModifiesUses() {
 
 	for (int i = 0; i < procTable.size(); i++) {
 		stmtNumbers = getStmtNumProcCalled(i);
-		for (int j = 0; j < stmtNumbers.size(); j++) {
-			int stmtNum = stmtNumbers.at(j);
-			stmtTable.at(stmtNum).setCallsStmtModifiesVar(getProcModified(i));
-			stmtTable.at(stmtNum).setCallsStmtUsesVar(getProcUsed(i));
+		if (stmtNumbers.size() == 0) {
+			continue;
+		}
+		else {
+			for (int j = 0; j < stmtNumbers.size(); j++) {
+				int stmtNum = stmtNumbers.at(j);
+				stmtTable.at(stmtNum).setCallsStmtModifiesVar(getProcModified(i));
+				stmtTable.at(stmtNum).setCallsStmtUsesVar(getProcUsed(i));
+			}
 		}
 	}
 }

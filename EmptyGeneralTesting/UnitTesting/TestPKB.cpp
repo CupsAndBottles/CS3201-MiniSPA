@@ -754,6 +754,34 @@ namespace UnitTesting
 
 		}
 
+		TEST_METHOD(PKB_setCallsStmtModifiesUses) {
+			PKB *pkb = new PKB();
+
+			pkb->setType(Enum::TYPE::CALLS);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+
+			pkb->setProcNameInProcTable("Main");
+			pkb->setProcNameInProcTable("La");
+
+			pkb->setVarName("x");
+			pkb->setVarName("y");
+			
+			pkb->setProcModified(0, { "x", "y" });
+			pkb->setProcModified(1, { "x" });
+			vector<pair<int, string>> pair;
+			pair.push_back(make_pair(1, "La"));
+			pkb->setStmtNumProcCalled(pair);
+
+			pkb->setCallsStmtModifiesUses();
+
+			vector<int> expectedResults = { 0 };
+			vector<int> actualResults = pkb->getModifiesForParser(1);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+			Assert::AreEqual(expectedResults.at(0), actualResults.at(0));
+
+		}
+
 		TEST_METHOD(PKB_getUsedByStmtNum) {
 			PKB *pkb = new PKB();
 			vector<int> used;
