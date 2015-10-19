@@ -21,6 +21,7 @@ int currIndex = 0;
 int numOfProc = 0;
 int numOfElse = 0;
 int procNumInTble = 0;
+int currElse = 0;
 vector<string> varModifiedInProc;
 vector<string> varUsedInProc;
 vector<int> currFollows;
@@ -29,6 +30,9 @@ stack<char> openBracket;
 stack<pair<int,string>> ifStmt;
 list<pair<int, string>> containerElements;
 string prevStmt;
+string pStmt;
+int pStmtType=0;
+int pStmtIndex = 0;
 
 Parser::Parser()
 {
@@ -136,6 +140,9 @@ void Parser::Procedure() {
 		else if (stmt.find("while") != std::string::npos) {
 			pkb->setType(Enum::WHILE);
 			processWhile((*i).first, (*i).second);
+			handleModifyAndUses((*i).first, (*i).second);
+			handleFollows((*i).first, (*i).second);
+			addToParent((*i).first);
 		}
 		else if (stmt.find("if") != std::string::npos) {
 			pkb->setType(Enum::IF);
@@ -145,6 +152,7 @@ void Parser::Procedure() {
 		else if (stmt.find("else") != std::string::npos) {
 			processElse((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
+			currElse = (*i).first -numOfProc;
 		}
 		else if (stmt.find("call") != std::string::npos) {
 			pkb->setType(Enum::CALLS);
@@ -158,8 +166,9 @@ void Parser::Procedure() {
 			processExpressions((*i).first, (*i).second);
 			handleModifyAndUses((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
-
 		}
+
+	//	processNextPrev((*i).first, (*i).second);
 	}
 	setRelationsInTable();
 	pkb->setParentTChildrenT();
@@ -215,6 +224,54 @@ void Parser::setRelationsInTable() {
 	pkb->setStmtNumProcCalled(stmtNoAndCalls);
 }
 
+void Parser::processNextPrev(int index, string stmt)
+{
+	if (pStmt.empty()) {
+		pStmt = stmt;
+		pStmtIndex = index - numOfProc - numOfElse;
+	}
+	else
+	{
+		if(pStmt.find("procedure") != std::string::npos){
+			pStmtType = 0;
+			pStmt.clear();
+			pStmtIndex = 0;
+		}
+		//while stmt
+		else if (pStmt.find("while") != std::string::npos) {
+			pStmtType = 1;
+			pStmt = stmt;
+			pStmtIndex = index - numOfProc - numOfElse;
+		}
+		//if stmt
+		else if (pStmt.find("if") != std::string::npos) {
+			pStmtType = 2;
+		}
+		//else stmt
+		else if (pStmt.find("else") != std::string::npos) {
+			pStmtType = 3;
+		}
+		//assign and call stmt
+		else {
+			if (pStmt.find("}") != std::string::npos) {
+				if (pStmtType==1) {
+
+				}
+				else if (pStmtType == 2) {
+
+				}
+				else if (pStmtType == 3) {
+
+				}
+				else if (pStmtType == 4) {
+
+				}
+			}
+			pStmtType = 4;
+		}
+	}
+}
+
 void Parser::addToParent(int child) {
 	pair<int, string> parentPair;
 	int parent = 0;
@@ -222,7 +279,15 @@ void Parser::addToParent(int child) {
 		parentPair = containerElements.back();
 		string parentStmt = parentPair.second;
 		pair<int, int> pairs;
-		int parent = parentPair.first - numOfProc-numOfElse;
+		parent = parentPair.first - numOfProc-numOfElse;
+		
+		if (parentStmt.find("while") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
+			cout <<"while index: " <<parent << "\n";
+			cout << "curr else: " << currElse << "\n";
+			parent = parentPair.first - numOfProc;
+			cout << "after deduction: " << parent << "\n";
+		}
+		
 		int newChild = child - numOfProc-numOfElse;
 		if (parent != newChild) {
 			pairs.first = parent;
@@ -297,9 +362,7 @@ void Parser::processWhile(int index, string statement) {
 		parentLink.push_back(parentPair);
 	}
 	containerElements.push_back(pair);
-	addToParent(pair.first);
-	handleModifyAndUses(pair.first, pair.second);
-	handleFollows(pair.first, pair.second);
+
 }
 
 void Parser::processIf(int index, string statement)
