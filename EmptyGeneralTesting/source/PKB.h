@@ -87,6 +87,7 @@ public:
 	void setCallsStmtModifiesUses();
 	void setNextT(int index, vector<int> nextT);
 	void setPrevT(int index, vector<int> prevT);
+	void setCallStmtsParentTModifiesUses();
 
 	//constant table
 	int setConstant(int constantValue);
