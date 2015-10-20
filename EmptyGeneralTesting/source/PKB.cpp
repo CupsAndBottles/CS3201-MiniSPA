@@ -58,6 +58,7 @@ void PKB::setProcModified(int index, vector<string> modifiedVar)
 		int i = getVarIndex(modifiedVar.back());
 		/*cout << "------------------------------------\n";
 		cout << "proc index: " << index << "\n";
+		cout << "proc name: " << getProcName(index) << "\n";
 		cout << "index: " << i << "\n";
 		cout << "modified var: "<<modifiedVar.back()<<"\n";*/
 		modifiedVar.pop_back();
@@ -223,18 +224,22 @@ void PKB::setType(Enum::TYPE type) {
 //G: parent set from setChildren method.
 void PKB::setParent(int index, int parentStmt)
 {
-	cout << "Parent: " << parentStmt << "\n";
-	cout << "Child: " << index << "\n\n";
+	//cout << "Parent: " << parentStmt << "\n";
+	//cout << "Child: " << index << "\n\n";
 	stmtTable[index].setParent(parentStmt);
 }
 
 void PKB::setNext(int index, int next)
 {
+	cout << "Index: " << index << "\n";
+	cout << "Next: " << next << "\n\n";
 	stmtTable[index].setNext(next);
 }
 
 void PKB::setPrev(int index, int prev)
 {
+	cout << "Index: " << index << "\n";
+	cout << "Prev: " << prev << "\n\n";
 	stmtTable[index].setPrev(prev);
 }
 

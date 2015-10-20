@@ -152,6 +152,7 @@ public:
 	int setVarName(string varName); //working - alphabets working, word is buggy. no uppercase, lowercase diff
 	void setProcNames(int index,string procName); //working - need to do for multiple procs
 	void setUsedBy(string varName,int stmtNum);  //working
+	bool isConstant(string s);
 	void setModifiedBy(string varName, int stmtNum); //working
 	 
 	int getType(int index);
