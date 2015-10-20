@@ -60,6 +60,26 @@ vector<Clauses> QueryTree::getWithTree()
 	return withTree;
 }
 
+void QueryTree::setSuchThatTree(Clauses clause)
+{
+	suchThatTree.push_back(clause);
+}
+
+void QueryTree::setPatternTree(Clauses clause)
+{
+	patternTree.push_back(clause);
+}
+
+void QueryTree::setResultTree(Clauses clause)
+{
+	 resultTree.push_back(clause);
+}
+
+void QueryTree::setWithTree(Clauses clause)
+{
+	withTree.push_back(clause);
+}
+
 bool QueryTree::getIsValid()
 {
 	return isValid;
@@ -69,9 +89,15 @@ void QueryTree::addResultTree(vector<string> syn, vector<string> type)
 {
 	//vector<Clauses> resultTree;
 	for (std::size_t i = 0; i < syn.size(); i++) {
+		Clauses clause;
+		clause.setParentStringVal(syn.at(i));
+		clause.setParentType(type.at(i));
+		setResultTree(clause);
+	/*
 		resultTree.push_back(Clauses());
 		resultTree.at(i).setParentStringVal(syn.at(i));
 		resultTree.at(i).setParentType(type.at(i));
+		*/
 	}
 }
 
@@ -80,6 +106,20 @@ void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vecto
 	int z = 0;
 
 	for (std::size_t i = 0; i < stringVal.size(); i = i + 2) {
+		Clauses clause;
+		clause.setLeftCType(type.at(i));
+		clause.setLeftCIsExpression(false);
+		clause.setLeftCIntValue(atoi(intVal.at(i).c_str()));
+		clause.setLeftCStringValue(stringVal.at(i));
+		clause.setLeftCIsStmt(isStmt.at(i));
+
+		clause.setRightCType(type.at(i + 1));
+		clause.setRightCIsExpression(false);
+		clause.setRightCIntValue(atoi(intVal.at(i + 1).c_str()));
+		clause.setRightCStringValue(stringVal.at(i + 1));
+		clause.setRightCIsStmt(isStmt.at(i + 1));
+		setWithTree(clause);
+		/*
 		withTree.push_back(Clauses());
 		withTree.at(z).setLeftCType(type.at(i));
 		withTree.at(z).setLeftCIsExpression(false);
@@ -93,6 +133,7 @@ void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vecto
 		withTree.at(z).setRightCStringValue(stringVal.at(i + 1));
 		withTree.at(z).setRightCIsStmt(isStmt.at(i + 1));
 		z++;
+		*/
 	}
 	//for (int j = 0; j < withTree.size(); j++) {
 	
@@ -105,6 +146,20 @@ void QueryTree::addSuchThatTree(vector<string> stringVal, vector<string> type, v
 	int z = 0;
 
 	for (std::size_t i = 0; i < stringVal.size(); i = i + 3) {
+		Clauses clause;
+		clause.setParentStringVal(stringVal.at(i));
+
+		clause.setLeftCType(type.at(i + 1));
+		clause.setLeftCIsExpression(false);
+		clause.setLeftCIntValue(atoi(intVal.at(i + 1).c_str()));
+		clause.setLeftCStringValue(stringVal.at(i + 1));
+
+		clause.setRightCType(type.at(i + 2));
+		clause.setRightCIsExpression(false);
+		clause.setRightCIntValue(atoi(intVal.at(i + 2).c_str()));
+		clause.setRightCStringValue(stringVal.at(i + 2));
+		setSuchThatTree(clause);
+		/*
 		suchThatTree.push_back(Clauses());
 		suchThatTree.at(z).setParentStringVal(stringVal.at(i));
 
@@ -118,6 +173,7 @@ void QueryTree::addSuchThatTree(vector<string> stringVal, vector<string> type, v
 		suchThatTree.at(z).setRightCIntValue(atoi(intVal.at(i + 2).c_str()));
 		suchThatTree.at(z).setRightCStringValue(stringVal.at(i + 2));
 		z++;
+		*/
 	}
 
 }
@@ -126,6 +182,25 @@ void QueryTree::addPatternTree(vector<string> stringVal, vector<string> type, ve
 {
 	int z = 0;
 	for (std::size_t i = 0; i < stringVal.size(); i = i + 3) {
+		Clauses clause;
+		clause.setParentStringVal(stringVal.at(i));
+		clause.setParentType(type.at(i));
+
+		clause.setLeftCType(type.at(i + 1));
+		clause.setLeftCIsExpression(isItExpression(isExpression.at(i + 1)));
+		clause.setLeftCIntValue(atoi(intVal.at(i + 1).c_str()));
+		clause.setLeftCStringValue(stringVal.at(i + 1));
+
+		clause.setRightCType(type.at(i + 2));
+		clause.setRightCIsExpression(isItExpression(isExpression.at(i + 2)));
+		clause.setRightCIntValue(atoi(intVal.at(i + 2).c_str()));
+		clause.setRightCStringValue(stringVal.at(i + 2));
+		
+		setPatternTree(clause);
+		if (type.at(i).compare("if") == 0) {
+			i++;
+		}
+		/*
 		patternTree.push_back(Clauses());
 		patternTree.at(z).setParentStringVal(stringVal.at(i));
 		patternTree.at(z).setParentType(type.at(i));
@@ -143,6 +218,7 @@ void QueryTree::addPatternTree(vector<string> stringVal, vector<string> type, ve
 		if (type.at(i).compare("if") == 0) {
 			i++;
 		}
+		*/
 	}
 		
 }

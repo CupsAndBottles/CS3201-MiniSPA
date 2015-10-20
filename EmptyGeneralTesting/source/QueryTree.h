@@ -16,6 +16,11 @@ public:
 	vector<Clauses> getPatternTree();
 	vector<Clauses> getResultTree();
 	vector<Clauses> getWithTree();
+
+	void setSuchThatTree(Clauses clause);
+	void setPatternTree(Clauses clause);
+	void setResultTree(Clauses clause);
+	void setWithTree(Clauses clause);
 	bool getIsValid();
 
 private:
