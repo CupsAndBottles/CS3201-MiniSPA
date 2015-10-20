@@ -1,0 +1,33 @@
+procedure Sea{
+x = 5;
+i = x + 8;
+t = 4;  
+y = y + 1;  
+m = 5;
+x = t + 2;
+while i {
+t = x * 5 + y + i; 
+i = m + 2; 
+y = 3;
+m = y * 8;
+if y then {
+t = t + 4; 
+y = y * 4 + x;
+m = 1;
+call Earth;} 
+else {
+x = 4;
+y = x + 2;}
+m = t + 2; 
+t = y + 30;} 
+y = m;
+x = 2 * x;  
+i = i + 3;} 
+procedure Earth{
+while y {
+x = t + 5 * y;
+m = m + 9;
+i = y + 10;}
+x = x + 10; 
+y = 8;
+t = m + 2;} 
