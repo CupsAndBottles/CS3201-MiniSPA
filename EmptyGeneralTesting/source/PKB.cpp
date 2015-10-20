@@ -154,8 +154,8 @@ int PKB::setVarName(string varName){
 		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
-		//cout << "set varName: " << varName << "\n";
-		//cout << "set varIndex: " << index << "\n";
+		cout << "set varName: " << varName << "\n";
+		cout << "set varIndex: " << index << "\n";
 	}
 	return index;
 }
@@ -170,6 +170,14 @@ void PKB::setProcNames(int index, string procName)
 
 }
 
+bool PKB::isConstant(string s) {
+	string::const_iterator it = s.begin();
+	while (it != s.end() && isdigit(*it))
+	{
+		++it;
+	}
+	return !s.empty() && it == s.end();
+}
 
 void PKB::setUsedBy(string varName, int stmtNum)
 {
@@ -178,8 +186,10 @@ void PKB::setUsedBy(string varName, int stmtNum)
 		varTable[varIndex].insertIntoUses(stmtNum);
 	}
 	else {
-		setVarName(varName);
-		setUsedBy(varName, stmtNum);
+		if (!isConstant(varName)) {
+			setVarName(varName);
+			setUsedBy(varName, stmtNum);
+		}
 	}
 }
 
@@ -190,8 +200,10 @@ void PKB::setModifiedBy(string varName, int stmtNum)
 	varTable[varIndex].insertIntoModify(stmtNum);
 	}
 	else {
-		setVarName(varName);
-		setModifiedBy(varName,stmtNum);
+		if (!isConstant(varName)) {
+			setVarName(varName);
+			setModifiedBy(varName, stmtNum);
+		}
 	}
 	//cout << "varname: " << varName << "\n";
 	//cout << "stmtNum: " << stmtNum << "\n";
