@@ -361,7 +361,6 @@ void PKB::setFollowedByT(int index, vector<int> followedByT)
 //G: change variable passed as string to int and set stmttable.
 void PKB::setModifies(int index, string modifiedVar)
 {
-
 	int varIndex = getVarIndex(modifiedVar);
 	stmtTable[index].setModifiedVar(varIndex);
 	/*cout << "---------------------------------------\n";
