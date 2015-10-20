@@ -154,8 +154,8 @@ int PKB::setVarName(string varName){
 		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
-		cout << "set varName: " << varName << "\n";
-		cout << "set varIndex: " << index << "\n";
+		//cout << "set varName: " << varName << "\n";
+		//cout << "set varIndex: " << index << "\n";
 	}
 	return index;
 }
@@ -236,8 +236,8 @@ void PKB::setType(Enum::TYPE type) {
 //G: parent set from setChildren method.
 void PKB::setParent(int index, int parentStmt)
 {
-	//cout << "Parent: " << parentStmt << "\n";
-	//cout << "Child: " << index << "\n\n";
+	cout << "Parent: " << parentStmt << "\n";
+	cout << "Child: " << index << "\n\n";
 	stmtTable[index].setParent(parentStmt);
 }
 

@@ -28,7 +28,7 @@ vector<string> varUsedInProc;
 vector<int> currFollows;
 stack<char> closeBracket;
 stack<char> openBracket;
-stack<pair<int, string>> ifStmt;
+stack<pair<int, string>> ifStmtVec;
 list<pair<int, string>> containerElements;
 string prevStmt;
 string pStmt;
@@ -305,6 +305,9 @@ void Parser::addToParent(int child) {
 		if (parentStmt.find("while") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
 			parent = parentPair.first - numOfProc;
 		}
+		if (parentStmt.find("if") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
+			parent = parentPair.first - numOfProc - numOfElse+1;
+		}
 
 		int newChild = child - numOfProc - numOfElse;
 		if (parent != newChild) {
@@ -392,10 +395,10 @@ void Parser::processIf(int index, string statement)
 	pair.first = index;
 	pair.second = statement;
 
-	ifPair.first = index + 1;
+	ifPair.first = index;
 	ifPair.second = statement;
 
-	ifStmt.push(ifPair);
+	ifStmtVec.push(ifPair);
 	if (!containerElements.empty()) {
 		parentPair.first = containerElements.back().first - numOfProc - numOfElse;
 		parentPair.second = index - numOfProc - numOfElse;
@@ -411,8 +414,8 @@ void Parser::processIf(int index, string statement)
 void Parser::processElse(int index, string statement) {
 	pushOpenBracket();
 	numOfElse++;
-	containerElements.push_back(ifStmt.top());
-	ifStmt.pop();
+	containerElements.push_back(ifStmtVec.top());
+	ifStmtVec.pop();
 }
 
 bool Parser::isOperator(char o) {
@@ -605,7 +608,19 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
 			int parentMod = pairedParent.first - numOfProc - numOfElse;
+
+			string parentStmt = pairedParent.second;
+			if (parentStmt.find("while") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
+				parentMod = pairedParent.first - numOfProc;
+			}
+			if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
+				parentMod = pairedParent.first - numOfProc - numOfElse + 1;
+			}
+
 			if (!isConstant(modified)) {
+				cout << "---------assign statement------" << "\n";
+				cout << "modified: " << modified << "\n";
+				cout << "stmt num : " << parentMod << "\n";
 				pkb->setModifiedBy(modified, parentMod);
 				pkb->setModifies(parentMod, modified);
 			}
@@ -613,6 +628,9 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		if (!isConstant(modified)) {
 			pkb->setModifiedBy(modified, i - numOfProc - numOfElse);
 			pkb->setModifies(i - numOfProc - numOfElse, modified);
+			cout << "---------assign statement 2------" << "\n";
+			cout << "modified: " << modified << "\n";
+			cout << "stmt num : " << i - numOfProc - numOfElse << "\n";
 			varModifiedInProc.push_back(modified);
 		}
 
