@@ -618,9 +618,6 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			}
 
 			if (!isConstant(modified)) {
-				cout << "---------assign statement------" << "\n";
-				cout << "modified: " << modified << "\n";
-				cout << "stmt num : " << parentMod << "\n";
 				pkb->setModifiedBy(modified, parentMod);
 				pkb->setModifies(parentMod, modified);
 			}
@@ -628,9 +625,6 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		if (!isConstant(modified)) {
 			pkb->setModifiedBy(modified, i - numOfProc - numOfElse);
 			pkb->setModifies(i - numOfProc - numOfElse, modified);
-			cout << "---------assign statement 2------" << "\n";
-			cout << "modified: " << modified << "\n";
-			cout << "stmt num : " << i - numOfProc - numOfElse << "\n";
 			varModifiedInProc.push_back(modified);
 		}
 
@@ -640,6 +634,15 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 					if (!containerElements.empty()) {
 						pair<int, string> pairedParent = containerElements.back();
 						int parentUse = pairedParent.first - numOfProc - numOfElse;
+
+						string parentStmt = pairedParent.second;
+						if (parentStmt.find("while") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
+							parentUse = pairedParent.first - numOfProc;
+						}
+						if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
+							parentUse = pairedParent.first - numOfProc - numOfElse + 1;
+						}
+
 						if (!isConstant(s)) {
 							pkb->setUsedBy(s, parentUse);
 							pkb->setUsedVar(parentUse, s);
