@@ -2,7 +2,7 @@ procedure Sea{
 x = 5;
 i = x + 8;
 t = 4;  
-y = y + 1; 
+y = y + 1;  
 m = 5;
 x = t + 2;
 while i {
@@ -22,7 +22,7 @@ m = t + 2;
 t = y + 30;} 
 y = m;
 x = 2 * x;  
-i = i + 3;}  
+i = i + 3;} 
 procedure Earth{
 while y {
 x = t + 5 * y;

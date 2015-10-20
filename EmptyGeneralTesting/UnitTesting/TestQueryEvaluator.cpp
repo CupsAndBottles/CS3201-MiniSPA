@@ -2940,8 +2940,56 @@ namespace UnitTesting
 			pkb->setConstant(7);
 			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; procedure p, q; call c; Select p pattern a(\"command\", _) such that Calls(p, q) with c.procName = \"hope\"");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			QueryTree queryTree = QueryTree();
+
+			Clauses clause;
+			clause.setLeftCType("call");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("");
+			clause.setLeftCIsStmt("0");
+
+			clause.setRightCType("procedure");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(0);
+			clause.setRightCStringValue("hope");
+			clause.setRightCIsStmt("0");
+			queryTree.setWithTree(clause);
+
+			clause.setParentStringVal("Calls");
+
+			clause.setLeftCType("procedure");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("p");
+
+			clause.setRightCType("procedure");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("q");
+			queryTree.setSuchThatTree(clause);
+		
+			clause.setParentStringVal("a");
+			clause.setParentType("assign");
+
+			clause.setLeftCType("variable");
+			clause.setLeftCIsExpression("0");
+			clause.setLeftCIntValue(0);
+			clause.setLeftCStringValue("command");
+
+			clause.setRightCType("_");
+			clause.setRightCIsExpression("0");
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("_");
+			queryTree.setPatternTree(clause);
+
+			
+			clause.setParentStringVal("p");
+			clause.setParentType("procedure");
+			queryTree.setResultTree(clause);
+
+		//	ParserForPQL parserPQL = ParserForPQL("assign a; procedure p, q; call c; Select p pattern a(\"command\", _) such that Calls(p, q) with c.procName = \"hope\"");
+		//	QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
