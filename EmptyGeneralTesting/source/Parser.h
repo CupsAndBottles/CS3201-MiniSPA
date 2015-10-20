@@ -25,6 +25,7 @@ public:
 	void addModifies();
 	void addUses();
 	void setRelationsInTable();
+	void processNextPrev(int index, string stmt);
 	void addToParent(int child);
 	string toLowerCase(string s);
 	void processProcedure(int index, string statment);

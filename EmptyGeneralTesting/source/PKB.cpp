@@ -273,10 +273,15 @@ void PKB::setCallsStmtModifiesUses() {
 
 	for (int i = 0; i < procTable.size(); i++) {
 		stmtNumbers = getStmtNumProcCalled(i);
-		for (int j = 0; j < stmtNumbers.size(); j++) {
-			int stmtNum = stmtNumbers.at(j);
-			stmtTable.at(stmtNum).setCallsStmtModifiesVar(getProcModified(i));
-			stmtTable.at(stmtNum).setCallsStmtUsesVar(getProcUsed(i));
+		if (stmtNumbers.size() == 0) {
+			continue;
+		}
+		else {
+			for (int j = 0; j < stmtNumbers.size(); j++) {
+				int stmtNum = stmtNumbers.at(j);
+				stmtTable.at(stmtNum).setCallsStmtModifiesVar(getProcModified(i));
+				stmtTable.at(stmtNum).setCallsStmtUsesVar(getProcUsed(i));
+			}
 		}
 	}
 }
@@ -413,8 +418,9 @@ void PKB::setByDesignExtractor() {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
-	//extractProcExtraModifiesUses();
-	//setCallsStmtModifiesUses();
+	extractProcExtraModifiesUses();
+	setCallsStmtModifiesUses();
+	setCallStmtsParentTModifiesUses();
 }
 
 //V
@@ -422,6 +428,42 @@ void PKB::setParentTChildrenT() {
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
 		extractParentT(i);
 		extractChildrenT(i);
+	}
+}
+
+//V
+void PKB::setCallStmtsParentTModifiesUses() {
+	vector<int> callStmtNum;
+	vector<int> parentTList;
+	vector<int> modifies, uses;
+	vector<int> existingModifiesList;
+	vector<int> existingUsesList;
+
+	for (int i = 0; i < procTable.size(); i++) {
+		callStmtNum = getStmtNumProcCalled(i);
+		for (int j = 0; j < callStmtNum.size(); j++) {
+			parentTList = stmtTable[callStmtNum.at(j)].getParentT();
+			modifies = stmtTable[callStmtNum.at(j)].getModifies();
+			uses = stmtTable[callStmtNum.at(j)].getUses();
+			for (int k = 0; k < parentTList.size(); k++) {
+				existingModifiesList = stmtTable[parentTList.at(k)].getModifies();
+				for (int m = 0; m < modifies.size(); m++) {
+					int modifiesVarIndex = modifies.at(m);
+					if (find(existingModifiesList.begin(), existingModifiesList.end(), modifiesVarIndex) == existingModifiesList.end()) {
+						existingModifiesList.push_back(modifiesVarIndex);
+					}
+				}
+				stmtTable.at(parentTList.at(k)).setModifies(existingModifiesList);
+				existingUsesList = stmtTable[parentTList.at(k)].getUses();
+				for (int n = 0; n < uses.size(); n++) {
+					int usesVarIndex = uses.at(n);
+					if (find(existingUsesList.begin(), existingUsesList.end(), usesVarIndex) == existingUsesList.end()) {
+						existingUsesList.push_back(usesVarIndex);
+					}
+				}
+				stmtTable.at(parentTList.at(k)).setUses(existingUsesList);
+			}
+		}
 	}
 }
 
@@ -1172,6 +1214,7 @@ void PKB::extractPrevT(int stmtNum) {
 	setPrevT(stmtNum, prevT);
 }
 
+//V
 void PKB::extractProcExtraModifiesUses() {
 	DesignExtractor design;
 	vector<int> existingList;
@@ -1258,12 +1301,12 @@ string PKB::getProcName(int procIndex)
 
 vector<int> PKB::getProcModified(int procIndex)
 {
-	return vector<int>();
+	return procTable[procIndex].getModified();
 }
 
 vector<int> PKB::getProcUsed(int procIndex)
 {
-	return vector<int>();
+	return procTable[procIndex].getUsed();
 }
 
 vector<int> PKB::getProcCalls(int procIndex)

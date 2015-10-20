@@ -102,6 +102,23 @@ namespace UnitTesting
 			}
 
 		}
+
+		TEST_METHOD(DE_TestProcExtraModifiesUses) {
+			DesignExtractor designE;
+			vector<int> existingList = {1,2};
+			vector<int> callsT = {1,3};
+			vector<vector<int>> modifiesCol = { {1,2}, {1,2,3}, {}, {1,2,7,4,5} };
+			vector<int> expectedResults = {1,2,3,7,4,5};
+			vector<int> actualResults;
+
+			//test modifies
+			actualResults = designE.extractExtraProcModifiesUses(existingList, callsT,modifiesCol);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+			for (int i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+			
+		}
 	
 	};
 }
