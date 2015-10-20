@@ -436,6 +436,49 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getRightCType()), 0);
 			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getRightCIntValue()), -1);
 			Assert::AreEqual(queryTree.getSuchThatTree().at(1).getRightCIsExpression(), false);
+
+			//test multiple pattern and suchThat
+			input = "while w1, w2, w3; assign a;prog_line n; variable v; if if; Select w1 pattern if(\"y\", _, _)  pattern a(v, \"2\") such that Parent*(w1, w2) and Follows(n, a) with n = 10";
+			ParserForPQL parser7(input);
+			queryTree = parser7.getQueryTree();
+
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getParentStringVal(), string("if"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getParentType()), 5);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCStringValue(), string("y"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCType()), 6);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCIntValue()), 0);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCStringValue(), string("_"));
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCType()), 3);
+			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCStringValue(), string("w1"));
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getLeftCType()), 4);
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCStringValue(), string("w2"));
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getRightCType()), 4);
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(0).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(0).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getSuchThatTree().at(1).getLeftCStringValue(), string("n"));
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getLeftCType()), 1);
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(1).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(1).getRightCStringValue(), string("a"));
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getRightCType()), 0);
+			Assert::AreEqual(int(queryTree.getSuchThatTree().at(1).getRightCIntValue()), -1);
+			Assert::AreEqual(queryTree.getSuchThatTree().at(1).getRightCIsExpression(), false);
+
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCStringValue(), string("n"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getLeftCIntValue()), -1);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getLeftCIsStmt(), false);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCStringValue(), string("10"));
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCType()), 1);
+			Assert::AreEqual(int(queryTree.getWithTree().at(0).getRightCIntValue()), 10);
+			Assert::AreEqual(queryTree.getWithTree().at(0).getRightCIsStmt(), true);
 		}
 
 		TEST_METHOD(TestGetVarName) {

@@ -110,7 +110,7 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			else if (suchThatSynonym[i].at(0).compare("Modifies") == 0 && k == 2 || suchThatSynonym[i].at(0).compare("Uses") == 0 && k == 2) {
 				indication = "variable";
 			}
-			temp = parserOfType.setType(*pkb, 1, suchThatSynonym[i].at(k), type, synonym, indication);
+			temp = parserOfType.setType(1, suchThatSynonym[i].at(k), type, synonym, indication);
 			if (temp.size() == 0) {
 			//	std::cout << "suchThatSynonym[i].at(0) = " << suchThatSynonym[i].at(k) << '\n';
 			//	std::cout << "temp2 = " << temp.size() << '\n';
@@ -232,7 +232,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 			patternSynAndType[3].insert(patternSynAndType[3].end(), temp[3].begin(), temp[3].end());
 
 		for (int k = 1; k < patternSynonym[i].size(); k++) {
-			temp = parserOfType.setType(*pkb, 2, patternSynonym[i].at(k), type, synonym, "variable");
+			temp = parserOfType.setType(2, patternSynonym[i].at(k), type, synonym, "variable");
 			if (temp.size() == 0) {
 				throw ParserException("Pattern synonym unidentified");
 			}

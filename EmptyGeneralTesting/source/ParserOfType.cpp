@@ -18,9 +18,8 @@ ParserOfType::~ParserOfType()
 {
 }
 
-vector<vector<string>> ParserOfType::setType(PKB &querypkb, int clauseType, string synonym, vector<string> type, vector<string> synonymType, string indication)
+vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vector<string> type, vector<string> synonymType, string indication)
 {
-	this->pkb = &querypkb; 
 	vector<vector<string>> synAndType;
 	int index;
 	synAndType.push_back(vector <string>()); //stringVal
@@ -297,25 +296,6 @@ string ParserOfType::removeOpenComma(string syn)
 		return syn.substr(1, syn.length() - 2);
 	}
 	return syn;
-}
-
-bool ParserOfType::isVariable(string syn)
-{
-	int index = pkb->getVarIndex(syn);
-	if (index == -1) {
-		return false;
-	}
-	return true;
-}
-
-bool ParserOfType::isProcedure(string syn)
-{
-	int index = pkb->getProcIndex(syn);
-
-		if (index == -1) {
-			return false;
-	}
-	return true;
 }
 
 bool ParserOfType::isExpression(std::string syn)
