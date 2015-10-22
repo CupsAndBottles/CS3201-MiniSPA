@@ -16,7 +16,6 @@ Variable::~Variable()
 
 void Variable::setVarName(string varName) {
 	this->varName = varName;
-	//cout << "Varname : " << varName << "\n";
 }
 
 void Variable::sortVectors(vector<int> list) {
@@ -44,7 +43,6 @@ vector<int> Variable::getProcNames() {
 	return this->procNamesList;
 }
 
-//Bug: weird numbers added. 
 void Variable::insertIntoModify(int modify) {
 	sortVectors(modifiedByList);
 	if (!binary_search(modifiedByList.begin(), modifiedByList.end(), modify)) {
@@ -54,7 +52,6 @@ void Variable::insertIntoModify(int modify) {
 
 }
 
-//Bug: weird numbers added. 
 void Variable::insertIntoUses(int use) {
 	sortVectors(usedByList);
 	if (!binary_search(usedByList.begin(), usedByList.end(), use)) {
@@ -65,9 +62,8 @@ void Variable::insertIntoUses(int use) {
 
 void Variable::insertIntoProc(int procName) {
 	sortVectors(procNamesList);
-//	cout << "Varname : " << varName << "\n";
-//	cout << "Procname: "<<procName << "\n";
 	if (!binary_search(procNamesList.begin(), procNamesList.end(), procName)) {
 		procNamesList.push_back(procName);
 	}
+
 }

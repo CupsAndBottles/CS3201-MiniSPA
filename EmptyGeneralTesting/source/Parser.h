@@ -43,13 +43,13 @@ public:
 	void pushCloseBracket(int stmtNum);
 	bool isOperator(char o);
 	void processExpressions(int index, string statement);
+	void setProcEndNum(int procNum, int stmtNum);
 	void pushOpenBracket();
 	bool isVariable(char c);
 	//	void insertIntoVarTable(int stmtNum, char var);
 	bool constantValue;
 
 	string userInput;
-	void setProcEndNum(int stmtNum);
 
 	int stmtCount;
 	int countOfVecs = 0;

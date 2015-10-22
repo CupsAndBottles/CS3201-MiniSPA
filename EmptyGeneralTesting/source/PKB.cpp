@@ -1,5 +1,5 @@
 #pragma once
-#include <stddef.h> //defines null
+#include <stddef.h>
 #include<stdio.h>
 #include <iostream>
 #include <string>
@@ -51,36 +51,26 @@ void PKB::setEndNum(int index, int endNum)
 	//cout << "end: " << endNum << "\n";
 }
 
-void PKB::setProcModified(int index, vector<string> modifiedVar)
+void PKB::setProcModified(vector<pair<int,string>> modifiedVar)
 {
-	vector<int> modifiedVarIndex;
 	while (!modifiedVar.empty()) {
-		int i = getVarIndex(modifiedVar.back());
-		/*cout << "------------------------------------\n";
-		cout << "proc index: " << index << "\n";
-		cout << "proc name: " << getProcName(index) << "\n";
-		cout << "index: " << i << "\n";
-		cout << "modified var: "<<modifiedVar.back()<<"\n";*/
+		int index = modifiedVar.back().first;
+		int modifiedVarIndex = getVarIndex(modifiedVar.back().second);
+		procTable[index].setModifiedVar(modifiedVarIndex);
 		modifiedVar.pop_back();
-		modifiedVarIndex.push_back(i);
 	}
-	procTable[index].setModifiedVar(modifiedVarIndex);
 
 }
 
-void PKB::setProcUses(int index, vector<string> usesVar)
+void PKB::setProcUses(vector<pair<int, string>> usedVar)
 {
-	vector<int> usesVarIndex;
-	while (!usesVar.empty()) {
-		int i = getVarIndex(usesVar.back());
-	/*	cout << "------------------------------------\n";
-		cout << "proc index: " << index << "\n";
-		cout << "index: " << i << "\n";
-		cout << "uses var: " << usesVar.back() << "\n";*/
-		usesVar.pop_back();
-		usesVarIndex.push_back(i);
+	while (!usedVar.empty()) {
+		int index = usedVar.back().first;
+		int usedVarIndex = getVarIndex(usedVar.back().second);
+		procTable[index].setUsedVar(usedVarIndex);
+		usedVar.pop_back();
 	}
-	procTable[index].setUsedVar(usesVarIndex);
+
 }
 
 //index=procCalling, calls - procCalled
@@ -154,8 +144,8 @@ int PKB::setVarName(string varName){
 		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
-		//cout << "set varName: " << varName << "\n";
-		//cout << "set varIndex: " << index << "\n";
+	//	cout << "set varName: " << varName << "\n";
+	//	cout << "set varIndex: " << index << "\n";
 	}
 	return index;
 }
@@ -236,8 +226,8 @@ void PKB::setType(Enum::TYPE type) {
 //G: parent set from setChildren method.
 void PKB::setParent(int index, int parentStmt)
 {
-	cout << "Parent: " << parentStmt << "\n";
-	cout << "Child: " << index << "\n\n";
+	//cout << "Parent: " << parentStmt << "\n";
+	//cout << "Child: " << index << "\n\n";
 	stmtTable[index].setParent(parentStmt);
 }
 

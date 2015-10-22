@@ -24,11 +24,11 @@ public:
 	vector<int> getCalledByT();
 	void setStartNo(int stmtNum);
 	void setEndNo(int stmtNum);
+	void setModifiedVar(int modify);
+	void setUsedVar(int use);
 	vector<int> getUsed();
 	vector<int> getModified();
 	void sortVectors(vector<int> list);
-	void setModifiedVar(vector<int> modify);
-	void setUsedVar(vector<int> use);
 	void setCalls(int procIndex);
 	void setCalledBy(int procIndex);
 	void setCallsT(vector<int> procList);

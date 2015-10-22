@@ -36,16 +36,17 @@ void Procedure::setEndNo(int stmtNum)
 	}
 }
 
-void Procedure::setModifiedVar(vector<int> modify) {
-	varModifiedList = modify;
+void Procedure::setModifiedVar(int modify) {
+	varModifiedList.push_back(modify);
+
 }
 
-void Procedure::setUsedVar(vector<int> use) {
-	varUsedList = use;
+void Procedure::setUsedVar(int use) {
+	varUsedList.push_back(use);
 }
 
 void Procedure::setCalls(int procIndex)
-{
+{	
 	callsList.push_back(procIndex);
 }
 

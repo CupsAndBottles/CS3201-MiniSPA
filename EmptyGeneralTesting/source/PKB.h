@@ -51,8 +51,8 @@ public:
 	int setProcNameInProcTable(string procName); //tested // working
 	void setStartNum(int index, int startNum);  //working
 	void setEndNum(int index, int endNum); //working
-	void setProcModified(int index, vector<string> modifiedVar);//working
-	void setProcUses(int index, vector<string> usesVar);//working
+	void setProcModified(vector<pair<int, string>> modifiedVar);
+	void setProcUses(vector<pair<int, string>> usedVar);
 	string setProcCalls(vector<pair<int,string>> procCalls); 
 	void setProcCalledBy(int index, int called);
 	void setStmtNumProcCalled(vector<pair<int, string>> stmtNoAndCalls);
