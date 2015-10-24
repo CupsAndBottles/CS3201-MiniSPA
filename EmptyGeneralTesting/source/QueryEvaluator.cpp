@@ -1355,7 +1355,16 @@ vector<vector<int>> QueryEvaluator::mergeSyn(vector<vector<int>> syn, int first,
 		syn.at(first).push_back(syn.at(second).at(i));
 	}
 	// Need to minus 1?
-	syn.erase(syn.begin() + first);
+	syn.erase(syn.begin() + second);
+
+	for (size_t i = 0; i < syn.at(first).size(); i++) {
+		for (size_t j = i + 1; j < syn.at(first).size(); j++) {
+			if (syn[first][i] == syn[first][j]) {
+				syn.at(first).erase(syn.at(first).begin() + j);
+				break;
+			}
+		}
+	}
 
 	return syn;
 }

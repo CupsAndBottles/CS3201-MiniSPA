@@ -114,12 +114,12 @@ void RelTable::addRelIntoTable()
 	relTable.insert(std::pair<string, Relationship>("Patternassign", assign));
 
 	While.noArgs = 2;
-	While.ag1Synonym = 5;
+	While.ag1Synonym = 4;
 	While.ag2Synonym = 6;
 	relTable.insert(std::pair<string, Relationship>("Patternwhile", While));
 
 	If.noArgs = 3;
-	If.ag1Synonym = 5;
+	If.ag1Synonym = 4;
 	If.ag2Synonym = 6;
 	relTable.insert(std::pair<string, Relationship>("Patternif", If));
 

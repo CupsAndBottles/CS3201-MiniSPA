@@ -736,9 +736,24 @@ namespace UnitTesting
 			pkb->setVarName("n");
 			pkb->setVarName("r");
 
-			pkb->setProcModified(0, { "y", "x"});
-			pkb->setProcModified(1, { "x","y","z"});
-			pkb->setProcModified(3, { "x","y","r","v","m" });
+			vector<pair<int, string>> procModified;
+			procModified.push_back(make_pair(0, "y"));
+			procModified.push_back(make_pair(0, "x"));
+			pkb->setProcModified(procModified);
+
+			procModified.clear();
+			procModified.push_back(make_pair(1, "x"));
+			procModified.push_back(make_pair(1, "y"));
+			procModified.push_back(make_pair(1, "z"));
+			pkb->setProcModified(procModified);
+
+			procModified.clear();
+			procModified.push_back(make_pair(3, "x"));
+			procModified.push_back(make_pair(3, "y"));
+			procModified.push_back(make_pair(3, "r"));
+			procModified.push_back(make_pair(3, "v"));
+			procModified.push_back(make_pair(3, "m"));
+			pkb->setProcModified(procModified);
 
 			pkb->setProcCallsT(0, { 1,3 });
 			pkb->setProcCallsT(1, { 3 });
@@ -767,8 +782,14 @@ namespace UnitTesting
 			pkb->setVarName("x");
 			pkb->setVarName("y");
 			
-			pkb->setProcModified(0, { "x", "y" });
-			pkb->setProcModified(1, { "x" });
+			vector<pair<int, string>> procModified;
+			procModified.push_back(make_pair(0, "x"));
+			procModified.push_back(make_pair(0, "y"));
+			pkb->setProcModified(procModified);
+
+			procModified.clear();
+			procModified.push_back(make_pair(1, "x"));
+			pkb->setProcModified(procModified);
 			vector<pair<int, string>> pair;
 			pair.push_back(make_pair(1, "La"));
 			pkb->setStmtNumProcCalled(pair);
