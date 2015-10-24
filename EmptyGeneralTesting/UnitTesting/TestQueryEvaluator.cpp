@@ -46,6 +46,10 @@ namespace UnitTesting
 		/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -55,16 +59,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -162,7 +162,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Follows(1, 2)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -189,6 +189,10 @@ namespace UnitTesting
 		/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -198,16 +202,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -305,7 +305,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("while w; Select w such that Parent(w, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -333,6 +333,10 @@ namespace UnitTesting
 		/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -342,16 +346,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -449,7 +449,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select p such that Uses(2, v)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -478,6 +478,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -487,16 +491,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -592,7 +592,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beads command +");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -629,6 +629,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -638,16 +642,13 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -743,7 +744,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beads command +");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(_, inspiration + 1)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -777,6 +778,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -786,16 +791,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -891,7 +892,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beads command +");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(x, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -926,6 +927,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -935,16 +940,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -1040,7 +1041,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beads command +");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select a pattern a(beads, command + 10)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -1076,6 +1077,10 @@ namespace UnitTesting
 			
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -1085,16 +1090,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -1190,7 +1191,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beads command +");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; variable v; Select a such that Modifies(a, v) pattern a(_, \"_x * 9_\")");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -1230,6 +1231,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -1239,16 +1244,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -1346,7 +1347,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 			pkb->setByDesignExtractor();
 			pkb->setParentTChildrenT();
 
@@ -1375,6 +1376,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -1384,16 +1389,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -1491,7 +1492,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 			pkb->setByDesignExtractor();
 
 			ParserForPQL parserPQL = ParserForPQL("stmt s, s1; Select s1 such that Follows*(s, s1)");
@@ -1521,6 +1522,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -1530,16 +1535,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -1638,7 +1639,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("while w; Select w pattern w(\"coffee\", _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -1675,6 +1676,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -1685,16 +1690,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 			pkb->setType(Enum::TYPE::IF);
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -1794,7 +1795,7 @@ namespace UnitTesting
 
 			// statement 9
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("if ifstat; Select ifstat pattern ifstat(command, _, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -1831,6 +1832,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -1841,16 +1846,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 			pkb->setType(Enum::TYPE::IF);
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -1951,7 +1952,7 @@ namespace UnitTesting
 
 			// statement 9
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a;variable x; Select BOOLEAN such that Modifies(a,x)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -1988,6 +1989,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -1998,16 +2003,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 			pkb->setType(Enum::TYPE::IF);
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -2107,7 +2108,7 @@ namespace UnitTesting
 
 			// statement 9
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN pattern a(x, x + 9 + 9)");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -2141,6 +2142,10 @@ namespace UnitTesting
 		/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -2150,16 +2155,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -2265,7 +2266,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -2297,6 +2298,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -2306,16 +2311,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -2421,7 +2422,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select v with v.varName = p.procName");
 			QueryTree queryTree = parserPQL.getQueryTree();
@@ -2453,6 +2454,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -2462,16 +2467,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);	//8
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -2577,7 +2578,7 @@ namespace UnitTesting
 			pkb->setRightExpr(8, "beadscommand+");
 
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 			ParserForPQL parserPQL = ParserForPQL("assign a; stmt s; Select s with a.stmt# = s.stmt#");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
@@ -2608,6 +2609,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 9);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -2618,16 +2623,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);   //8
 			pkb->setType(Enum::TYPE::CALLS);	//9
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 9);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -2739,14 +2740,14 @@ namespace UnitTesting
 			pkb->setProcCalls(calledProc);
 			pkb->setProcCalledBy(1, 0);
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			pkb->setType(Enum::TYPE::ASSIGN);	//10
 			pkb->setStartNum(1, 10);
 			pkb->setEndNum(1, 10);
 
-			varUsed = { "moonlight" };
-			pkb->setProcUses(1, varUsed);
+			varUsed = { make_pair(1, "moonlight") };
+			pkb->setProcUses(varUsed);
 
 			// statement 10
 			pkb->setVarName("bye");
@@ -2789,6 +2790,10 @@ namespace UnitTesting
 			/**********************************************************/
 			PKB *pkb = new PKB();
 
+			pkb->setProcNameInProcTable("dream");	//0
+			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 9);
+
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
 			pkb->setType(Enum::TYPE::ASSIGN);	//3
@@ -2799,16 +2804,12 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);   //8
 			pkb->setType(Enum::TYPE::CALLS);	//9
 
-			vector<string> varUsed;
-			varUsed.push_back("command");
-			varUsed.push_back("inspiration");
-			varUsed.push_back("coffee");
-			varUsed.push_back("beads");
-			varUsed.push_back("x");
-
-			pkb->setProcNameInProcTable("dream");	//0
-			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 9);
+			vector<pair<int, string>> varUsed;
+			varUsed.push_back(make_pair(0, "command"));
+			varUsed.push_back(make_pair(0, "inspiration"));
+			varUsed.push_back(make_pair(0, "coffee"));
+			varUsed.push_back(make_pair(0, "beads"));
+			varUsed.push_back(make_pair(0, "x"));
 
 			// Set ALL follows
 			vector<pair<int, int>> follows;
@@ -2920,14 +2921,14 @@ namespace UnitTesting
 			pkb->setProcCalls(calledProc);
 			pkb->setProcCalledBy(1, 0);
 
-			pkb->setProcUses(0, varUsed);
+			pkb->setProcUses(varUsed);
 
 			pkb->setType(Enum::TYPE::ASSIGN);	//10
 			pkb->setStartNum(1, 10);
 			pkb->setEndNum(1, 10);
 
-			varUsed = { "moonlight" };
-			pkb->setProcUses(1, varUsed);
+			varUsed = { make_pair(1, "moonlight") };
+			pkb->setProcUses(varUsed);
 
 			// statement 10
 			pkb->setVarName("bye");
