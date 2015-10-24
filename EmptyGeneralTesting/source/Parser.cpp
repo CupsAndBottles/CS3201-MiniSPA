@@ -10,6 +10,7 @@
 
 using namespace std;
 vector<int> ifIndex;
+vector<int> whileIndex;
 list<pair<int, string>> listOfStatements;
 vector<pair<int, int>> parentLink;
 vector<pair<int, int>> followLink;
@@ -173,7 +174,7 @@ void Parser::Procedure() {
 			endIndex = (*i).first;
 		}
 
-	//	processNextPrev((*i).first, (*i).second);
+		processNextPrev((*i).first, (*i).second);
 	}
 	setProcEndNum(procNumInTble, endIndex);
 	setRelationsInTable();
@@ -235,7 +236,6 @@ void Parser::processNextPrev(int index, string stmt)
 	if (pStmt.empty()) {
 		pStmt = stmt;
 		pStmtIndex = index - numOfProc - numOfElse;
-
 	}
 	else
 	{
@@ -243,6 +243,7 @@ void Parser::processNextPrev(int index, string stmt)
 		if (pStmt.find("procedure") != std::string::npos) {
 			pStmt = stmt;
 			pStmtIndex = index - numOfProc - numOfElse;
+			//pkb->setNext(pStmtIndex, pStmtIndex+1);
 		}
 		//while stmt
 		else if (pStmt.find("while") != std::string::npos) {
@@ -250,13 +251,15 @@ void Parser::processNextPrev(int index, string stmt)
 			pairs.second = 1;
 			indexAndType.push_back(pairs);
 			pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
-
 			if (stmt.find("}") != std::string::npos) {
 				if (!indexAndType.empty()) {
 					pair<int, int> paired = indexAndType.back();
 					pkb->setNext(index - numOfProc - numOfElse, paired.first);
 					indexAndType.pop_back();
 				}
+			}
+			else {
+				pkb->setNext(pStmtIndex,index - numOfProc - numOfElse);
 			}
 			pStmt = stmt;
 			pStmtIndex = index - numOfProc - numOfElse;
@@ -270,13 +273,23 @@ void Parser::processNextPrev(int index, string stmt)
 		
 		}
 		//assign and call stmt
-		else {
+		else {			
 			if (stmt.find("}") != std::string::npos) {
+				if (pStmt.find("}") != std::string::npos) {
+					if (!whileIndex.empty()) {
+						pkb->setNext(whileIndex.back(), index - numOfProc - numOfElse);
+						pkb->setPrev(index - numOfProc - numOfElse, whileIndex.back());
+						whileIndex.pop_back();
+					}
+				}
 				if (!indexAndType.empty()) {
 					pair<int, int> paired = indexAndType.back();
 					if (paired.second = 1) {
+						pkb->setPrev(index - numOfProc - numOfElse,pStmtIndex);
+						pkb->setNext(pStmtIndex,index - numOfProc - numOfElse);
 						pkb->setNext(index - numOfProc - numOfElse, paired.first);
-						pkb->setPrev(index - numOfProc - numOfElse, paired.first);
+						pkb->setPrev(paired.first,index - numOfProc - numOfElse);
+						whileIndex.push_back(paired.first);
 					}
 					else if (paired.second = 2) {
 						ifIndex.push_back(index - numOfProc - numOfElse);
@@ -286,13 +299,40 @@ void Parser::processNextPrev(int index, string stmt)
 						pkb->setNext(ifIndex.back(), index - numOfProc - numOfElse + 1);
 						
 					}
+					else {
+						pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
+					}
 					indexAndType.pop_back();
 				}
+
+				else {
+					if (!whileIndex.empty()) {
+						pkb->setNext(whileIndex.back(), index - numOfProc - numOfElse);
+						pkb->setPrev(index - numOfProc - numOfElse, whileIndex.back());
+						whileIndex.pop_back();
+					}
+					else {
+						pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
+						pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+					}
+
+				}
+
 			}
 			else {
-				pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
-				pkb->setNext(index - numOfProc - numOfElse, index - numOfProc - numOfElse + 1);
-			}
+				if (pStmt.find("}") != std::string::npos) {
+					if (!whileIndex.empty()) {
+						pkb->setNext(whileIndex.back(), index - numOfProc - numOfElse);
+						pkb->setPrev(index - numOfProc - numOfElse, whileIndex.back());
+						whileIndex.pop_back();
+					}
+				}
+				else {
+					pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+					pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
+					//pkb->setNext(index - numOfProc - numOfElse, index - numOfProc - numOfElse + 1);
+				}
+				}
 			pStmt = stmt;
 			pStmtIndex = index - numOfProc - numOfElse;
 			
