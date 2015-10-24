@@ -150,7 +150,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9+");
+			pkb->setRightExpr(7, "xx9*+");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -309,7 +309,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9+");
+			pkb->setRightExpr(7, "xx9*+");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -467,7 +467,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9+");
+			pkb->setRightExpr(7, "xx9*+");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -548,13 +548,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -625,7 +626,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "x x 9 +");
+			pkb->setRightExpr(7, "x x 9 * +");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -715,13 +716,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -733,10 +735,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -745,22 +751,24 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -768,8 +776,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -786,21 +801,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beads command +");
+			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -863,13 +880,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -881,10 +899,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -893,22 +915,24 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -916,8 +940,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -934,22 +965,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beads command +");
-
+			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 			pkb->setProcUses(varUsed);
 
@@ -1012,13 +1044,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -1030,10 +1063,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -1042,22 +1079,24 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -1065,8 +1104,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -1083,21 +1129,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beads command +");
+			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -1162,13 +1210,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -1180,10 +1229,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -1192,22 +1245,24 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -1215,8 +1270,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -1233,21 +1295,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beads command +");
+			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -1316,7 +1380,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -1336,10 +1399,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -1348,22 +1415,24 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -1371,8 +1440,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -1389,21 +1465,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -1461,7 +1539,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -1481,10 +1558,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -1493,22 +1574,24 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -1516,8 +1599,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -1534,21 +1624,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -1607,13 +1699,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -1625,10 +1718,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -1637,6 +1734,8 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
@@ -1645,15 +1744,14 @@ namespace UnitTesting
 			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -1661,11 +1759,16 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
 
 			// statement 6
 			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
+
 			// statement 7
 			pkb->setVarName("x");
 			pkb->setUsedVar(7, "x");
@@ -1681,21 +1784,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -1720,7 +1825,7 @@ namespace UnitTesting
 		TEST_METHOD(QE_PatternIf) {
 			/*********************** Test Code ************************/
 			/*
-			Procedure dream {
+			procedure dream {
 			beads = command + 10;							\\1
 			beads = 34;										\\2
 			command = inspiration + 1;						\\3
@@ -1728,9 +1833,9 @@ namespace UnitTesting
 			stamps = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x + x * 9;}							\\7
-			x = beads + command; }}					\\8
+			x = beads + command; }					\\8
 			if command{								\\9
-			}
+			}}
 			*/
 			/**********************************************************/
 			PKB *pkb = new PKB();
@@ -1762,13 +1867,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -1780,10 +1886,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -1792,6 +1902,8 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
@@ -1800,15 +1912,14 @@ namespace UnitTesting
 			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -1816,11 +1927,16 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
 
 			// statement 6
 			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
+
 			// statement 7
 			pkb->setVarName("x");
 			pkb->setUsedVar(7, "x");
@@ -1836,21 +1952,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 			// statement 9
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
@@ -1884,9 +2002,9 @@ namespace UnitTesting
 			stamps = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x + x * 9;}							\\7
-			x = beads + command; }}					\\8
+			x = beads + command; }					\\8
 			if command{								\\9
-			}
+			}}
 			*/
 			/**********************************************************/
 			PKB *pkb = new PKB();
@@ -1918,7 +2036,7 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
@@ -1937,10 +2055,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -1949,6 +2071,8 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
@@ -1957,15 +2081,14 @@ namespace UnitTesting
 			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -1973,11 +2096,16 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
 
 			// statement 6
 			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
+
 			// statement 7
 			pkb->setVarName("x");
 			pkb->setUsedVar(7, "x");
@@ -1993,21 +2121,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 			// statement 9
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
@@ -2075,13 +2205,14 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(7, 8));
+			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
 			// Set ALL Parent
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
+			parent.push_back(make_pair(4, 8));
 			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
@@ -2093,10 +2224,14 @@ namespace UnitTesting
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
 			pkb->setUsedBy("command", 1);
+			pkb->setConstant(10);
+			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
 			pkb->setModifies(2, "beads");
 			pkb->setModifiedBy("beads", 2);
+			pkb->setConstant(34);
+			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
@@ -2105,6 +2240,8 @@ namespace UnitTesting
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
 			pkb->setUsedBy("inspiration", 3);
+			pkb->setConstant(1);
+			pkb->setStmtUsed(pkb->getConstantIndex(1), 3);
 
 			//Statement 4
 			pkb->setVarName("coffee");
@@ -2113,15 +2250,14 @@ namespace UnitTesting
 			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2129,11 +2265,16 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
 
 			// statement 6
 			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
+
 			// statement 7
 			pkb->setVarName("x");
 			pkb->setUsedVar(7, "x");
@@ -2149,21 +2290,23 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 6);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
+			pkb->setConstant(9);
+			pkb->setStmtUsed(pkb->getConstantIndex(9), 7);
 
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 			// statement 9
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
@@ -2227,7 +2370,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -2270,17 +2412,17 @@ namespace UnitTesting
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2288,8 +2430,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -2312,17 +2461,17 @@ namespace UnitTesting
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -2383,7 +2532,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -2426,17 +2574,17 @@ namespace UnitTesting
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2444,8 +2592,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -2468,17 +2623,17 @@ namespace UnitTesting
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -2539,7 +2694,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -2582,17 +2736,17 @@ namespace UnitTesting
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2600,8 +2754,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -2624,17 +2785,17 @@ namespace UnitTesting
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 
 			pkb->setProcUses(varUsed);
@@ -2695,7 +2856,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -2738,17 +2898,17 @@ namespace UnitTesting
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2756,8 +2916,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -2780,17 +2947,17 @@ namespace UnitTesting
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 			// statement 9
 			pkb->setProcNameInProcTable("hope");
@@ -2805,10 +2972,12 @@ namespace UnitTesting
 			pkb->setStartNum(1, 10);
 			pkb->setEndNum(1, 10);
 
-			varUsed = { make_pair(1, "moonlight") };
-			pkb->setProcUses(varUsed);
+			pkb->setProcCallsT(0, { 1 });
+			pkb->setProcCalledByT(1, { 0 });
 
 			// statement 10
+			varUsed = { make_pair(1, "moonlight") };
+			pkb->setProcUses(varUsed);
 			pkb->setVarName("bye");
 			pkb->setVarName("moonlight");
 			pkb->setRightExpr(10, "moonlight7*");
@@ -2819,6 +2988,9 @@ namespace UnitTesting
 			pkb->setConstant(7);
 			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
 			
+			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
+			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
+
 			ParserForPQL parserPQL = ParserForPQL("procedure p, q; call c; Select <p, q> such that Calls(p, q) with c.procName = \"hope\"");
 			QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
@@ -2876,7 +3048,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -2919,17 +3090,17 @@ namespace UnitTesting
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2937,8 +3108,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -2961,17 +3139,17 @@ namespace UnitTesting
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 			// statement 9
 			pkb->setProcNameInProcTable("hope");
@@ -2986,10 +3164,12 @@ namespace UnitTesting
 			pkb->setStartNum(1, 10);
 			pkb->setEndNum(1, 10);
 
-			varUsed = { make_pair(1, "moonlight") };
-			pkb->setProcUses(varUsed);
+			pkb->setProcCallsT(0, { 1 });
+			pkb->setProcCalledByT(1, { 0 });
 
 			// statement 10
+			varUsed = { make_pair(1, "moonlight") };
+			pkb->setProcUses(varUsed);
 			pkb->setVarName("bye");
 			pkb->setVarName("moonlight");
 			pkb->setRightExpr(10, "moonlight7*");
@@ -2999,6 +3179,8 @@ namespace UnitTesting
 			pkb->setUsedBy("moonlight", 10);
 			pkb->setConstant(7);
 			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
+			pkb->setProcUses(0, { pkb->getVarIndex("moonlight")});
+			pkb->setProcModifies(0, { pkb->getVarIndex("bye")});
 
 			QueryTree queryTree = QueryTree();
 
@@ -3104,7 +3286,6 @@ namespace UnitTesting
 			follows.push_back(make_pair(2, 3));
 			follows.push_back(make_pair(3, 4));
 			follows.push_back(make_pair(5, 6));
-			follows.push_back(make_pair(5, 8));
 			follows.push_back(make_pair(6, 8));
 			pkb->setFollows(follows);
 
@@ -3147,17 +3328,17 @@ namespace UnitTesting
 			pkb->setVarName("coffee");
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
+			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
-			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "stamps");
-			pkb->setModifiedBy("stamps", 5);
+			pkb->setModifies(5, "inspiration");
+			pkb->setModifiedBy("inspiration", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -3165,8 +3346,15 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "stamps");
-			pkb->setModifiedBy("stamps", 4);
+			pkb->setModifies(4, "inspiration");
+			pkb->setModifiedBy("inspiration", 4);
+
+			// statement 6
+			pkb->setControlVar(6, pkb->getVarIndex("command"));
+			pkb->setUsedVar(4, "command");
+			pkb->setUsedBy("command", 4);
+			pkb->setUsedVar(6, "command");
+			pkb->setUsedBy("command", 6);
 
 			// statement 7
 			pkb->setVarName("x");
@@ -3189,17 +3377,17 @@ namespace UnitTesting
 			// statement 8
 			pkb->setUsedVar(8, "beads");
 			pkb->setUsedBy("beads", 8);
-			pkb->setUsedVar(6, "beads");
-			pkb->setUsedBy("beads", 6);
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
 			pkb->setUsedVar(8, "command");
 			pkb->setUsedBy("command", 8);
-			pkb->setUsedVar(6, "command");
-			pkb->setUsedBy("command", 6);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
 			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setModifies(8, "x");
+			pkb->setModifiedBy("x", 8);
+			pkb->setModifies(4, "x");
+			pkb->setModifiedBy("x", 4);
 
 			// statement 9
 			pkb->setProcNameInProcTable("hope");
@@ -3214,10 +3402,12 @@ namespace UnitTesting
 			pkb->setStartNum(1, 10);
 			pkb->setEndNum(1, 10);
 
-			varUsed = { make_pair(1, "moonlight") };
-			pkb->setProcUses(varUsed);
+			pkb->setProcCallsT(0, { 1 });
+			pkb->setProcCalledByT(1, { 0 });
 
 			// statement 10
+			varUsed = { make_pair(1, "moonlight") };
+			pkb->setProcUses(varUsed);
 			pkb->setVarName("bye");
 			pkb->setVarName("moonlight");
 			pkb->setRightExpr(10, "moonlight7*");
@@ -3227,6 +3417,8 @@ namespace UnitTesting
 			pkb->setUsedBy("moonlight", 10);
 			pkb->setConstant(7);
 			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
+			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
+			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
 
 			QueryTree queryTree = QueryTree();
 
