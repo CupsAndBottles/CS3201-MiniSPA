@@ -31,7 +31,7 @@ public:
 	vector<int> extractCalledByT(vector<vector<int>>, int);
 	vector<int> extractPrevT(vector<vector<int>>, int);
 	vector<int> extractNextT(vector<vector<int>>, int);
-	vector<int> extractExtraProcModifiesUses(vector<int>,vector<int>,vector<vector<int>>);
+	vector<int> extractExtraProcModifies(vector<vector<int>>,vector<vector<int>>);
 };
 
 #endif

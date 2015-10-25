@@ -1223,25 +1223,23 @@ void PKB::extractPrevT(int stmtNum) {
 //V
 void PKB::extractProcExtraModifiesUses() {
 	DesignExtractor design;
-	vector<int> existingList;
-	vector<int> callsT;
+	vector<vector<int>> calls;
 	vector<vector<int>> modifiesCol;
 	vector<vector<int>> usesCol;
-	vector<int> updatedModifies, updatedUses;
+	vector<vector<int>> updatedModifies;
+	vector<vector<int>> updatedUses;
 
 	for (int i = 0; i < procTable.size(); i++) {
 		modifiesCol.push_back(getProcModified(i));
 		usesCol.push_back(getProcUsed(i));
+		calls.push_back(getProcCalls(i));
 	}
 
+	updatedModifies = design.extractExtraProcModifies(calls, modifiesCol);
+	updatedUses = design.extractExtraProcUses(calls, usesCol)
 	for (int j = 0; j < procTable.size(); j++) {
-		existingList = getProcModified(j);
-		callsT = getCallsT(j);
-		updatedModifies = design.extractExtraProcModifiesUses(existingList, callsT, modifiesCol);
-		setProcModifies(j, updatedModifies);
-		existingList = getProcUsed(j);
-		updatedUses = design.extractExtraProcModifiesUses(existingList, callsT, usesCol);
-		setProcUses(j, updatedUses);
+		setProcModifies(j, updatedModifies.at(j));
+		setProcUses(j, updatedUses.at(j));
 	}
 }
 

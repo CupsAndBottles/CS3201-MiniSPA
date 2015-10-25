@@ -158,19 +158,53 @@ std::vector<int> DesignExtractor::extractCalledByT(vector<vector<int>>col, int s
 	return CalledByT;
 }
 
-vector<int> DesignExtractor::extractExtraProcModifiesUses(vector<int> existingList, vector<int> callsT, vector<vector<int>> col) {
-	vector<int> result = existingList;
-	for (int i = 0; i < callsT.size(); i++) {
-		int proc = callsT.at(i);
-		for (int j = 0; j < col.at(proc).size(); j++) {
-			int varIndex = col.at(proc).at(j);
-			if (find(result.begin(), result.end(), varIndex) == result.end()) {
-				result.push_back(varIndex);
-			}
-		
+vector<vector<int>> DesignExtractor::extractExtraProcModifies(vector<vector<int>> calls, vector<vector<int>> modifiesCol) {
+	vector<int> updated;
+	updatedModifiesCol = modifiesCol;
+
+	for (int i = 0; i < calls.size(); i++) {
+		updated.push_back(0);
+	}
+
+	for (int i = 0; i < calls.size(); i++) {
+		if (calls.at(i).size() == 0) {
+			updated.at(i) = 1;
 		}
 	}
-	return result;
+
+	for (int j = 0; j < calls.size(); j++) {
+		if (updated.at(j) == 0) {
+			extractRecProcModifies(j, calls.at(j), calls, updatedModifiesCol, updated);
+		}
+	}
+			//if (find(result.begin(), result.end(), varIndex) == result.end()) {
+				//result.push_back(varIndex);
+			//}
+		
+	return modifiesCol;
+}
+
+void extractRecProcModifies(int index, vector<int> currentCallsList, vector<vector<int>> callsCol, vector<vector<int>> updatedModifiesCol, vector<int> updated) {
+	if (updated.at(index)) {
+		return;
+	}
+
+	else {
+		for (int i = 0; i < currentCallsList.size(); i++) {
+			if (updated.at(currentCallsList.at(i))) {
+				vector<int> extra = updatedModifiesCol.at(currentCallsList.at(i));
+				vector<int>	existingList = updatedModifiesCol.at(index);
+				for (int j = 0; j < extra.size();j++) {
+					int varIndex = extra.at(j);
+				if (find(existingList.begin(), existingList.end(), varIndex) == existingList.end()) {
+				existingList.push_back(varIndex);
+				}
+			} else {
+					extractRecProcModifies(currentCallsList.at(i), callsCol.at(currentCallsList.at(i)), callsCol, updatedModifiesCol, updated);
+			}
+		}
+		updated.at(index) = 1;
+	}
 }
 
 std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmtNum) {
