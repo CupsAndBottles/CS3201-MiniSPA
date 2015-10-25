@@ -233,16 +233,20 @@ void PKB::setParent(int index, int parentStmt)
 
 void PKB::setNext(int index, int next)
 {
-	cout << "Index: " << index << "\n";
-	cout << "Next: " << next << "\n\n";
-	stmtTable[index].setNext(next);
+	if (index != next) {
+		//cout << "Index: " << index << "\n";
+		//cout << "Next: " << next << "\n\n";
+		stmtTable[index].setNext(next);
+	}
 }
 
 void PKB::setPrev(int index, int prev)
 {
-	cout << "Index: " << index << "\n";
-	cout << "Prev: " << prev << "\n\n";
-	stmtTable[index].setPrev(prev);
+	if (index != prev) {
+		//cout << "Index: " << index << "\n";
+		//cout << "Prev: " << prev << "\n\n";
+		stmtTable[index].setPrev(prev);
+	}
 }
 
 void PKB::setNextT(int index, vector<int> nextT) {
