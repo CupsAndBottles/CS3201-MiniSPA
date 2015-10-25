@@ -518,7 +518,7 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 		}
 	}
 	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
-		for (size_t i = 1; i < procTable.size(); i++) {
+		for (size_t i = 0; i < procTable.size(); i++) {
 			varNos = procTable.at(i).getModified();
 			for (size_t k = 0; k < varNos.size(); k++) {
 				results.push_back(std::make_pair(i, varNos.at(k)));
