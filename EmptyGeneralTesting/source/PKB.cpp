@@ -1075,7 +1075,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 
 }
 
-/*vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
+vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {
 	vector<int> nextStmtNos;
 	vector<int> prevStmtNos;
@@ -1111,7 +1111,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			}
 		}
 	}
-	else { // Parent(s/w/_, s/w/a/_/c)
+	else { // Next(s/w/_, s/w/a/_/c)
 		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				nextStmtNos = stmtTable.at(i).getNext();
@@ -1128,7 +1128,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 	}
 
 	return results;
-}*/
+}
 
 //WL
 vector<int> PKB::getProcNameInVarTable(int index)

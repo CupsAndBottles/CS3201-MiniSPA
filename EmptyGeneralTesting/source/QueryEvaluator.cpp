@@ -16,6 +16,7 @@ const string RELATIONSHIP_CALLST = "Calls*";
 const string RELATIONSHIP_FOLLOWS = "Follows";
 const string RELATIONSHIP_FOLLOWST = "Follows*";
 const string RELATIONSHIP_MODIFIES = "Modifies";
+const string RELATIONSHIP_NEXT = "Next";
 const string RELATIONSHIP_PARENT = "Parent";
 const string RELATIONSHIP_PARENTT = "Parent*";
 const string RELATIONSHIP_USES = "Uses";
@@ -196,9 +197,9 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 		else if (relationship == RELATIONSHIP_USES) {
 			results = this->pkb->getUses(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 		}
-		/*	else if (relationship == RELATIONSHIP_NEXT) {
-		results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-		} else if (relationship == RELATIONSHIP_NEXT*) {
+		else if (relationship == RELATIONSHIP_NEXT) {
+			results = this->pkb->getNext(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}/* else if (relationship == RELATIONSHIP_NEXT*) {
 		results = this->pkb->getNext*(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 		}*/
 		else {
