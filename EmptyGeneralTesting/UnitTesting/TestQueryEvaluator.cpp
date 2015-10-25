@@ -355,7 +355,7 @@ namespace UnitTesting
 				beads = 34;										\\2
 				command = inspiration + 1;						\\3
 				while coffee {									\\4
-					stamps = beads + command + coffee;			\\5
+					inspiration = beads + command + coffee;		\\5
 					while command {								\\6
 						x = x * 9;}								\\7
 					x = beads + command; }}						\\8
@@ -514,7 +514,7 @@ namespace UnitTesting
 					beads = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 							x = x + x * 9;}							\\7
 						x = beads + command; }}						\\8
@@ -681,7 +681,7 @@ namespace UnitTesting
 					beads = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 							x = x + x * 9;}							\\7
 						x = beads + command; }}						\\8
@@ -846,7 +846,7 @@ namespace UnitTesting
 			beads = 34;										\\2
 			command = inspiration + 1;						\\3
 			while coffee {									\\4
-			stamps = beads + command + coffee;			\\5
+			inspiration = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x + x * 9;}							\\7
 			x = beads + command; }}					\\8
@@ -1010,7 +1010,7 @@ namespace UnitTesting
 					beads = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 							x = x + x * 9;}							\\7
 						x = beads + command; }}						\\8
@@ -1174,7 +1174,7 @@ namespace UnitTesting
 					beads = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 							x = x + x * 9;}							\\7
 						x = beads + command; }}						\\8
@@ -1346,7 +1346,7 @@ namespace UnitTesting
 					beads = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 							x = x * 9;}								\\7
 						x = beads + command; }}						\\8
@@ -1505,7 +1505,7 @@ namespace UnitTesting
 					beads = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 							x = x * 9;}								\\7
 						x = beads + command; }}						\\8
@@ -1665,7 +1665,7 @@ namespace UnitTesting
 			beads = 34;										\\2
 			command = inspiration + 1;						\\3
 			while coffee {									\\4
-			stamps = beads + command + coffee;			\\5
+			inspiration = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x + x * 9;}							\\7
 			x = beads + command; }}					\\8
@@ -1830,7 +1830,7 @@ namespace UnitTesting
 			beads = 34;										\\2
 			command = inspiration + 1;						\\3
 			while coffee {									\\4
-			stamps = beads + command + coffee;			\\5
+			inspiration = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x + x * 9;}							\\7
 			x = beads + command; }					\\8
@@ -1999,7 +1999,7 @@ namespace UnitTesting
 			beads = 34;										\\2
 			command = inspiration + 1;						\\3
 			while coffee {									\\4
-			stamps = beads + command + coffee;			\\5
+			inspiration = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x + x * 9;}							\\7
 			x = beads + command; }					\\8
@@ -2168,7 +2168,7 @@ namespace UnitTesting
 			beads = 34;										\\2
 			command = inspiration + 1;						\\3
 			while coffee {									\\4
-			stamps = beads + command + coffee;			\\5
+			inspiration = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x + x * 9;}							\\7
 			x = beads + command; }}					\\8
@@ -2336,7 +2336,7 @@ namespace UnitTesting
 				beads = 34;										\\2
 				command = inspiration + 1;						\\3
 				while coffee {									\\4
-					stamps = beads + command + coffee;			\\5
+					inspiration = beads + command + coffee;		\\5
 					while command {								\\6
 						x = x * 9;}								\\7
 					x = beads + command; }}						\\8
@@ -2498,7 +2498,7 @@ namespace UnitTesting
 					dream = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 						x = x * 9;}								\\7
 						x = beads + command; }}						\\8
@@ -2660,7 +2660,7 @@ namespace UnitTesting
 			dream = 34;										\\2
 			command = inspiration + 1;						\\3
 			while coffee {									\\4
-			stamps = beads + command + coffee;			\\5
+			inspiration = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x * 9;}								\\7
 			x = beads + command; }}						\\8
@@ -2816,7 +2816,7 @@ namespace UnitTesting
 					dream = 34;										\\2
 					command = inspiration + 1;						\\3
 					while coffee {									\\4
-						stamps = beads + command + coffee;			\\5
+						inspiration = beads + command + coffee;		\\5
 						while command {								\\6
 							x = x * 9;}								\\7
 						x = beads + command;						\\8
@@ -3008,7 +3008,7 @@ namespace UnitTesting
 			dream = 34;										\\2
 			command = inspiration + 1;						\\3
 			while coffee {									\\4
-			stamps = beads + command + coffee;			\\5
+			inspiration = beads + command + coffee;			\\5
 			while command {								\\6
 			x = x * 9;}								\\7
 			x = beads + command;						\\8
@@ -3188,7 +3188,7 @@ namespace UnitTesting
 			clause.setLeftCType("call");
 			clause.setLeftCIsExpression(false);
 			clause.setLeftCIntValue(-1);
-			clause.setLeftCStringValue("");
+			clause.setLeftCStringValue("c");
 			clause.setLeftCIsStmt("0");
 
 			clause.setRightCType("procedure");
@@ -3231,7 +3231,7 @@ namespace UnitTesting
 			queryTree.setResultTree(clause);
 
 		//	ParserForPQL parserPQL = ParserForPQL("assign a; procedure p, q; call c; Select p pattern a(\"command\", _) such that Calls(p, q) with c.procName = \"hope\"");
-		//	QueryTree queryTree = parserPQL.getQueryTree();
+		
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -3309,6 +3309,7 @@ namespace UnitTesting
 			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
+			pkb->setVarName("dream");
 			pkb->setModifies(2, "dream");
 			pkb->setModifiedBy("dream", 2);
 			pkb->setConstant(34);
@@ -3331,14 +3332,15 @@ namespace UnitTesting
 			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
+			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "inspiration");
-			pkb->setModifiedBy("inspiration", 5);
+			pkb->setModifies(5, "stamps");
+			pkb->setModifiedBy("stamps", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -3346,8 +3348,8 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "inspiration");
-			pkb->setModifiedBy("inspiration", 4);
+			pkb->setModifies(4, "stamps");
+			pkb->setModifiedBy("stamps", 4);
 
 			// statement 6
 			pkb->setControlVar(6, pkb->getVarIndex("command"));
@@ -3419,43 +3421,43 @@ namespace UnitTesting
 			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
 			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
 			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
-
+			
 			QueryTree queryTree = QueryTree();
 
 			Clauses clause;
-			clause.setLeftCType("call");
+			clause.setLeftCType("assign");
 			clause.setLeftCIsExpression(false);
 			clause.setLeftCIntValue(-1);
-			clause.setLeftCStringValue("");
+			clause.setLeftCStringValue("a");
 			clause.setLeftCIsStmt("0");
 
-			clause.setRightCType("procedure");
+			clause.setRightCType("stmt");
 			clause.setRightCIsExpression(false);
-			clause.setRightCIntValue(0);
-			clause.setRightCStringValue("hope");
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("s");
 			clause.setRightCIsStmt("0");
 			queryTree.setWithTree(clause);
 
-			clause.setParentStringVal("Calls");
+			clause.setParentStringVal("Modifies");
 
-			clause.setLeftCType("procedure");
+			clause.setLeftCType("stmt");
 			clause.setLeftCIsExpression(false);
 			clause.setLeftCIntValue(-1);
-			clause.setLeftCStringValue("p");
+			clause.setLeftCStringValue("s");
 
-			clause.setRightCType("procedure");
+			clause.setRightCType("variable");
 			clause.setRightCIsExpression(false);
 			clause.setRightCIntValue(-1);
-			clause.setRightCStringValue("q");
+			clause.setRightCStringValue("v");
 			queryTree.setSuchThatTree(clause);
 
-			clause.setParentStringVal("a");
-			clause.setParentType("assign");
+			clause.setParentStringVal("w");
+			clause.setParentType("while");
 
-			clause.setLeftCType("variable");
+			clause.setLeftCType("_");
 			clause.setLeftCIsExpression("0");
-			clause.setLeftCIntValue(0);
-			clause.setLeftCStringValue("command");
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("_");
 
 			clause.setRightCType("_");
 			clause.setRightCIsExpression("0");
@@ -3464,16 +3466,23 @@ namespace UnitTesting
 			queryTree.setPatternTree(clause);
 
 
-			clause.setParentStringVal("p");
-			clause.setParentType("procedure");
+			clause.setParentStringVal("w");
+			clause.setParentType("while");
 			queryTree.setResultTree(clause);
 
-			//	ParserForPQL parserPQL = ParserForPQL("assign a; procedure p, q; call c; Select p pattern a(\"command\", _) such that Calls(p, q) with c.procName = \"hope\"");
-			//	QueryTree queryTree = parserPQL.getQueryTree();
+			clause.setParentStringVal("s");
+			clause.setParentType("stmt");
+			queryTree.setResultTree(clause);
+
+			clause.setParentStringVal("v");
+			clause.setParentType("variable");
+			queryTree.setResultTree(clause);
+			
+	//		ParserForPQL parserPQL = ParserForPQL("while w; assign a; variable v; stmt s; Select <w, s, v> such that Modifies(s, v) with a.stmt# = s.stmt# pattern w(_, _)");
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
-			list<string> expectedResults = { "dream" };
+			list<string> expectedResults = { "4 1 beads", "4 2 dream", "4 3 command", "4 5 stamps", "4 7 x", "4 8 x", "4 10 bye", "6 1 beads", "6 2 dream", "6 3 command", "6 5 stamps", "6 7 x", "6 8 x", "6 10 bye" };
 
 			Assert::IsTrue(expectedResults == results);
 		};
