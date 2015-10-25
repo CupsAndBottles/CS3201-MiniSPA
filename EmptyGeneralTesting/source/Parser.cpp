@@ -11,6 +11,7 @@
 using namespace std;
 vector<int> ifIndex;
 vector<int> whileIndex;
+vector<int> ifIndexStmt;
 list<pair<int, string>> listOfStatements;
 vector<pair<int, int>> parentLink;
 vector<pair<int, int>> followLink;
@@ -229,9 +230,9 @@ void Parser::setRelationsInTable() {
 	pkb->setFollows(followLink);
 	string procName = pkb->setProcCalls(callsLink);
 	if (!procName.empty()) {
-		//throw "ProcName: " + procName +" does not exist.\n";
-		cout << "ProcName: " << procName << " does not exist.\n";
-		exit(0);
+		throw "ProcName: " + procName +" does not exist.\n";
+		//cout << "ProcName: " << procName << " does not exist.\n";
+		//exit(0);
 	}
 	pkb->setStmtNumProcCalled(stmtNoAndCalls);
 }
@@ -269,6 +270,7 @@ void Parser::processNextPrev(int index, string stmt)
 		}
 		else if (stmt.find("if") != std::string::npos) {
 			indexAndType.push_back(make_pair(2, index - numOfProc - numOfElse));
+			ifIndexStmt.push_back(index - numOfProc - numOfElse);
 			pStmt = stmt;
 			pStmtIndex = index - numOfProc - numOfElse;
 			pkb->setNext(index - numOfProc - numOfElse, index - numOfProc - numOfElse + 1);
@@ -290,12 +292,19 @@ void Parser::processNextPrev(int index, string stmt)
 						whileIndex.push_back(indexAndType.back().second);
 					}
 					else if (indexAndType.back().first == 2) {
-							ifIndex.push_back(index - numOfProc - numOfElse);
+						ifIndex.push_back(index - numOfProc - numOfElse);
 							pkb->setPrev(index - numOfProc - numOfElse,pStmtIndex);
 					}
 					else if (indexAndType.back().first == 3) {
-							ifIndex.push_back(index - numOfProc - numOfElse);
-							pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+						pkb->setNext(ifIndexStmt.back(),index - numOfProc - numOfElse);
+						pkb->setPrev(index - numOfProc - numOfElse, ifIndexStmt.back());
+						ifIndex.push_back(index - numOfProc - numOfElse);
+						ifIndexStmt.pop_back();
+						if (!indexAndType.empty() && indexAndType.size()>1) {
+							indexAndType.pop_back();
+							pkb->setNext(index - numOfProc - numOfElse,indexAndType.back().second);
+							pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
+						}
 					}
 					indexAndType.pop_back();
 				}
@@ -387,7 +396,7 @@ void Parser::processCalls(int index, string stmt)
 	int procExist = pkb->getProcIndex(procCalls);
 
 	if (procExist == procNumInTble) {
-		cout << "\nError: Procedure " << procCalls << " calling itself!";
+		throw "Error: Procedure: " + procCalls + " calling itself!.\n";
 		exit(0);
 	}
 
