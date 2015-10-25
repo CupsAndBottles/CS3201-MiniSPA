@@ -720,7 +720,7 @@ std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TY
 }
 
 //XH
-std::vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
+vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {
 	vector<int> childrenStmtNos;
 	int parentStmtNo;
@@ -1075,6 +1075,60 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 
 }
 
+/*vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
+{
+	vector<int> nextStmtNos;
+	vector<int> prevStmtNos;
+	vector<pair<int, int>> results;
+
+	if (stmtNum1 != -1) {
+		nextStmtNos = stmtTable.at(stmtNum1).getNext();
+
+		for (size_t i = 0; i < nextStmtNos.size(); i++) {
+			if (stmtNum2 != -1) { // Next(2, 6)
+				if (stmtNum2 == nextStmtNos.at(i)) {
+					results.push_back(std::make_pair(stmtNum1, stmtNum2));
+					break;
+				}
+			}
+			else { // Next(2, s/w/a/_/c/if)
+				if (nextStmtNos.at(i) > 0) {
+					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(nextStmtNos.at(i)).getType()) {
+						results.push_back(std::make_pair(stmtNum1, nextStmtNos.at(i)));
+					}
+				}
+			}
+		}
+	}
+	else if (stmtNum2 != -1) { // Next(s/w,_/a/c/if, 4)
+		prevStmtNos = stmtTable.at(stmtNum2).getPrev();
+
+		for(size_t i = 0; i < prevStmtNos.size(); i++) {
+			if (prevStmtNos.at(i) > 0) 
+				if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(prevStmtNos.at(i)).getType()) {
+					results.push_back(std::make_pair(stmtNum1, prevStmtNos.at(i)));
+				}
+			}
+		}
+	}
+	else { // Parent(s/w/_, s/w/a/_/c)
+		for (size_t i = 1; i < stmtTable.size(); i++) {
+			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
+				nextStmtNos = stmtTable.at(i).getNext();
+
+				for (size_t j = 0; j < nextStmtNos.size(); j++) {
+					if (nextStmtNos.at(j) > 0) {
+						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(nextStmtNos.at(j)).getType()) {
+							results.push_back(std::make_pair(i, nextStmtNos.at(j)));
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return results;
+}*/
 
 //WL
 vector<int> PKB::getProcNameInVarTable(int index)
