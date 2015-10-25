@@ -1355,7 +1355,16 @@ vector<vector<int>> QueryEvaluator::mergeSyn(vector<vector<int>> syn, int first,
 		syn.at(first).push_back(syn.at(second).at(i));
 	}
 	// Need to minus 1?
-	syn.erase(syn.begin() + first);
+	syn.erase(syn.begin() + second);
+
+	for (size_t i = 0; i < syn.at(first).size(); i++) {
+		for (size_t j = i + 1; j < syn.at(first).size(); j++) {
+			if (syn[first][i] == syn[first][j]) {
+				syn.at(first).erase(syn.at(first).begin() + j);
+				break;
+			}
+		}
+	}
 
 	return syn;
 }
@@ -1395,34 +1404,96 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 	list<string> stringedResults;
 	nonCommonSyn = select;
 
-	vector<pair<string, vector<int>>> mergedSelectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
 
+	vector<Synonym> selectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
+	
 	if (!this->nonCommonSyn.empty()) {
-		vector<pair<string, vector<int>>> nonCommonSyn = getValuesOfNonCommonSyn(this->nonCommonSyn);
-
-		for (size_t syn = 0; syn < nonCommonSyn.size(); syn++) {
-			mergedSelectedSyns = mergeSelectedSyns(mergedSelectedSyns, nonCommonSyn[syn]);
+		for (size_t syn = 0; syn < this->nonCommonSyn.size(); syn++) {
+			vector<vector<int>> resultsToStore;
+			vector<int> results = getValuesOfNonCommonSyn(nonCommonSyn[syn]);
+			resultsToStore.push_back(results);
+			vector<Enum::TYPE> type = { nonCommonSyn[syn].getParentType() };
+			vector<string> synString = { nonCommonSyn[syn].getParentStringVal() };
+			Synonym nonCommonSyn = Synonym();
+			nonCommonSyn.addResult(type, synString, resultsToStore);
+			selectedSyns.push_back(nonCommonSyn);
 		}
+
+		/************************ Present Selected Syns **************************/
+		cout << "Non Common Syn Present";
+		cout << endl;
+		cout << "Current Selected Syns";
+		cout << endl;
+		for (size_t i = 0; i < selectedSyns.size(); i++) {
+			selectedSyns[i].printSyn();
+		}
+		/************************************************************************/
 	}
 
-	vector<pair<Enum::TYPE, vector<int>>> arrangedSyns = rearrangeSynOrder(mergedSelectedSyns, select);
-	return convertResultsToString(arrangedSyns);
+	vector<pair<Enum::TYPE, vector<int>>> merged = mergeBetweenGroups(selectedSyns);
+	return convertResultsToString(merged);
 }
 
-vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfNonCommonSyn(vector<Clauses> nonCommon) {
-	vector<pair<string, vector<int>>> valuesOfNonCommonSyn;
+vector<Synonym> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select) {
+	vector<Synonym> mergedValues;
+	vector<Enum::TYPE> type;
+	vector<string> synString;
+	vector<vector<int>> resultsToStore;
 
-	for (size_t syn = 0; syn < nonCommon.size(); syn++) {
-		Enum::TYPE typeOfSyn = nonCommon[syn].getParentType();
+	for (size_t groupIndex = 0; groupIndex < groupedSyns.size(); groupIndex++) { // in one group
+		vector<string> synsInAGroup = groupedSyns[groupIndex].getSyn();
+		vector<Enum::TYPE> typesInAGroup = groupedSyns[groupIndex].getType();
+		vector<vector<int>> synValuesInAGroup = groupedSyns[groupIndex].getResult();
 
-		if (typeOfSyn == Enum::TYPE::VARIABLE || typeOfSyn == Enum::TYPE::PROCEDURE || typeOfSyn == Enum::TYPE::CALLS) {
-			valuesOfNonCommonSyn.push_back(make_pair(nonCommon[syn].getParentStringVal(), getStringedAttrIndexes(typeOfSyn)));
+		for (size_t groupPos = 0; groupPos < synsInAGroup.size(); groupPos++) { // a syn in a group
+			for (size_t syn = 0; syn < nonCommonSyn.size(); syn++) { // a selected syn from select tree
+				if (synsInAGroup[groupPos] == nonCommonSyn.at(syn).getParentStringVal() && typesInAGroup[groupPos] == nonCommonSyn.at(syn).getParentType()) {
+					type.push_back(typesInAGroup[groupPos]);
+					synString.push_back(synsInAGroup[groupPos]);
+					resultsToStore.push_back(synValuesInAGroup[groupPos]);
+					nonCommonSyn.erase(nonCommonSyn.begin() + syn);
+					break;
+				}
+			}
 		}
-		else {
-			valuesOfNonCommonSyn.push_back(make_pair(nonCommon[syn].getParentStringVal(), getAllAttrValues(typeOfSyn)));
+
+		if (!type.empty()) {
+			Synonym syn = Synonym();
+			syn.addResult(type, synString, resultsToStore);
+			mergedValues.push_back(syn);
+		}
+
+		type.clear();
+		synString.clear();
+		resultsToStore.clear();
+	}
+	/**************** Printing Selected Syns *******************/
+	cout << "Selected Syns";
+	cout << endl;
+
+	if (mergedValues.empty()) {
+		cout << "<empty>";
+		cout << endl;
+	}
+	else {
+		for (size_t i = 0; i < mergedValues.size(); i++) {
+			mergedValues[i].printSyn();
 		}
 	}
-	return valuesOfNonCommonSyn;
+	/**********************************************************/
+
+	return mergedValues;
+}
+
+vector<int> QueryEvaluator::getValuesOfNonCommonSyn(Clauses nonCommon) {
+	Enum::TYPE typeOfSyn = nonCommon.getParentType();
+
+	if (typeOfSyn == Enum::TYPE::VARIABLE || typeOfSyn == Enum::TYPE::PROCEDURE || typeOfSyn == Enum::TYPE::CALLS) {
+		return getStringedAttrIndexes(typeOfSyn);
+	}
+	else {
+		return getAllAttrValues(typeOfSyn);
+	}
 }
 
 vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
@@ -1456,19 +1527,152 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 	return stringedAttrIndexes;
 }
 
-vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::rearrangeSynOrder(vector<pair<string, vector<int>>> mergedSelectedSyns, vector<Clauses> select) {
-	vector<pair<Enum::TYPE, vector<int>>> arrangedSynValues;
+vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::mergeBetweenGroups(vector<Synonym> mergedSyns) {
+	vector<pair<Enum::TYPE, vector<int>>> merged;
+	if (mergedSyns.size() == 0) {
+		return merged;
+	} else if (mergedSyns.size() == 1) {
+		/******************** Merged Syns *********************/
+		cout << "Merged Syns";
+		cout << endl;
+		mergedSyns.front().printSyn();
+		/*****************************************************/
+		merged = extractTypeAndIndexes(rearrangeSynOrder(mergedSyns.front(), tree.getResultTree()));
+		return merged;
+	}
+	else {
+		int lastSetToMerge;
+		int numSyn = mergedSyns.size();
+		bool isOdd = false;
+		vector<Synonym> mergedResults;
 
-	for (size_t syn = 0; syn < select.size(); syn++) {
-		for (size_t mergedSyn = 0; mergedSyn < mergedSelectedSyns.size(); mergedSyn++) {
-			if (mergedSelectedSyns[mergedSyn].first == select[syn].getParentStringVal()) {
-				arrangedSynValues.push_back(make_pair(select[syn].getParentType(), mergedSelectedSyns[mergedSyn].second));
+		if (numSyn % 2 == 1) {
+			isOdd = true;
+		}
+		else {
+			isOdd = false;
+		}
+
+		if (isOdd) {
+			lastSetToMerge = mergedSyns.size() - 2; // leave the last set out.
+		}
+		else {
+			lastSetToMerge = mergedSyns.size() - 1;
+		}
+
+		for (int i = 0; i < lastSetToMerge; i += 2) {
+			mergedResults.push_back(mergeTwoGroups(mergedSyns[i], mergedSyns[i + 1]));
+		}
+
+
+		if (isOdd) {
+			mergedResults.push_back(mergedSyns.back()); // will terminate, eventually it will be 3 sets (if more than 3) which merge to become 1.
+		}
+
+		return mergeBetweenGroups(mergedResults);
+	}
+}
+
+Synonym QueryEvaluator::mergeTwoGroups(Synonym firstSet, Synonym secondSet) {
+	Synonym mergedPair = Synonym();
+
+	vector<Enum::TYPE> typeOfFirstSet = firstSet.getType();
+	vector<string> synStringOfFirstSet = firstSet.getSyn();
+	vector<vector<int>> synValuesOfFirstSet = firstSet.getResult();
+	vector<Enum::TYPE> typeOfSecondSet = secondSet.getType();
+	vector<string> synStringOfSecondSet = secondSet.getSyn();
+	vector<vector<int>> synValuesOfSecondSet = secondSet.getResult();
+	
+	vector<Enum::TYPE> typeOfMergedSet = typeOfFirstSet;
+	typeOfMergedSet.insert(typeOfMergedSet.end(), typeOfSecondSet.begin(), typeOfSecondSet.end());
+
+	vector<string> synStringOfMergedSet = synStringOfFirstSet;
+	synStringOfMergedSet.insert(synStringOfMergedSet.end(), synStringOfSecondSet.begin(), synStringOfSecondSet.end());
+
+	vector<vector<int>> synValuesOfMergedSet;
+		
+	vector<int> tempForFirstSet;
+	vector<int> mergedValuesForFirstSet;
+	vector<int> tempForSecondSet;
+	vector<int> mergedValuesForSecondSet;
+		
+	if (synValuesOfFirstSet.empty() || synValuesOfSecondSet.empty()) {
+		mergedPair.addResult(typeOfMergedSet, synStringOfMergedSet, synValuesOfMergedSet);
+		return mergedPair;
+	}
+	else {
+		int numOfValuesForFirstSetSyn = synValuesOfFirstSet[0].size();
+		int numOfValuesForSecondSetSyn = synValuesOfSecondSet[0].size();
+
+		for (size_t i = 0; i < synStringOfFirstSet.size(); i++) {
+			for (int values = 0; values < numOfValuesForFirstSetSyn; values++) {
+				tempForFirstSet.assign(numOfValuesForSecondSetSyn, synValuesOfFirstSet[i][values]);
+				mergedValuesForFirstSet.insert(mergedValuesForFirstSet.end(), tempForFirstSet.begin(), tempForFirstSet.end());
+				tempForFirstSet.clear();
+			}
+
+			synValuesOfMergedSet.push_back(mergedValuesForFirstSet);
+			mergedValuesForFirstSet.clear();
+		}
+
+		for (size_t i = 0; i < synStringOfSecondSet.size(); i++) {
+			tempForSecondSet = synValuesOfSecondSet[i];
+
+			for (int i = 0; i < numOfValuesForFirstSetSyn; i++) {
+				mergedValuesForSecondSet.insert(mergedValuesForSecondSet.end(), tempForSecondSet.begin(), tempForSecondSet.end());
+			}
+
+			synValuesOfMergedSet.push_back(mergedValuesForSecondSet);
+			mergedValuesForSecondSet.clear();
+		}
+
+		mergedPair.addResult(typeOfMergedSet, synStringOfMergedSet, synValuesOfMergedSet);
+		return mergedPair;
+	}
+}
+
+Synonym QueryEvaluator::rearrangeSynOrder(Synonym mergedSelectedSyn, vector<Clauses> select) {
+	vector<Enum::TYPE> arrangedType;
+	vector<string> arrangedSynString;
+	vector<vector<int>> arrangedResultsToStore;
+
+	for (size_t i = 0; i < select.size(); i++) {
+		vector<Enum::TYPE> type = mergedSelectedSyn.getType();
+		vector<string> synString = mergedSelectedSyn.getSyn();
+		vector<vector<int>> results = mergedSelectedSyn.getResult();
+
+		for (size_t syn = 0; syn < synString.size(); syn++) {
+			if (synString[syn] == select[i].getParentStringVal() && type[syn] == select[i].getParentType()) {
+				arrangedType.push_back(type[syn]);
+				arrangedSynString.push_back(synString[syn]);
+				arrangedResultsToStore.push_back(results[syn]);
 				break;
 			}
 		}
 	}
 
-	return arrangedSynValues;
+	Synonym syn = Synonym();
+	syn.addResult(arrangedType, arrangedSynString, arrangedResultsToStore);
+
+	/**************** Arranged Syns ******************/
+	cout << "Arranged Syns";
+	cout << endl;
+	syn.printSyn();
+	/************************************************/
+	return syn;
+}
+
+vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::extractTypeAndIndexes(Synonym merged) {
+	vector<pair<Enum::TYPE, vector<int>>> extractedSyns;
+
+	vector<Enum::TYPE> type = merged.getType();
+	vector<vector<int>> results = merged.getResult();
+
+	for (size_t i = 0; i < type.size(); i++) {
+		extractedSyns.push_back(make_pair(type[i], results[i]));
+	}
+	
+	return extractedSyns;
 }
 
 list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns) {
@@ -1484,73 +1688,8 @@ list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vect
 
 		stringedResults.push_back(combinedValues);
 	}
-	
+
 	return stringedResults;
-}
-
-vector<pair<string, vector<int>>> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedSyns, vector<Clauses> select) {
-	vector<pair<string, vector<int>>> mergedValues;
-
-	for (size_t groupIndex = 0; groupIndex < groupedSyns.size(); groupIndex++) { // in one group
-		vector<string> synsInAGroup = groupedSyns[groupIndex].getSyn();
-		vector<Enum::TYPE> typesInAGroup = groupedSyns[groupIndex].getType();
-		vector<vector<int>> synValuesInAGroup = groupedSyns[groupIndex].getResult();
-
-		int firstGroupIndexAdded = -1;
-		for (size_t groupPos = 0; groupPos < synsInAGroup.size(); groupPos++) { // a syn in a group
-			for (size_t syn = 0; syn < nonCommonSyn.size(); syn++) { // a selected syn from select tree
-				if (synsInAGroup[groupPos] == nonCommonSyn.at(syn).getParentStringVal() && typesInAGroup[groupPos] == nonCommonSyn.at(syn).getParentType()) {
-					if (firstGroupIndexAdded == -1 || firstGroupIndexAdded == groupIndex) {
-						firstGroupIndexAdded = groupIndex;
-						mergedValues.push_back(make_pair(synsInAGroup[groupPos], synValuesInAGroup[groupPos]));
-					}
-					else {
-						mergedValues = mergeSelectedSyns(mergedValues, make_pair(synsInAGroup[groupPos], synValuesInAGroup[groupPos]));
-					}
-
-					nonCommonSyn.erase(nonCommonSyn.begin() + syn);
-					break;
-				}
-			}
-		}
-	}
-
-	return mergedValues;
-}
-
-vector<pair<string, vector<int>>> QueryEvaluator::mergeSelectedSyns(vector<pair<string, vector<int>>> mergedValues, pair<string, vector<int>> toBeMerged) {
-	vector<pair<string, vector<int>>> newMergedGroup;
-	vector<vector<int>> newMergedValues;
-	vector<int> valuesFromToBeMerged = toBeMerged.second;
-	int newGroupSize = mergedValues.size() + 1;
-
-	if (mergedValues.empty()) {
-		newMergedGroup.push_back(toBeMerged);
-		return newMergedGroup;
-	} 
-
-	newMergedValues.assign(newGroupSize, vector<int>());
-	for (size_t values = 0; values < valuesFromToBeMerged.size(); values++) {
-		for (size_t valueFromMerged = 0; valueFromMerged < mergedValues.front().second.size(); valueFromMerged++) {
-
-			for (size_t syn = 0; syn < mergedValues.size(); syn++) {
-				vector<int> valuesOfSyn = mergedValues[syn].second;
-				newMergedValues[syn].push_back(valuesOfSyn.at(valueFromMerged));
-			}
-			newMergedValues[mergedValues.size()].push_back(valuesFromToBeMerged[values]);
-		}
-	}
-
-	for (int i = 0; i < newGroupSize; i++) {
-		if (i == mergedValues.size()) {
-			newMergedGroup.push_back(make_pair(toBeMerged.first, newMergedValues[i]));
-		}
-		else {
-			newMergedGroup.push_back(make_pair(mergedValues[i].first, newMergedValues[i]));
-		}
-	}
-
-	return newMergedGroup;
 }
 
 void QueryEvaluator::printResults() {
