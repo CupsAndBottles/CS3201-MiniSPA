@@ -1532,6 +1532,11 @@ vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::mergeBetweenGroups(vector<
 	if (mergedSyns.size() == 0) {
 		return merged;
 	} else if (mergedSyns.size() == 1) {
+		/******************** Merged Syns *********************/
+		cout << "Merged Syns";
+		cout << endl;
+		mergedSyns.front().printSyn();
+		/*****************************************************/
 		merged = extractTypeAndIndexes(rearrangeSynOrder(mergedSyns.front(), tree.getResultTree()));
 		return merged;
 	}
@@ -1658,12 +1663,6 @@ Synonym QueryEvaluator::rearrangeSynOrder(Synonym mergedSelectedSyn, vector<Clau
 }
 
 vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::extractTypeAndIndexes(Synonym merged) {
-	/******************** Merged Syns *********************/
-	cout << "Merged Syns";
-	cout << endl;
-	merged.printSyn();
-	/*****************************************************/
-
 	vector<pair<Enum::TYPE, vector<int>>> extractedSyns;
 
 	vector<Enum::TYPE> type = merged.getType();
