@@ -1097,8 +1097,8 @@ vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE t
 
 		for(size_t i = 0; i < prevStmtNos.size(); i++) {
 			if (prevStmtNos.at(i) > 0) { 
-				if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(prevStmtNos.at(i)).getType()) {
-					results.push_back(std::make_pair(stmtNum1, prevStmtNos.at(i)));
+				if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(prevStmtNos.at(i)).getType()) {
+					results.push_back(std::make_pair(prevStmtNos.at(i), stmtNum2));
 				}
 			}
 		}
