@@ -233,16 +233,20 @@ void PKB::setParent(int index, int parentStmt)
 
 void PKB::setNext(int index, int next)
 {
-	cout << "Index: " << index << "\n";
-	cout << "Next: " << next << "\n\n";
-	stmtTable[index].setNext(next);
+	if (index != next) {
+		//cout << "Index: " << index << "\n";
+		//cout << "Next: " << next << "\n\n";
+		stmtTable[index].setNext(next);
+	}
 }
 
 void PKB::setPrev(int index, int prev)
 {
-	cout << "Index: " << index << "\n";
-	cout << "Prev: " << prev << "\n\n";
-	stmtTable[index].setPrev(prev);
+	if (index != prev) {
+		//cout << "Index: " << index << "\n";
+		//cout << "Prev: " << prev << "\n\n";
+		stmtTable[index].setPrev(prev);
+	}
 }
 
 void PKB::setNextT(int index, vector<int> nextT) {
@@ -514,7 +518,7 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 		}
 	}
 	else if (type1 == 2 && stmtNum == -1 && varIndex == -1) {
-		for (size_t i = 1; i < procTable.size(); i++) {
+		for (size_t i = 0; i < procTable.size(); i++) {
 			varNos = procTable.at(i).getModified();
 			for (size_t k = 0; k < varNos.size(); k++) {
 				results.push_back(std::make_pair(i, varNos.at(k)));
@@ -1071,7 +1075,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 
 }
 
-/*vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
+vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {
 	vector<int> nextStmtNos;
 	vector<int> prevStmtNos;
@@ -1100,14 +1104,14 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 		prevStmtNos = stmtTable.at(stmtNum2).getPrev();
 
 		for(size_t i = 0; i < prevStmtNos.size(); i++) {
-			if (prevStmtNos.at(i) > 0) 
+			if (prevStmtNos.at(i) > 0) { 
 				if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(prevStmtNos.at(i)).getType()) {
 					results.push_back(std::make_pair(stmtNum1, prevStmtNos.at(i)));
 				}
 			}
 		}
 	}
-	else { // Parent(s/w/_, s/w/a/_/c)
+	else { // Next(s/w/_, s/w/a/_/c)
 		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				nextStmtNos = stmtTable.at(i).getNext();
@@ -1124,7 +1128,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 	}
 
 	return results;
-}*/
+}
 
 
 //WL

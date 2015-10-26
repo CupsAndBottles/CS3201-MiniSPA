@@ -553,3 +553,58 @@ assign a; variable v;
 Select v pattern a(v, "_x_")
 z, m, d, a, y, x
 5000
+112 - merging within groups resulting in empty results
+assign a; while w;
+Select a such that Follows(a, 5) and Parent(w, a)
+
+5000
+113 - Question 51a
+
+Select BOOLEAN such that Next(1,2)
+true
+5000
+114 - Question 51b
+
+Select BOOLEAN such that Next(5,6)
+true
+5000
+115 - Question 51c
+
+Select BOOLEAN such that Next(9,10)
+true
+5000
+116 - Question 51d
+
+Select BOOLEAN such that Next(13,12)
+false
+5000
+117 - Question 51e
+
+Select BOOLEAN such that Next(13,14)
+false
+5000
+118 - Question 51f
+
+Select BOOLEAN such that Next(14,15)
+false
+5000
+119 - Question 51g
+
+Select BOOLEAN such that Next(18,19)
+false
+5000
+120 - Question 51h
+
+Select BOOLEAN such that Next(21,28)
+false
+5000
+121 - Question 51i
+
+Select BOOLEAN such that Next(29,31)
+true
+5000
+122 - Question 51j
+
+Select BOOLEAN such that Next(31, 28)
+true
+5000
