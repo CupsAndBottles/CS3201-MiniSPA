@@ -85,8 +85,6 @@ public:
 	void setPrev(int index, int prev);
 
 	void setCallsStmtModifiesUses();
-	void setNextT(int index, vector<int> nextT);
-	void setPrevT(int index, vector<int> prevT);
 	void setCallStmtsParentTModifiesUses();
 
 	//constant table
@@ -104,8 +102,8 @@ public:
 	void extractCallsT(int index);
 	void extractCalledByT(int index);
 	void extractProcExtraModifiesUses();
-	void extractNextT(int index);
-	void extractPrevT(int index);
+	vector<int> extractNextT(int index);
+	vector<int> extractPrevT(int index);
 
 	//DESIGNEXT->PKB
 	int getParent(int index);
@@ -130,7 +128,7 @@ public:
 	vector<pair<int, int>> getFollowsT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	vector<pair<int, int>> getCallsT(int stmtNum, int stmtNum2);
 	vector<pair<int, int>> getNext(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
-
+	vector<pair<int, int>> getNextT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	//From ProcTable
 	int getProcIndex(string procName);
 	string getProcName(int procIndex);

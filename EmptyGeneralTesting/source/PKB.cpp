@@ -249,14 +249,6 @@ void PKB::setPrev(int index, int prev)
 	}
 }
 
-void PKB::setNextT(int index, vector<int> nextT) {
-	stmtTable[index].setNextT(nextT);
-}
-
-void PKB::setPrevT(int index, vector<int> prevT) {
-	stmtTable[index].setPrevT(prevT);
-}
-
 int PKB::setConstant(int constantValue)
 {
 	int index = getConstantIndex(constantValue);
@@ -1130,6 +1122,54 @@ vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE t
 	return results;
 }
 
+//V
+vector<pair<int, int>> PKB::getNextT(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
+{
+	vector<int> nextT;
+	vector<int> prevT;
+	vector<pair<int, int>> results;
+
+	if (stmtNum1 != -1) {
+		nextT = extractNextT(stmtNum1);
+
+		for (size_t i = 0; i < nextT.size(); i++) {
+			if (stmtNum2 != -1) { // Next(2, 6)
+				if (stmtNum2 == nextT.at(i)) {
+					results.push_back(std::make_pair(stmtNum1, stmtNum2));
+					break;
+				}
+			}
+			else { // Next(2, s/w/a/_/c/if)
+					if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(nextT.at(i)).getType()) {
+						results.push_back(std::make_pair(stmtNum1, nextT.at(i)));
+					}
+			}
+		}
+	}
+	else if (stmtNum2 != -1) { // Next(s/w,_/a/c/if, 4)
+		prevT = extractPrevT(stmtNum2);
+
+		for (size_t i = 0; i < prevT.size(); i++) {
+				if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(prevT.at(i)).getType()) {
+					results.push_back(std::make_pair(prevT.at(i), stmtNum2));
+				}
+		}
+	}
+	else { // Next(s/w/_, s/w/a/_/c)
+		for (size_t i = 1; i < stmtTable.size(); i++) {
+			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
+				nextT = extractNextT(i);
+
+				for (size_t j = 0; j < nextT.size(); j++) {
+						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(nextT.at(j)).getType()) {
+							results.push_back(std::make_pair(i, nextT.at(j)));
+						}
+				}
+			}
+		}
+	}
+	return results;
+}
 
 //WL
 vector<int> PKB::getProcNameInVarTable(int index)
@@ -1246,7 +1286,7 @@ void PKB::extractCalledByT(int stmtNum) {
 }
 
 //V
-void PKB::extractNextT(int stmtNum) {
+vector<int> PKB::extractNextT(int stmtNum) {
 	DesignExtractor design;
 	vector<vector<int>> nextCol;
 	vector<int> nextT;
@@ -1256,14 +1296,12 @@ void PKB::extractNextT(int stmtNum) {
 	}
 
 	
-		nextT = design.extractNextT(nextCol, stmtNum);
-		
-	
-	setNextT(stmtNum, nextT);
+	nextT = design.extractNextT(nextCol, stmtNum);
+	return nextT;
 }
 
 //V
-void PKB::extractPrevT(int stmtNum) {
+vector<int> PKB::extractPrevT(int stmtNum) {
 	DesignExtractor design;
 	vector<vector<int>> prevCol;
 	vector<int> prevT;
@@ -1273,9 +1311,8 @@ void PKB::extractPrevT(int stmtNum) {
 
 	
 		prevT = design.extractPrevT(prevCol, stmtNum);
-		
-	
-	setPrevT(stmtNum, prevT);
+
+		return prevT;
 }
 
 //V
