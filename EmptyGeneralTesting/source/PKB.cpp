@@ -424,9 +424,9 @@ void PKB::setByDesignExtractor() {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
-	extractProcExtraModifiesUses();
-	setCallsStmtModifiesUses();
-	setCallStmtsParentTModifiesUses();
+	//extractProcExtraModifiesUses();
+	//setCallsStmtModifiesUses();
+	//setCallStmtsParentTModifiesUses();
 }
 
 //V
@@ -1126,6 +1126,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 	return results;
 }*/
 
+
 //WL
 vector<int> PKB::getProcNameInVarTable(int index)
 {
@@ -1262,7 +1263,6 @@ void PKB::extractPrevT(int stmtNum) {
 	DesignExtractor design;
 	vector<vector<int>> prevCol;
 	vector<int> prevT;
-
 	for (size_t i = 0; i < stmtTable.size(); i++) {
 		prevCol.push_back(stmtTable.at(i).getPrev());
 	}
@@ -1275,6 +1275,7 @@ void PKB::extractPrevT(int stmtNum) {
 }
 
 //V
+/*
 void PKB::extractProcExtraModifiesUses() {
 	DesignExtractor design;
 	vector<vector<int>> calls;
@@ -1290,13 +1291,13 @@ void PKB::extractProcExtraModifiesUses() {
 	}
 
 	updatedModifies = design.extractExtraProcModifies(calls, modifiesCol);
-	updatedUses = design.extractExtraProcUses(calls, usesCol)
+	updatedUses = design.extractExtraProcUses(calls, usesCol);
 	for (int j = 0; j < procTable.size(); j++) {
 		setProcModifies(j, updatedModifies.at(j));
 		setProcUses(j, updatedUses.at(j));
 	}
 }
-
+*/
 //V
 vector<int> PKB::getStmtNumProcCalled(int index) {
 	return procTable[index].getStmtNum();

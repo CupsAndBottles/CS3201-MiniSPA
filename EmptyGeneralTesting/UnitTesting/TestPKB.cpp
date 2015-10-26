@@ -718,7 +718,7 @@ namespace UnitTesting
 			vector<pair<int,int>> expectedResults;
 			vector<pair<int,int>> actualResults;
 		}
-
+		/*
 		TEST_METHOD(PKB_ExtractProcExtraModifiesUses) {
 			PKB *pkb = new PKB();
 
@@ -768,7 +768,7 @@ namespace UnitTesting
 			}
 
 		}
-
+		*/
 		TEST_METHOD(PKB_setCallsStmtModifiesUses) {
 			PKB *pkb = new PKB();
 

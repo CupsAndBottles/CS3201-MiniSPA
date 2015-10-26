@@ -1,5 +1,6 @@
 #pragma once
 #include "DesignExtractor.h"
+#include <list>;
 
 using namespace std;
 
@@ -157,54 +158,86 @@ std::vector<int> DesignExtractor::extractCalledByT(vector<vector<int>>col, int s
 	}
 	return CalledByT;
 }
+ 
+class Graph
+{
+	int V;    //vertices
+	list<int> *adj;    //Pointer to an array containing adjacency lists
+	void DFSRec(int v, bool visited[]);
+	//vector<int> nodesVisited;
+public:
+	Graph(int V);   
+	void addEdge(int v, int w); 
+	vector<vector<int>> DFS(int v);
+	vector<vector<int>> col;
+};
 
-vector<vector<int>> DesignExtractor::extractExtraProcModifies(vector<vector<int>> calls, vector<vector<int>> modifiesCol) {
-	vector<int> updated;
-	updatedModifiesCol = modifiesCol;
-
-	for (int i = 0; i < calls.size(); i++) {
-		updated.push_back(0);
-	}
-
-	for (int i = 0; i < calls.size(); i++) {
-		if (calls.at(i).size() == 0) {
-			updated.at(i) = 1;
-		}
-	}
-
-	for (int j = 0; j < calls.size(); j++) {
-		if (updated.at(j) == 0) {
-			extractRecProcModifies(j, calls.at(j), calls, updatedModifiesCol, updated);
-		}
-	}
-			//if (find(result.begin(), result.end(), varIndex) == result.end()) {
-				//result.push_back(varIndex);
-			//}
-		
-	return modifiesCol;
+Graph::Graph(int V)
+{
+	this->V = V;
+	adj = new list<int>[V];
 }
 
-void extractRecProcModifies(int index, vector<int> currentCallsList, vector<vector<int>> callsCol, vector<vector<int>> updatedModifiesCol, vector<int> updated) {
-	if (updated.at(index)) {
-		return;
-	}
+void Graph::addEdge(int v, int w)
+{
+	adj[v].push_back(w); // Add w to v’s list.
+}
 
-	else {
-		for (int i = 0; i < currentCallsList.size(); i++) {
-			if (updated.at(currentCallsList.at(i))) {
-				vector<int> extra = updatedModifiesCol.at(currentCallsList.at(i));
-				vector<int>	existingList = updatedModifiesCol.at(index);
-				for (int j = 0; j < extra.size();j++) {
-					int varIndex = extra.at(j);
-				if (find(existingList.begin(), existingList.end(), varIndex) == existingList.end()) {
-				existingList.push_back(varIndex);
-				}
-			} else {
-					extractRecProcModifies(currentCallsList.at(i), callsCol.at(currentCallsList.at(i)), callsCol, updatedModifiesCol, updated);
+void Graph::DFSRec(int v, bool updated[])
+{	
+	//nodesVisited.push_back(v);
+	// Recur for all the vertices adjacent to this vertex
+	list<int>::iterator i; 
+	for (i = adj[v].begin(); i != adj[v].end(); ++i) {
+		if (!updated[*i]) {
+			DFSRec(*i, updated);
+		}
+		//updated then add missing variables into current list
+		vector<int> list = col.at(*i);
+		vector<int> existingList = col.at(v);
+		for (int j = 0; j < list.size(); j++) {
+			int var = list.at(j);
+			if (find(existingList.begin(), existingList.end(), var) == existingList.end()) {
+				existingList.push_back(var);
 			}
 		}
-		updated.at(index) = 1;
+		col.at(v) = existingList;
 	}
+	updated[v] = true;
+	return;
+}
+
+// DFS traversal of the vertices reachable from v. It uses recursive DFSUtil()
+vector<vector<int>> Graph::DFS(int v)
+{
+	// Mark all the vertices as not updated
+	bool *updated = new bool[V];
+	for (int i = 0; i < V; i++) {
+		if (adj[i].size() == 0) {
+			updated[i] == true;
+		}
+		else {
+			updated[i] = false;
+		}
+	}
+
+	DFSRec(v, updated);
+	return col;
+}
+
+vector<vector<int>> DesignExtractor::extractProcModifiesUses(vector<vector<int>>calls, vector<vector<int>> col) {
+	Graph graph(calls.size());
+	
+	for (int i = 0; i < calls.size(); i++) {
+		vector<int> list = calls.at(i);
+		for (int j = 0; j < list.size(); j++) {
+			graph.addEdge(i, list.at(j));
+		}
+	}
+
+	graph.col = col;
+	updatedCol = graph.DFS(0);
+	return updatedCol;
 }
 
 std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmtNum) {

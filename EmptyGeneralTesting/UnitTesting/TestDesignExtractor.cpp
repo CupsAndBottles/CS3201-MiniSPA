@@ -103,24 +103,37 @@ namespace UnitTesting
 
 		}
 
-		/*
-		TEST_METHOD(DE_TestProcExtraModifiesUses) {
+		
+		TEST_METHOD(DE_TestProcModifiesUses) {
 			DesignExtractor designE;
-			vector<int> existingList = {1,2};
-			vector<int> callsT = {1,3};
-			vector<vector<int>> modifiesCol = { {1,2}, {1,2,3}, {}, {1,2,7,4,5} };
-			vector<int> expectedResults = {1,2,3,7,4,5};
-			vector<int> actualResults;
+			vector<vector<int>> calls = { {3,2,1}, {3}, {}, {4,2}, {} };
+			vector<vector<int>> modifiesCol = { {1}, {}, {1,2}, {3}, {4} };
+			vector<vector<int>> expectedResults = { {1,3,4,2}, {3,4,1,2}, {1,2}, {3,4,1,2}, {4} };
+			vector<vector<int>> actualResults;
+
+			//vector<int> expectedResults = { 0,3,4,2,1 };
+			//vector<int> actualResults = designE.extractProcModifies(calls, modifiesCol);
 
 			//test modifies
-			actualResults = designE.extractExtraProcModifiesUses(existingList, callsT,modifiesCol);
+			actualResults = designE.extractProcModifiesUses(calls,modifiesCol);
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
+			//for (int i = 0; i < actualResults.size(); i++) {
+				//Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			//}
+			//Assert::AreEqual(expectedResults.at(0).at(2), actualResults.at(0).at(2));
 			for (int i = 0; i < actualResults.size(); i++) {
-				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+				Assert::AreEqual(expectedResults.at(i).size(), actualResults.at(i).size());
+				for (int j = 0; j < actualResults.at(i).size(); j++) {
+					Assert::AreEqual(expectedResults.at(i).at(j), actualResults.at(i).at(j));
+				}
 			}
-			
+				
+	}
+		TEST_METHOD(DE_setting) {
+			vector<int> updated = { 0,0,0,0,0 };
+			updated.at(1) = 1;
+			Assert::AreEqual(1, updated.at(1));
 		}
-		*/
 	
 	};
 }
