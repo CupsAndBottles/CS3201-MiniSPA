@@ -718,7 +718,7 @@ namespace UnitTesting
 			vector<pair<int,int>> expectedResults;
 			vector<pair<int,int>> actualResults;
 		}
-		/*
+		
 		TEST_METHOD(PKB_ExtractProcExtraModifiesUses) {
 			PKB *pkb = new PKB();
 
@@ -739,15 +739,12 @@ namespace UnitTesting
 			vector<pair<int, string>> procModified;
 			procModified.push_back(make_pair(0, "y"));
 			procModified.push_back(make_pair(0, "x"));
-			pkb->setProcModified(procModified);
+			
 
-			procModified.clear();
 			procModified.push_back(make_pair(1, "x"));
 			procModified.push_back(make_pair(1, "y"));
 			procModified.push_back(make_pair(1, "z"));
-			pkb->setProcModified(procModified);
 
-			procModified.clear();
 			procModified.push_back(make_pair(3, "x"));
 			procModified.push_back(make_pair(3, "y"));
 			procModified.push_back(make_pair(3, "r"));
@@ -768,7 +765,7 @@ namespace UnitTesting
 			}
 
 		}
-		*/
+		
 		TEST_METHOD(PKB_setCallsStmtModifiesUses) {
 			PKB *pkb = new PKB();
 
