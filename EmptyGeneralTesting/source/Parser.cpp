@@ -603,7 +603,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		pkb->setControlVar(i - numOfProc - numOfElse, index);
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentUse = pairedParent.first - numOfProc - containerElements.size() + 1 - numOfElse;
+			int parentUse = pairedParent.first - numOfProc - numOfElse;
 			if (!isConstant(varInWhile)) {
 				pkb->setUsedBy(varInWhile, parentUse);
 				pkb->setUsedVar(parentUse, varInWhile);
