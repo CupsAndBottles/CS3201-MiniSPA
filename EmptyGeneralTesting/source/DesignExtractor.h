@@ -3,6 +3,7 @@
 #define DESIGNEXTRACTOR_H
 #include <vector>
 #include "PKB.h"
+#include "Graph.h"
 
 using namespace std;
 
