@@ -16,6 +16,7 @@
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\Details.h" />
     <ClInclude Include="..\source\Enum.h" />
+    <ClInclude Include="..\source\Graph.h" />
     <ClInclude Include="..\source\PairSeparator.h" />
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\ParserException.h" />
@@ -46,6 +47,7 @@
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\Details.cpp" />
     <ClCompile Include="..\source\Enum.cpp" />
+    <ClCompile Include="..\source\Graph.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\ParserException.cpp" />
     <ClCompile Include="..\source\ParserForPattern.cpp" />
