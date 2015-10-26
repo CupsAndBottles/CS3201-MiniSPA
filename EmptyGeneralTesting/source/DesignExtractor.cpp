@@ -170,7 +170,12 @@ vector<vector<int>> DesignExtractor::extractProcModifiesUses(vector<vector<int>>
 	}
 
 	graph.col = col;
-	updatedCol = graph.DFS(0);
+	if (col.size()==0) {
+	}
+	else {
+		updatedCol = graph.DFS(0);
+	}
+
 	return updatedCol;
 }
 

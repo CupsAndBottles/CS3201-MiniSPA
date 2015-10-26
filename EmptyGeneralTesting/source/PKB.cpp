@@ -424,9 +424,9 @@ void PKB::setByDesignExtractor() {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
-	//extractProcExtraModifiesUses();
-	//setCallsStmtModifiesUses();
-	//setCallStmtsParentTModifiesUses();
+	extractProcExtraModifiesUses();
+	setCallsStmtModifiesUses();
+	setCallStmtsParentTModifiesUses();
 }
 
 //V
@@ -1275,7 +1275,6 @@ void PKB::extractPrevT(int stmtNum) {
 }
 
 //V
-/*
 void PKB::extractProcExtraModifiesUses() {
 	DesignExtractor design;
 	vector<vector<int>> calls;
@@ -1290,14 +1289,14 @@ void PKB::extractProcExtraModifiesUses() {
 		calls.push_back(getProcCalls(i));
 	}
 
-	updatedModifies = design.extractExtraProcModifies(calls, modifiesCol);
-	updatedUses = design.extractExtraProcUses(calls, usesCol);
+	updatedModifies = design.extractProcModifiesUses(calls, modifiesCol);
+	updatedUses = design.extractProcModifiesUses(calls, usesCol);
 	for (int j = 0; j < procTable.size(); j++) {
 		setProcModifies(j, updatedModifies.at(j));
 		setProcUses(j, updatedUses.at(j));
 	}
 }
-*/
+
 //V
 vector<int> PKB::getStmtNumProcCalled(int index) {
 	return procTable[index].getStmtNum();
