@@ -752,8 +752,10 @@ namespace UnitTesting
 			procModified.push_back(make_pair(3, "m"));
 			pkb->setProcModified(procModified);
 
-			pkb->setProcCallsT(0, { 1,3 });
-			pkb->setProcCallsT(1, { 3 });
+			vector<pair<int, string>> calls;
+			calls.push_back(make_pair(0, "La"));
+			calls.push_back(make_pair(1, "Planet"));
+			pkb->setProcCalls(calls);
 			pkb->extractProcExtraModifiesUses();
 			
 			vector<int> actualResults = pkb->getProcModified(0);
