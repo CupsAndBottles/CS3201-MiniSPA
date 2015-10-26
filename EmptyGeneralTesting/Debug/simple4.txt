@@ -1,0 +1,65 @@
+procedure fruit{
+apple = 4;
+grape = 10;
+orange = 3 + apple;
+cherry = 8;
+grape = grape + 5;
+while apple{
+cherry = 4 * grape + apple;
+orange = 5;
+grape = 2 + grape;
+mango = 12;
+while orange{
+grape = 8;
+apple = 10 + cherry;
+mango = mango + 1;}
+while grape{
+orange = 2;
+apple = apple + 3;
+mango = 3 + grape + 5;}}
+call book;
+mango = 5;
+apple = 3 + grape * 4;}
+procedure book{
+page = 10;
+paper = 2 + paper;
+title = 7;
+chapter = 12 + title;
+if chapter then{
+title = 2 + title;
+paper = 3;
+page = 4 * chapter;}
+else{
+page = 2;
+title = 5 + paper;
+chapter = 8;}
+while paper{
+note = 4;
+page = note;
+paper = 12 * title;
+chapter = 5;}
+note = 2 * note;
+paper = 6;
+title = paper * 3;}
+procedure alpha{
+x = 2;
+y = 3 * x;
+a = 4;
+b = 2 * a;
+while x{
+b = 7;
+x = 4 + x;
+a = 12;
+if a then{
+y = 3 * b;
+a = 8 * a;}
+else{
+x = 1;
+y = y + 1;
+a = 10;}
+while b{
+y = 5 + y;
+a = 9 * b;
+x = 8;}
+y = y + 4;
+b = b * 2;}}
