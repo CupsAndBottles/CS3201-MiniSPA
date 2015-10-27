@@ -713,6 +713,32 @@ namespace UnitTesting
 			}
 		}
 
+		TEST_METHOD(PKB_getNextT) {
+			PKB *pkb = new PKB();
+
+		}
+
+		TEST_METHOD(PKB_extractNextT) {
+			PKB *pkb = new PKB();
+			vector<int> expectedResults = {1,2,3};
+
+			vector<int> actualResults;
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setNext(1, 2);
+			pkb->setNext(2, 3);
+
+			vector<int> test = pkb->getNext(3);
+			Assert::AreEqual(size_t(0), test.size());
+			//actualResults = pkb->extractNextT(1);
+
+			//Assert::AreEqual(expectedResults.size(), actualResults.size());
+			//for (int i = 0; i < actualResults.size(); i++) {
+				//Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			//}
+		}
+
 		TEST_METHOD(PKB_getCallsT) {
 			PKB *pkb = new PKB();
 			vector<pair<int,int>> expectedResults;

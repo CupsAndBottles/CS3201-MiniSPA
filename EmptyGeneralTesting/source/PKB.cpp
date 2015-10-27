@@ -927,6 +927,11 @@ vector<int> PKB::getChildrenT(int stmtNum) {
 	return stmtTable[stmtNum].getChildrenT();
 }
 
+vector<int> PKB::getNext(int stmtNum)
+{
+	return stmtTable.at(stmtNum).getNext();
+}
+
 vector<int> PKB::getModifiesForParser(int stmtNum)
 {
 	return stmtTable[stmtNum].getModifies();
@@ -1197,7 +1202,7 @@ void PKB::extractParentT(int stmtNum)
 	vector<int> parentCol;
 	vector<int> parentT;
 
-	for (size_t i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 		parentCol.push_back(stmtTable.at(i).getParent());
 	}
 	
@@ -1213,7 +1218,7 @@ void PKB::extractChildrenT(int stmtNum)
 	vector<vector<int>> childrenCol;
 	vector<int> childrenT;
 
-	for (size_t i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 		childrenCol.push_back(stmtTable.at(i).getChildren());
 	} 
 		childrenT = design.extractChildrenT(childrenCol, stmtNum);
@@ -1229,7 +1234,7 @@ void PKB::extractFollowsT(int stmtNum)
 	vector<int> followsCol;
 	vector<int> followsT;
 
-	for (size_t i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 		followsCol.push_back(stmtTable.at(i).getFollows());
 	}
 	
@@ -1243,7 +1248,7 @@ void PKB::extractFollowedByT(int stmtNum)
 	vector<int> followedByCol;
 	vector<int> followedByT;
 
-	for (size_t i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 		followedByCol.push_back(stmtTable.at(i).getFollowedBy());
 	}
 	
@@ -1258,7 +1263,7 @@ void PKB::extractCallsT(int stmtNum) {
 	vector<vector<int>> callsCol;
 	vector<int> callsT;
 
-	for (size_t i = 0; i < procTable.size(); i++) {
+	for (size_t i = OFFSET; i < procTable.size(); i++) {
 		callsCol.push_back(getProcCalls(i));
 	}
 
@@ -1275,7 +1280,7 @@ void PKB::extractCalledByT(int stmtNum) {
 	vector<vector<int>> calledByCol;
 	vector<int> calledByT;
 
-	for (size_t i = 0; i < procTable.size(); i++) {
+	for (size_t i = OFFSET; i < procTable.size(); i++) {
 		calledByCol.push_back(getProcCalledBy(i));
 	}
 	
@@ -1291,7 +1296,7 @@ vector<int> PKB::extractNextT(int stmtNum) {
 	vector<vector<int>> nextCol;
 	vector<int> nextT;
 
-	for (size_t i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 		nextCol.push_back(stmtTable.at(i).getNext());
 	}
 
@@ -1305,7 +1310,7 @@ vector<int> PKB::extractPrevT(int stmtNum) {
 	DesignExtractor design;
 	vector<vector<int>> prevCol;
 	vector<int> prevT;
-	for (size_t i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 		prevCol.push_back(stmtTable.at(i).getPrev());
 	}
 
