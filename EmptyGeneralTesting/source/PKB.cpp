@@ -1168,7 +1168,14 @@ vector<pair<int, int>> PKB::getNextT(Enum::TYPE type1, int stmtNum1, Enum::TYPE 
 
 				for (size_t j = 0; j < nextT.size(); j++) {
 						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(nextT.at(j)).getType()) {
-							results.push_back(std::make_pair(i, nextT.at(j)));
+							if (type1 == Enum::TYPE::STATEMENT && type2 == Enum::TYPE::STATEMENT) {
+								if (i == nextT.at(j)) {
+									results.push_back(make_pair(i, nextT.at(j)));
+								}
+							}
+							else {
+								results.push_back(make_pair(i, nextT.at(j)));
+							}
 						}
 				}
 			}
