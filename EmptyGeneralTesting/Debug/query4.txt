@@ -13,3 +13,8 @@ assign a;
 Select a such that Modifies(a, "grape") and Uses(a, "grape")
 5, 9
 5000
+4 -Next 
+prog_line n;
+Select n such that Next(n, 6)
+5, 18
+5000
