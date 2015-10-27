@@ -772,6 +772,80 @@ namespace UnitTesting
 				Assert::AreEqual(expectedResults.at(i).second, actualResults.at(i).second);
 			}
 		}
+
+		TEST_METHOD(PKB_setCallsStmtModifiesUses) {
+			PKB *pkb = new PKB();
+
+			pkb->setType(Enum::TYPE::CALLS);
+			pkb->setType(Enum::TYPE::CALLS);
+			pkb->setType(Enum::TYPE::WHILE);
+			pkb->setType(Enum::TYPE::CALLS);
+			
+			pkb->setProcNameInProcTable("Main");
+			pkb->setProcNameInProcTable("La");
+			pkb->setProcNameInProcTable("Sun");
+			pkb->setProcNameInProcTable("Moon");
+
+			pkb->setVarName("x");
+			pkb->setVarName("y");
+			pkb->setVarName("z");
+			pkb->setVarName("r");
+
+			vector<pair<int, string>> procModified;
+			procModified.push_back(make_pair(0, "x"));
+			procModified.push_back(make_pair(0, "y"));
+			procModified.push_back(make_pair(1, "x"));
+			procModified.push_back(make_pair(2, "z"));
+			procModified.push_back(make_pair(2, "r"));
+			procModified.push_back(make_pair(3, "x"));
+			procModified.push_back(make_pair(3, "y"));
+			procModified.push_back(make_pair(3, "z"));
+			pkb->setProcModified(procModified);
+			vector<pair<int, string>> procCalls;
+			procCalls.push_back(make_pair(0, "Sun"));
+			procCalls.push_back(make_pair(1, "Sun"));
+			procCalls.push_back(make_pair(1, "Moon"));
+
+			pkb->setProcCalls(procCalls);
+			pkb->extractProcExtraModifiesUses();
+
+			vector<pair<int, string>> stmtCalled;
+			stmtCalled.push_back(make_pair(1, "Sun"));
+			stmtCalled.push_back(make_pair(2, "Sun"));
+			stmtCalled.push_back(make_pair(4, "Moon"));
+			pkb->setStmtNumProcCalled(stmtCalled);
+			vector<int> procs = pkb->getStmtNumProcCalled(2);
+			
+			Assert::AreEqual(2, procs.at(0));
+			Assert::AreEqual(1, procs.at(1));
+			pkb->setCallsStmtModifiesUses();
+
+			vector<int> test = pkb->getProcModified(2);
+			Assert::AreEqual(3, test.at(0));
+			Assert::AreEqual(2,test.at(1));
+
+			vector<int> expectedResults = { 3,2 };
+			vector<int> actualResults = pkb->getModifiesForParser(1);
+
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+			for (int i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+
+			//test set modifies Parent of Call statement
+			vector<int> parentT = { 3 };
+			pkb->setParentT(4, parentT);
+			pkb->setModifies(3, "x");
+
+			pkb->setCallStmtsParentTModifiesUses();
+			expectedResults = { 0,2,1 };
+			actualResults = pkb->getModifiesForParser(3);
+
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+			for (int i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+		}
 		
 		TEST_METHOD(PKB_ExtractProcExtraModifiesUses) {
 			PKB *pkb = new PKB();
@@ -821,7 +895,7 @@ namespace UnitTesting
 			}
 
 		}
-		
+		/*
 		TEST_METHOD(PKB_setCallsStmtModifiesUses) {
 			PKB *pkb = new PKB();
 
@@ -853,9 +927,9 @@ namespace UnitTesting
 			vector<int> actualResults = pkb->getModifiesForParser(1);
 			Assert::AreEqual(expectedResults.size(), actualResults.size());
 			Assert::AreEqual(expectedResults.at(0), actualResults.at(0));
-
+			
 		}
-
+		*/
 		TEST_METHOD(PKB_getUsedByStmtNum) {
 			PKB *pkb = new PKB();
 			vector<int> used;
