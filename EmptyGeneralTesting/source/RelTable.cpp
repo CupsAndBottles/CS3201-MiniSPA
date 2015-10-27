@@ -136,26 +136,26 @@ void RelTable::addRelIntoTable()
 	relTable.insert(std::pair<string, Relationship>("Withvalue", value));
 
 	constant.ag1Synonym = 13;
-	relTable.insert(std::pair<string, Relationship>("Withconstant", constant));
+	relTable.insert(std::pair<string, Relationship>("With4constant", constant));
 
 	stringOfWith.ag1Synonym = 14;
-	relTable.insert(std::pair<string, Relationship>("Withprocedure", stringOfWith));
-	relTable.insert(std::pair<string, Relationship>("Withvariable", stringOfWith));
+	relTable.insert(std::pair<string, Relationship>("With4procedure", stringOfWith));
+	relTable.insert(std::pair<string, Relationship>("With4variable", stringOfWith));
 
 	withAssign.ag1Synonym = 15;
-	relTable.insert(std::pair<string, Relationship>("Withassign", withAssign));
+	relTable.insert(std::pair<string, Relationship>("With4assign", withAssign));
 
 	stmt1.ag1Synonym = 16;
-	relTable.insert(std::pair<string, Relationship>("Withstmt", stmt1));
+	relTable.insert(std::pair<string, Relationship>("With4stmt", stmt1));
 
 	withWhile.ag1Synonym = 17;
-	relTable.insert(std::pair<string, Relationship>("Withwhile", withWhile));
+	relTable.insert(std::pair<string, Relationship>("With4while", withWhile));
 
 	withIf.ag1Synonym = 18;
-	relTable.insert(std::pair<string, Relationship>("Withif", withIf));
+	relTable.insert(std::pair<string, Relationship>("With4if", withIf));
 
 	withCalls.ag1Synonym = 19 ;
-	relTable.insert(std::pair<string, Relationship>("Withcall", withCalls));
+	relTable.insert(std::pair<string, Relationship>("With4call", withCalls));
 
 }
 
