@@ -93,28 +93,28 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		return trueResult;
 	}
 
-	printResults();
+//	printResults();
 	sort(this->results.begin(), this->results.end());
-	cout << "after sorting" << endl;
-	printResults();
+//	cout << "after sorting" << endl;
+//	printResults();
 
 	vector<vector<int>> syn = groupSynonym(this->results);
 	
-	cout << "after grouping" << endl;
+//	cout << "after grouping" << endl;
 
-	for (size_t i = 0; i < syn.size(); i++) {
+/*	for (size_t i = 0; i < syn.size(); i++) {
 		for (size_t j = 0; j < syn[i].size(); j++) {
 			cout << syn[i][j] << " ";
 		}
 		cout << endl;
 	}
 	cout << endl;
-
+*/
 	vector<vector<int>> synGroup = rearrangeSynonym(syn);
 	
-	cout << "after rearranging" << endl;
+//	cout << "after rearranging" << endl;
 
-	for (size_t i = 0; i < synGroup.size(); i++) {
+/*	for (size_t i = 0; i < synGroup.size(); i++) {
 		for (size_t j = 0; j < synGroup[i].size(); j++) {
 			cout << synGroup[i][j] << " ";
 		}
@@ -123,15 +123,15 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	cout << endl;
 
 	cout << "Before merging" << endl;
-
+*/
 	vector<Synonym> afterMerging = mergeWithinGroup(synGroup);
 
-	cout << "After merging" << endl; 
+//	cout << "After merging" << endl; 
 
-	for (size_t i = 0; i < afterMerging.size(); i++) {
+/*	for (size_t i = 0; i < afterMerging.size(); i++) {
 		afterMerging.at(i).printSyn();
 	}
-
+*/
 	result = evaluateSelect(afterMerging, select);
 
 	return result;
@@ -1094,6 +1094,9 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 	case Enum::TYPE::CALLS:
 		return to_string(index);
 		break;
+	case Enum::TYPE::CONSTANT:
+		return to_string(this->pkb->getConstantValue(index));
+		break;
 	default:
 		cout << "Convert to String, no TYPE matches" << endl;
 		return EMPTY_STRING;
@@ -1422,7 +1425,7 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 		}
 
 		/************************ Present Selected Syns **************************/
-		cout << "Non Common Syn Present";
+	/*	cout << "Non Common Syn Present";
 		cout << endl;
 		cout << "Current Selected Syns";
 		cout << endl;
@@ -1470,7 +1473,7 @@ vector<Synonym> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedS
 		resultsToStore.clear();
 	}
 	/**************** Printing Selected Syns *******************/
-	cout << "Selected Syns";
+/*	cout << "Selected Syns";
 	cout << endl;
 
 	if (mergedValues.empty()) {
@@ -1535,7 +1538,7 @@ vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::mergeBetweenGroups(vector<
 		return merged;
 	} else if (mergedSyns.size() == 1) {
 		/******************** Merged Syns *********************/
-		cout << "Merged Syns";
+	/*	cout << "Merged Syns";
 		cout << endl;
 		mergedSyns.front().printSyn();
 		/*****************************************************/
@@ -1657,7 +1660,7 @@ Synonym QueryEvaluator::rearrangeSynOrder(Synonym mergedSelectedSyn, vector<Clau
 	syn.addResult(arrangedType, arrangedSynString, arrangedResultsToStore);
 
 	/**************** Arranged Syns ******************/
-	cout << "Arranged Syns";
+/*	cout << "Arranged Syns";
 	cout << endl;
 	syn.printSyn();
 	/************************************************/
