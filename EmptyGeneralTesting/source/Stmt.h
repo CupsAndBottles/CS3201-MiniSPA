@@ -69,6 +69,8 @@ private:
 	Enum::TYPE type;
 	int parent=0;
 	int controlVar=0;
+	int next = 0;
+	int prev = 0;
 	vector<int> parentT;
 	vector<int> childrenList;
 	vector<int> childrenT;
