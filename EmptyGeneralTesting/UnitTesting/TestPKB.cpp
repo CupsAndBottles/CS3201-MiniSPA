@@ -719,6 +719,48 @@ namespace UnitTesting
 			vector<pair<int,int>> actualResults;
 		}
 		
+		TEST_METHOD(PKB_extractNextT) {
+
+			PKB *pkb = new PKB();
+
+			vector<int> expectedResults = { 2,3 };
+
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+
+			pkb->setNext(1, 2);
+			pkb->setNext(2, 3);
+		
+			vector<int> actualResults = pkb->extractNextT(1);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+
+			for (int i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i), actualResults.at(i));
+			}
+		}
+
+		TEST_METHOD(PKB_getNextT) {
+			PKB *pkb = new PKB();
+
+			vector<pair<int,int>> expectedResults;
+			expectedResults.push_back(make_pair(1, 3));
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+			pkb->setType(Enum::TYPE::ASSIGN);
+
+			pkb->setNext(1, 2);
+			pkb->setNext(2, 3);
+
+			vector<pair<int,int>> actualResults = pkb->getNextT(Enum::TYPE::STATEMENT, 1, Enum::TYPE::STATEMENT, 3);
+			Assert::AreEqual(expectedResults.size(), actualResults.size());
+
+			for (int i = 0; i < actualResults.size(); i++) {
+				Assert::AreEqual(expectedResults.at(i).first, actualResults.at(i).first);
+				Assert::AreEqual(expectedResults.at(i).second, actualResults.at(i).second);
+			}
+		}
+		
 		TEST_METHOD(PKB_ExtractProcExtraModifiesUses) {
 			PKB *pkb = new PKB();
 

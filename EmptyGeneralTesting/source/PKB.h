@@ -114,6 +114,7 @@ public:
 	vector<int> getParentT(int stmtNum);
 	vector<int> getFollowedByT(int stmtNum);
 	vector<int>getChildrenT(int stmtNum);
+	vector<int> getNext(int stmtNum);
 
 	//parser
 	vector<int> getModifiesForParser(int stmtNum);
