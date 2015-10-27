@@ -1095,7 +1095,7 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 		return to_string(index);
 		break;
 	case Enum::TYPE::CONSTANT:
-		return to_string(this->pkb->getConstantValue(index);
+		return to_string(this->pkb->getConstantValue(index));
 		break;
 	default:
 		cout << "Convert to String, no TYPE matches" << endl;
