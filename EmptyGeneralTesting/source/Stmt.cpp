@@ -120,12 +120,10 @@ void Stmt::setUses(vector<int> var) {
 }
 
 //---------------set next and next*----------------
-void Stmt::setNext(int n) {
-	next = n;
+void Stmt::setNext(int next) {
 	nextList.push_back(next);
 }
-void Stmt::setPrev(int p) {
-	prev = p;
+void Stmt::setPrev(int prev) {
 	prevList.push_back(prev);
 }
 
