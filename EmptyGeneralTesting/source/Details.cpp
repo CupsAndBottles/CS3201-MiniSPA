@@ -97,7 +97,10 @@ Enum::TYPE Details::convertToType(string typeInString)
 	else if (typeInString.compare("if") == 0) {
 		return Enum::TYPE::IF;
 	}
-	else if (typeInString.compare("stmt") == 0 || typeInString.compare("prog_line") == 0) {
+	else if (typeInString.compare("stmt") == 0) {
 		return Enum::TYPE::STATEMENT;
+	}
+	else if (typeInString.compare("prog_line") == 0) {
+		return Enum::TYPE::PROG_LINE;
 	}
 }
