@@ -137,11 +137,12 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 	withSynAndType.push_back(vector <string>());
 	int pos;
 	Validation validation;
-	
+
 	for (std::size_t i = 0; i < withSynonym.size(); i++) {
 		if (withSynonym[i].size() == 4) {
 			withSynonym[i] = arrangeSyn(withSynonym[i]);
 		}
+
 		for (int k = 0; k < withSynonym[i].size(); k++) {
 			if (k == 0 || (withSynonym[i].size() == 4 && k == 2)) {
 
@@ -164,11 +165,13 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			}
 			else if (withSynonym[i].size() > 2 && (k == 1 || k == 3)) {
 				int size = withSynAndType[1].size() - 1;
+				cout << "withSynAndType[1].at(size) = " << withSynAndType[1].at(size) << '\n';
+				cout << "withSynonym[i].at(k) = " << withSynonym[i].at(k) << '\n';
 				validation.withValidation(withSynAndType[1].at(size), withSynonym[i].at(k));
 			}
 			else if ((withSynonym[i].size() == 2 && k == 1) || k == 2) {
 				int size = withSynAndType[1].size() - 1;
-			
+			 
 				if (withSynonym[i].at(k-1).compare("procName") == 0) {
 					temp = parserOfType.setProcedureTypeAndSyn(withSynonym[i].at(k), withSynonym[i].at(k - 1));
 				}
@@ -181,6 +184,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				else if (withSynAndType[1].at(size).compare("prog_line") == 0) {
 					temp = parserOfType.setDigitTypeAndSyn(withSynAndType[1].at(size), withSynonym[i].at(k));
 				}
+				
 				if (temp.size() == 0) {
 					throw ParserException("With synonym unidentified");
 				}
@@ -205,7 +209,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			} else if (withSynAndType[3].at(size1).compare("0") == 0 && withSynAndType[3].at(size2).compare("1") == 0 && withSynAndType[1].at(size1).compare("constant") != 0) {
 				throw ParserException("stmt# must be equal to stmt#, not equal to procName");
 			}
-			validation.withValidation(withSynAndType[1].at(size1), withSynAndType[1].at(size2));
+			validation.withValidation(withSynAndType[1].at(size1), "4" + withSynAndType[1].at(size2));
 		}
 	}
 	
