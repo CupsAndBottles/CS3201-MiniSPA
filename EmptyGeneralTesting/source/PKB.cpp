@@ -1099,7 +1099,7 @@ vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE t
 	}
 	else if (stmtNum2 != -1) { // Next(s/w,_/a/c/if, 4)
 		prevStmtNos = stmtTable.at(stmtNum2).getPrev();
-
+		cout << prevStmtNos.size();
 		for(size_t i = 0; i < prevStmtNos.size(); i++) {
 			if (prevStmtNos.at(i) > 0) { 
 				if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(prevStmtNos.at(i)).getType()) {
