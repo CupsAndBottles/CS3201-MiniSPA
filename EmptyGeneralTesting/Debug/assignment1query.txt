@@ -608,3 +608,13 @@ true
 Select BOOLEAN such that Next(31, 28)
 true
 5000
+123 - Question 49
+prog_line n;
+Select n such that Next*(20, n) and Next*(n,19)
+19, 20, 21, 22
+5000
+124 - Question 50
+prog_line n;
+Select n such that Next*(n,n)
+11, 12, 13, 19, 20, 21, 22, 23, 28, 29, 30, 31
+5000
