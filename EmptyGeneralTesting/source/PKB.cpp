@@ -1123,6 +1123,11 @@ vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE t
 }
 
 //V
+vector<int> PKB::getNext(int stmtNum) {
+	return stmtTable.at(stmtNum).getNext();
+}
+
+//V
 vector<pair<int, int>> PKB::getNextT(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {
 	vector<int> nextT;
@@ -1130,8 +1135,9 @@ vector<pair<int, int>> PKB::getNextT(Enum::TYPE type1, int stmtNum1, Enum::TYPE 
 	vector<pair<int, int>> results;
 
 	if (stmtNum1 != -1) {
+		//cout << "Before";
 		nextT = extractNextT(stmtNum1);
-
+		//cout << "After";
 		for (size_t i = 0; i < nextT.size(); i++) {
 			if (stmtNum2 != -1) { // Next(2, 6)
 				if (stmtNum2 == nextT.at(i)) {
@@ -1217,8 +1223,6 @@ void PKB::extractChildrenT(int stmtNum)
 		childrenCol.push_back(stmtTable.at(i).getChildren());
 	} 
 		childrenT = design.extractChildrenT(childrenCol, stmtNum);
-		
-	
 	 setChildrenT(stmtNum, childrenT);
 
 }
@@ -1290,13 +1294,13 @@ vector<int> PKB::extractNextT(int stmtNum) {
 	DesignExtractor design;
 	vector<vector<int>> nextCol;
 	vector<int> nextT;
-
+	//cout<<"in extractNextT";
 	for (size_t i = 0; i < stmtTable.size(); i++) {
 		nextCol.push_back(stmtTable.at(i).getNext());
 	}
-
 	
 	nextT = design.extractNextT(nextCol, stmtNum);
+	//cout << "after extractNextT";
 	return nextT;
 }
 
