@@ -129,11 +129,6 @@ namespace UnitTesting
 			}
 				
 	}
-		TEST_METHOD(DE_setting) {
-			vector<int> updated = { 0,0,0,0,0 };
-			updated.at(1) = 1;
-			Assert::AreEqual(1, updated.at(1));
-		}
 	
 	};
 }

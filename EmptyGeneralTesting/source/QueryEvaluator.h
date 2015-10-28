@@ -45,11 +45,10 @@ private:
 	bool evaluateWith(Clauses clause);
 	bool evaluateValidityOfIntLeftRef(Clauses clause);
 	bool hasSameAttrNames(Clauses clause);
-	bool hasSameAttrValues(Clauses clause);
 	vector<string> getAllAttrNames(Enum::TYPE type);
 	vector<int> getAllAttrValues(Enum::TYPE type);
 	bool getCommonAttrNames(vector<string> leftResults, vector<string> rightResults, Clauses clause);
-	bool getCommonAttrValues(vector<int> leftResults, vector<int> rightResults, Clauses clause);
+	bool getCommonAttrValues(Clauses clause);
 	vector<int> convertNamesToIndexes(vector<string> stringResults, Enum::TYPE type);
 	void storeResultsForSyn(Clauses clause, vector<pair<int, int>> results);
 	void storeResults(vector<Enum::TYPE> type, vector<string> synString, vector<vector<int>> resultToStore);

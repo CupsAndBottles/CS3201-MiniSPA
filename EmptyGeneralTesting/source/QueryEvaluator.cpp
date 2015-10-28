@@ -790,7 +790,7 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 	case Enum::TYPE::CALLS:
 		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
 			|| clause.getRightCType() == Enum::TYPE::CALLS) {
-			return hasSameAttrValues(clause);
+			return getCommonAttrValues(clause);
 		}
 		else {
 			return false;
@@ -799,19 +799,19 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 	case Enum::TYPE::ASSIGN:
 		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
 			|| clause.getRightCType() == Enum::TYPE::ASSIGN) {
-			return hasSameAttrValues(clause);
+			return getCommonAttrValues(clause);
 		}
 		else {
 			return false;
 		}
 		break;
 	case Enum::TYPE::STATEMENT:
-		return hasSameAttrValues(clause);
+		return getCommonAttrValues(clause);
 		break;
 	case Enum::TYPE::IF:
 		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
 			|| clause.getRightCType() == Enum::TYPE::IF) {
-			return hasSameAttrValues(clause);
+			return getCommonAttrValues(clause);
 		}
 		else {
 			return false;
@@ -820,18 +820,15 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 	case Enum::TYPE::WHILE:
 		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
 			|| clause.getRightCType() == Enum::TYPE::WHILE) {
-			return hasSameAttrValues(clause);
+			return getCommonAttrValues(clause);
 		}
 		else {
 			return false;
 		}
 		break;
 	case Enum::TYPE::CONSTANT:
-		return hasSameAttrValues(clause);
+		return getCommonAttrValues(clause);
 		break;
-		/*	case Enum::TYPE::PROG_LINE:
-		return hasSameAttrNum(clause);
-		break; */
 	default:
 		return false;
 		break;
@@ -845,15 +842,6 @@ bool QueryEvaluator::hasSameAttrNames(Clauses clause) {
 	leftSynResults = getAllAttrNames(clause.getLeftCType());
 	rightSynResults = getAllAttrNames(clause.getRightCType());
 	return getCommonAttrNames(leftSynResults, rightSynResults, clause);
-}
-
-bool QueryEvaluator::hasSameAttrValues(Clauses clause) {
-	vector<int> leftSynResults;
-	vector<int> rightSynResults;
-
-	leftSynResults = getAllAttrValues(clause.getLeftCType());
-	rightSynResults = getAllAttrValues(clause.getRightCType());
-	return getCommonAttrValues(leftSynResults, rightSynResults, clause);
 }
 
 vector<string> QueryEvaluator::getAllAttrNames(Enum::TYPE type) {
@@ -913,7 +901,6 @@ vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			allValues.push_back(i);
 		}
-		break;
 	case Enum::TYPE::WHILE:
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
@@ -952,38 +939,54 @@ bool QueryEvaluator::getCommonAttrNames(vector<string> leftResults, vector<strin
 	}
 }
 
-bool QueryEvaluator::getCommonAttrValues(vector<int> leftResults, vector<int> rightResults, Clauses clause) {
-	vector<int> mergedResults;
-	for (size_t i = 0; i < leftResults.size(); i++) {
-		for (size_t r = 0; r < rightResults.size(); r++) {
-			if (leftResults[i] == rightResults[r]) {
-				mergedResults.push_back(leftResults[i]);
+bool QueryEvaluator::getCommonAttrValues(Clauses clause) {
+	vector<int> leftSynResults;
+	vector<int> rightSynResults;
+	vector<int> intermediateResults;
+
+	// other stmt types must either be equals to stmt num or constant num
+	if (clause.getLeftCType() == Enum::TYPE::CONSTANT) { // c.value = s.stmt#, a.stmt#, if.stmt#, w.stmt#, n
+		intermediateResults = getAllAttrValues(clause.getLeftCType());
+		for (size_t i = 0; i < intermediateResults.size(); i++) {
+			if (checkValidityOfIntEntities(clause.getRightCType(), intermediateResults.at(i))) {
+				leftSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
+				rightSynResults.push_back(intermediateResults.at(i));
 			}
 		}
 	}
+
+	if (clause.getRightCType() == Enum::TYPE::CONSTANT) { // s.stmt#, a.stmt#, if.stmt#, w.stmt#, n = c.value
+		intermediateResults = getAllAttrValues(clause.getRightCType());
+		for (size_t i = 0; i < intermediateResults.size(); i++) {
+			if (checkValidityOfIntEntities(clause.getLeftCType(), intermediateResults.at(i))) {
+				rightSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
+				leftSynResults.push_back(intermediateResults.at(i));
+			}
+		}
+	}
+
+	if (clause.getLeftCType() == Enum::TYPE::STATEMENT) { // s.stmt# = a.stmt#, if.stmt#, w.stmt#, n
+		if (clause.getRightCType() != Enum::TYPE::CONSTANT) {
+			rightSynResults = getAllAttrValues(clause.getRightCType());
+			leftSynResults = rightSynResults;
+		}
+	}
+
+	if (clause.getRightCType() == Enum::TYPE::STATEMENT) { // a.stmt#, if.stmt#, w.stmt#, n = s.stmt#
+		if (clause.getLeftCType() != Enum::TYPE::CONSTANT) {
+			leftSynResults = getAllAttrValues(clause.getLeftCType());
+			rightSynResults = leftSynResults;
+		}
+	}
+
 
 	vector<Enum::TYPE> type = { clause.getLeftCType(), clause.getRightCType() };
 	vector<string> synString = { clause.getLeftCStringValue(), clause.getRightCStringValue() };
-	if (mergedResults.empty()) {
+	if (leftSynResults.empty() || rightSynResults.empty()) {
 		return false;
 	}
 	else {
-		vector<int> leftResults = mergedResults;
-		vector<int> rightResults = mergedResults;
-
-		if (clause.getLeftCType() == Enum::TYPE::CONSTANT) {
-			for (size_t i = 0; i < mergedResults.size(); i++) {
-				leftResults.push_back(pkb->getConstantIndex(mergedResults.at(i)));
-			}
-		}
-
-		if (clause.getRightCType() == Enum::TYPE::CONSTANT) {
-			for (size_t i = 0; i < mergedResults.size(); i++) {
-				rightResults.push_back(pkb->getConstantIndex(mergedResults.at(i)));
-			}
-		}
-
-		vector<vector<int>> resultsToStore = { leftResults, rightResults };
+		vector<vector<int>> resultsToStore = { leftSynResults, rightSynResults };
 		storeResults(type, synString, resultsToStore);
 		return true;
 	}
