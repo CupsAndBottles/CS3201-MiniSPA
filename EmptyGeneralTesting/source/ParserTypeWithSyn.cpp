@@ -165,8 +165,8 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			}
 			else if (withSynonym[i].size() > 2 && (k == 1 || k == 3)) {
 				int size = withSynAndType[1].size() - 1;
-				cout << "withSynAndType[1].at(size) = " << withSynAndType[1].at(size) << '\n';
-				cout << "withSynonym[i].at(k) = " << withSynonym[i].at(k) << '\n';
+			//	cout << "withSynAndType[1].at(size) = " << withSynAndType[1].at(size) << '\n';
+				//cout << "withSynonym[i].at(k) = " << withSynonym[i].at(k) << '\n';
 				validation.withValidation(withSynAndType[1].at(size), withSynonym[i].at(k));
 			}
 			else if ((withSynonym[i].size() == 2 && k == 1) || k == 2) {
