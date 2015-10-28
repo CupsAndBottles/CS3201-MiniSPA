@@ -199,11 +199,10 @@ std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmt
 	}
 	else {
 		nextStmtNum = next.at(0);
-		//cout << nextStmtNum;
+
 		if (nextStmtNum == 0) {
 		}
 		else {
-			//cout << "before extractRec in de";
 			extractRec(next, col, "next");
 		}
 	}

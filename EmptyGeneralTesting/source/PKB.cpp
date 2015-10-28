@@ -273,7 +273,8 @@ void PKB::setStmtUsed(int index, int stmtNum)
 void PKB::setCallsStmtModifiesUses() {
 	int stmtNum;
 	vector<int> stmtNumbers;
-
+	vector<int> modifies;
+	vector<int> uses;
 	for (int i = 0; i < procTable.size(); i++) {
 		stmtNumbers = getStmtNumProcCalled(i);
 		if (stmtNumbers.size() == 0) {
@@ -285,8 +286,24 @@ void PKB::setCallsStmtModifiesUses() {
 				stmtTable.at(stmtNum).setCallsStmtModifiesVar(getProcModified(i));
 				stmtTable.at(stmtNum).setCallsStmtUsesVar(getProcUsed(i));
 			}
+
+			for (int j = 0; j < stmtNumbers.size(); j++) {
+				int stmtNum = stmtNumbers.at(j);
+				modifies = stmtTable.at(stmtNum).getModifies();
+				uses = stmtTable.at(stmtNum).getUses();
+				for (int k = 0; k < modifies.size(); k++) {
+					string var = getVarName(modifies.at(k));
+					setModifiedBy(var, stmtNum);
+				}
+
+				for (int k = 0; k < uses.size(); k++) {
+					string var = getVarName(uses.at(k));
+					setUsedBy(var, stmtNum);
+				}
+			}
 		}
 	}
+
 }
 
 //V: set parents
@@ -420,8 +437,43 @@ void PKB::setByDesignExtractor() {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
+	//int index = getProcIndex("Sun");
+	//vector<int> uses = getProcUsed(index);
+	//for (int i = 0; i < uses.size(); i++) {
+		//string var = getVarName(uses.at(i));
+		//cout << "Uses for Proc sun is " << var << endl;
+
+	//}
 	extractProcExtraModifiesUses();
+	//int index = getProcIndex("Sun");
+	//vector<int> uses = getProcUsed(index);
+	//for (int i = 0; i < uses.size(); i++) {
+		//string var = getVarName(uses.at(i));
+		//cout << "Uses for proc sun is " << var<< endl;
+
+	//}
+	//vector<int> modifies=  stmtTable.at(5).getModifies(); 
 	setCallsStmtModifiesUses();
+	/*vector<int> uses =  stmtTable.at(21).getUses();
+	if (uses.size() == 0) {
+		cout << "\nafter is empty\n";
+	}
+	else {
+		cout << "Size is " << uses.size()<<endl;
+		for (int i = 0; i < uses.size(); i++) {
+			string var = getVarName(uses.at(i));
+			cout << endl << var;
+		}
+	}*/
+	/*for (int i = 0; i < stmtTable.size(); i++) {
+		vector<int> used = stmtTable.at(i).getUses();
+		cout << "Statement" << i << ": ";
+		for (int j = 0; j < used.size();j++) {
+			string var = getVarName(used.at(j));
+			cout << var << " ";
+		}
+		cout << endl;
+	}*/
 	setCallStmtsParentTModifiesUses();
 }
 
@@ -440,7 +492,10 @@ void PKB::setCallStmtsParentTModifiesUses() {
 	vector<int> modifies, uses;
 	vector<int> existingModifiesList;
 	vector<int> existingUsesList;
-
+	vector<int> updatedModifies;
+	vector<int> updatedUses;
+	vector<int> modifiedNum;
+	vector<int> usedNum;
 	for (int i = 0; i < procTable.size(); i++) {
 		callStmtNum = getStmtNumProcCalled(i);
 		for (int j = 0; j < callStmtNum.size(); j++) {
@@ -457,13 +512,32 @@ void PKB::setCallStmtsParentTModifiesUses() {
 				}
 				stmtTable.at(parentTList.at(k)).setModifies(existingModifiesList);
 				existingUsesList = stmtTable[parentTList.at(k)].getUses();
-				for (int n = 0; n < uses.size(); n++) {
-					int usesVarIndex = uses.at(n);
+				for (int m = 0; m < uses.size(); m++) {
+					int usesVarIndex = uses.at(m);
 					if (find(existingUsesList.begin(), existingUsesList.end(), usesVarIndex) == existingUsesList.end()) {
 						existingUsesList.push_back(usesVarIndex);
 					}
 				}
 				stmtTable.at(parentTList.at(k)).setUses(existingUsesList);
+
+				updatedModifies = stmtTable.at(parentTList.at(k)).getModifies();
+				updatedUses = stmtTable.at(parentTList.at(k)).getUses();
+				for (int m = 0; m < updatedModifies.size(); m++) {
+					string var = getVarName(updatedModifies.at(m));
+					modifiedNum = getModifiedByStmtNum(updatedModifies.at(m));
+						if(find(modifiedNum.begin(),modifiedNum.end(),parentTList.at(k)) == modifiedNum.end()) {
+							setModifiedBy(var, parentTList.at(k));
+					}
+
+				}
+
+				for (int m = 0; m < updatedUses.size(); m++) {
+					string var = getVarName(updatedUses.at(m));
+					usedNum = getUsedByStmtNum(updatedUses.at(m));
+					if (find(usedNum.begin(), usedNum.end(), parentTList.at(k)) == usedNum.end()) {
+						setUsedBy(var, parentTList.at(k));
+					}
+				}
 			}
 		}
 	}
