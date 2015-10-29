@@ -437,43 +437,9 @@ void PKB::setByDesignExtractor() {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
-	//int index = getProcIndex("Sun");
-	//vector<int> uses = getProcUsed(index);
-	//for (int i = 0; i < uses.size(); i++) {
-		//string var = getVarName(uses.at(i));
-		//cout << "Uses for Proc sun is " << var << endl;
 
-	//}
 	extractProcExtraModifiesUses();
-	//int index = getProcIndex("Sun");
-	//vector<int> uses = getProcUsed(index);
-	//for (int i = 0; i < uses.size(); i++) {
-		//string var = getVarName(uses.at(i));
-		//cout << "Uses for proc sun is " << var<< endl;
-
-	//}
-	//vector<int> modifies=  stmtTable.at(5).getModifies(); 
 	setCallsStmtModifiesUses();
-	/*vector<int> uses =  stmtTable.at(21).getUses();
-	if (uses.size() == 0) {
-		cout << "\nafter is empty\n";
-	}
-	else {
-		cout << "Size is " << uses.size()<<endl;
-		for (int i = 0; i < uses.size(); i++) {
-			string var = getVarName(uses.at(i));
-			cout << endl << var;
-		}
-	}*/
-	/*for (int i = 0; i < stmtTable.size(); i++) {
-		vector<int> used = stmtTable.at(i).getUses();
-		cout << "Statement" << i << ": ";
-		for (int j = 0; j < used.size();j++) {
-			string var = getVarName(used.at(j));
-			cout << var << " ";
-		}
-		cout << endl;
-	}*/
 	setCallStmtsParentTModifiesUses();
 }
 
@@ -1408,7 +1374,10 @@ void PKB::extractProcExtraModifiesUses() {
 	vector<vector<int>> usesCol;
 	vector<vector<int>> updatedModifies;
 	vector<vector<int>> updatedUses;
-
+	vector<int> modifies;
+	vector<int> uses;
+	int varIndex;
+	vector<int> procIndex;
 	for (int i = 0; i < procTable.size(); i++) {
 		modifiesCol.push_back(getProcModified(i));
 		usesCol.push_back(getProcUsed(i));
@@ -1420,7 +1389,25 @@ void PKB::extractProcExtraModifiesUses() {
 	for (int j = 0; j < procTable.size(); j++) {
 		setProcModifies(j, updatedModifies.at(j));
 		setProcUses(j, updatedUses.at(j));
+		modifies = getProcModified(j);
+		uses = getProcUsed(j);
+		for (int k = 0; k < modifies.size(); k++) {
+			varIndex = modifies.at(k);
+			procIndex = getProcNameInVarTable(varIndex);
+			if (find(procIndex.begin(), procIndex.end(), j) == procIndex.end()) {
+				setProcNames(varIndex, getProcName(j));
+			}
+		}
+
+		for (int k = 0; k < uses.size(); k++) {
+			varIndex = uses.at(k);
+			procIndex = getProcNameInVarTable(varIndex);
+			if (find(procIndex.begin(), procIndex.end(), j) == procIndex.end()) {
+				setProcNames(varIndex, getProcName(j));
+			}
+		}
 	}
+
 }
 
 //V
