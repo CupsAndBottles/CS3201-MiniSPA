@@ -557,6 +557,16 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 			}
 		}
 	}
+	else if (type1 == 2 && stmtNum == -1 && varIndex != -1) {
+		for (size_t i = 0; i < procTable.size(); i++) {
+			varNos = procTable.at(i).getModified();
+			for (size_t k = 0; k < varNos.size(); k++) {
+				if (varNos.at(i) == varIndex) {
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
+			}
+		}
+	}
 	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getModifies();
 		for (size_t i = 0; i < varNos.size(); i++) {
@@ -714,6 +724,16 @@ std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TY
 				}
 			}
 	}
+	else if (type1 == 2 && stmtNum == -1 && varIndex != -1) {
+		for (size_t i = 0; i < procTable.size(); i++) {
+			varNos = procTable.at(i).getModified();
+			for (size_t k = 0; k < varNos.size(); k++) {
+				if (varNos.at(i) == varIndex) {
+					results.push_back(std::make_pair(i, varNos.at(k)));
+				}
+			}
+		}
+	}
 	else if (stmtNum != -1 && varIndex != -1) {
 		varNos = stmtTable.at(stmtNum).getUses();
 		for (size_t i = 0; i < varNos.size(); i++) {
@@ -747,6 +767,7 @@ std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TY
 			}
 		}
 	}
+
 	return results;
 	
 }
