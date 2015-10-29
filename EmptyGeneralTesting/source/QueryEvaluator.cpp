@@ -901,6 +901,7 @@ vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			allValues.push_back(i);
 		}
+		break;
 	case Enum::TYPE::WHILE:
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
@@ -1428,7 +1429,7 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 		}
 
 		/************************ Present Selected Syns **************************/
-	/*	cout << "Non Common Syn Present";
+/*		cout << "Non Common Syn Present";
 		cout << endl;
 		cout << "Current Selected Syns";
 		cout << endl;
