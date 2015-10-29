@@ -561,7 +561,7 @@ std::vector<pair<int, int>> PKB::getModifies(Enum::TYPE type1, int stmtNum, Enum
 		for (size_t i = 0; i < procTable.size(); i++) {
 			varNos = procTable.at(i).getModified();
 			for (size_t k = 0; k < varNos.size(); k++) {
-				if (varNos.at(i) == varIndex) {
+				if (varNos.at(k) == varIndex) {
 					results.push_back(std::make_pair(i, varNos.at(k)));
 				}
 			}
@@ -728,7 +728,8 @@ std::vector<pair<int, int>> PKB::getUses(Enum::TYPE type1, int stmtNum, Enum::TY
 		for (size_t i = 0; i < procTable.size(); i++) {
 			varNos = procTable.at(i).getModified();
 			for (size_t k = 0; k < varNos.size(); k++) {
-				if (varNos.at(i) == varIndex) {
+				if (varNos.at(k) == varIndex) {
+				
 					results.push_back(std::make_pair(i, varNos.at(k)));
 				}
 			}
