@@ -1245,6 +1245,61 @@ vector<pair<int, int>> PKB::getNextT(Enum::TYPE type1, int stmtNum1, Enum::TYPE 
 	}
 	return results;
 }
+int PKB::getStartNum(int procIndex) {
+	return procTable[procIndex].getStartNo();
+}
+
+int PKB::getEndNum(int procIndex) {
+	return procTable[procIndex].getEndNo();
+}
+//V
+vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
+{
+	vector<pair<int, int>> results;
+	vector<pair<int, int>> startEndNum;
+	vector<vector<int>> modifiesCol;
+	vector<vector<int>> usesCol;
+	vector<vector<int>> nextCol;
+	DesignExtractor De;
+	vector<int> modifies, uses, next;
+
+	for (int i = 0; i < procTable.size(); i++) {
+		int start = getStartNum(i);
+		int end = getEndNum(i);
+		startEndNum.push_back(make_pair(start, end));
+	}
+
+	for (int i = 0; i < stmtTable.size(); i++) {
+		modifies = stmtTable.at(i).getModifies();
+		uses = stmtTable.at(i).getUses();
+		next = stmtTable.at(i).getNext();
+		modifiesCol.push_back(modifies);
+		usesCol.push_back(uses);
+		nextCol.push_back(next);
+	}
+
+	if (stmtNum1 != -1) {
+			if (stmtNum2 != -1) { // Affects(2, 6)
+				if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN) && (stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
+					int check = De.extractAffects(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum);
+					if (check == 1) {
+						results.push_back(make_pair(stmtNum1, stmtNum2));
+					}
+				}
+			}
+			else { // Affects( 2, s/a/_)
+				
+			}
+		}
+	else if (stmtNum2 != -1) { // Next(s/w,_/a/c/if, 4)
+		
+	}
+	else { // Next(s/w/_, s/w/a/_/c)
+		
+		}
+
+	return results;
+}
 
 //WL
 vector<int> PKB::getProcNameInVarTable(int index)

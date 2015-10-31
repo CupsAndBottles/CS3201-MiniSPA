@@ -130,6 +130,8 @@ public:
 	vector<pair<int, int>> getCallsT(int stmtNum, int stmtNum2);
 	vector<pair<int, int>> getNext(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	vector<pair<int, int>> getNextT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getAffects(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+
 	//From ProcTable
 	int getProcIndex(string procName);
 	string getProcName(int procIndex);
@@ -140,7 +142,8 @@ public:
 	vector<int> getCallsT(int procIndex);
 	vector<int> getCalledByT(int procIndex);
 	vector<int> getStmtNumProcCalled(int procIndex);
-
+	int getStartNum(int procIndex);
+	int getEndNum(int procIndex);
 	//From VarTable
 	int getVarIndex(string varName); //tested
 	string getVarName(int index); //tested

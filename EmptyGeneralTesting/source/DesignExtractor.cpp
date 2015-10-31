@@ -184,8 +184,11 @@ vector<vector<int>> DesignExtractor::extractProcModifiesUses(vector<vector<int>>
 	if (col.size()==0) {
 	}
 	else {
-		updatedCol = graph.DFS(0);
+		for (int i = 0; i < calls.size(); i++) {
+			updatedCol = graph.DFS(i);
+		}
 	}
+
 
 	return updatedCol;
 }
@@ -226,4 +229,38 @@ std::vector<int> DesignExtractor::extractPrevT(vector<vector<int>> col, int stmt
 	}
 
 	return PrevT;
+}
+
+int DesignExtractor::extractAffects(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum) {
+	
+	int firstIndex;
+	int secondIndex;
+
+	for (int i = 0; i < startEndNum.size(); i++) {
+		int start = startEndNum.at(i).first;
+		int end = startEndNum.at(i).second;
+		if ((start <= stmtNum1) && (stmtNum1 <= end)) {
+			firstIndex = i;
+		}
+
+		if ((start <= stmtNum2) && (stmtNum2 <= end)) {
+			secondIndex = i;
+		}
+	}
+
+	if (firstIndex != secondIndex) {
+		return 0;
+	}
+	else {
+		int modifiedVar = modifiesCol.at(stmtNum1).at(0);
+		vector<int> usedVars = usesCol.at(stmtNum2);
+		if (find(usedVars.begin(), usedVars.end(), modifiedVar) == usedVars.end()) {
+			return 0;
+		}
+		else {
+			//cfg
+
+		}
+
+	}
 }
