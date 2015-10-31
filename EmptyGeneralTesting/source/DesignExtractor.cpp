@@ -260,6 +260,47 @@ int DesignExtractor::extractAffects(int stmtNum1, int stmtNum2, vector<vector<in
 		else {
 			//cfg
 
+			int endNum = startEndNum.at(firstIndex).second;
+			int startNum =	startEndNum.at(firstIndex).first;
+			
+			Graph cfg(endNum);
+
+			for (int i = startNum; i <= endNum; i++) {
+				vector<int> list = nextCol.at(i);
+				for (int j = 0; j < list.size(); j++) {
+					cfg.addEdge(i, list.at(j));
+				}
+			}
+
+			vector<int> path = cfg.DFSOriginal(stmtNum1);
+			if (find(path.begin(), path.end(), stmtNum2) == path.end()) {
+				return 0;
+			}
+			else {
+				int stmtNum;
+				vector<int> modifies;
+				int found = 0;
+				for (int i = 1; i < path.size(); i++) {
+					stmtNum = path.at(i);
+					if (stmtNum == stmtNum2) {
+						break;
+					}
+					else {
+						modifies = modifiesCol.at(stmtNum);
+						if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+							found = 1;
+							break;
+						}
+					}
+				}
+				if (found == 0) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
+
+			}
 		}
 
 	}

@@ -35,6 +35,18 @@ void Graph::DFSRec(int v, bool updated[])
 	return;
 }
 
+void Graph::DFSPath(int v, bool visited[], vector<int> path) {
+	visited[v] = true;
+	path.push_back(v);
+
+	list<int>::iterator i;
+	for (i = adj[v].begin(); i != adj[v].end(); ++i) {
+		if (!visited[*i]) {
+			DFSPath(*i, visited,path);
+		}
+	}
+}
+
 // DFS traversal of the vertices reachable from v. It uses recursive DFSUtil()
 vector<vector<int>> Graph::DFS(int v)
 {
@@ -51,4 +63,15 @@ vector<vector<int>> Graph::DFS(int v)
 
 	DFSRec(v, updated);
 	return col;
+}
+
+vector<int> Graph::DFSOriginal(int v) {
+	bool *visited = new bool[V];
+	for (int i = 0; i < V; i++) {
+		visited[i] = false;
+	}
+
+	DFSPath(v, visited, path);
+
+	return path;
 }
