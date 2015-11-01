@@ -231,7 +231,7 @@ std::vector<int> DesignExtractor::extractPrevT(vector<vector<int>> col, int stmt
 	return PrevT;
 }
 
-int DesignExtractor::extractAffects(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum) {
+int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum) {
 	
 	int firstIndex;
 	int secondIndex;
@@ -303,5 +303,99 @@ int DesignExtractor::extractAffects(int stmtNum1, int stmtNum2, vector<vector<in
 			}
 		}
 
+	}
+}
+
+vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type) {
+
+	int procStart, procEnd;
+	vector<pair<int, int>> results;
+	vector<int> modifies;
+
+	for (int i = 0; i < startEndNum.size(); i++) {
+		procStart = startEndNum.at(i).first;
+		procEnd = startEndNum.at(i).second;
+		if ((procStart <= stmtNum1) && (stmtNum1 <= procEnd)) {
+			break;
+		}
+	}
+
+	Graph cfg(procEnd);
+	for (int i = procStart; i <= procEnd; i++) {
+		vector<int> list = nextCol.at(i);
+		for (int j = 0; j < list.size(); j++) {
+			cfg.addEdge(i, list.at(j));
+		}
+	}
+
+	int stmtNum2;
+	int modifiedVar = modifiesCol.at(stmtNum1).at(0);
+	vector<int> usedVar;
+	int betweenStmt;
+
+	vector<int> path = cfg.DFSOriginal(stmtNum1);
+	for (int i = 1; i < path.size(); i++) {
+		stmtNum2 = path.at(i);
+		if (type.at(stmtNum2) == Enum::TYPE::ASSIGN) {
+			usedVar = usesCol.at(stmtNum2);
+			if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
+				if (i == 1) {
+					results.push_back(make_pair(stmtNum1, stmtNum2));
+				}
+				else {
+					for (int j = 1; j < i; j++) {
+						betweenStmt = path.at(j);
+						modifies = modifiesCol.at(betweenStmt);
+						if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
+							results.push_back(make_pair(stmtNum1, stmtNum2));
+						}
+					}
+				}
+			}
+		}
+	}
+	return results;
+}
+
+vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type) {
+	int procStart, procEnd;
+	vector<pair<int, int>> results;
+	vector<int> modifies;
+
+	for (int i = 0; i < startEndNum.size(); i++) {
+		procStart = startEndNum.at(i).first;
+		procEnd = startEndNum.at(i).second;
+		if ((procStart <= stmtNum2) && (stmtNum2 <= procEnd)) {
+			break;
+		}
+	}
+
+	Graph cfg(procEnd);
+	for (int i = procStart; i <= procEnd; i++) {
+		vector<int> list = nextCol.at(i);
+		for (int j = 0; j < list.size(); j++) {
+			cfg.addEdge(i, list.at(j));
+		}
+	}
+	int stmtNum1;
+	vector<int> usedVar = usesCol.at(stmtNum2);
+	int modifiedVar;
+
+	vector<int> path = cfg.DFSOriginal(procStart);
+	for (int i = 0; i < path.size(); i++) {
+		stmtNum1 = path.at(i);
+		if (type.at(stmtNum1) == Enum::TYPE::ASSIGN) {
+			modifiedVar = modifiesCol.at(stmtNum1).at(0);
+			if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
+				
+					for (int j = 1; j < i; j++) {
+						betweenStmt = path.at(j);
+						modifies = modifiesCol.at(betweenStmt);
+						if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
+							results.push_back(make_pair(stmtNum1, stmtNum2));
+						}
+					}
+			}
+		}
 	}
 }

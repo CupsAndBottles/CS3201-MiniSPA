@@ -1262,6 +1262,8 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 	vector<vector<int>> nextCol;
 	DesignExtractor De;
 	vector<int> modifies, uses, next;
+	int type;
+	vector<int> typeCol;
 
 	for (int i = 0; i < procTable.size(); i++) {
 		int start = getStartNum(i);
@@ -1273,29 +1275,35 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 		modifies = stmtTable.at(i).getModifies();
 		uses = stmtTable.at(i).getUses();
 		next = stmtTable.at(i).getNext();
+		type = stmtTable.at(i).getType();
 		modifiesCol.push_back(modifies);
 		usesCol.push_back(uses);
 		nextCol.push_back(next);
+		typeCol.push_back(type);
 	}
 
 	if (stmtNum1 != -1) {
 			if (stmtNum2 != -1) { // Affects(2, 6)
 				if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN) && (stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
-					int check = De.extractAffects(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum);
+					int check = De.extractAffectsBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum);
 					if (check == 1) {
 						results.push_back(make_pair(stmtNum1, stmtNum2));
 					}
 				}
 			}
 			else { // Affects( 2, s/a/_)
-				
+				if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN)) {
+					results = De.extractAffectsFirstNum(stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, typeCol);
+				} 
 			}
 		}
 	else if (stmtNum2 != -1) { // Next(s/w,_/a/c/if, 4)
-		
+		if ((stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
+			results = De.extractAffectsSecondNum(stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, typeCol);
+		}
 	}
 	else { // Next(s/w/_, s/w/a/_/c)
-		
+		results = De.extractAffectsBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol);
 		}
 
 	return results;
