@@ -10,7 +10,8 @@ const int NOT_SYN = 0;
 const int POSITION_FIRSTPARAM = 1;
 const int POSITION_SECONDPARAM = 2;
 
-
+const string RELATIONSHIP_AFFECTS = "Affects";
+const string RELATIONSHIP_AFFECTST = "Affects*";
 const string RELATIONSHIP_CALLS = "Calls";
 const string RELATIONSHIP_CALLST = "Calls*";
 const string RELATIONSHIP_FOLLOWS = "Follows";
@@ -203,6 +204,12 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 		} else if (relationship == RELATIONSHIP_NEXTT) {
 			results = this->pkb->getNextT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 		}
+		else if (relationship == RELATIONSHIP_AFFECTS) {
+			results = this->pkb->getAffects(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		}
+	/*	else if (relationship == RELATIONSHIP_AFFECTST) {
+			results = this->pkb->getAffectsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
+		} */
 		else {
 
 		}
