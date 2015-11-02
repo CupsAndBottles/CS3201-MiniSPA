@@ -35,7 +35,7 @@ while light{
 rain = rain + 2;  
 plane = 3 * plane; 
 bird = 4; 
-if rain{  
+if rain then{  
 thunder = 2 * light; 
 light = 8 * cloud; 
 cloud = rain + 4;} 
