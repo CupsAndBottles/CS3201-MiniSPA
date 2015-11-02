@@ -239,12 +239,12 @@ void Parser::setRelationsInTable() {
 
 void Parser::processNextPrev(int index, string stmt)
 {
-
 	if (pStmt.empty()) {
 		pStmt = stmt;
 		pStmtIndex = index - numOfProc - numOfElse;
 	}
 	else {
+
 		if (pStmt.find("}") != std::string::npos && !ifIndex.empty() && stmt.find("else") == std::string::npos) {
 			while (!ifIndex.empty()) {
 				pkb->setNext(ifIndex.back(), index - numOfProc - numOfElse);
@@ -253,9 +253,14 @@ void Parser::processNextPrev(int index, string stmt)
 			}
 		}
 		if (stmt.find("procedure") == std::string::npos && !whileIndex.empty()) {
-			pkb->setNext(whileIndex.back(),index-numOfProc-numOfElse);
-			pkb->setPrev(index - numOfProc - numOfElse,whileIndex.back());
-			whileIndex.pop_back();
+			size_t n = count(pStmt.begin(), pStmt.end(), '}');
+			for (int i = 0; i < n;i++) {
+				if (!whileIndex.empty()) {
+					pkb->setNext(whileIndex.back(), index - numOfProc - numOfElse);
+					pkb->setPrev(index - numOfProc - numOfElse, whileIndex.back());
+					whileIndex.pop_back();
+				}
+			}
 		}
 		if (stmt.find("procedure") != std::string::npos) {
 			pStmt = stmt;
@@ -283,34 +288,45 @@ void Parser::processNextPrev(int index, string stmt)
 		}
 		else {
 			if (stmt.find("}") != std::string::npos) {
-				if (!indexAndType.empty()) {
-					if (indexAndType.back().first == 1) {
-						pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
-						pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
-						pkb->setNext(index - numOfProc - numOfElse, indexAndType.back().second);
-						pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
-						whileIndex.push_back(indexAndType.back().second);
-					}
-					else if (indexAndType.back().first == 2) {
-						ifIndex.push_back(index - numOfProc - numOfElse);
-							pkb->setPrev(index - numOfProc - numOfElse,pStmtIndex);
-					}
-					else if (indexAndType.back().first == 3) {
-						pkb->setNext(ifIndexStmt.back(),index - numOfProc - numOfElse);
-						pkb->setPrev(index - numOfProc - numOfElse, ifIndexStmt.back());
-						ifIndex.push_back(index - numOfProc - numOfElse);
-						ifIndexStmt.pop_back();
-						if (!indexAndType.empty() && indexAndType.size()>1) {
-							indexAndType.pop_back();
-							pkb->setNext(index - numOfProc - numOfElse,indexAndType.back().second);
+				size_t n = count(stmt.begin(), stmt.end(), '}');
+				for (int i = 0; i < n;i++) {
+					if (!indexAndType.empty()) {
+						if (indexAndType.back().first == 1) {
+							pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+							pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
+							pkb->setNext(index - numOfProc - numOfElse, indexAndType.back().second);
 							pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
+							whileIndex.push_back(indexAndType.back().second);
 						}
+						else if (indexAndType.back().first == 2) {
+							ifIndex.push_back(index - numOfProc - numOfElse);
+							pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+							pair<int, int> currIf = indexAndType.back();
+							indexAndType.pop_back();
+							if (!indexAndType.empty()) {
+								pkb->setNext(index-numOfProc-numOfElse,indexAndType.back().second);
+								pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
+
+							}
+							indexAndType.push_back(currIf);
+						}
+						else if (indexAndType.back().first == 3) {
+							pkb->setNext(ifIndexStmt.back(), index - numOfProc - numOfElse);
+							pkb->setPrev(index - numOfProc - numOfElse, ifIndexStmt.back());
+							ifIndex.push_back(index - numOfProc - numOfElse);
+							ifIndexStmt.pop_back();
+							if (!indexAndType.empty() && indexAndType.size()>1) {
+								indexAndType.pop_back();
+								pkb->setNext(index - numOfProc - numOfElse, indexAndType.back().second);
+								pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
+							}
+						}
+						indexAndType.pop_back();
 					}
-					indexAndType.pop_back();
-				}
-				else {
-					//	pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
-					pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+					else {
+						//	pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
+						pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+					}
 				}
 			}
 			else {
