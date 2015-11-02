@@ -47,7 +47,7 @@ cloud = 7 + cloud;}
 plane = 10 + plane; 
 light = 7;} 
 bird = 12; 
-thunder = 8 * thunder;  
+thunder = 8 * thunder;}  
 procedure earth{ 
 while human{ 
 animal = 4 * human + 2 + animal; 
@@ -184,7 +184,7 @@ nice = 7;
 right = 18 + right; 
 wow = 5 * wow;} 
 nice = nice + 12; 
-fine = 4;}} 
+fine = 4;} 
 procedure see{ 
 look = 14; 
 spot = 5; 
@@ -214,3 +214,5 @@ spot = 17;
 sight = 7 + sight; 
 look = 17 + look;} 
   
+
+
