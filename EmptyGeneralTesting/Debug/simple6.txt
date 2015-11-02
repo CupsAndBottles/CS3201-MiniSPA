@@ -1,0 +1,218 @@
+procedure tree{
+leaf = 2;  
+bark = 3;  
+root = 10; 
+flower = bark + 2;  
+stem = 2 * stem;  
+if flower then{  
+leaf = 3 * leaf + flower;  
+stem = 2; 
+tree = 1;}  
+else{
+bark = 4 * bark; 
+flower = 8 + flower; 
+root = 9 + root;} 
+leaf = 5 * bark;  
+while root{  
+flower = 4; 
+nectar = 6 * root; 
+stem = bark + 5 * stem; 
+root = 2 + root; 
+bark = bark + 9;} 
+while leaf{ 
+root = 12; 
+nectar = 5 * nectar;  
+stem = 2 * stem; 
+flower = leaf * 4;} 
+bark = 8 + bark;} 
+procedure air{ 
+plane = 4; 
+cloud = 2;  
+rain = 7; 
+thunder = 10;  
+light = 1; 
+while light{ 
+rain = rain + 2;  
+plane = 3 * plane; 
+bird = 4; 
+if rain then{  
+thunder = 2 * light; 
+light = 8 * cloud; 
+cloud = rain + 4;} 
+else{  
+thunder = 11; 
+bird = 6 * bird; 
+rain = rain + plane + 3; 
+cloud = 7 + cloud;} 
+plane = 10 + plane; 
+light = 7;} 
+bird = 12; 
+thunder = 8 * thunder;}  
+procedure earth{ 
+while human{ 
+animal = 4 * human + 2 + animal; 
+water = 3; 
+sky = 2 * sky; 
+while sky{ 
+ground = 5; 
+human = 8 * human; 
+animal = 14; 
+water = 9 + water;} 
+ground = 2; 
+sky = sky * 9;}} 
+procedure farm{ 
+chick = 3; 
+hen = 10 + chick; 
+goat = 12; 
+pig = 8; 
+rabbit = 5; 
+horse = pig; 
+wolf = 10; 
+while horse{ 
+chick = 3 * goat; 
+pig = 4 + pig; 
+hen = 10; 
+rabbit = rabbit + 2;} 
+while goat{ 
+horse = 9; 
+chick = 2 * chick; 
+if pig then{ 
+rabbit = 5 + wolf;} 
+else{ 
+goat = 7 + horse; 
+chick = 22;} 
+wolf = 4 * wolf; 
+hen = 3 * chick;} 
+rabbit = 12 + rabbit;} 
+procedure cake{ 
+butter = 6; 
+flour = 2; 
+egg = 12; 
+oven = 4; 
+milk = 8; 
+while egg{ 
+oven = oven * 3; 
+butter = 2 * butter + 5; 
+flour = 9; 
+milk = 8 * milk;} 
+egg = 2; 
+butter = 4 * butter; 
+oven = 9 + oven;} 
+procedure place{ 
+room = 2; 
+garden = 3 + garden; 
+class = 9; 
+lab = 14; 
+shop = 4 * class; 
+if shop then{ 
+shop = 5 * shop; 
+room = 2 * room; 
+lab = 12 + lab;} 
+else{ 
+class = class + 2; 
+room = 1 + room;} 
+garden = 8; 
+shop = garden + 5; 
+lab = 6; 
+class = 30;} 
+procedure river{ 
+g = 2; 
+m = 4 + g; 
+x = 3; 
+y = y * 2; 
+z = 12; 
+k = 11; 
+if g then{ 
+x = 5; 
+y = 3 * m + 2;
+z = 1; 
+x = z + 1; 
+m = 5 * m; 
+else{ 
+k = 3; 
+x = 6 * x; 
+z = 10; 
+g = g + 8;} 
+while m{ 
+y = y + 2; 
+x = 45; 
+k = 9 * k; 
+g = 2;}} 
+while y{ 
+z = z + 6 * x; 
+m = 7; 
+m = m + 1;
+k = 15; 
+while z{ 
+y = 7 * y; 
+g = 2 + g; 
+x = x * 9;} 
+k = k * 4; 
+m = 20;} 
+z = 13; 
+y = 4 * m;} 
+procedure good{ 
+nice = 2;  
+best = 10; 
+wow = 5; 
+best = best + 1; 
+great = 8; 
+right = 14; 
+fine = fine * 2; 
+while nice{ 
+best = nice + 6; 
+wow = 4 * wow; 
+great = 9; 
+fine = 12; 
+nice = nice * 9; 
+while fine{ 
+best = 11; 
+wow = 6 + wow * 3; 
+right = 7 + right; 
+fine = 16;} 
+while great{ 
+right = 5 + right; 
+wow = wow + 19; 
+nice = 3 * nice; 
+best = 10;} 
+while wow{ 
+fine = 23; 
+fine = fine + 1; 
+great = 22; 
+best = 15 + best;} 
+nice = 7; 
+right = 18 + right; 
+wow = 5 * wow;} 
+nice = nice + 12; 
+fine = 4;} 
+procedure see{ 
+look = 14; 
+spot = 5; 
+sight = 6; 
+view = view + 1; 
+spy = 4; 
+if look then{ 
+spy = 4 + spy; 
+look = look * 10; 
+sight = 2 + sight; 
+spot = 12 * spot;} 
+else{ 
+view = 2 + view; 
+look = 3; 
+sight = sight * 8 + spy;} 
+if spot then{ 
+view = 11; 
+spy = spy * 6 + look; 
+sight = 5;} 
+else{
+spot = 16; 
+look = look * 5;} 
+sight = 1; 
+spy = spy * 80; 
+view = view + 23; 
+spot = 17; 
+sight = 7 + sight; 
+look = 17 + look;} 
+  
+
+

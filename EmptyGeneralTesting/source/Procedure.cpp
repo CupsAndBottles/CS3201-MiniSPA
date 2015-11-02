@@ -37,6 +37,8 @@ void Procedure::setEndNo(int stmtNum)
 }
 
 void Procedure::setModifiedVar(int modify) {
+	//cout << "Procname: " << procName << "\n";
+	//cout << "Modified: " << modify << "\n";
 	varModifiedList.push_back(modify);
 
 }
