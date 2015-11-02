@@ -1303,7 +1303,7 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 		}
 	}
 	else { // Next(s/w/_, s/w/a/_/c)
-		results = De.extractAffectsBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol);
+		//results = De.extractAffectsBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol);
 		}
 
 	return results;

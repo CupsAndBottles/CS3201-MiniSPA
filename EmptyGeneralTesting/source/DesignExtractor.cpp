@@ -380,6 +380,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 	int stmtNum1;
 	vector<int> usedVar = usesCol.at(stmtNum2);
 	int modifiedVar;
+	int betweenStmt;
 
 	vector<int> path = cfg.DFSOriginal(procStart);
 	for (int i = 0; i < path.size(); i++) {
@@ -388,7 +389,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 			modifiedVar = modifiesCol.at(stmtNum1).at(0);
 			if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
 				
-					for (int j = 1; j < i; j++) {
+					for (int j = 0; j <path.size(); j++) {
 						betweenStmt = path.at(j);
 						modifies = modifiesCol.at(betweenStmt);
 						if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
@@ -398,4 +399,5 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 			}
 		}
 	}
+	return results;
 }
