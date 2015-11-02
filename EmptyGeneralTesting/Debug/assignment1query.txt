@@ -618,3 +618,83 @@ prog_line n;
 Select n such that Next*(n,n)
 11, 12, 13, 19, 20, 21, 22, 28, 29, 30, 31
 5000
+125 - Question 52a
+
+Select BOOLEAN such that Affects(1,2)
+true
+5000
+126 - Question 52b
+
+Select BOOLEAN such that Affects(1,5)
+false
+5000
+127 - Quesiton 52c
+
+Select BOOLEAN such that Affects(3,9)
+false
+5000
+128 - Question 52d
+
+Select BOOLEAN such that Affects(15,14)
+false
+5000
+129 - Question 52e
+
+Select BOOLEAN such that Affects(17,9)
+false
+5000
+130 - Question 52f
+
+Select BOOLEAN such that Affects(25,26)
+false
+5000
+131 - Question 53a
+assign a1;
+Select a1 such that Affects(a1, 2)
+1
+5000
+132 - Question 53b
+assign a1;
+Select a1 such that Affects(a1, 10)
+6
+5000
+133 - Question 53c
+assign a1;
+Select a1 such that Affects(a1, 20)
+
+5000
+134 - Question 53d
+assign a1;
+Select a1 such that Affects(a1,29)
+
+5000
+135 - Question 53e
+assign a1;
+Select a1 such that Affects(a1,31)
+31
+5000
+136 - Question 54a
+assign a2;
+Select a2 such that Affects(1,a2)
+2,3,4
+5000
+137 - Question 54b
+assign a2;
+Select a2 such that Affects(13,a2)
+12,13,14
+5000
+138 - Question 54c
+assign a2;
+Select a2 such that Affects(21, a2)
+
+5000
+139 - Question 54d
+assign a2;
+Select a2 such that Affects(29, a2)
+
+5000
+140 - Question 54e
+assign a2;
+Select a2 such that Affects(31, a2)
+30, 31
+5000
