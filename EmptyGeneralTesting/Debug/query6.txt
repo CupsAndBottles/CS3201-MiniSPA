@@ -1,0 +1,80 @@
+1 -Boolean
+
+Select BOOLEAN such that Affects(79, 80)
+false
+5000 
+2 - Modifies
+assign a;
+Select a such that Modifies(a, "flower")
+4, 11, 15, 24
+5000
+3 -Uses
+assign a;
+Select a such that Uses(a, "flower")
+7, 11
+5000
+4 -Modifies and Uses
+assign a;
+Select a such that Modifies(a, "flower") and Uses(a, "flower")
+11
+5000
+5 -Modifies
+assign a;
+Select a such that Modifies(a, "rain")
+28, 32, 41
+5000
+6 -Uses
+assign a;
+Select a such that Uses(a, "rain")
+32, 38, 41
+5000
+7- Modifies and Uses
+assign a;
+Select a such that Modifies(a, "rain") and Uses(a, "rain")
+32, 41
+5000
+8 -Modifies
+assign a;
+Select a such that Modifies(a, "animal") 
+48, 54
+5000
+9 -Uses 
+assign a;
+Select a such that Uses(a, "animal")
+48
+5000
+10 -Modifies and Uses
+assign a;
+Select a such that Uses(a, "animal") and Modifies(a, "animal")
+48
+5000
+11 -Modifies 
+assign a;
+Select a such that Modifies(a, "pig") 
+61, 67
+5000
+12 -Uses  
+assign a;
+Select a such that Uses(a, "pig")
+63, 67
+5000
+13 -Modifies and Uses
+assign a;
+Select a such that Uses(a, "pig") and Modifies(a, "pig")
+67
+5000
+14 -Next
+prog_line n;
+Select n such that Next(24, n)
+20 
+5000
+15 -Next*
+prog_line n;
+Select n such that Next*(24,n)
+20, 23
+5000
+16 -Parent
+while w;
+Select w such that Parent(w, 15)
+14
+5000 
