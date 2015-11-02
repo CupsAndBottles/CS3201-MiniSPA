@@ -276,10 +276,11 @@ void Parser::processNextPrev(int index, string stmt)
 		else if (stmt.find("if") != std::string::npos) {
 			indexAndType.push_back(make_pair(2, index - numOfProc - numOfElse));
 			ifIndexStmt.push_back(index - numOfProc - numOfElse);
+			pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
 			pStmt = stmt;
 			pStmtIndex = index - numOfProc - numOfElse;
 			pkb->setNext(index - numOfProc - numOfElse, index - numOfProc - numOfElse + 1);
-
+		
 		}
 		else if (stmt.find("else") != std::string::npos) {
 			indexAndType.push_back(make_pair(3, index - numOfProc - numOfElse));
@@ -323,10 +324,10 @@ void Parser::processNextPrev(int index, string stmt)
 						}
 						indexAndType.pop_back();
 					}
-					else {
-						//	pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
-						pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
-					}
+				/*	else {
+					pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
+					pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+					}*/
 				}
 			}
 			else {
