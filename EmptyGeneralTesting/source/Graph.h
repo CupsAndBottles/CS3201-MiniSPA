@@ -8,7 +8,7 @@ class Graph {
 	int V;
 	list<int> *adj;
 	void DFSRec(int, bool[]);
-	void DFSPath(int, bool[], vector<int>);
+	void DFSPath(int, bool[]);
 	vector<int> path;
 public:
 	Graph(int);

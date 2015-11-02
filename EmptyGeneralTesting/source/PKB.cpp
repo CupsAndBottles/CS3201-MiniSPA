@@ -1252,9 +1252,11 @@ int PKB::getStartNum(int procIndex) {
 int PKB::getEndNum(int procIndex) {
 	return procTable[procIndex].getEndNo();
 }
+
 //V
 vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
 {
+
 	vector<pair<int, int>> results;
 	vector<pair<int, int>> startEndNum;
 	vector<vector<int>> modifiesCol;
@@ -1281,11 +1283,14 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 		nextCol.push_back(next);
 		typeCol.push_back(type);
 	}
-
+	
 	if (stmtNum1 != -1) {
+		cout << stmtTable[stmtNum1].getType();
+		cout << stmtTable[stmtNum2].getType();
 			if (stmtNum2 != -1) { // Affects(2, 6)
 				if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN) && (stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
-					int check = De.extractAffectsBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum);
+					int check = De.extractAffectsBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, typeCol);
+					cout << "CHECK IS " << check << endl;
 					if (check == 1) {
 						results.push_back(make_pair(stmtNum1, stmtNum2));
 					}

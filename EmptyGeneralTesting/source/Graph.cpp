@@ -1,4 +1,5 @@
 #include "Graph.h";
+#include <iostream>;
 
 Graph::Graph(int V)
 {
@@ -35,14 +36,14 @@ void Graph::DFSRec(int v, bool updated[])
 	return;
 }
 
-void Graph::DFSPath(int v, bool visited[], vector<int> path) {
+void Graph::DFSPath(int v, bool visited[]) {
 	visited[v] = true;
 	path.push_back(v);
 
 	list<int>::iterator i;
 	for (i = adj[v].begin(); i != adj[v].end(); ++i) {
 		if (!visited[*i]) {
-			DFSPath(*i, visited,path);
+			DFSPath(*i, visited);
 		}
 	}
 }
@@ -71,7 +72,11 @@ vector<int> Graph::DFSOriginal(int v) {
 		visited[i] = false;
 	}
 
-	DFSPath(v, visited, path);
+	DFSPath(v, visited);
+
+	for (int i = 0; i < path.size(); i++) {
+		cout << path.at(i) << " ";
+	}
 
 	return path;
 }

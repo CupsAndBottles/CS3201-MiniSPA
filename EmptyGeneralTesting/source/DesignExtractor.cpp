@@ -231,8 +231,7 @@ std::vector<int> DesignExtractor::extractPrevT(vector<vector<int>> col, int stmt
 	return PrevT;
 }
 
-int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum) {
-	
+int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type) {
 	int firstIndex;
 	int secondIndex;
 
@@ -263,7 +262,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 			int endNum = startEndNum.at(firstIndex).second;
 			int startNum =	startEndNum.at(firstIndex).first;
 			
-			Graph cfg(endNum);
+			Graph cfg(endNum+1);
 
 			for (int i = startNum; i <= endNum; i++) {
 				vector<int> list = nextCol.at(i);
@@ -284,6 +283,9 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 					stmtNum = path.at(i);
 					if (stmtNum == stmtNum2) {
 						break;
+					}
+					else if (type.at(stmtNum) == Enum::TYPE::WHILE || type.at(stmtNum) == Enum::TYPE::IF) {
+						continue;
 					}
 					else {
 						modifies = modifiesCol.at(stmtNum);
@@ -320,7 +322,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 		}
 	}
 
-	Graph cfg(procEnd);
+	Graph cfg(procEnd+1);
 	for (int i = procStart; i <= procEnd; i++) {
 		vector<int> list = nextCol.at(i);
 		for (int j = 0; j < list.size(); j++) {
@@ -345,10 +347,15 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 				else {
 					for (int j = 1; j < i; j++) {
 						betweenStmt = path.at(j);
-						modifies = modifiesCol.at(betweenStmt);
-						if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
-							results.push_back(make_pair(stmtNum1, stmtNum2));
-						}
+			if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
+				continue;
+			}
+			else {
+				modifies = modifiesCol.at(betweenStmt);
+				if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
+					results.push_back(make_pair(stmtNum1, stmtNum2));
+				}
+			}
 					}
 				}
 			}
@@ -370,7 +377,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 		}
 	}
 
-	Graph cfg(procEnd);
+	Graph cfg(procEnd+1);
 	for (int i = procStart; i <= procEnd; i++) {
 		vector<int> list = nextCol.at(i);
 		for (int j = 0; j < list.size(); j++) {
@@ -391,10 +398,15 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 				
 					for (int j = 0; j <path.size(); j++) {
 						betweenStmt = path.at(j);
-						modifies = modifiesCol.at(betweenStmt);
-						if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
-							results.push_back(make_pair(stmtNum1, stmtNum2));
-						}
+			if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
+				continue;
+			}
+			else {
+				modifies = modifiesCol.at(betweenStmt);
+				if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
+					results.push_back(make_pair(stmtNum1, stmtNum2));
+				}
+			}
 					}
 			}
 		}
