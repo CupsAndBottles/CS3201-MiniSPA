@@ -396,18 +396,78 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 			modifiedVar = modifiesCol.at(stmtNum1).at(0);
 			if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
 				
-					for (int j = 0; j <path.size(); j++) {
-						betweenStmt = path.at(j);
-			if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
-				continue;
-			}
-			else {
-				modifies = modifiesCol.at(betweenStmt);
-				if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
-					results.push_back(make_pair(stmtNum1, stmtNum2));
-				}
-			}
+					for (int j = i+1; j <path.size(); j++) {
+						if (path.at(j) == stmtNum2) {
+							break;
+						}
+						else {
+							betweenStmt = path.at(j);
+							if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
+								continue;
+							}
+							else {
+								modifies = modifiesCol.at(betweenStmt);
+								if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
+									results.push_back(make_pair(stmtNum1, stmtNum2));
+								}
+							}
+						}
 					}
+			}
+		}
+	}
+	return results;
+}
+
+vector<pair<int, int>> DesignExtractor::extractAffectsBothUnspecified(vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type) {
+	
+	vector<pair<int, int>> results;
+
+	for (int i = 0; i < startEndNum.size(); i++) {
+
+		int startNum = startEndNum.at(i).first;
+		int endNum = startEndNum.at(i).second;
+
+		Graph cfg(endNum + 1);
+		for (int i = startNum; i <= startNum; i++) {
+			vector<int> list = nextCol.at(i);
+			for (int j = 0; j < list.size(); j++) {
+				cfg.addEdge(i, list.at(j));
+			}
+		}
+		
+		vector<int> path;
+		int modifiedVar;
+		vector<int> usedVar;
+		int betweenStmt;
+		vector<int> modifies;
+
+		for (int j = startNum; j <= endNum; j++) {	
+			if (type.at(j) == Enum::TYPE::ASSIGN) {
+				modifiedVar = modifiesCol.at(j).at(0);
+				path = cfg.DFSOriginal(j);
+				for (int k = 1; k < path.size(); k++) {
+					int stmtNum2 = path.at(k);
+					if (type.at(stmtNum2) == Enum::TYPE::ASSIGN) {
+						usedVar = usesCol.at(stmtNum2);
+						if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
+							for (int m = j + 1; m < path.size();m++) {
+								if (path.at(m) == stmtNum2) {
+									break;
+								}
+								else if (type.at(path.at(m))== Enum::TYPE::WHILE || type.at(path.at(m)) == Enum::TYPE::IF) {
+									continue;
+								}
+								else {
+									modifies = modifiesCol.at(path.at(m));
+									if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
+										results.push_back(make_pair(j, stmtNum2));
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
