@@ -2497,11 +2497,46 @@ namespace UnitTesting
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
 
-
 			pkb->setProcUses(varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			QueryTree queryTree;
+			Clauses clause;
+
+			clause.setParentStringVal("Modifies");
+
+			clause.setLeftCType("assign");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("a");
+			clause.setLeftCIsStmt("0");
+
+			clause.setRightCType("");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("x");
+			clause.setRightCIsStmt("0");
+			queryTree.setSuchThatTree(clause);
+
+			clause = Clauses();
+			clause.setLeftCType("assign");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("a");
+			clause.setLeftCIsStmt("0");
+
+			clause.setRightCType("stmt");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(10);
+			clause.setRightCIsStmt("0");
+			queryTree.setWithTree(clause);
+
+			clause = Clauses();
+			clause.setParentStringVal("BOOLEAN");
+			clause.setParentType("BOOLEAN");
+			queryTree.setResultTree(clause);
+
+			//ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
+			//QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -2510,7 +2545,6 @@ namespace UnitTesting
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
 				outputString = outputString + *it;
 			}
-
 
 			Assert::AreEqual(expectedResults, outputString);
 		};
@@ -2662,8 +2696,28 @@ namespace UnitTesting
 
 			pkb->setProcUses(varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select v with v.varName = p.procName");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			QueryTree queryTree;
+			Clauses clause;
+			clause.setLeftCType("variable");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("v");
+			clause.setLeftCIsStmt("0");
+
+			clause.setRightCType("procedure");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("p");
+			clause.setRightCIsStmt("0");
+			queryTree.setWithTree(clause);
+
+			clause = Clauses();
+			clause.setParentStringVal("v");
+			clause.setParentType("variable");
+			queryTree.setResultTree(clause);
+
+			//ParserForPQL parserPQL = ParserForPQL("procedure p; variable v; Select v with v.varName = p.procName");
+			//QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -2672,7 +2726,6 @@ namespace UnitTesting
 			for (std::list<string>::iterator it = results.begin(); it != results.end(); it++) {
 				outputString = outputString + *it;
 			}
-
 
 			Assert::AreEqual(expectedResults, outputString);
 		};
@@ -2821,10 +2874,29 @@ namespace UnitTesting
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
 
+			QueryTree queryTree;
+			Clauses clause;
+			clause.setLeftCType("assign");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("a");
+			clause.setLeftCIsStmt("0");
+
+			clause.setRightCType("stmt");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("s");
+			clause.setRightCIsStmt("0");
+			queryTree.setWithTree(clause);
+
+			clause = Clauses();
+			clause.setParentStringVal("s");
+			clause.setParentType("stmt");
+			queryTree.setResultTree(clause);
 
 			pkb->setProcUses(varUsed);
-			ParserForPQL parserPQL = ParserForPQL("assign a; stmt s; Select s with a.stmt# = s.stmt#");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			//	ParserForPQL parserPQL = ParserForPQL("assign a; stmt s; Select s with a.stmt# = s.stmt#");
+			//QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -3015,8 +3087,45 @@ namespace UnitTesting
 			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
 			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
 
-			ParserForPQL parserPQL = ParserForPQL("procedure p, q; call c; Select <p, q> such that Calls(p, q) with c.procName = \"hope\"");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			QueryTree queryTree = QueryTree();
+
+			Clauses clause;
+			clause.setLeftCType("call");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("c");
+			clause.setLeftCIsStmt("0");
+
+			clause.setRightCType("procedure");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(0);
+			clause.setRightCStringValue("hope");
+			clause.setRightCIsStmt("0");
+			queryTree.setWithTree(clause);
+
+			clause.setParentStringVal("Calls");
+
+			clause.setLeftCType("procedure");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("p");
+
+			clause.setRightCType("procedure");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("q");
+			queryTree.setSuchThatTree(clause);
+
+			clause.setParentStringVal("p");
+			clause.setParentType("procedure");
+			queryTree.setResultTree(clause);
+
+			clause.setParentStringVal("q");
+			clause.setParentType("procedure");
+			queryTree.setResultTree(clause);
+
+			//ParserForPQL parserPQL = ParserForPQL("procedure p, q; call c; Select <p, q> such that Calls(p, q) with c.procName = \"hope\"");
+			//QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
