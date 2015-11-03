@@ -77,4 +77,24 @@ Select n such that Next*(24,n)
 while w;
 Select w such that Parent(w, 15)
 14
-5000 
+5000
+35 -Calls and Modifies
+procedure p;
+Select p such that Calls(p, "see") and Modifies(p, "fine")
+good
+5000
+36 -Calls
+procedure p;
+Select p such that Calls(p, "see")
+good 
+5000
+37 -Calls 
+procedure p;
+Select p such that Calls("good", p)
+see
+5000
+38 -Calls and Modifies
+procedure p;
+Select p such that Calls("good", p) and Modifies(p, "view")
+see
+5000
