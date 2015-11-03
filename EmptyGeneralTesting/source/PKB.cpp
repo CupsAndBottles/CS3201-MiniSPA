@@ -428,18 +428,22 @@ void PKB::setRightExpr(int index, string expr)
 
 // V: Parser - PKB, called at start by parser
 void PKB::setByDesignExtractor() {
+
 	for (int i = OFFSET; i < stmtTable.size(); i++) {
 	extractFollowsT(i);
 	extractFollowedByT(i);
+	
 	}
-	 
+
 	for (int j = 0; j < procTable.size(); j++) {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
-
+	
 	extractProcExtraModifiesUses();
+	
 	setCallsStmtModifiesUses();
+	
 	setCallStmtsParentTModifiesUses();
 }
 
@@ -1263,9 +1267,11 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 	vector<vector<int>> usesCol;
 	vector<vector<int>> nextCol;
 	DesignExtractor De;
-	vector<int> modifies, uses, next;
+	vector<int> modifies, uses, next, parentT, children;
 	int type;
 	vector<int> typeCol;
+	vector<vector<int>> parentTCol;
+	vector<vector<int>> childrenCol;
 
 	for (int i = 0; i < procTable.size(); i++) {
 		int start = getStartNum(i);
@@ -1278,18 +1284,21 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 		uses = stmtTable.at(i).getUses();
 		next = stmtTable.at(i).getNext();
 		type = stmtTable.at(i).getType();
+		parentT = stmtTable.at(i).getParentT();
+		children = stmtTable.at(i).getChildren();
 		modifiesCol.push_back(modifies);
 		usesCol.push_back(uses);
 		nextCol.push_back(next);
 		typeCol.push_back(type);
+		parentTCol.push_back(parentT);
+		childrenCol.push_back(children);
 	}
 	
 	if (stmtNum1 != -1) {
-		//cout << stmtTable[stmtNum1].getType();
-		//cout << stmtTable[stmtNum2].getType();
+		
 			if (stmtNum2 != -1) { // Affects(2, 6)
 				if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN) && (stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
-					int check = De.extractAffectsBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, typeCol);
+					int check = De.extractAffectsBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
 					//cout << "CHECK IS " << check << endl;
 					if (check == 1) {
 						results.push_back(make_pair(stmtNum1, stmtNum2));
@@ -1374,7 +1383,6 @@ void PKB::extractFollowsT(int stmtNum)
 	for (size_t i = 0; i < stmtTable.size(); i++) {
 		followsCol.push_back(stmtTable.at(i).getFollows());
 	}
-	
 	followsT = design.extractFollowsT(followsCol, stmtNum);
 	setFollowsT(stmtNum, followsT);
 }
@@ -1389,9 +1397,8 @@ void PKB::extractFollowedByT(int stmtNum)
 		followedByCol.push_back(stmtTable.at(i).getFollowedBy());
 	}
 	
-		followedByT = design.extractFollowedByT(followedByCol, stmtNum);
+	followedByT = design.extractFollowedByT(followedByCol, stmtNum);
 	setFollowedByT(stmtNum, followedByT);
-
 }
 
 //V
