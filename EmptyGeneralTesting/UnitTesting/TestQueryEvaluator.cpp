@@ -13,6 +13,7 @@ namespace UnitTesting
 	{
 	public:
 		TEST_METHOD(QE_EvaluateSelectClause) {
+			//assign a; Select a;
 			PKB *pkb = new PKB();
 
 			// Sets stmts
@@ -20,10 +21,16 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			//ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
+			//QueryTree queryTree = parserPQL.getQueryTree();
+			QueryTree queryTree;
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
+			Clauses clause;
+			clause.setParentStringVal("a");
+			clause.setParentType("assign");
+			queryTree.setResultTree(clause);
+
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 			list<string> expectedResults = { "1", "3" };
 
@@ -86,7 +93,7 @@ namespace UnitTesting
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
 			pkb->setVarName("command");
-			pkb->setRightExpr(1, "command10+");
+			pkb->setRightExpr(1, "command 10 +");
 			pkb->setModifies(1, "beads");
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
@@ -102,7 +109,7 @@ namespace UnitTesting
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
-			pkb->setRightExpr(3, "inspiration1+");
+			pkb->setRightExpr(3, "inspiration 1 +");
 			pkb->setModifies(3, "command");
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
@@ -170,17 +177,34 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 8);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setRightExpr(8, "beads command +");
 			pkb->setModifies(8, "x");
 			pkb->setModifiedBy("x", 8);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
 
-
 			pkb->setProcUses(varUsed);
+			
+			QueryTree queryTree;
+			Clauses clause;
 
-			ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Follows(1, 2)");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			clause.setParentStringVal("Follows");
+
+			clause.setLeftCType("stmt");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(1);
+
+			clause.setRightCType("stmt");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(2);
+			queryTree.setSuchThatTree(clause);
+
+			clause.setParentStringVal("s");
+			clause.setParentType("stmt");
+			queryTree.setResultTree(clause);
+
+			//ParserForPQL parserPQL = ParserForPQL("stmt s; Select s such that Follows(1, 2)");
+			//QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -334,11 +358,11 @@ namespace UnitTesting
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
 
-
 			pkb->setProcUses(varUsed);
 
 			ParserForPQL parserPQL = ParserForPQL("while w; Select w such that Parent(w, _)");
 			QueryTree queryTree = parserPQL.getQueryTree();
+
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -645,7 +669,7 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 8);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setRightExpr(8, "beads command +");
 			pkb->setModifies(8, "x");
 			pkb->setModifiedBy("x", 8);
 			pkb->setModifies(4, "x");
