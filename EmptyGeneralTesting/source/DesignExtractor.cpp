@@ -442,6 +442,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 			cfg.addEdge(i, list.at(j));
 		}
 	}
+
 	int stmtNum1;
 	vector<int> usedVar = usesCol.at(stmtNum2);
 	int modifiedVar;
@@ -454,7 +455,6 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 			if (type.at(stmtNum1) == Enum::TYPE::ASSIGN) {
 				modifiedVar = modifiesCol.at(stmtNum1).at(0);
 				if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
-
 					for (int j = i + 1; j < path.size(); j++) {
 						if (path.at(j) == stmtNum2) {
 							break;
@@ -473,9 +473,10 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 							}
 						}
 					}
-					if (found == 0) {
+					if (found == 0){
 						results.push_back(make_pair(stmtNum1, stmtNum2));
 					}
+					found = 0;
 				}
 			}
 		}
