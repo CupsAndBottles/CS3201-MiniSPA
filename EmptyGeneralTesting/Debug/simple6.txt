@@ -31,22 +31,22 @@ cloud = 2;
 rain = 7; //28
 thunder = 10;  
 light = 1; 
-while light{ 
+while light{ //31
 rain = rain + 2; //32  
 plane = 3 * plane; 
 bird = 4; 
 if rain then{ //35  
-thunder = 2 * light; 
-light = 8 * cloud; 
+thunder = 2 * light; //36
+light = 8 * cloud; //37
 cloud = rain + 4;} //38 
 else{  
 thunder = 11; 
 bird = 6 * bird; 
 rain = rain + plane + 3; //41 
-cloud = 7 + cloud;} 
-plane = 10 + plane; 
-light = 7;} 
-bird = 12; 
+cloud = 7 + cloud;} //42
+plane = 10 + plane; //43
+light = 7;} //44
+bird = 12; //45
 thunder = 8 * thunder;} //46  
 procedure earth{ 
 while human{ //47
@@ -90,11 +90,11 @@ flour = 2; //81
 egg = 12; 
 oven = 4; 
 milk = 8; 
-while egg{ 
+while egg{//85 
 oven = oven * 3; //86
 butter = 2 * butter + 5; 
 flour = 9; 
-milk = 8 * milk;} 
+milk = 8 * milk;}//89 
 egg = 2; //90
 butter = 4 * butter; 
 oven = 9 + oven;} //92 
@@ -104,14 +104,14 @@ garden = 3 + garden;
 class = 9; //95 
 lab = 14; 
 shop = 4 * class; 
-if shop then{ 
-shop = 5 * shop; 
+if shop then{ //98
+shop = 5 * shop; //99
 room = 2 * room; //100 
 lab = 12 + lab;} //101
 else{ 
 class = class + 2; //102 
-room = 1 + room;} 
-garden = 8; 
+room = 1 + room;}  //103
+garden = 8;  //104
 shop = garden + 5; //105 
 lab = 6; 
 class = 30;} //107 
@@ -128,16 +128,16 @@ y = 3 * m + 2;
 z = 1; 
 x = z + 1; 
 m = 5 * m; //119 
+while m{ //120
+y = y + 2; //121
+x = 45; //122
+k = 9 * k; //123
+g = 2;}} //124
 else{ 
-k = 3; //120 
-x = 6 * x; //121
-z = 10; //122
-g = g + 8;} //123
-while m{ //124
-y = y + 2; //125
-x = 45; 
-k = 9 * k; 
-g = 2;}} 
+k = 3; //125 
+x = 6 * x; //126
+z = 10; //127
+g = g + 8;} //128
 while y{ //129
 z = z + 6 * x; //130 
 m = 7; 
