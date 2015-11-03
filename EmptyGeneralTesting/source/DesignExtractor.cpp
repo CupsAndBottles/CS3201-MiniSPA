@@ -329,7 +329,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 			cfg.addEdge(i, list.at(j));
 		}
 	}
-
+	cout << "after cfg building\n";
 	int stmtNum2;
 	int modifiedVar = modifiesCol.at(stmtNum1).at(0);
 	vector<int> usedVar;
@@ -354,6 +354,9 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 				modifies = modifiesCol.at(betweenStmt);
 				if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
 					results.push_back(make_pair(stmtNum1, stmtNum2));
+				}
+				else { 
+					break;
 				}
 			}
 					}
@@ -387,16 +390,17 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 	int stmtNum1;
 	vector<int> usedVar = usesCol.at(stmtNum2);
 	int modifiedVar;
-	int betweenStmt;
+	int betweenStmt, found = 0;
 
 	vector<int> path = cfg.DFSOriginal(procStart);
 	for (int i = 0; i < path.size(); i++) {
 		stmtNum1 = path.at(i);
-		if (type.at(stmtNum1) == Enum::TYPE::ASSIGN) {
-			modifiedVar = modifiesCol.at(stmtNum1).at(0);
-			if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
-				
-					for (int j = i+1; j <path.size(); j++) {
+		if (stmtNum1 != stmtNum2) {
+			if (type.at(stmtNum1) == Enum::TYPE::ASSIGN) {
+				modifiedVar = modifiesCol.at(stmtNum1).at(0);
+				if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
+
+					for (int j = i + 1; j < path.size(); j++) {
 						if (path.at(j) == stmtNum2) {
 							break;
 						}
@@ -407,13 +411,21 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 							}
 							else {
 								modifies = modifiesCol.at(betweenStmt);
-								if (find(modifies.begin(), modifies.end(), modifiedVar) == modifies.end()) {
-									results.push_back(make_pair(stmtNum1, stmtNum2));
+								if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+									found = 1;
+									break;
 								}
 							}
 						}
 					}
+					if (found == 0) {
+						results.push_back(make_pair(stmtNum1, stmtNum2));
+					}
+				}
 			}
+		}
+		else {
+			break;
 		}
 	}
 	return results;
