@@ -11,3 +11,7 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
+#include "QueryEvaluator.h"
+#include "QueryTree.h"
+#include "PKB.h"
+#include "ParserForPQL.h"

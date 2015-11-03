@@ -930,6 +930,61 @@ namespace UnitTesting
 			
 		}
 		*/
+
+		TEST_METHOD(PKB_getCalls) {
+			PKB *pkb = new PKB();
+			pkb->setProcNameInProcTable("morning");
+			pkb->setProcNameInProcTable("afternoon");
+			pkb->setProcNameInProcTable("evening");
+			pkb->setProcNameInProcTable("night");
+			pkb->setProcNameInProcTable("midnight");
+
+			vector<pair<int, string>> calls;
+			calls.push_back(make_pair(0, "afternoon"));
+			calls.push_back(make_pair(1, "evening"));
+			calls.push_back(make_pair(2, "night"));
+			calls.push_back(make_pair(3, "midnight"));
+
+			pkb->setProcCalls(calls);
+
+			// Calls(p, p1)
+			vector<pair<int, int>> actualResult = pkb->getCalls(UNDEFINED, UNDEFINED);
+			vector<pair<int, int>> expectedResult;
+			
+			expectedResult.push_back(make_pair(0,1));
+			expectedResult.push_back(make_pair(1, 2));
+			expectedResult.push_back(make_pair(2, 3));
+			expectedResult.push_back(make_pair(3, 4));
+			
+			Assert::IsTrue(actualResult == expectedResult);
+			
+			// Calls(1, p)
+			actualResult.clear();
+			expectedResult.clear();
+
+			actualResult = pkb->getCalls(1, UNDEFINED);
+			expectedResult.push_back(make_pair(1, 2));
+			
+			Assert::IsTrue(actualResult == expectedResult);
+			
+			// Calls(p, 1)
+			actualResult.clear();
+			expectedResult.clear();
+
+			actualResult = pkb->getCalls(UNDEFINED, 3);
+			expectedResult.push_back(make_pair(2, 3));
+
+			Assert::IsTrue(actualResult == expectedResult);
+
+			// Calls(1,2)
+			actualResult.clear();
+			expectedResult.clear();
+			actualResult = pkb->getCalls(4, 3);
+			
+			Assert::IsTrue(actualResult == expectedResult);
+
+		}
+
 		TEST_METHOD(PKB_getUsedByStmtNum) {
 			PKB *pkb = new PKB();
 			vector<int> used;
