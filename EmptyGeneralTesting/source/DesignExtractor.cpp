@@ -1,6 +1,7 @@
 #pragma once
 #include "DesignExtractor.h"
-#include <list>;
+#include <list>
+#include <algorithm>
 
 using namespace std;
 
@@ -308,7 +309,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 					vector<int> parentT = parentTCol.at(stmtNum2);
 					vector<int> whileStmt;
 					int stmt;
-
+					
 					for (int i = 0; i < parentT.size(); i++) {
 						stmt = parentT.at(i);
 						if (type.at(stmt) == Enum::TYPE::WHILE) {
@@ -422,7 +423,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 	return results;
 }
 
-vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type) {
+vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
 	int procStart, procEnd;
 	vector<pair<int, int>> results;
 	vector<int> modifies;
@@ -447,7 +448,6 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 	vector<int> usedVar = usesCol.at(stmtNum2);
 	int modifiedVar;
 	int betweenStmt, found = 0;
-
 	vector<int> path = cfg.DFSOriginal(procStart);
 	for (int i = 0; i < path.size(); i++) {
 		stmtNum1 = path.at(i);
@@ -467,6 +467,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 							else {
 								modifies = modifiesCol.at(betweenStmt);
 								if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+									
 									found = 1;
 									break;
 								}
@@ -483,6 +484,46 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 		else {
 			break;
 		}
+	}
+
+	if (parentTCol.at(stmtNum2).size() != 0) {
+		vector<int> parentT = parentTCol.at(stmtNum2);
+		vector<int> whileStmt;
+		int stmt;
+
+		for (int i = 0; i < parentT.size(); i++) {
+			stmt = parentT.at(i);
+			if (type.at(stmt) == Enum::TYPE::WHILE) {
+				whileStmt.push_back(stmt);
+			}
+		}
+
+		if (whileStmt.size() > 0) {
+			int min = whileStmt.at(0);
+			for (int j = 1; j < whileStmt.size(); j++) {
+				if (whileStmt.at(j) < min) {
+					min = whileStmt.at(j);
+				}
+			}
+
+			vector<int> children = childrenCol.at(min);
+			sort(children.begin(), children.end());
+			size_t start = find(children.begin(), children.end(), stmtNum2) - children.begin();
+			for (size_t j = start; j < children.size(); j++) {
+				if (type.at(children.at(j)) == Enum::TYPE::IF) {
+					continue;
+				}
+				else {
+					if (extractAffectsBothNum(children.at(j), stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol) == 1) {
+						results.push_back(make_pair(children.at(j), stmtNum2));
+					}
+				}
+			}
+		}
+		}
+	
+	if (extractAffectsBothNum(stmtNum2, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol) == 1) {
+		results.push_back(make_pair(stmtNum2, stmtNum2));
 	}
 	return results;
 }
