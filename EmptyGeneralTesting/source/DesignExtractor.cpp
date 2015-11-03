@@ -316,7 +316,6 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 						}
 					}
 					int min = whileStmt.at(0);
-					cout << "WhileStmt: " << min;
 					for (int j = 1; j < whileStmt.size(); j++) {
 						if (whileStmt.at(j) < min) {
 							min = whileStmt.at(j);
@@ -324,17 +323,21 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 					}
 
 					vector<int> children = childrenCol.at(min);
+					
 					vector<int> modified;
-					for (int j = 0; j < children.size(); j++) {
-						if (children.at(j) == stmtNum1) {
+					for (int j = 0; j <children.size(); j++) {
+						if (type.at(children.at(j)) == Enum::TYPE::IF) {
 							continue;
-						} else {
-						modified = modifiesCol.at(children.at(j));
-						if (find(modified.begin(), modified.end(), modifiedVar) != modified.end()) {
-							found = 1;
+						}
+						else {
+							if ((find(path.begin(), path.end(), children.at(j)) != path.end()) && (children.at(j)!= stmtNum1)) {
+								modified = modifiesCol.at(children.at(j));
+								if (find(modified.begin(), modified.end(), modifiedVar) != modified.end()) {
+									found = 1;
+								}
+							}
 						}
 
-						}
 					}
 
 					if(found ==0) {
@@ -352,7 +355,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 	}
 }
 
-vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type) {
+vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
 
 	int procStart, procEnd;
 	vector<pair<int, int>> results;
@@ -391,18 +394,18 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 				else {
 					for (int j = 1; j < i; j++) {
 						betweenStmt = path.at(j);
-			if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
-				continue;
-			}
-			else {
-				modifies = modifiesCol.at(betweenStmt);
-				if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-					found = 1;
-				}
-				else { 
-					continue;
-				}
-			}
+						if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
+							continue;
+						}
+						else {
+							modifies = modifiesCol.at(betweenStmt);
+							if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+								found = 1;
+							}
+							else {
+								continue;
+							}
+						}
 					}
 					if (found == 0) {
 						results.push_back(make_pair(stmtNum1, stmtNum2));
@@ -410,6 +413,10 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 				}
 			}
 		}
+	}
+
+	if (extractAffectsBothNum(stmtNum1, stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol)== 1) {
+		results.push_back(make_pair(stmtNum1, stmtNum1));
 	}
 
 	return results;

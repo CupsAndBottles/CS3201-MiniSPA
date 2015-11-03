@@ -1308,7 +1308,7 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 			else { // Affects( 2, s/a/_)
 				if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN)) {
 					
-					results = De.extractAffectsFirstNum(stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, typeCol);
+					results = De.extractAffectsFirstNum(stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
 				} 
 			}
 		}
