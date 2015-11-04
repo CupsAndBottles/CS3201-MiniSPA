@@ -252,6 +252,12 @@ void Parser::processNextPrev(int index, string stmt)
 				ifIndex.pop_back();
 			}
 		}
+
+		if (pStmt.find("else") != std::string::npos) {
+			pkb->setPrev(index - numOfProc - numOfElse, ifIndexStmt.back());
+			pkb->setNext(ifIndexStmt.back(), index - numOfProc - numOfElse );
+
+		}
 		if (stmt.find("procedure") == std::string::npos && !whileIndex.empty()) {
 			size_t n = count(pStmt.begin(), pStmt.end(), '}');
 			for (int i = 0; i < n;i++) {
@@ -286,6 +292,7 @@ void Parser::processNextPrev(int index, string stmt)
 			indexAndType.push_back(make_pair(3, index - numOfProc - numOfElse));
 			pStmt = stmt;
 			pStmtIndex = index - numOfProc - numOfElse;
+
 		}
 		else {
 			if (stmt.find("}") != std::string::npos) {
@@ -312,8 +319,6 @@ void Parser::processNextPrev(int index, string stmt)
 							indexAndType.push_back(currIf);
 						}
 						else if (indexAndType.back().first == 3) {
-							pkb->setNext(ifIndexStmt.back(), index - numOfProc - numOfElse);
-							pkb->setPrev(index - numOfProc - numOfElse, ifIndexStmt.back());
 							ifIndex.push_back(index - numOfProc - numOfElse);
 							ifIndexStmt.pop_back();
 							if (!indexAndType.empty() && indexAndType.size()>1) {
