@@ -98,3 +98,13 @@ procedure p;
 Select p such that Calls("good", p) and Modifies(p, "view")
 see
 5000
+39 -Next 
+prog_line n;
+Select n such that Next(78, n)
+70
+5000
+40 -Next 
+prog_line n;
+Select n such that Next(73, n)
+74, 75, 76
+5000
