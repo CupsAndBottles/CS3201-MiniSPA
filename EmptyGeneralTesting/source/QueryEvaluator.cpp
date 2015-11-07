@@ -207,9 +207,9 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 		else if (relationship == RELATIONSHIP_AFFECTS) {
 			results = this->pkb->getAffects(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
 		}
-	/*	else if (relationship == RELATIONSHIP_AFFECTST) {
+		else if (relationship == RELATIONSHIP_AFFECTST) {
 			results = this->pkb->getAffectsT(firstParamType, firstParamIndex, secondParamType, secondParamIndex);
-		} */
+		} 
 		else {
 
 		}
@@ -356,6 +356,7 @@ bool QueryEvaluator::evaluatePattern(Clauses clause) {
 		return evaluateWhile(clause);
 		break;
 	default:
+		return false;
 		break;
 	}
 }
