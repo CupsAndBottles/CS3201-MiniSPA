@@ -698,3 +698,83 @@ assign a2;
 Select a2 such that Affects(31, a2)
 30, 31
 5000
+141 - Question 55a
+
+Select BOOLEAN such that Affects*(1,2)
+true
+5000
+142 - Question 55b
+
+Select BOOLEAN such that Affects*(1,4)
+true
+5000
+143 - Question 55c
+
+Select BOOLEAN such that Affects*(1,8)
+false
+5000
+144 - Question 55d
+
+Select BOOLEAN such that Affects*(8,28)
+false
+5000
+145 - Question 55e
+
+Select BOOLEAN such that Affects*(14,15)
+false
+5000
+146 - Question 55f
+
+Select BOOLEAN such that Affects*(22, 22)
+true
+5000
+147 - Question 56a
+assign a1;
+Select a1 such that Affects*(a1, 10)
+6
+5000
+148 - Question 56b
+assign a1;
+Select a1 such that Affects*(a1, 20)
+
+5000
+149 - Question 56c
+assign a1;
+Select a1 such that Affects*(a1, 25)
+
+5000
+150 - Question 56d
+assign a1;
+Select a1 such that Affects*(a1, 27)
+25, 26
+5000
+151 - Question 56e
+assign a1;
+Select a1 such that Affects*(a1, 30)
+31
+5000
+152 - Question 57a
+assign a2;
+Select a2 such that Affects*(1, a2)
+2, 3, 4, 17
+5000
+153 - Question 57b
+assign a2;
+Select a2 such that Affects*(14, a2)
+
+5000
+154 - Question 57c
+assign a2;
+Select a2 such that Affects*(20, a2)
+
+5000
+155 - Question 57d
+assign a2;
+Select a2 such that Affects*(25, a2)
+27
+5000
+156 - Question 57e
+assign a2;
+Select a2 such that Affects*(30, a2)
+
+5000
