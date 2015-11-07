@@ -108,3 +108,18 @@ prog_line n;
 Select n such that Next(73, n)
 74, 75, 76
 5000
+41 -Parent
+stmt s;
+Select s such that Parent(70, s)
+71, 72, 73, 77, 78
+5000
+42 -Parent
+stmt s;
+Select s such that Parent(s, 43)
+31
+5000
+43 -Parent
+stmt s;
+Select s such that Parent(31, s)
+32, 33, 34, 35, 43, 44
+5000

@@ -273,6 +273,9 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 			}
 
 			vector<int> path = cfg.DFSOriginal(stmtNum1);
+			//for (int i = 0; i < path.size(); i++) {
+				//cout << path.at(i) << " ";
+			//}
 			if ((stmtNum1 != stmtNum2) && (find(path.begin(), path.end(), stmtNum2) == path.end())) {
 				return 0;
 			}
@@ -292,8 +295,12 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 						else {
 							modifies = modifiesCol.at(stmtNum);
 							if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-								found = 1;
-								break;
+								if ((stmtNum < stmtNum1) && (stmtNum < stmtNum2)) {
+								} else {
+									found = 1;
+									//cout << "This is it: " << stmtNum;
+									break;
+								}
 							}
 						}
 					}
@@ -407,8 +414,13 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 						else {
 							modifies = modifiesCol.at(betweenStmt);
 							if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-								found = 1;
-								break;
+								if ((betweenStmt < stmtNum1) && (betweenStmt < stmtNum2)) {
+
+								}
+								else {
+									found = 1;
+									break;
+								}
 							}
 						}
 					}
@@ -466,8 +478,12 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 							else {
 								modifies = modifiesCol.at(betweenStmt);
 								if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-									found = 1;
-									break;
+									if (betweenStmt < stmtNum1 && betweenStmt < stmtNum2) {
+									}
+									else {
+										found = 1;
+										break;
+									}
 								}
 							}
 					}
@@ -531,7 +547,9 @@ vector<pair<int, int>> DesignExtractor::extractAffectsBothUnspecified(vector<vec
 		int endNum = startEndNum.at(i).second;
 
 		for (int j = startNum; j <= endNum; j++) {
-			returnResults = extractAffectsFirstNum(j, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
+			if (type.at(j) == Enum::TYPE::ASSIGN) {
+				returnResults = extractAffectsFirstNum(j, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
+			}
 		}
 
 		for (int k = 0; k < returnResults.size(); k++) {
@@ -572,7 +590,7 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 				cfg.addEdge(i, list.at(j));
 			}
 		}
-
+		//cout << "Entered here\n";
 		vector<int> path = cfg.DFSOriginal(stmtNum1);
 		if ((stmtNum1 != stmtNum2) && (find(path.begin(), path.end(), stmtNum2) == path.end())) {
 			return 0;
@@ -588,7 +606,7 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 						list.push_back(affectsIntermediateResults.at(j).second);
 					}
 					for (int k = 0; k < list.size(); k++) {
-						//cout << list.at(k);
+						//cout << list.at(k) << " ";
 					}
 					affects.at(path.at(i)) = list;
 					list.clear();
@@ -616,3 +634,90 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 
 }
 
+vector<pair<int,int>> DesignExtractor::extractAffectsTFirstNum(int stmtNum1, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
+	vector<pair<int, int>> results;
+	int procStart, procEnd;
+	vector<int> modifies;
+
+	for (int i = 0; i < startEndNum.size(); i++) {
+		procStart = startEndNum.at(i).first;
+		procEnd = startEndNum.at(i).second;
+		if ((procStart <= stmtNum1) && (stmtNum1 <= procEnd)) {
+			break;
+		}
+	}
+
+	Graph cfg(procEnd + 1);
+	for (int i = procStart; i <= procEnd; i++) {
+		vector<int> list = nextCol.at(i);
+		for (int j = 0; j < list.size(); j++) {
+			cfg.addEdge(i, list.at(j));
+		}
+	}
+
+	vector<int> path = cfg.DFSOriginal(stmtNum1);
+	int check;
+	for (int i = 0; i < path.size(); i++) {
+		check = extractAffectsTBothNum(stmtNum1, path.at(i), modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
+		if (check == 1) {
+			results.push_back(make_pair(stmtNum1, path.at(i)));
+		}
+	}
+	return results;
+}
+
+vector<pair<int, int>> DesignExtractor::extractAffectsTSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> prevCol, vector<pair<int, int>> startEndNum, vector<int> type, vector < vector<int>> parentTCol, vector<vector<int>> childrenCol) {
+
+	vector<pair<int, int>> results;
+	int procStart, procEnd;
+	vector<int> modifies;
+
+	for (int i = 0; i < startEndNum.size(); i++) {
+		procStart = startEndNum.at(i).first;
+		procEnd = startEndNum.at(i).second;
+		if ((procStart <= stmtNum2) && (stmtNum2 <= procEnd)) {
+			break;
+		}
+	}
+
+	Graph cfg(procEnd + 1);
+	for (int i = procStart; i <= procEnd; i++) {
+		vector<int> list = prevCol.at(i);
+		for (int j = 0; j < list.size(); j++) {
+			cfg.addEdge(i, list.at(j));
+		}
+	}
+
+	vector<int> path = cfg.DFSOriginal(stmtNum2);
+	int check;
+	for (int i = 0; i < path.size(); i++) {
+		check = extractAffectsTBothNum(path.at(i), stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, type, parentTCol, childrenCol);
+		if (check == 1) {
+			results.push_back(make_pair(path.at(i), stmtNum2));
+		}
+	}
+	return results;
+}
+
+vector<pair<int,int>> DesignExtractor::extractAffectsTBothUnspecified(vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
+	
+	vector<pair<int, int>> results;
+	vector < pair<int, int>> returnResults;
+	for (int i = 0; i < startEndNum.size(); i++) {
+
+		int startNum = startEndNum.at(i).first;
+		int endNum = startEndNum.at(i).second;
+
+		for (int j = startNum; j <= endNum; j++) {
+			if(type.at(j)== Enum::TYPE::ASSIGN) {
+				returnResults = extractAffectsTFirstNum(j, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
+			}
+			
+		}
+
+		for (int k = 0; k < returnResults.size(); k++) {
+			results.push_back(returnResults.at(k));
+		}
+	}
+	return results;
+}
