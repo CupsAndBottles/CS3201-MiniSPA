@@ -131,6 +131,7 @@ public:
 	vector<pair<int, int>> getNext(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	vector<pair<int, int>> getNextT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 	vector<pair<int, int>> getAffects(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
+	vector<pair<int, int>> getAffectsT(Enum::TYPE type1, int stmtNum, Enum::TYPE type2, int stmtNum2);
 
 	//From ProcTable
 	int getProcIndex(string procName);

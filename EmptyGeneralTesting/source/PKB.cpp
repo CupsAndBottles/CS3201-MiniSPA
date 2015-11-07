@@ -1266,10 +1266,10 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 	vector<vector<int>> modifiesCol;
 	vector<vector<int>> usesCol;
 	vector<vector<int>> nextCol;
+	vector<vector<int>> prevCol;
 	DesignExtractor De;
-	vector<int> modifies, uses, next, parentT, children;
+	vector<int> modifies, uses, next, parentT, children, typeCol, prev;
 	int type;
-	vector<int> typeCol;
 	vector<vector<int>> parentTCol;
 	vector<vector<int>> childrenCol;
 
@@ -1283,12 +1283,14 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 		modifies = stmtTable.at(i).getModifies();
 		uses = stmtTable.at(i).getUses();
 		next = stmtTable.at(i).getNext();
+		prev = stmtTable.at(i).getPrev();
 		type = stmtTable.at(i).getType();
 		parentT = stmtTable.at(i).getParentT();
 		children = stmtTable.at(i).getChildren();
 		modifiesCol.push_back(modifies);
 		usesCol.push_back(uses);
 		nextCol.push_back(next);
+		prevCol.push_back(prev);
 		typeCol.push_back(type);
 		parentTCol.push_back(parentT);
 		childrenCol.push_back(children);
@@ -1312,14 +1314,82 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 				} 
 			}
 		}
-	else if (stmtNum2 != -1) { // Next(s/w,_/a/c/if, 4)
+	else if (stmtNum2 != -1) { // Affects(s/_/a, 4)
 		if ((stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
-			results = De.extractAffectsSecondNum(stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
+			results = De.extractAffectsSecondNum(stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, typeCol, parentTCol, childrenCol);
+		}
+	}
+	else { //(s/a/_, s/a/_)
+		results = De.extractAffectsBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
+		}
+
+	return results;
+}
+
+//V
+vector<pair<int, int>> PKB::getAffectsT(Enum::TYPE type1, int stmtNum1, Enum::TYPE type2, int stmtNum2)
+{
+	cout << "Entered\n";
+	vector<pair<int, int>> results;
+	vector<pair<int, int>> startEndNum;
+	vector<vector<int>> modifiesCol;
+	vector<vector<int>> usesCol;
+	vector<vector<int>> nextCol;
+	vector<vector<int>> prevCol;
+	DesignExtractor De;
+	vector<int> modifies, uses, next, parentT, children, typeCol, prev;
+	int type;
+	vector<vector<int>> parentTCol;
+	vector<vector<int>> childrenCol;
+
+	for (int i = 0; i < procTable.size(); i++) {
+		int start = getStartNum(i);
+		int end = getEndNum(i);
+		startEndNum.push_back(make_pair(start, end));
+	}
+
+	for (int i = 0; i < stmtTable.size(); i++) {
+		modifies = stmtTable.at(i).getModifies();
+		uses = stmtTable.at(i).getUses();
+		next = stmtTable.at(i).getNext();
+		prev = stmtTable.at(i).getPrev();
+		type = stmtTable.at(i).getType();
+		parentT = stmtTable.at(i).getParentT();
+		children = stmtTable.at(i).getChildren();
+		modifiesCol.push_back(modifies);
+		usesCol.push_back(uses);
+		nextCol.push_back(next);
+		prevCol.push_back(prev);
+		typeCol.push_back(type);
+		parentTCol.push_back(parentT);
+		childrenCol.push_back(children);
+	}
+
+	if (stmtNum1 != -1) {
+		if (stmtNum2 != -1) { // Affects(2, 6)
+			if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN) && (stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
+				int check = De.extractAffectsTBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
+				cout << "CHECK IS " << check << endl;
+				if (check == 1) {
+					results.push_back(make_pair(stmtNum1, stmtNum2));
+				}
+			}
+		}
+		else { // Affects( 2, s/a/_)
+			if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN)) {
+
+				//results = De.extractAffectsTFirstNum(stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
+			}
+		}
+	}
+	else if (stmtNum2 != -1) { // Affects(s/_/a, 4)
+		if ((stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
+			//results = De.extractAffectsTSecondNum(stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, typeCol, parentTCol, childrenCol);
 		}
 	}
 	else { // Next(s/w/_, s/w/a/_/c)
-		//results = De.extractAffectsBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol);
-		}
+		   //results = De.extractAffectsTBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
+	}
 
 	return results;
 }
