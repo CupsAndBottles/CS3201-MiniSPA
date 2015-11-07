@@ -544,7 +544,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsBothUnspecified(vector<vec
 int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
 	int firstIndex;
 	int secondIndex;
-
+	
 	for (int i = 0; i < startEndNum.size(); i++) {
 		int start = startEndNum.at(i).first;
 		int end = startEndNum.at(i).second;
@@ -565,50 +565,44 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 		int startNum = startEndNum.at(firstIndex).first;
 
 		Graph cfg(endNum + 1);
-
+		
 		for (int i = startNum; i <= endNum; i++) {
 			vector<int> list = nextCol.at(i);
 			for (int j = 0; j < list.size(); j++) {
 				cfg.addEdge(i, list.at(j));
 			}
 		}
-		cout << "Weird!";
+
 		vector<int> path = cfg.DFSOriginal(stmtNum1);
 		if ((stmtNum1 != stmtNum2) && (find(path.begin(), path.end(), stmtNum2) == path.end())) {
 			return 0;
 		}
 		else {
-			cout << "Here\n";
 			vector<pair<int,int>> affectsIntermediateResults;
 			vector<int> list;
-			vector <vector<int>> affects(stmtNum2);
+			vector <vector<int>> affects(endNum+1);
 			for (int i = 0; i < path.size(); i++) {
-				if(path.at(i)!= stmtNum2) {
-					affectsIntermediateResults = extractAffectsFirstNum(stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
-					for (int j = 0; j < affectsIntermediateResults.size(); i++) {
+					affectsIntermediateResults = extractAffectsFirstNum(path.at(i), modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
+					//cout << "Stmt" << path.at(i) << ": ";
+					for (int j = 0; j < affectsIntermediateResults.size(); j++) {
 						list.push_back(affectsIntermediateResults.at(j).second);
 					}
-					affects.at(path.at(i))= list;
+					for (int k = 0; k < list.size(); k++) {
+						//cout << list.at(k);
+					}
+					affects.at(path.at(i)) = list;
 					list.clear();
-				}
-				else {
-					break;
-				}
 			}
-			Graph affectsGraph(endNum);
+			//cout << "End of first\n";
+			Graph affectsGraph(endNum+1);
 			int stmt;
 			vector<int> stmts;
 			for (int j = 0; j < path.size(); j++) {
-				if (path.at(j) != stmtNum2) {
 					stmt = path.at(j);
 					stmts = affects.at(stmt);
 					for (int k = 0; k < stmts.size(); k++) {
 						affectsGraph.addEdge(stmt, stmts.at(k));
 					}
-				}
-				else {
-					break;
-				}
 			}
 			vector<int> affectsPath = affectsGraph.DFSOriginal(stmtNum1);
 			if (find(affectsPath.begin(), affectsPath.end(), stmtNum2) != affectsPath.end()) {

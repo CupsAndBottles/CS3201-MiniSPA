@@ -79,7 +79,7 @@ vector<int> Graph::DFSOriginal(int v) {
 	}
 	else {
 		for (int i = 0; i < path.size(); i++) {
-			cout << path.at(i) << " ";
+			//cout << path.at(i) << " ";
 		}
 	}
 	return path;
