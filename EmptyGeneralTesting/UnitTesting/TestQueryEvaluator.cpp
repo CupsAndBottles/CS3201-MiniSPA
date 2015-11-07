@@ -2541,7 +2541,6 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE);	//6
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);   //8
-			pkb->setType(Enum::TYPE::CALLS);	//9
 
 			vector<pair<int, string>> varUsed;
 			varUsed.push_back(make_pair(0, "command"));
@@ -2661,37 +2660,6 @@ namespace UnitTesting
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
 
-			// statement 9
-			pkb->setProcNameInProcTable("hope");
-			vector<pair<int, string>> calledProc;
-			calledProc.push_back(make_pair(0, "hope"));
-			pkb->setProcCalls(calledProc);
-			pkb->setProcCalledBy(1, 0);
-
-			pkb->setProcUses(varUsed);
-
-			pkb->setType(Enum::TYPE::ASSIGN);	//10
-			pkb->setStartNum(1, 10);
-			pkb->setEndNum(1, 10);
-
-			pkb->setProcCallsT(0, { 1 });
-			pkb->setProcCalledByT(1, { 0 });
-
-			// statement 10
-			varUsed = { make_pair(1, "moonlight") };
-			pkb->setProcUses(varUsed);
-			pkb->setVarName("bye");
-			pkb->setVarName("moonlight");
-			pkb->setRightExpr(10, "moonlight 7 *");
-			pkb->setModifies(10, "bye");
-			pkb->setModifiedBy("bye", 10);
-			pkb->setUsedVar(10, "moonlight");
-			pkb->setUsedBy("moonlight", 10);
-			pkb->setConstant(7);
-			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
-			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
-			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
-
 			QueryTree queryTree;
 			Clauses clause;
 
@@ -2720,7 +2688,7 @@ namespace UnitTesting
 			queryTree.setWithTree(clause);
 
 			clause.setParentStringVal("BOOLEAN");
-			clause.setParentType("BOOLEAN");
+	//		clause.setParentType("BOOLEAN");
 			queryTree.setResultTree(clause);
 
 	//		ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
