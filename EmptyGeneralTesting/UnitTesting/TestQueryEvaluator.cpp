@@ -21,8 +21,8 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE); // stmt 2: while stmt
 			pkb->setType(Enum::TYPE::ASSIGN); // stmt 3: assignment stmt
 
-			//ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
-			//QueryTree queryTree = parserPQL.getQueryTree();
+		//	ParserForPQL parserPQL = ParserForPQL("assign a; Select a");
+		//	QueryTree queryTree = parserPQL.getQueryTree();
 			QueryTree queryTree;
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 			
@@ -30,7 +30,7 @@ namespace UnitTesting
 			clause.setParentStringVal("a");
 			clause.setParentType("assign");
 			queryTree.setResultTree(clause);
-
+			
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 			list<string> expectedResults = { "1", "3" };
 
@@ -2502,19 +2502,16 @@ namespace UnitTesting
 			QueryTree queryTree;
 			Clauses clause;
 
-			clause.setParentStringVal("Modifies");
-
 			clause.setLeftCType("assign");
 			clause.setLeftCIsExpression(false);
 			clause.setLeftCIntValue(-1);
 			clause.setLeftCStringValue("a");
-			clause.setLeftCIsStmt("0");
 
-			clause.setRightCType("");
+			clause.setRightCType("variable");
 			clause.setRightCIsExpression(false);
-			clause.setRightCIntValue(-1);
+			clause.setRightCIntValue(0);
 			clause.setRightCStringValue("x");
-			clause.setRightCIsStmt("0");
+			clause.setParentStringVal("Modifies");
 			queryTree.setSuchThatTree(clause);
 
 			clause = Clauses();
@@ -2535,8 +2532,8 @@ namespace UnitTesting
 			clause.setParentType("BOOLEAN");
 			queryTree.setResultTree(clause);
 
-			//ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
-			//QueryTree queryTree = parserPQL.getQueryTree();
+	//		ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
+	//		queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);

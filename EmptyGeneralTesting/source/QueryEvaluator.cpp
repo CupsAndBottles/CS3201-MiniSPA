@@ -1421,7 +1421,6 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 	list<string> stringedResults;
 	nonCommonSyn = select;
 
-
 	vector<Synonym> selectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
 	
 	if (!this->nonCommonSyn.empty()) {
