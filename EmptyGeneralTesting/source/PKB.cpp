@@ -1378,17 +1378,17 @@ vector<pair<int, int>> PKB::getAffectsT(Enum::TYPE type1, int stmtNum1, Enum::TY
 		else { // Affects( 2, s/a/_)
 			if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN)) {
 
-				//results = De.extractAffectsTFirstNum(stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
+				results = De.extractAffectsTFirstNum(stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
 			}
 		}
 	}
 	else if (stmtNum2 != -1) { // Affects(s/_/a, 4)
 		if ((stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
-			//results = De.extractAffectsTSecondNum(stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, typeCol, parentTCol, childrenCol);
+			results = De.extractAffectsTSecondNum(stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, typeCol, parentTCol, childrenCol);
 		}
 	}
-	else { // Next(s/w/_, s/w/a/_/c)
-		   //results = De.extractAffectsTBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
+	else { // (s/a/_, s/a/_)
+		   results = De.extractAffectsTBothUnspecified(modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
 	}
 
 	return results;
