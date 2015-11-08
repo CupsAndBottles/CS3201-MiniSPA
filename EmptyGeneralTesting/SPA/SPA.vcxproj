@@ -17,7 +17,6 @@
     <ClInclude Include="..\source\Details.h" />
     <ClInclude Include="..\source\Enum.h" />
     <ClInclude Include="..\source\Graph.h" />
-    <ClInclude Include="..\source\PairSeparator.h" />
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\ParserException.h" />
     <ClInclude Include="..\source\ParserForPattern.h" />
@@ -30,14 +29,12 @@
     <ClInclude Include="..\source\ParserOfTypeForSuchThat.h" />
     <ClInclude Include="..\source\ParserTypeWithSyn.h" />
     <ClInclude Include="..\source\PKB.h" />
-    <ClInclude Include="..\source\PQLController.h" />
     <ClInclude Include="..\source\Procedure.h" />
     <ClInclude Include="..\source\QueryEvaluator.h" />
     <ClInclude Include="..\source\QueryTree.h" />
     <ClInclude Include="..\source\RelTable.h" />
     <ClInclude Include="..\source\Stmt.h" />
     <ClInclude Include="..\source\Synonym.h" />
-    <ClInclude Include="..\source\TNode.h" />
     <ClInclude Include="..\source\Validation.h" />
     <ClInclude Include="..\source\Variable.h" />
   </ItemGroup>
@@ -60,7 +57,6 @@
     <ClCompile Include="..\source\ParserOfTypeForSuchThat.cpp" />
     <ClCompile Include="..\source\ParserTypeWithSyn.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
-    <ClCompile Include="..\source\PQLController.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
     <ClCompile Include="..\source\QueryEvaluator.cpp" />
     <ClCompile Include="..\source\QueryTree.cpp" />

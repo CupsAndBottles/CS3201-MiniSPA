@@ -62,7 +62,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < suchThat.size(); i++) {
 		isTrueClause = evaluateSuchThat(suchThat[i]);
 		if (!isTrueClause) {
-			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+			if (select.at(0).getParentType() == Enum::TYPE::BOOLEAN) {
 				emptyResult = { STRING_FALSE };
 			}
 			return emptyResult;
@@ -72,7 +72,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < pattern.size(); i++) {
 		isTrueClause = evaluatePattern(pattern[i]);
 		if (!isTrueClause) {
-			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+			if (select.at(0).getParentType() == Enum::TYPE::BOOLEAN) {
 				emptyResult = { STRING_FALSE };
 			}
 			return emptyResult;
@@ -82,7 +82,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	for (size_t i = 0; i < with.size(); i++) {
 		isTrueClause = evaluateWith(with[i]);
 		if (!isTrueClause) {
-			if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+			if (select.at(0).getParentType() == Enum::TYPE::BOOLEAN) {
 				emptyResult = { STRING_FALSE };
 			}
 			return emptyResult;
