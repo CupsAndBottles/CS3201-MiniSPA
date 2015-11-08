@@ -469,9 +469,8 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 
 	vector<int> path = cfg.DFSOriginal(stmtNum1);
 	for (int i = 0; i < path.size(); i++) {
-		cout << path.at(i);
+		//cout << path.at(i);
 	}
-	int skip = 0;
 	vector<int> stmts;
 	for (int i = 1; i < path.size(); i++) {
 		stmtNum2 = path.at(i);
@@ -524,7 +523,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 									}
 									
 									if (check == true && check1 == true) {
-										return results;
+										//return results;
 									}
 									else if ((check == true && check1 == false) || (check == false && check1 == true)) {
 										if (check == true && check1 == false) {
