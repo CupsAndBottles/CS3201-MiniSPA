@@ -271,7 +271,7 @@ void PKB::setStmtUsed(int index, int stmtNum)
 
 //V
 void PKB::setCallsStmtModifiesUses() {
-	int stmtNum;
+	int stmtNum = -1;
 	vector<int> stmtNumbers;
 	vector<int> modifies;
 	vector<int> uses;

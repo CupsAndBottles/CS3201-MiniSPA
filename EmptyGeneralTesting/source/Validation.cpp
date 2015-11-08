@@ -19,7 +19,7 @@ Validation::~Validation()
 void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 {
 	string relName;
-	int ag1 = -1, ag2 = -1, noOfArgs;
+	int ag1 = -1, ag2 = -1, noOfArgs = -1;
 	bool isSyn = false;
 	if (suchThatSynAndType.size() > 0) {
 		for (int i = 0; i < suchThatSynAndType[1].size(); i++) {

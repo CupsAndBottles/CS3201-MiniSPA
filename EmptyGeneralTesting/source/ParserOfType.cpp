@@ -21,7 +21,7 @@ ParserOfType::~ParserOfType()
 vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vector<string> type, vector<string> synonymType, string indication)
 {
 	vector<vector<string>> synAndType;
-	int index;
+	int index = -1;
 	synAndType.push_back(vector <string>()); //stringVal
 	synAndType.push_back(vector <string>()); //type
 	synAndType.push_back(vector <string>()); //intVal
@@ -165,7 +165,7 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 
 vector<vector<string>> ParserOfType::setVariableTypeAndSyn(string synonym) {
 	vector<vector<string>> synAndType;
-	int index;
+	int index = -1;
 	synAndType.push_back(vector <string>()); //stringVal
 	synAndType.push_back(vector <string>()); //type
 	synAndType.push_back(vector <string>()); //intVal
@@ -188,7 +188,7 @@ vector<vector<string>> ParserOfType::setVariableTypeAndSyn(string synonym) {
 
 vector<vector<string>> ParserOfType::setProcedureTypeAndSyn(string synonym, string clauseType) {
 	vector<vector<string>> synAndType;
-	int index;
+	int index = -1;
 	synAndType.push_back(vector <string>()); //stringVal
 	synAndType.push_back(vector <string>()); //type
 	synAndType.push_back(vector <string>()); //intVal

@@ -81,7 +81,7 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 	suchThatSynAndType.push_back(vector <string>());
 	suchThatSynAndType.push_back(vector <string>());
 	suchThatSynAndType.push_back(vector <string>());
-	int index;
+	int index = -1;
 	vector<vector<string>> temp;
 	ParserOfType parserOfType;
 	string indication = "";
