@@ -50,10 +50,6 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	list<string> emptyResult = {};
 	bool isTrueClause = false;
 
-	if (!tree.getIsValid()) { // variables not found in program
-		return emptyResult;
-	}
-
 	suchThat = tree.getSuchThatTree();
 	pattern = tree.getPatternTree();
 	with = tree.getWithTree();
