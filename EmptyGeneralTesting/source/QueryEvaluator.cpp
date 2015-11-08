@@ -89,7 +89,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 		}
 	}
 
-	if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
+	if (select.at(0).getParentType() == Enum::TYPE::BOOLEAN) {
 		if (results.empty() && isTrueClause) {
 			return list<string>{STRING_TRUE};
 		}
@@ -1421,14 +1421,12 @@ bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
 list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select) {
 	list<string> stringedResults;
 	
-	if (select.front().getParentStringVal() != STRING_BOOLEAN) {
+	if (select.front().getParentType() != Enum::TYPE::BOOLEAN) {
 		nonCommonSyn = select;
 	}
 	else {
 		for (size_t i = 0; i < groupedSyns.size(); i++) {
-			vector<vector<int>> groupResults = groupedSyns[i].getResult();
-
-			if (groupResults.empty()) {
+			if (groupedSyns[i].getSize() == 0) {
 				stringedResults = { STRING_FALSE };
 				return stringedResults;
 			}
