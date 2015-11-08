@@ -13,3 +13,68 @@ assign a;
 Select a such that Modifies(a, "y") and Uses(a, "y")
 4, 14
 5000
+4 -Affects
+assign a1, a2; 
+Select a2 such that Affects(1, a2)
+2, 8, 14
+5000
+5 -Affects
+assign a1, a2;
+Select a2 such that Affects(18, a2)
+
+5000
+6 -Affects
+assign a1, a2;
+Select a1 such that Affects(a1, 6)
+3
+5000
+7 -Affects 
+assign a1, a2;
+Select a1 such that Affects(a1, 9)
+
+5000
+8 -Affects*
+assign a1, a2;
+Select a2 such that Affects*(3, a2)
+6
+5000
+9 -Affects*
+assign a1, a2;
+Select a2 such that Affects*(21, a2)
+
+5000
+10 -Affects*
+assign a1, a2;
+Select a1 such that Affects*(a1, 4)
+
+5000
+11 -Affects*
+assign a1, a2;
+Select a1 such that Affects*(a1, 25)
+
+5000
+12 -Boolean
+
+Select BOOLEAN such that Affects(7, 8)
+false
+5000
+13 -Boolean
+
+Select BOOLEAN such that Affects(2, 8)
+false
+5000
+14 -Boolean
+
+Select BOOLEAN such that Affects(26, 30)
+false
+5000
+15 -Boolean
+
+Select BOOLEAN such that Affects*(26, 30)
+false
+5000
+16 -Boolean
+
+Select BOOLEAN such that Affects*(25, 28)
+false
+5000
