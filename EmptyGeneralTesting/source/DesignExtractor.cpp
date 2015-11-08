@@ -556,10 +556,9 @@ vector<pair<int, int>> DesignExtractor::extractAffectsBothUnspecified(vector<vec
 			if (type.at(j) == Enum::TYPE::ASSIGN) {
 				returnResults = extractAffectsFirstNum(j, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
 			}
-		}
-
-		for (int k = 0; k < returnResults.size(); k++) {
-			results.push_back(returnResults.at(k));
+			for (int k = 0; k < returnResults.size(); k++) {
+				results.push_back(returnResults.at(k));
+			}
 		}
 	}
 	return results;
@@ -598,7 +597,7 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 		}
 		//cout << "Entered here\n";
 		vector<int> path = cfg.DFSOriginal(stmtNum1);
-		if ((stmtNum1 != stmtNum2) && (find(path.begin(), path.end(), stmtNum2) == path.end())) {
+			if ((stmtNum1 != stmtNum2) && (find(path.begin(), path.end(), stmtNum2) == path.end())) {
 			return 0;
 		}
 		else {
@@ -615,17 +614,16 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 			vector <vector<int>> affects(endNum+1);
 			for (int i = 0; i < path.size(); i++) {
 					affectsIntermediateResults = extractAffectsFirstNum(path.at(i), modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
-					cout << "Stmt" << path.at(i) << ": ";
+					//cout << "Stmt" << path.at(i) << ": ";
 					for (int j = 0; j < affectsIntermediateResults.size(); j++) {
 						list.push_back(affectsIntermediateResults.at(j).second);
 					}
 					for (int k = 0; k < list.size(); k++) {
-						cout << list.at(k) << " ";
+						//cout << list.at(k) << " ";
 					}
 					affects.at(path.at(i)) = list;
 					list.clear();
 			}
-			cout << "End of first\n";
 			if (stmtNum1 == stmtNum2) {
 				int stmt;
 				vector<int> nums;
@@ -704,13 +702,12 @@ vector<pair<int,int>> DesignExtractor::extractAffectsTFirstNum(int stmtNum1, vec
 			if (check == 1) {
 				results.push_back(make_pair(stmtNum1, path.at(i)));
 			}
-		}
-		
+		}	
 	}
 	return results;
 }
 
-vector<pair<int, int>> DesignExtractor::extractAffectsTSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> prevCol, vector<pair<int, int>> startEndNum, vector<int> type, vector < vector<int>> parentTCol, vector<vector<int>> childrenCol) {
+vector<pair<int, int>> DesignExtractor::extractAffectsTSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> prevCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector < vector<int>> parentTCol, vector<vector<int>> childrenCol) {
 
 	vector<pair<int, int>> results;
 	int procStart, procEnd;
@@ -733,14 +730,17 @@ vector<pair<int, int>> DesignExtractor::extractAffectsTSecondNum(int stmtNum2, v
 	}
 
 	vector<int> path = cfg.DFSOriginal(stmtNum2);
+	for (int i = 0; i<path.size(); i++) {
+	//	cout << path.at(i) << " ";
+	}
+	//cout << "\n";
 	int check;
 	for (int i = 0; i < path.size(); i++) {
 		if (type.at(path.at(i)) == Enum::TYPE::ASSIGN) {
-			check = extractAffectsTBothNum(path.at(i), stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, type, parentTCol, childrenCol);
+			check = extractAffectsTBothNum(path.at(i), stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
 			if (check == 1) {
 				results.push_back(make_pair(path.at(i), stmtNum2));
 			}
-
 		}
 		
 	}
@@ -760,11 +760,9 @@ vector<pair<int,int>> DesignExtractor::extractAffectsTBothUnspecified(vector<vec
 			if(type.at(j)== Enum::TYPE::ASSIGN) {
 				returnResults = extractAffectsTFirstNum(j, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
 			}
-			
-		}
-
-		for (int k = 0; k < returnResults.size(); k++) {
-			results.push_back(returnResults.at(k));
+			for (int k = 0; k < returnResults.size(); k++) {
+				results.push_back(returnResults.at(k));
+			}
 		}
 	}
 	return results;
