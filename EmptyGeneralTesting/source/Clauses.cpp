@@ -144,6 +144,3 @@ Enum::TYPE Clauses::getLeftCType()
 {
 	return leftChild.getType();
 }
-
-
-

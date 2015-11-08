@@ -68,7 +68,7 @@ string ParserForWith::getToBeSplit(vector<string> patternSubset, int i)
 vector<string> ParserForWith::removeUnwanted(vector<string> withSynonym)
 {
 	std::regex toBeRemove("<|>|\\s+|;|\\s");
-	for (int i = 0; i < withSynonym.size(); i++) {
+	for (size_t i = 0; i < withSynonym.size(); i++) {
 		withSynonym.at(i) = std::regex_replace(withSynonym.at(i), toBeRemove, "");
 		if (withSynonym.at(i).compare("") == 0) {
 			throw ParserException("with synonym could not be empty");

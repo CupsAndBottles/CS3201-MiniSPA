@@ -271,32 +271,32 @@ void PKB::setStmtUsed(int index, int stmtNum)
 
 //V
 void PKB::setCallsStmtModifiesUses() {
-	int stmtNum;
+//	int stmtNum;
 	vector<int> stmtNumbers;
 	vector<int> modifies;
 	vector<int> uses;
-	for (int i = 0; i < procTable.size(); i++) {
+	for (size_t i = 0; i < procTable.size(); i++) {
 		stmtNumbers = getStmtNumProcCalled(i);
 		if (stmtNumbers.size() == 0) {
 			continue;
 		}
 		else {
-			for (int j = 0; j < stmtNumbers.size(); j++) {
+			for (size_t j = 0; j < stmtNumbers.size(); j++) {
 				int stmtNum = stmtNumbers.at(j);
 				stmtTable.at(stmtNum).setCallsStmtModifiesVar(getProcModified(i));
 				stmtTable.at(stmtNum).setCallsStmtUsesVar(getProcUsed(i));
 			}
 
-			for (int j = 0; j < stmtNumbers.size(); j++) {
+			for (size_t j = 0; j < stmtNumbers.size(); j++) {
 				int stmtNum = stmtNumbers.at(j);
 				modifies = stmtTable.at(stmtNum).getModifies();
 				uses = stmtTable.at(stmtNum).getUses();
-				for (int k = 0; k < modifies.size(); k++) {
+				for (size_t k = 0; k < modifies.size(); k++) {
 					string var = getVarName(modifies.at(k));
 					setModifiedBy(var, stmtNum);
 				}
 
-				for (int k = 0; k < uses.size(); k++) {
+				for (size_t k = 0; k < uses.size(); k++) {
 					string var = getVarName(uses.at(k));
 					setUsedBy(var, stmtNum);
 				}
@@ -429,13 +429,13 @@ void PKB::setRightExpr(int index, string expr)
 // V: Parser - PKB, called at start by parser
 void PKB::setByDesignExtractor() {
 
-	for (int i = OFFSET; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 	extractFollowsT(i);
 	extractFollowedByT(i);
 	
 	}
 
-	for (int j = 0; j < procTable.size(); j++) {
+	for (size_t j = 0; j < procTable.size(); j++) {
 		extractCallsT(j);
 		extractCalledByT(j);
 	}
@@ -449,7 +449,7 @@ void PKB::setByDesignExtractor() {
 
 //V
 void PKB::setParentTChildrenT() {
-	for (int i = OFFSET; i < stmtTable.size(); i++) {
+	for (size_t i = OFFSET; i < stmtTable.size(); i++) {
 		extractParentT(i);
 		extractChildrenT(i);
 	}
@@ -466,15 +466,15 @@ void PKB::setCallStmtsParentTModifiesUses() {
 	vector<int> updatedUses;
 	vector<int> modifiedNum;
 	vector<int> usedNum;
-	for (int i = 0; i < procTable.size(); i++) {
+	for (size_t i = 0; i < procTable.size(); i++) {
 		callStmtNum = getStmtNumProcCalled(i);
-		for (int j = 0; j < callStmtNum.size(); j++) {
+		for (size_t j = 0; j < callStmtNum.size(); j++) {
 			parentTList = stmtTable[callStmtNum.at(j)].getParentT();
 			modifies = stmtTable[callStmtNum.at(j)].getModifies();
 			uses = stmtTable[callStmtNum.at(j)].getUses();
-			for (int k = 0; k < parentTList.size(); k++) {
+			for (size_t k = 0; k < parentTList.size(); k++) {
 				existingModifiesList = stmtTable[parentTList.at(k)].getModifies();
-				for (int m = 0; m < modifies.size(); m++) {
+				for (size_t m = 0; m < modifies.size(); m++) {
 					int modifiesVarIndex = modifies.at(m);
 					if (find(existingModifiesList.begin(), existingModifiesList.end(), modifiesVarIndex) == existingModifiesList.end()) {
 						existingModifiesList.push_back(modifiesVarIndex);
@@ -482,7 +482,7 @@ void PKB::setCallStmtsParentTModifiesUses() {
 				}
 				stmtTable.at(parentTList.at(k)).setModifies(existingModifiesList);
 				existingUsesList = stmtTable[parentTList.at(k)].getUses();
-				for (int m = 0; m < uses.size(); m++) {
+				for (size_t m = 0; m < uses.size(); m++) {
 					int usesVarIndex = uses.at(m);
 					if (find(existingUsesList.begin(), existingUsesList.end(), usesVarIndex) == existingUsesList.end()) {
 						existingUsesList.push_back(usesVarIndex);
@@ -492,7 +492,7 @@ void PKB::setCallStmtsParentTModifiesUses() {
 
 				updatedModifies = stmtTable.at(parentTList.at(k)).getModifies();
 				updatedUses = stmtTable.at(parentTList.at(k)).getUses();
-				for (int m = 0; m < updatedModifies.size(); m++) {
+				for (size_t m = 0; m < updatedModifies.size(); m++) {
 					string var = getVarName(updatedModifies.at(m));
 					modifiedNum = getModifiedByStmtNum(updatedModifies.at(m));
 						if(find(modifiedNum.begin(),modifiedNum.end(),parentTList.at(k)) == modifiedNum.end()) {
@@ -501,7 +501,7 @@ void PKB::setCallStmtsParentTModifiesUses() {
 
 				}
 
-				for (int m = 0; m < updatedUses.size(); m++) {
+				for (size_t m = 0; m < updatedUses.size(); m++) {
 					string var = getVarName(updatedUses.at(m));
 					usedNum = getUsedByStmtNum(updatedUses.at(m));
 					if (find(usedNum.begin(), usedNum.end(), parentTList.at(k)) == usedNum.end()) {
@@ -886,7 +886,7 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 		}
 		else {
 			// stmt1 is -1, stmt2 is not -1
-			if (stmt2 > stmtTable.size()) {
+			if ((size_t)stmt2 > stmtTable.size()) {
 				return follows;
 			}
 			follow = stmtTable[stmt2].getFollows();
@@ -900,7 +900,7 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 	else {
 		if (stmt2 == -1) {
 		// stmt 1 is not -1, stmt 2 is -1
-			if (stmt1 > stmtTable.size()) {
+			if ((size_t)stmt1 > stmtTable.size()) {
 				return follows;
 			}
 			follow = stmtTable[stmt1].getFollowedBy();
@@ -912,7 +912,7 @@ std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::T
 		}
 		else {
 			//Both parameters are defined
-			if (stmt1 > stmtTable.size() || stmt2 > stmtTable.size()) {
+			if ((size_t)stmt1 > stmtTable.size() || stmt2 > stmtTable.size()) {
 				return follows;
 			}
 			if (stmtTable[stmt1].getFollowedBy() == stmt2) {
@@ -1272,13 +1272,13 @@ vector<pair<int, int>> PKB::getAffects(Enum::TYPE type1, int stmtNum1, Enum::TYP
 	vector<vector<int>> parentTCol;
 	vector<vector<int>> childrenCol;
 
-	for (int i = 0; i < procTable.size(); i++) {
+	for (size_t i = 0; i < procTable.size(); i++) {
 		int start = getStartNum(i);
 		int end = getEndNum(i);
 		startEndNum.push_back(make_pair(start, end));
 	}
 
-	for (int i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = 0; i < stmtTable.size(); i++) {
 		modifies = stmtTable.at(i).getModifies();
 		uses = stmtTable.at(i).getUses();
 		next = stmtTable.at(i).getNext();
@@ -1341,13 +1341,13 @@ vector<pair<int, int>> PKB::getAffectsT(Enum::TYPE type1, int stmtNum1, Enum::TY
 	vector<vector<int>> parentTCol;
 	vector<vector<int>> childrenCol;
 
-	for (int i = 0; i < procTable.size(); i++) {
+	for (size_t i = 0; i < procTable.size(); i++) {
 		int start = getStartNum(i);
 		int end = getEndNum(i);
 		startEndNum.push_back(make_pair(start, end));
 	}
 
-	for (int i = 0; i < stmtTable.size(); i++) {
+	for (size_t i = 0; i < stmtTable.size(); i++) {
 		modifies = stmtTable.at(i).getModifies();
 		uses = stmtTable.at(i).getUses();
 		next = stmtTable.at(i).getNext();
@@ -1546,7 +1546,7 @@ void PKB::extractProcExtraModifiesUses() {
 	vector<int> uses;
 	int varIndex;
 	vector<int> procIndex;
-	for (int i = 0; i < procTable.size(); i++) {
+	for (size_t i = 0; i < procTable.size(); i++) {
 		modifiesCol.push_back(getProcModified(i));
 		usesCol.push_back(getProcUsed(i));
 		calls.push_back(getProcCalls(i));
@@ -1554,12 +1554,12 @@ void PKB::extractProcExtraModifiesUses() {
 
 	updatedModifies = design.extractProcModifiesUses(calls, modifiesCol);
 	updatedUses = design.extractProcModifiesUses(calls, usesCol);
-	for (int j = 0; j < procTable.size(); j++) {
+	for (size_t j = 0; j < procTable.size(); j++) {
 		setProcModifies(j, updatedModifies.at(j));
 		setProcUses(j, updatedUses.at(j));
 		modifies = getProcModified(j);
 		uses = getProcUsed(j);
-		for (int k = 0; k < modifies.size(); k++) {
+		for (size_t k = 0; k < modifies.size(); k++) {
 			varIndex = modifies.at(k);
 			procIndex = getProcNameInVarTable(varIndex);
 			if (find(procIndex.begin(), procIndex.end(), j) == procIndex.end()) {
@@ -1567,7 +1567,7 @@ void PKB::extractProcExtraModifiesUses() {
 			}
 		}
 
-		for (int k = 0; k < uses.size(); k++) {
+		for (size_t k = 0; k < uses.size(); k++) {
 			varIndex = uses.at(k);
 			procIndex = getProcNameInVarTable(varIndex);
 			if (find(procIndex.begin(), procIndex.end(), j) == procIndex.end()) {
@@ -1703,7 +1703,7 @@ int PKB::getNoOfVar() {
 
 int PKB::getConstantIndex(int constant)
 {
-	for (int i = 0; i < constantTable.size(); i++) {
+	for (size_t i = 0; i < constantTable.size(); i++) {
 		if (constantTable[i].getConstant() == constant) {
 			return i;
 		}

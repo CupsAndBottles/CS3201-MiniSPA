@@ -12,6 +12,7 @@ class Graph {
 	vector<int> path;
 public:
 	Graph(int);
+	~Graph();
 	void addEdge(int, int);
 	vector<vector<int>> DFS(int);
 	vector<vector<int>> col;
