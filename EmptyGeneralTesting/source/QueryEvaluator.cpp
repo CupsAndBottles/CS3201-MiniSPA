@@ -48,7 +48,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> with;
 	list<string> result;
 	list<string> emptyResult = {};
-	bool isTrueClause;
+	bool isTrueClause = false;
 
 	if (!tree.getIsValid()) { // variables not found in program
 		return emptyResult;
