@@ -78,3 +78,23 @@ false
 Select BOOLEAN such that Affects*(25, 28)
 false
 5000
+17 -Affects, Pattern, Parent, Parent*
+assign a1, a2; while w1, w2;
+Select a1 pattern a1("x", _) and a2("x", _"x + 8"_) such that Affects(a1, a2) and Parent(w2, a2) and Parent*(w1, w2)
+
+5000
+18 -Affects, Pattern, Parent, Follows
+assign a1, a2; while w; if ifstat;
+Select a2 pattern a1("t", _) and a2("t", _"m + 2"_) such that Follows*(w, ifstat) and Parent(w, ifstat) and Affects(a1, a2)
+
+5000
+19 -Affects*, Pattern, Parent
+assign a1, a2; while w; if ifstat;
+Select a1 pattern a1("x", _) and a2("m", _"y * 3"_) such that Parent(ifstat, w) and Affects*(a1, a2)
+
+5000
+20 -Affects*, Pattern, Parent*, Follows*
+assign a1, a2; while w; if ifstat;
+Select a1 pattern a1("i", _) and pattern a2("m", _"t + 2"_) and Parent*(ifstat, w) and Follows*(ifstat, w) and Affects*(a1, a2)
+
+5000
