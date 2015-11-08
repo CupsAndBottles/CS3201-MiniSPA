@@ -40,7 +40,6 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		return synAndType;
 	}
 	else if (isSynDigit(synonym) && clauseType == 2) {
-		//index = pkb->getConstantIndex(atoi(synonym.c_str()));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("constant");
 		synAndType[2].push_back(synonym);
@@ -71,7 +70,6 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 		return synAndType;
 	}
 	else if (indication.compare("variable") == 0) {
-			//index = pkb->getVarIndex(synonym);
 			synAndType[2].push_back("0");
 			synAndType[0].push_back(synonym);
 			synAndType[1].push_back("variable");
@@ -79,7 +77,6 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 			return synAndType;
 		}
 		else if (indication.compare("procedure") == 0) {
-		//	index = pkb->getProcIndex(synonym);
 			synAndType[2].push_back("0");
 			synAndType[0].push_back(synonym);
 			synAndType[1].push_back("procedure");
@@ -87,7 +84,6 @@ vector<vector<string>> ParserOfType::setType(int clauseType, string synonym, vec
 			return synAndType;
 		}
 		else if(found != std::string::npos) {
-		//	index = pkb->getProcIndex(synonym);
 			synAndType[2].push_back("0");
 			synAndType[0].push_back(synonym);
 			synAndType[1].push_back("procedure");
@@ -108,8 +104,7 @@ vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synony
 	synAndType.push_back(vector <string>()); //isExpression
 	if (clauseType == 0 || clauseType == 2 || clauseType == 3) {
 		int typeDeclared = isBeingDeclared(synonym, synonymType);
-	//	std::cout << "typeDeclared = " << typeDeclared << '\n';
-	//	std::cout << "synonym = " << synonym << '\n';
+	
 			if (typeDeclared != -1) {
 
 			synAndType[0].push_back(synonym);
@@ -124,7 +119,6 @@ vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synony
 			synAndType[1].push_back("BOOLEAN");
 			synAndType[2].push_back("-1");
 			synAndType[3].push_back("0");
-		//	std::cout << "hello" << '\n';
 			return synAndType;
 		}
 	}
@@ -149,7 +143,6 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 	synAndType.push_back(vector <string>()); //intVal
 	synAndType.push_back(vector <string>()); //isExpression
 
-	std::cout << "clauseType = " << clauseType << '\n';
 	if (isSynDigit(synonym) && (clauseType.compare("stmt#") == 0 || clauseType.compare("prog_line") == 0)) {
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("prog_line");
@@ -158,7 +151,6 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 		return synAndType;
 	}
 	else if (isSynDigit(synonym) && clauseType.compare("value") == 0) {
-	//	int index = pkb->getConstantIndex(atoi(synonym.c_str()));
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("constant");
 		synAndType[2].push_back(synonym);
@@ -182,7 +174,6 @@ vector<vector<string>> ParserOfType::setVariableTypeAndSyn(string synonym) {
 	synonym = removeOpenComma(synonym);
 	
 	if (found != std::string::npos) {
-	//	int index = pkb->getVarIndex(synonym);
 		synAndType[2].push_back("0");
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("variable");
@@ -206,7 +197,6 @@ vector<vector<string>> ParserOfType::setProcedureTypeAndSyn(string synonym, stri
 	synonym = removeOpenComma(synonym);
 	
 	if (found != std::string::npos) {
-		//int index = pkb->getProcIndex(synonym);
 		synAndType[2].push_back("0");
 		synAndType[0].push_back(synonym);
 		synAndType[1].push_back("procedure");

@@ -12,10 +12,6 @@ namespace UnitTesting
 	public:
 		TEST_METHOD(TestResultTree)
 		{
-			PKB *pkb = new PKB();
-			pkb->setVarName("x");
-			pkb->setVarName("y");
-
 			string input = "while w1, w2, w3; stmt s, n; Select <w1,w2, w3> pattern w1(\"x\", _) such that Follows(n, s)";
 			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
 			ParserForPQL parser(input);
@@ -165,11 +161,7 @@ namespace UnitTesting
 		}
 	
  		TEST_METHOD(TestPatternTree) {
-			PKB *pkb = new PKB();
-			pkb->setVarName("x");
-			pkb->setVarName("y");
-			pkb->setConstant(2);
-
+			
 			string input = "while w1, w2, w3; assign a; prog_line n; Select <w1,w2, w3> pattern a(\"x\", _) such that Follows(n, a)";
 			ParserForPQL parser4(input);
 			QueryTree queryTree = parser4.getQueryTree();
@@ -422,6 +414,7 @@ namespace UnitTesting
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCType()), 6);
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getLeftCIntValue()), 0);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIsExpression(), false);
+			Assert::AreEqual(queryTree.getPatternTree().at(0).getLeftCIsStmt(), false);
 			Assert::AreEqual(queryTree.getPatternTree().at(0).getRightCStringValue(), string("_"));
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCType()), 3);
 			Assert::AreEqual(int(queryTree.getPatternTree().at(0).getRightCIntValue()), -1);
@@ -498,12 +491,6 @@ namespace UnitTesting
 		}
 
 		TEST_METHOD(TestWithTree) {
-			PKB *pkb = new PKB();
-			pkb->setVarName("x");
-			pkb->setVarName("y");
-			pkb->setProcNameInProcTable("Second");
-			pkb->setProcNameInProcTable("Main");
-
 			string input = "stmt s; constant c; while w1; Select s with s.stmt# = c.value";
 			ParserForPQL parser1(input);
 			QueryTree queryTree = parser1.getQueryTree();

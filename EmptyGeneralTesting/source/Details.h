@@ -15,12 +15,12 @@ public:
 	int intValue;
 	string stringValue = "";
 	Enum::TYPE type;
-	bool isExpression;
+	bool isExpression = false;
 	bool getIsExpression();
 	string getStringValue();
 	int getIntValue();
 	Enum::TYPE getType();
-	bool isStmt;
+	bool isStmt = false;
 	bool getIsStmt();
 
 	void setIsExpression(bool isExpression);
