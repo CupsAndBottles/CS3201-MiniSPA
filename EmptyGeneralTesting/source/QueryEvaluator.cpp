@@ -48,7 +48,7 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	vector<Clauses> with;
 	list<string> result;
 	list<string> emptyResult = {};
-	bool isTrueClause;
+	bool isTrueClause = false;
 
 	if (!tree.getIsValid()) { // variables not found in program
 		return emptyResult;
@@ -375,7 +375,7 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 
 	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
 		//pattern while(_, _)
-		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				patternSyn.push_back(i);
 			}
@@ -385,7 +385,7 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 	else if (leftCIntValue == IS_SYN) {
 		//cout << "is syn" << endl;
 		//pattern while (x, _)
-		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				patternSyn.push_back(i);
 				controlSyn.push_back(pkb->getControlVar(i));
@@ -395,7 +395,7 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 	}
 	else if (controlVariable != NOT_FOUND) {
 		//pattern while ("x", _)
-		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				if (pkb->getControlVar(i) == controlVariable) {
 					cout << "push back" << endl;
@@ -442,7 +442,7 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 	
 	if (clause.getLeftCType() == Enum::TYPE::UNDERSCORE) {
 		//pattern if(_, _, _)
-		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
 				patternSyn.push_back(i);
 			}
@@ -452,7 +452,7 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 	else if (leftCIntValue == IS_SYN) {
 		//cout << "is syn" << endl;
 		//pattern if (x, _, _)
-		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
 				patternSyn.push_back(i);
 				controlSyn.push_back(pkb->getControlVar(i));
@@ -462,7 +462,7 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 	}
 	else if (controlVariable != NOT_FOUND) {
 		//pattern if ("x", _, _)
-		for (size_t i = 1; i <= pkb->getNoOfStmt(); i++) {
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
 				if (pkb->getControlVar(i) == controlVariable) {
 					cout << "push back" << endl;
