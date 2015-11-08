@@ -1,18 +1,17 @@
 #pragma once
 #include <stddef.h>
-#include<stdio.h>
+#include <stdio.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Enum.h"
+#include "PKB.h"
+#include "DesignExtractor.h"
 #include "Procedure.h"
 #include "Stmt.h"
 #include "Variable.h"
-#include "Enum.h"
 
 using namespace std;
-
-#include "PKB.h"
-#include "DesignExtractor.h"
 
 const int OFFSET = 1;
 const int NOT_FOUND = -1;
@@ -20,8 +19,6 @@ const int UNDEFINED = -1;
 
 //-----------------------------------------------------------------------------
 //ProcTable Setters:
-
-//ZH : tested
 //G: check for existence, return index if there is the procName. Parser stops if not -1.
 int PKB::setProcNameInProcTable(string procName)
 {
@@ -134,7 +131,6 @@ void PKB::setProcUses(int index, vector<int> uses) {
 //----------------------------------------------------------------------------------------------
 //Vartable Setters:
 
-//ZH: tested
 //G: check for existence, return index if exists else, set varname and return new index
 int PKB::setVarName(string varName){
 	
@@ -209,7 +205,6 @@ PKB::~PKB()
 {
 }
 
-//ZH: tested
 //G: index not necessary. 
 void PKB::setType(Enum::TYPE type) {
 
@@ -343,7 +338,6 @@ void PKB::setChildrenT(int index, vector<int> childrenT)
 	
 }
 
-//ZH: tested
 //G: set Follows and FollowedBy in same method
 void PKB::setFollows(vector<pair<int,int>> follows)
 {
@@ -417,7 +411,6 @@ void PKB::setUsedVar(int index, string usedVar)
 	cout << "---------------------------------------\n";*/
 }
 
-//ZH - tested
 void PKB::setRightExpr(int index, string expr)
 {
 //	cout << "Index: " << index << "\n";
@@ -513,13 +506,11 @@ void PKB::setCallStmtsParentTModifiesUses() {
 	}
 }
 
-//ZH - tested
 string PKB::getRightExpr(int index){
 	return stmtTable[index].getRightExpression();
 
 }
 
-//ZH - tested
 int PKB::getNoOfStmt(){
 	if (stmtTable.size() == 0) {
 		return 0;
@@ -831,7 +822,7 @@ vector<pair<int, int>> PKB::getParent(Enum::TYPE type1, int stmtNum1, Enum::TYPE
 	return results;
 }
 
-//ZH : tested
+//ZH
 std::vector<pair<int, int>> PKB::getFollows(Enum::TYPE type1, int stmt1, Enum::TYPE type2, int stmt2){
 	vector<pair<int, int>> follows;
 	size_t follow;
@@ -1681,22 +1672,18 @@ int PKB::getVarIndex(string varName){
 	return NOT_FOUND;
 }
 
-//ZH : tested
 string PKB::getVarName(int index){
 	return varTable[index].getVarName();
 }
 
-//ZH : tested
 int PKB::getType(int index) {
 	return stmtTable[index].getType();
 }
 
-//ZH
 int PKB::getNoOfProc() {
 	return procTable.size();
 }
 
-//ZH
 int PKB::getNoOfVar() {
 	return varTable.size();
 }
