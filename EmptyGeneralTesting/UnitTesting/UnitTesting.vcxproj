@@ -173,7 +173,6 @@
     <ClCompile Include="TestPKB.cpp" />
     <ClCompile Include="TestPreprocessor.cpp" />
     <ClCompile Include="TestQueryEvaluator.cpp" />
-    <ClCompile Include="TestSynonym.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
