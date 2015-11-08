@@ -27,6 +27,7 @@ namespace IntegrationTesting
 			list<string> expectedResults = { "1", "3" };
 
 			Assert::IsTrue(expectedResults == results);
+			delete pkb;
 		}
 
 		TEST_METHOD(PQL_Follows) {
@@ -185,7 +186,8 @@ namespace IntegrationTesting
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 			list<string> expectedResults = { "1", "2", "3", "4", "5", "6","7", "8" };
 			Assert::IsTrue(expectedResults == results);
-		}
+			delete pkb;
+	}
 
 		TEST_METHOD(PQL_With) {
 			/*********************** Test Code ************************/
@@ -346,6 +348,7 @@ namespace IntegrationTesting
 			}
 
 			Assert::AreEqual(expectedResults, outputString);
+			delete pkb;
 		}
 
 		TEST_METHOD(PQL_Boolean) {
@@ -507,6 +510,7 @@ namespace IntegrationTesting
 			}
 
 			Assert::AreEqual(expectedResults, outputString);
+			delete pkb;
 		}
 
 		TEST_METHOD(PQL_3Clauses) {
@@ -698,6 +702,7 @@ namespace IntegrationTesting
 			list<string> expectedResults = { "dream" };
 
 			Assert::IsTrue(expectedResults == results);
+			delete pkb;
 		}
 
 	};

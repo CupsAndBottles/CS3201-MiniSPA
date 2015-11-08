@@ -11,3 +11,10 @@
 #include "CppUnitTest.h"
 
 // TODO: reference additional headers your program requires here
+#include "QueryEvaluator.h"
+#include "ParserForPQL.h"
+#include "PKB.h"
+#include "Enum.h"
+#include "Clauses.h"
+#include "QueryTree.h"
+#include "Parser.h"
