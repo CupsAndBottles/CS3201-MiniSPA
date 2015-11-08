@@ -1,7 +1,5 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "PKB.h"
-#include "Enum.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

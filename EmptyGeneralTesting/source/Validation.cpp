@@ -19,10 +19,10 @@ Validation::~Validation()
 void Validation::grammarValidation(vector<vector<string>> suchThatSynAndType)
 {
 	string relName;
-	int ag1 = -1, ag2 = -1, noOfArgs;
+	int ag1 = -1, ag2 = -1;
 	bool isSyn = false;
 	if (suchThatSynAndType.size() > 0) {
-		for (int i = 0; i < suchThatSynAndType[1].size(); i++) {
+		for (size_t i = 0; i < suchThatSynAndType[1].size(); i++) {
 			if (suchThatSynAndType[1].at(i).compare("") == 0) {
 				relName = suchThatSynAndType[0].at(i);
 				std::transform(relName.begin(), relName.end(), relName.begin(), ::tolower);

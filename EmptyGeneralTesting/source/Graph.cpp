@@ -1,10 +1,13 @@
-#include "Graph.h";
-#include <iostream>;
+#include "Graph.h"
+#include <iostream>
 
 Graph::Graph(int V)
 {
 	this->V = V;
 	adj = new list<int>[V];
+}
+
+Graph::~Graph() {
 }
 
 void Graph::addEdge(int v, int w)
@@ -24,7 +27,7 @@ void Graph::DFSRec(int v, bool updated[])
 		//updated then add missing variables into current list
 		vector<int> list = col.at(*i);
 		vector<int> existingList = col.at(v);
-		for (int j = 0; j < list.size(); j++) {
+		for (size_t j = 0; j < list.size(); j++) {
 			int var = list.at(j);
 			if (find(existingList.begin(), existingList.end(), var) == existingList.end()) {
 				existingList.push_back(var);
@@ -79,7 +82,7 @@ vector<int> Graph::DFSOriginal(int v) {
 		cout << "EMPTY\n";
 	}
 	else {
-		for (int i = 0; i < path.size(); i++) {
+		for (size_t i = 0; i < path.size(); i++) {
 			//cout << path.at(i) << " ";
 		}
 	}

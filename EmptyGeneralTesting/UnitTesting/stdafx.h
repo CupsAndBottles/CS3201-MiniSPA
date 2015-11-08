@@ -18,3 +18,4 @@
 #include "Clauses.h"
 #include "QueryTree.h"
 #include "Parser.h"
+#include "DesignExtractor.h"
