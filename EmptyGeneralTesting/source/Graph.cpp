@@ -71,7 +71,8 @@ vector<int> Graph::DFSOriginal(int v) {
 	for (int i = 0; i < V; i++) {
 		visited[i] = false;
 	}
-
+	
+	path.clear();
 	DFSPath(v, visited);
 
 	if (path.size() == 0) {

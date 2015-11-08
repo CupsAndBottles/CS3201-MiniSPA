@@ -297,6 +297,11 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 							if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
 								if ((stmtNum < stmtNum1) && (stmtNum1 < stmtNum2)) {
 								} else {
+									vector<int> betweenPath;
+									betweenPath = cfg.DFSOriginal(stmtNum);
+									if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
+										continue;
+									}
 									found = 1;
 									//cout << "This is it: " << stmtNum;
 									break;
@@ -400,6 +405,9 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 	int betweenStmt, found = 0;
 
 	vector<int> path = cfg.DFSOriginal(stmtNum1);
+	for (int i = 0; i < path.size(); i++) {
+		cout << path.at(i);
+	}
 	for (int i = 1; i < path.size(); i++) {
 		stmtNum2 = path.at(i);
 		if (type.at(stmtNum2) == Enum::TYPE::ASSIGN) {
@@ -421,6 +429,11 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 
 								}
 								else {
+									vector<int> betweenPath;
+									betweenPath = cfg.DFSOriginal(betweenStmt);
+									if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
+										continue;
+									}
 									found = 1;
 									break;
 								}
@@ -487,6 +500,15 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 									if (betweenStmt < stmtNum1 && stmtNum1 < stmtNum2) {
 									}
 									else {
+									vector<int> betweenPath;
+									betweenPath = cfg.DFSOriginal(betweenStmt);
+									for (int k = 0; k < betweenPath.size(); k++) {
+										cout << betweenPath.at(k);
+									}
+									if (find(betweenPath.begin(), betweenPath.end(), stmtNum1) == betweenPath.end()) {
+										cout << "betweenStmt skipped " << betweenStmt << "for" << stmtNum1;
+										continue;
+									}
 										found = 1;
 										break;
 									}
