@@ -1369,7 +1369,7 @@ vector<pair<int, int>> PKB::getAffectsT(Enum::TYPE type1, int stmtNum1, Enum::TY
 			if ((stmtTable[stmtNum1].getType() == Enum::TYPE::ASSIGN) && (stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
 				
 				int check = De.extractAffectsTBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
-				cout << "CHECK IS " << check << endl;
+				//cout << "CHECK IS " << check << endl;
 				if (check == 1) {
 					results.push_back(make_pair(stmtNum1, stmtNum2));
 				}
@@ -1384,7 +1384,7 @@ vector<pair<int, int>> PKB::getAffectsT(Enum::TYPE type1, int stmtNum1, Enum::TY
 	}
 	else if (stmtNum2 != -1) { // Affects(s/_/a, 4)
 		if ((stmtTable[stmtNum2].getType() == Enum::TYPE::ASSIGN)) {
-			results = De.extractAffectsTSecondNum(stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, typeCol, parentTCol, childrenCol);
+			results = De.extractAffectsTSecondNum(stmtNum2, modifiesCol, usesCol, prevCol, nextCol, startEndNum, typeCol, parentTCol, childrenCol);
 		}
 	}
 	else { // (s/a/_, s/a/_)
