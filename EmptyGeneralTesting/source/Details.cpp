@@ -100,4 +100,7 @@ Enum::TYPE Details::convertToType(string typeInString)
 	else if (typeInString.compare("stmt") == 0 || typeInString.compare("prog_line") == 0) {
 		return Enum::TYPE::STATEMENT;
 	}
+	else if (typeInString.compare("BOOLEAN") == 0) {
+		return Enum::TYPE::BOOLEAN;
+	}
 }

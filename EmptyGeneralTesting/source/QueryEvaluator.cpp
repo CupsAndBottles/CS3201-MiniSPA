@@ -90,10 +90,10 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 	}
 
 	if (select.at(0).getParentStringVal() == STRING_BOOLEAN) {
-		list<string> trueResult = { STRING_TRUE };
-		return trueResult;
+		if (results.empty() && isTrueClause) {
+			return list<string>{STRING_TRUE};
+		}
 	}
-
 //	printResults();
 	sort(this->results.begin(), this->results.end());
 //	cout << "after sorting" << endl;
@@ -1069,8 +1069,9 @@ void QueryEvaluator::storeResultsForSyn(Clauses clause, vector<pair<int, int>> r
 		}
 	}
 
-	storeResults(type, synString, resultsToStore);
-
+	if (!resultsToStore.empty()) {
+		storeResults(type, synString, resultsToStore);
+	}
 }
 
 void QueryEvaluator::storeResults(vector<Enum::TYPE> type, vector<string> synString, vector<vector<int>> resultToStore) {
@@ -1419,8 +1420,23 @@ bool QueryEvaluator::hasCommonSyn(Synonym syn1, Synonym syn2) {
 
 list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<Clauses> select) {
 	list<string> stringedResults;
-	nonCommonSyn = select;
+	
+	if (select.front().getParentStringVal() != STRING_BOOLEAN) {
+		nonCommonSyn = select;
+	}
+	else {
+		for (size_t i = 0; i < groupedSyns.size(); i++) {
+			vector<vector<int>> groupResults = groupedSyns[i].getResult();
 
+			if (groupResults.empty()) {
+				stringedResults = { STRING_FALSE };
+				return stringedResults;
+			}
+		}
+		
+		stringedResults = { STRING_TRUE };
+		return stringedResults;
+	}
 
 	vector<Synonym> selectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
 	

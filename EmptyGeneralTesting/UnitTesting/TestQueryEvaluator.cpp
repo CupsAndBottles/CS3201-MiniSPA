@@ -191,7 +191,7 @@ namespace UnitTesting
 			clause.setParentStringVal("a");
 			clause.setParentType("assign");
 			queryTree.setResultTree(clause);
-
+			
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
 			list<string> expectedResults = { "1", "2", "3", "5", "7", "8", "10"};
 
@@ -3025,7 +3025,6 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::WHILE);	//6
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
 			pkb->setType(Enum::TYPE::ASSIGN);   //8
-			pkb->setType(Enum::TYPE::CALLS);	//9
 
 			vector<pair<int, string>> varUsed;
 			varUsed.push_back(make_pair(0, "command"));
@@ -3145,53 +3144,19 @@ namespace UnitTesting
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
 
-			// statement 9
-			pkb->setProcNameInProcTable("hope");
-			vector<pair<int, string>> calledProc;
-			calledProc.push_back(make_pair(0, "hope"));
-			pkb->setProcCalls(calledProc);
-			pkb->setProcCalledBy(1, 0);
-
-			pkb->setProcUses(varUsed);
-
-			pkb->setType(Enum::TYPE::ASSIGN);	//10
-			pkb->setStartNum(1, 10);
-			pkb->setEndNum(1, 10);
-
-			pkb->setProcCallsT(0, { 1 });
-			pkb->setProcCalledByT(1, { 0 });
-
-			// statement 10
-			varUsed = { make_pair(1, "moonlight") };
-			pkb->setProcUses(varUsed);
-			pkb->setVarName("bye");
-			pkb->setVarName("moonlight");
-			pkb->setRightExpr(10, "moonlight 7 *");
-			pkb->setModifies(10, "bye");
-			pkb->setModifiedBy("bye", 10);
-			pkb->setUsedVar(10, "moonlight");
-			pkb->setUsedBy("moonlight", 10);
-			pkb->setConstant(7);
-			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
-			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
-			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
-
 			QueryTree queryTree;
 			Clauses clause;
-
-			clause.setParentStringVal("Modifies");
 
 			clause.setLeftCType("assign");
 			clause.setLeftCIsExpression(false);
 			clause.setLeftCIntValue(-1);
 			clause.setLeftCStringValue("a");
-			clause.setLeftCIsStmt("0");
 
-			clause.setRightCType("");
+			clause.setRightCType("variable");
 			clause.setRightCIsExpression(false);
-			clause.setRightCIntValue(-1);
+			clause.setRightCIntValue(0);
 			clause.setRightCStringValue("x");
-			clause.setRightCIsStmt("0");
+			clause.setParentStringVal("Modifies");
 			queryTree.setSuchThatTree(clause);
 
 			clause.setLeftCType("assign");
@@ -3207,11 +3172,11 @@ namespace UnitTesting
 			queryTree.setWithTree(clause);
 
 			clause.setParentStringVal("BOOLEAN");
-			clause.setParentType("BOOLEAN");
+	//		clause.setParentType("BOOLEAN");
 			queryTree.setResultTree(clause);
 
-			//ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
-			//QueryTree queryTree = parserPQL.getQueryTree();
+	//		ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN such that Modifies(a, \"x\") with a.stmt# = 10");
+	//		queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);

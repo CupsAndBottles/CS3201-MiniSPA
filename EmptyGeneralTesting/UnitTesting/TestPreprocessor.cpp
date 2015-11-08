@@ -34,6 +34,14 @@ namespace UnitTesting
 
 			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("w1"));
 			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 4);
+
+			input = "while w1, w2, w3; stmt s, n; Select BOOLEAN pattern w1(\"x\", _) such that Follows(n, s)";
+			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
+			ParserForPQL parser2(input);
+			queryTree = parser2.getQueryTree();
+
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("BOOLEAN"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 10);
 		}
 
 		TEST_METHOD(TestSuchThatTree)
