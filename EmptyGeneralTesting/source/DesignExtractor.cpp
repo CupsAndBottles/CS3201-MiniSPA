@@ -290,6 +290,67 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 							break;
 						}
 						else if (type.at(stmtNum) == Enum::TYPE::WHILE || type.at(stmtNum) == Enum::TYPE::IF) {
+							if (type.at(stmtNum) == Enum::TYPE::IF && stmtNum>stmtNum1) {
+								vector<int> children = childrenCol.at(stmtNum);
+								if (find(children.begin(), children.end(), stmtNum2) == children.end()) {
+									int max = children.at(0);
+									for (int k = 1; k < children.size(); k++) {
+										if (children.at(k) > max) {
+											max = children.at(k);
+										}
+									}
+									vector<int> start = nextCol.at(stmtNum);
+									int elseStmtStart;
+									if (start.at(0) == stmtNum + 1) {
+										elseStmtStart = start.at(1);
+									}
+									else {
+										elseStmtStart = start.at(0);
+									}
+									bool check = false;
+									for (int j = stmtNum + 1; j < elseStmtStart; j++) {
+										if (type.at(j) != Enum::TYPE::IF || type.at(j)!= Enum::TYPE::WHILE) {
+											vector<int> modifies = modifiesCol.at(j);
+											if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+												check = true;
+											}
+										}
+										
+									}
+									bool check1 = false;
+									for (int j = elseStmtStart; j<=max; j++) {
+										if (type.at(j) != Enum::TYPE::IF || type.at(j) != Enum::TYPE::WHILE) {
+											vector<int> modifies = modifiesCol.at(j);
+											if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+												check = true;
+											}
+										}
+									}
+									if (check == true && check1 == true) {
+										return 0;
+									}
+									else if ((check == true && check1 == false) || (check== false && check1 == true)) {
+										vector<int> next = nextCol.at(max);
+										int num;
+										if (next.size() == 1) {
+											num = next.at(0);
+										}
+										else {
+											if (next.at(0) < next.at(1)) {
+												num = next.at(0);
+											}
+											else {
+												num = next.at(1);
+											}
+										}
+										for (int k = 0; k < path.size(); k++) {
+											if (path.at(k) >= num) {
+												i = k;
+											}
+										}
+									}
+								}
+							}
 							continue;
 						}
 						else {
@@ -302,6 +363,8 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 									if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
 										continue;
 									}
+
+
 									found = 1;
 									//cout << "This is it: " << stmtNum;
 									break;
@@ -408,6 +471,8 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 	for (int i = 0; i < path.size(); i++) {
 		cout << path.at(i);
 	}
+	int skip = 0;
+	vector<int> stmts;
 	for (int i = 1; i < path.size(); i++) {
 		stmtNum2 = path.at(i);
 		if (type.at(stmtNum2) == Enum::TYPE::ASSIGN) {
@@ -420,6 +485,80 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 					for (int j = 1; j < i; j++) {
 						betweenStmt = path.at(j);
 						if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
+							if (type.at(betweenStmt) == Enum::TYPE::IF && betweenStmt>stmtNum1) {
+								vector<int> children = childrenCol.at(betweenStmt);
+								if (find(children.begin(), children.end(), stmtNum2) == children.end()) {
+									int max = children.at(0);
+									for (int k = 1; k < children.size(); k++) {
+										if (children.at(k) > max) {
+											max = children.at(k);
+										}
+									}
+									vector<int> start = nextCol.at(betweenStmt);
+									int elseStmtStart;
+									if (start.at(0) == betweenStmt + 1) {
+										elseStmtStart = start.at(1);
+									}
+									else {
+										elseStmtStart = start.at(0);
+									}
+									bool check = false;
+									vector<int> ifModifies, elseModifies;
+									for (int j = betweenStmt + 1; j < elseStmtStart; j++) {
+										if (type.at(j) != Enum::TYPE::IF || type.at(j) != Enum::TYPE::WHILE) {
+											 ifModifies = modifiesCol.at(j);
+											if (find(ifModifies.begin(), ifModifies.end(), modifiedVar) != ifModifies.end()) {
+												check = true;
+											}
+										}
+
+									}
+									bool check1 = false;
+									for (int j = elseStmtStart; j <= max; j++) {
+										if (type.at(j) != Enum::TYPE::IF || type.at(j) != Enum::TYPE::WHILE) {
+											elseModifies = modifiesCol.at(j);
+											if (find(elseModifies.begin(), elseModifies.end(), modifiedVar) != elseModifies.end()) {
+												check = true;
+											}
+										}
+									}
+									
+									if (check == true && check1 == true) {
+										return results;
+									}
+									else if ((check == true && check1 == false) || (check == false && check1 == true)) {
+										if (check == true && check1 == false) {
+											for (int k = betweenStmt + 1; k < elseStmtStart; k++) {
+												stmts.push_back(k);
+											}
+											
+										}
+										else {
+											for (int k = elseStmtStart; k <= max; k++) {
+												stmts.push_back(k);
+											}
+										}
+										vector<int> next = nextCol.at(max);
+										int num;
+										if (next.size() == 1) {
+											num = next.at(0);
+										}
+										else {
+											if (next.at(0) < next.at(1)) {
+												num = next.at(0);
+											}
+											else {
+												num = next.at(1);
+											}
+										}
+										for (int k = 0; k < path.size(); k++) {
+											if (path.at(k) >= num) {
+												i = k;
+											}
+										}
+									}
+								}
+							}
 							continue;
 						}
 						else {
@@ -433,8 +572,16 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 									betweenPath = cfg.DFSOriginal(betweenStmt);
 									if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
 										continue;
+									} if (find(stmts.begin(), stmts.end(), betweenStmt) != stmts.end()) {
+										continue;
+									}
+
+									cout << "Start";
+									for (int k = 0; k < stmts.size(); k++) {
+										cout << stmts.at(k);
 									}
 									found = 1;
+									cout << "Stmt: " << betweenStmt;
 									break;
 								}
 							}
