@@ -59,7 +59,7 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 	vector<vector<string>> temp;
 
 	ParserOfType parserOfType;
-	for (int i = 0; i < selectSynonym.size(); i++) {
+	for (size_t i = 0; i < selectSynonym.size(); i++) {
 		temp = parserOfType.setClauseType(0, selectSynonym.at(i), type, synonym);
 		if (temp.size() == 0) {
 			throw ParserException("Select synonym unidentified");
@@ -81,7 +81,7 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 	suchThatSynAndType.push_back(vector <string>());
 	suchThatSynAndType.push_back(vector <string>());
 	suchThatSynAndType.push_back(vector <string>());
-	int index = -1;
+//	int index;
 	vector<vector<string>> temp;
 	ParserOfType parserOfType;
 	string indication = "";
@@ -140,7 +140,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			withSynonym[i] = arrangeSyn(withSynonym[i]);
 		}
 
-		for (int k = 0; k < withSynonym[i].size(); k++) {
+		for (size_t k = 0; k < withSynonym[i].size(); k++) {
 			if (k == 0 || (withSynonym[i].size() == 4 && k == 2)) {
 
 				pos = parserOfType.isBeingDeclared(withSynonym[i].at(k), synonym);
@@ -232,7 +232,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 			patternSynAndType[2].insert(patternSynAndType[2].end(), temp[2].begin(), temp[2].end());
 			patternSynAndType[3].insert(patternSynAndType[3].end(), temp[3].begin(), temp[3].end());
 
-		for (int k = 1; k < patternSynonym[i].size(); k++) {
+		for (size_t k = 1; k < patternSynonym[i].size(); k++) {
 			temp = parserOfType.setType(2, patternSynonym[i].at(k), type, synonym, "variable");
 			if (temp.size() == 0) {
 				throw ParserException("Pattern synonym unidentified");
@@ -251,8 +251,8 @@ void ParserTypeWithSyn::checkCommonSynonym()
 	int number = 0;
 	string temp = "";
 	if(suchThatSynAndType.size() > 0 && patternSynAndType.size() > 0) {
-		for (int i = 0; i < suchThatSynAndType[0].size(); i++) {
-			for (int j = 0; j < patternSynAndType[0].size(); j++) {
+		for (size_t i = 0; i < suchThatSynAndType[0].size(); i++) {
+			for (size_t j = 0; j < patternSynAndType[0].size(); j++) {
 				if (suchThatSynAndType[0].at(i).compare(patternSynAndType[0].at(j)) == 0 && temp.compare(suchThatSynAndType[0].at(i)) != 0 &&
 					suchThatSynAndType[0].at(i).compare("_") != 0) {
 					temp = suchThatSynAndType[0].at(i);

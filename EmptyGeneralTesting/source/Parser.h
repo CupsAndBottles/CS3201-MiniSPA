@@ -15,6 +15,34 @@ class Parser
 	char nextChar;
 	int charType;
 public:
+	vector<int> ifIndex;
+	vector<int> whileIndex;
+	vector<int> ifIndexStmt;
+	list<pair<int, string>> listOfStatements;
+	vector<pair<int, int>> parentLink;
+	vector<pair<int, int>> followLink;
+	vector<pair<int, int>> indexAndType;
+	vector<pair<int, string>> callsLink;
+	list<pair<int, string>> stmtNoAndExpr;
+	vector<pair<int, string>> stmtNoAndCalls;
+	string currProcName;
+	int currIndex = 0;
+	int numOfProc = 0;
+	int numOfElse = 0;
+	int procNumInTble = 0;
+	int currElse = 0;
+	vector<pair<int, string>> varModifiedInProc;
+	vector<pair<int, string>> varUsedInProc;
+	vector<int> currFollows;
+	stack<char> closeBracket;
+	stack<char> openBracket;
+	stack<pair<int, string>> ifStmtVec;
+	list<pair<int, string>> containerElements;
+	string prevStmt;
+	string pStmt;
+	int pStmtType = 0;
+	int pStmtIndex = 0;
+
 	Parser();
 	~Parser();
 	PKB* getPkb();

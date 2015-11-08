@@ -58,7 +58,7 @@ vector<string>& ParserKeyword::split(const string & s, char delim, vector<string
 vector<string> ParserKeyword::removeUnwanted(vector<string> commaSubset)
 {
 	std::regex toBeRemove("<|>|\\s+|;|\\s");
-	for (int i = 0; i < commaSubset.size(); i++) {
+	for (size_t i = 0; i < commaSubset.size(); i++) {
 		commaSubset.at(i) = std::regex_replace(commaSubset.at(i), toBeRemove, "");
 		if (commaSubset.at(i).compare("") == 0) {
 			throw ParserException("Input less declaration");
@@ -70,7 +70,7 @@ vector<string> ParserKeyword::removeUnwanted(vector<string> commaSubset)
 
 void ParserKeyword::addType(vector<string> temp, vector<vector<string>> type, int i)
 {
-	for (int j = 0; j < temp.size(); j++) {
+	for (size_t j = 0; j < temp.size(); j++) {
 		keywordType.push_back(type[1].at(i));
 	}
 }

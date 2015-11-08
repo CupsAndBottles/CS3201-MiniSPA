@@ -92,5 +92,3 @@ vector<string> ParserForSuchThat::getSuchThatSynonym()
 {
 	return suchThatSynonym;
 }
-
-

@@ -1,5 +1,5 @@
 #include "TestWrapper.h"
-#include "Parser.h";
+#include "Parser.h"
 #include "ParserForPQL.h"
 #include "QueryEvaluator.h"
 
