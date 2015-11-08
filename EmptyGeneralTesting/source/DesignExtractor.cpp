@@ -626,6 +626,17 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 					list.clear();
 			}
 			cout << "End of first\n";
+			if (stmtNum1 == stmtNum2) {
+				int stmt;
+				vector<int> nums;
+				for (int j = 0; j < path.size(); j++) {
+					stmt = path.at(j);
+					nums = affects.at(stmt);
+					if (find(nums.begin(), nums.end(), stmtNum1) != nums.end()) {
+
+					}
+				}
+			}
 			Graph affectsGraph(endNum+1);
 			int stmt;
 			vector<int> stmts;
@@ -638,9 +649,18 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 			}
 
 			vector<int> affectsPath = affectsGraph.DFSOriginal(stmtNum1);
-					//for (int i = 0; i < affectsPath.size(); i++) {
-				//cout << affectsPath.at(i);
-			//}
+					
+			if (stmtNum1 == stmtNum2) {
+				int stmt;
+				vector<int> nums;
+				for (int j = 0; j < affectsPath.size(); j++) {
+					stmt = affectsPath.at(j);
+					nums = affects.at(stmt);
+					if (find(nums.begin(), nums.end(), stmtNum1) != nums.end()) {
+						return 1;
+					}
+				}
+			}
 			if (find(affectsPath.begin()+1, affectsPath.end(), stmtNum2) != affectsPath.end()) {
 				return 1;
 			}
