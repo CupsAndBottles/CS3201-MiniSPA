@@ -2812,8 +2812,31 @@ namespace UnitTesting
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
 			pkb->setProcUses(varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a;variable x; Select BOOLEAN such that Modifies(a,x)");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			QueryTree queryTree = QueryTree();
+			Clauses clause;
+
+			clause.setParentStringVal("Modifies");
+
+			clause.setLeftCType("assign");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCIntValue(-1);
+			clause.setLeftCStringValue("a");
+			clause.setLeftCIsStmt("0");
+
+			clause.setRightCType("variable");
+			clause.setRightCIsExpression(false);
+			clause.setRightCIntValue(-1);
+			clause.setRightCStringValue("x");
+			clause.setRightCIsStmt("0");
+
+			queryTree.setSuchThatTree(clause);
+
+			clause.setParentStringVal("BOOLEAN");
+			clause.setParentType("BOOLEAN");
+			queryTree.setResultTree(clause);
+
+	//		ParserForPQL parserPQL = ParserForPQL("assign a;variable x; Select BOOLEAN such that Modifies(a,x)");
+	//		QueryTree queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
@@ -2981,8 +3004,27 @@ namespace UnitTesting
 			pkb->setControlVar(9, pkb->getVarIndex("command"));
 			pkb->setProcUses(varUsed);
 
-			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN pattern a(x, x + 9 + 9)");
-			QueryTree queryTree = parserPQL.getQueryTree();
+			QueryTree queryTree;
+			Clauses clause;
+			clause.setParentStringVal("a");
+			clause.setParentType("assign");
+
+			clause.setLeftCType("");
+			clause.setLeftCIsExpression(false);
+			clause.setLeftCStringValue("x");
+
+			clause.setRightCType("");
+			clause.setRightCIsExpression(false);
+			clause.setRightCStringValue("x + 9 + 9");
+			queryTree.setPatternTree(clause);
+
+			clause = Clauses();
+			clause.setParentStringVal("BOOLEAN");
+			clause.setParentType("BOOLEAN");
+			queryTree.setResultTree(clause);
+
+//			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN pattern a(x, x + 9 + 9)");
+//			queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
 			list<string> results = queryEvaluator.evaluateQuery(queryTree);
