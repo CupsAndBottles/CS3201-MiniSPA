@@ -2689,8 +2689,8 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//5
 			pkb->setType(Enum::TYPE::WHILE);	//6
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
-			pkb->setType(Enum::TYPE::ASSIGN);	//8
-			pkb->setType(Enum::TYPE::IF);
+			pkb->setType(Enum::TYPE::ASSIGN);   //8
+			pkb->setType(Enum::TYPE::CALLS);	//9
 
 			vector<pair<int, string>> varUsed;
 			varUsed.push_back(make_pair(0, "command"));
@@ -2712,14 +2712,14 @@ namespace UnitTesting
 			vector<pair<int, int>> parent;
 			parent.push_back(make_pair(4, 5));
 			parent.push_back(make_pair(4, 6));
-			parent.push_back(make_pair(6, 7));
 			parent.push_back(make_pair(4, 8));
+			parent.push_back(make_pair(6, 7));
 			pkb->setChildren(parent);
 
 			// Statement 1 - set constant as variables?
 			pkb->setVarName("beads");
 			pkb->setVarName("command");
-			pkb->setRightExpr(1, "command10+");
+			pkb->setRightExpr(1, "command 10 +");
 			pkb->setModifies(1, "beads");
 			pkb->setModifiedBy("beads", 1);
 			pkb->setUsedVar(1, "command");
@@ -2728,14 +2728,15 @@ namespace UnitTesting
 			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
-			pkb->setModifies(2, "beads");
-			pkb->setModifiedBy("beads", 2);
+			pkb->setVarName("dream");
+			pkb->setModifies(2, "dream");
+			pkb->setModifiedBy("dream", 2);
 			pkb->setConstant(34);
 			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
-			pkb->setRightExpr(3, "inspiration1+");
+			pkb->setRightExpr(3, "inspiration 1 +");
 			pkb->setModifies(3, "command");
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
@@ -2750,14 +2751,15 @@ namespace UnitTesting
 			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
+			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "inspiration");
-			pkb->setModifiedBy("inspiration", 5);
+			pkb->setModifies(5, "stamps");
+			pkb->setModifiedBy("stamps", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2765,8 +2767,8 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "inspiration");
-			pkb->setModifiedBy("inspiration", 4);
+			pkb->setModifies(4, "stamps");
+			pkb->setModifiedBy("stamps", 4);
 
 			// statement 6
 			pkb->setControlVar(6, pkb->getVarIndex("command"));
@@ -2783,7 +2785,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9*+");
+			pkb->setRightExpr(7, "x x 9 * +");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -2802,15 +2804,42 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 8);
 			pkb->setUsedVar(4, "command");
 			pkb->setUsedBy("command", 4);
-			pkb->setRightExpr(8, "beadscommand+");
+			pkb->setRightExpr(8, "beads command +");
 			pkb->setModifies(8, "x");
 			pkb->setModifiedBy("x", 8);
 			pkb->setModifies(4, "x");
 			pkb->setModifiedBy("x", 4);
 
 			// statement 9
-			pkb->setControlVar(9, pkb->getVarIndex("command"));
+			pkb->setProcNameInProcTable("hope");
+			vector<pair<int, string>> calledProc;
+			calledProc.push_back(make_pair(0, "hope"));
+			pkb->setProcCalls(calledProc);
+			pkb->setProcCalledBy(1, 0);
+
 			pkb->setProcUses(varUsed);
+
+			pkb->setType(Enum::TYPE::ASSIGN);	//10
+			pkb->setStartNum(1, 10);
+			pkb->setEndNum(1, 10);
+
+			pkb->setProcCallsT(0, { 1 });
+			pkb->setProcCalledByT(1, { 0 });
+
+			// statement 10
+			varUsed = { make_pair(1, "moonlight") };
+			pkb->setProcUses(varUsed);
+			pkb->setVarName("bye");
+			pkb->setVarName("moonlight");
+			pkb->setRightExpr(10, "moonlight 7 *");
+			pkb->setModifies(10, "bye");
+			pkb->setModifiedBy("bye", 10);
+			pkb->setUsedVar(10, "moonlight");
+			pkb->setUsedBy("moonlight", 10);
+			pkb->setConstant(7);
+			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
+			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
+			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
 
 			QueryTree queryTree = QueryTree();
 			Clauses clause;
@@ -2872,7 +2901,7 @@ namespace UnitTesting
 
 			pkb->setProcNameInProcTable("dream");	//0
 			pkb->setStartNum(pkb->getProcIndex("dream"), 1);
-			pkb->setEndNum(pkb->getProcIndex("dream"), 8);
+			pkb->setEndNum(pkb->getProcIndex("dream"), 9);
 
 			pkb->setType(Enum::TYPE::ASSIGN);	//1
 			pkb->setType(Enum::TYPE::ASSIGN);	//2
@@ -2881,8 +2910,8 @@ namespace UnitTesting
 			pkb->setType(Enum::TYPE::ASSIGN);	//5
 			pkb->setType(Enum::TYPE::WHILE);	//6
 			pkb->setType(Enum::TYPE::ASSIGN);	//7
-			pkb->setType(Enum::TYPE::ASSIGN);	//8
-			pkb->setType(Enum::TYPE::IF);
+			pkb->setType(Enum::TYPE::ASSIGN);   //8
+			pkb->setType(Enum::TYPE::CALLS);	//9
 
 			vector<pair<int, string>> varUsed;
 			varUsed.push_back(make_pair(0, "command"));
@@ -2920,14 +2949,15 @@ namespace UnitTesting
 			pkb->setStmtUsed(pkb->getConstantIndex(10), 1);
 
 			// Statement 2
-			pkb->setModifies(2, "beads");
-			pkb->setModifiedBy("beads", 2);
+			pkb->setVarName("dream");
+			pkb->setModifies(2, "dream");
+			pkb->setModifiedBy("dream", 2);
 			pkb->setConstant(34);
 			pkb->setStmtUsed(pkb->getConstantIndex(34), 2);
 
 			// Statement 3 - set constant as variable?
 			pkb->setVarName("inspiration");
-			pkb->setRightExpr(3, "inspiration1+");
+			pkb->setRightExpr(3, "inspiration 1 +");
 			pkb->setModifies(3, "command");
 			pkb->setModifiedBy("command", 3);
 			pkb->setUsedVar(3, "inspiration");
@@ -2942,14 +2972,15 @@ namespace UnitTesting
 			pkb->setControlVar(4, pkb->getVarIndex("coffee"));
 
 			//Statement 5
+			pkb->setVarName("stamps");
 			pkb->setUsedVar(5, "beads");
 			pkb->setUsedBy("beads", 5);
 			pkb->setUsedVar(5, "command");
 			pkb->setUsedBy("command", 5);
 			pkb->setUsedVar(5, "coffee");
 			pkb->setUsedBy("coffee", 5);
-			pkb->setModifies(5, "inspiration");
-			pkb->setModifiedBy("inspiration", 5);
+			pkb->setModifies(5, "stamps");
+			pkb->setModifiedBy("stamps", 5);
 			// set statement 4
 			pkb->setUsedVar(4, "beads");
 			pkb->setUsedBy("beads", 4);
@@ -2957,8 +2988,8 @@ namespace UnitTesting
 			pkb->setUsedBy("command", 4);
 			pkb->setUsedVar(4, "coffee");
 			pkb->setUsedBy("coffee", 4);
-			pkb->setModifies(4, "inspiration");
-			pkb->setModifiedBy("inspiration", 4);
+			pkb->setModifies(4, "stamps");
+			pkb->setModifiedBy("stamps", 4);
 
 			// statement 6
 			pkb->setControlVar(6, pkb->getVarIndex("command"));
@@ -2975,7 +3006,7 @@ namespace UnitTesting
 			pkb->setUsedBy("x", 6);
 			pkb->setUsedVar(4, "x");
 			pkb->setUsedBy("x", 4);
-			pkb->setRightExpr(7, "xx9*+");
+			pkb->setRightExpr(7, "x x 9 * +");
 			pkb->setModifies(7, "x");
 			pkb->setModifiedBy("x", 7);
 			pkb->setModifies(6, "x");
@@ -3001,8 +3032,35 @@ namespace UnitTesting
 			pkb->setModifiedBy("x", 4);
 
 			// statement 9
-			pkb->setControlVar(9, pkb->getVarIndex("command"));
+			pkb->setProcNameInProcTable("hope");
+			vector<pair<int, string>> calledProc;
+			calledProc.push_back(make_pair(0, "hope"));
+			pkb->setProcCalls(calledProc);
+			pkb->setProcCalledBy(1, 0);
+
 			pkb->setProcUses(varUsed);
+
+			pkb->setType(Enum::TYPE::ASSIGN);	//10
+			pkb->setStartNum(1, 10);
+			pkb->setEndNum(1, 10);
+
+			pkb->setProcCallsT(0, { 1 });
+			pkb->setProcCalledByT(1, { 0 });
+
+			// statement 10
+			varUsed = { make_pair(1, "moonlight") };
+			pkb->setProcUses(varUsed);
+			pkb->setVarName("bye");
+			pkb->setVarName("moonlight");
+			pkb->setRightExpr(10, "moonlight 7 *");
+			pkb->setModifies(10, "bye");
+			pkb->setModifiedBy("bye", 10);
+			pkb->setUsedVar(10, "moonlight");
+			pkb->setUsedBy("moonlight", 10);
+			pkb->setConstant(7);
+			pkb->setStmtUsed(pkb->getConstantIndex(7), 10);
+			pkb->setProcUses(0, { pkb->getVarIndex("moonlight") });
+			pkb->setProcModifies(0, { pkb->getVarIndex("bye") });
 
 			QueryTree queryTree;
 			Clauses clause;
@@ -3023,7 +3081,7 @@ namespace UnitTesting
 			clause.setParentType("BOOLEAN");
 			queryTree.setResultTree(clause);
 
-//			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN pattern a(x, x + 9 + 9)");
+//			ParserForPQL parserPQL = ParserForPQL("assign a; Select BOOLEAN pattern a(\"x\", \"x + 9 + 9\")");
 //			queryTree = parserPQL.getQueryTree();
 			QueryEvaluator queryEvaluator = QueryEvaluator(*pkb);
 
