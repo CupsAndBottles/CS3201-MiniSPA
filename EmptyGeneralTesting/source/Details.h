@@ -20,7 +20,7 @@ public:
 	string getStringValue();
 	int getIntValue();
 	Enum::TYPE getType();
-	bool isStmt;
+	bool isStmt = false;
 	bool getIsStmt();
 
 	void setIsExpression(bool isExpression);
