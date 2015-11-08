@@ -98,3 +98,8 @@ assign a1, a2; while w; if ifstat;
 Select a1 pattern a1("i", _) and pattern a2("m", _"t + 2"_) and Parent*(ifstat, w) and Follows*(ifstat, w) and Affects*(a1, a2)
 
 5000
+21 -Affects
+assign a1, a2;
+Select a1 such that Affects(a1, a2)
+1, 2, 3, 4, 5, 6, 8, 9, 10, 25  26, 30
+5000
