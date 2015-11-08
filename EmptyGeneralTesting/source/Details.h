@@ -15,7 +15,7 @@ public:
 	int intValue;
 	string stringValue = "";
 	Enum::TYPE type;
-	bool isExpression;
+	bool isExpression = false;
 	bool getIsExpression();
 	string getStringValue();
 	int getIntValue();

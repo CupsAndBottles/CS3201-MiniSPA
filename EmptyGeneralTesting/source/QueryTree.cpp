@@ -87,17 +87,11 @@ bool QueryTree::getIsValid()
 
 void QueryTree::addResultTree(vector<string> syn, vector<string> type)
 {
-	//vector<Clauses> resultTree;
 	for (std::size_t i = 0; i < syn.size(); i++) {
 		Clauses clause;
 		clause.setParentStringVal(syn.at(i));
 		clause.setParentType(type.at(i));
 		setResultTree(clause);
-	/*
-		resultTree.push_back(Clauses());
-		resultTree.at(i).setParentStringVal(syn.at(i));
-		resultTree.at(i).setParentType(type.at(i));
-		*/
 	}
 }
 
@@ -119,26 +113,7 @@ void QueryTree::addWithTree(vector<string> stringVal, vector<string> type, vecto
 		clause.setRightCStringValue(stringVal.at(i + 1));
 		clause.setRightCIsStmt(isStmt.at(i + 1));
 		setWithTree(clause);
-		/*
-		withTree.push_back(Clauses());
-		withTree.at(z).setLeftCType(type.at(i));
-		withTree.at(z).setLeftCIsExpression(false);
-		withTree.at(z).setLeftCIntValue(atoi(intVal.at(i).c_str()));
-		withTree.at(z).setLeftCStringValue(stringVal.at(i));
-		withTree.at(z).setLeftCIsStmt(isStmt.at(i));
-
-		withTree.at(z).setRightCType(type.at(i + 1));
-		withTree.at(z).setRightCIsExpression(false);
-		withTree.at(z).setRightCIntValue(atoi(intVal.at(i + 1).c_str()));
-		withTree.at(z).setRightCStringValue(stringVal.at(i + 1));
-		withTree.at(z).setRightCIsStmt(isStmt.at(i + 1));
-		z++;
-		*/
 	}
-	//for (int j = 0; j < withTree.size(); j++) {
-	
-		//std::cout << "withTreeLeft = " << withTree.at(j).getLeftCStringValue() << '\n';
-//	}
 }
 
 void QueryTree::addSuchThatTree(vector<string> stringVal, vector<string> type, vector<string> intVal)
@@ -159,21 +134,6 @@ void QueryTree::addSuchThatTree(vector<string> stringVal, vector<string> type, v
 		clause.setRightCIntValue(atoi(intVal.at(i + 2).c_str()));
 		clause.setRightCStringValue(stringVal.at(i + 2));
 		setSuchThatTree(clause);
-		/*
-		suchThatTree.push_back(Clauses());
-		suchThatTree.at(z).setParentStringVal(stringVal.at(i));
-
-		suchThatTree.at(z).setLeftCType(type.at(i + 1));
-		suchThatTree.at(z).setLeftCIsExpression(false);
-		suchThatTree.at(z).setLeftCIntValue(atoi(intVal.at(i + 1).c_str()));
-		suchThatTree.at(z).setLeftCStringValue(stringVal.at(i + 1));
-
-		suchThatTree.at(z).setRightCType(type.at(i + 2));
-		suchThatTree.at(z).setRightCIsExpression(false);
-		suchThatTree.at(z).setRightCIntValue(atoi(intVal.at(i + 2).c_str()));
-		suchThatTree.at(z).setRightCStringValue(stringVal.at(i + 2));
-		z++;
-		*/
 	}
 
 }
@@ -200,25 +160,6 @@ void QueryTree::addPatternTree(vector<string> stringVal, vector<string> type, ve
 		if (type.at(i).compare("if") == 0) {
 			i++;
 		}
-		/*
-		patternTree.push_back(Clauses());
-		patternTree.at(z).setParentStringVal(stringVal.at(i));
-		patternTree.at(z).setParentType(type.at(i));
-
-		patternTree.at(z).setLeftCType(type.at(i + 1));
-		patternTree.at(z).setLeftCIsExpression(isItExpression(isExpression.at(i + 1)));
-		patternTree.at(z).setLeftCIntValue(atoi(intVal.at(i + 1).c_str()));
-		patternTree.at(z).setLeftCStringValue(stringVal.at(i + 1));
-
-		patternTree.at(z).setRightCType(type.at(i + 2));
-		patternTree.at(z).setRightCIsExpression(isItExpression(isExpression.at(i + 2)));
-		patternTree.at(z).setRightCIntValue(atoi(intVal.at(i + 2).c_str()));
-		patternTree.at(z).setRightCStringValue(stringVal.at(i + 2));
-		z++;
-		if (type.at(i).compare("if") == 0) {
-			i++;
-		}
-		*/
 	}
 		
 }

@@ -17,7 +17,6 @@ ParserTypeWithSyn::ParserTypeWithSyn(vector<string> selectSynonym, vector<vector
 	vector<vector<string>> withSynonym,
 	vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym)
 {
-	//this->pkb = &querypkb;
 	parseSelectTypeWithSyn(selectSynonym, type, synonym);
 	parseSuchThatTypeWithSyn(suchThatSynonym, type, synonym);
 	parseWithTypeWithSyn(withSynonym, type, synonym);
@@ -112,8 +111,6 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			}
 			temp = parserOfType.setType(1, suchThatSynonym[i].at(k), type, synonym, indication);
 			if (temp.size() == 0) {
-			//	std::cout << "suchThatSynonym[i].at(0) = " << suchThatSynonym[i].at(k) << '\n';
-			//	std::cout << "temp2 = " << temp.size() << '\n';
 				throw ParserException("SuchThat synonym unidentified");
 			}
 
