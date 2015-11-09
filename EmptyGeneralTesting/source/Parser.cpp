@@ -43,7 +43,6 @@ string Parser::openFile(string fileName) {
 		allLines.erase(remove_if(allLines.begin(), allLines.end(), isspace), allLines.end());
 		lines = splitLines(allLines);
 		output = linesSplitted(lines);
-		//	cout << output;
 		Procedure();
 	}
 
@@ -109,6 +108,7 @@ void Parser::Procedure() {
 	int endIndex=0;
 	for (i = (lines).begin(); i != (lines).end(); ++i) {
 		string stmt = (*i).second;
+		//cout << stmt << "\n";
 		if (stmt.find("procedure") != std::string::npos) {
 			processProcedure((*i).first, (*i).second);
 			processNextPrev((*i).first, (*i).second);
@@ -202,8 +202,6 @@ void Parser::setRelationsInTable() {
 	string procName = pkb->setProcCalls(callsLink);
 	if (!procName.empty()) {
 		throw "ProcName: " + procName +" does not exist.\n";
-		//cout << "ProcName: " << procName << " does not exist.\n";
-		//exit(0);
 	}
 	pkb->setStmtNumProcCalled(stmtNoAndCalls);
 }
@@ -374,10 +372,12 @@ void Parser::processCalls(int index, string stmt)
 		procCalls.replace(semiColonPos, string(";").length(), "");
 	}
 	size_t bracketPos = procCalls.find("}");
-	if (bracketPos != std::string::npos) {
+	size_t n = count(procCalls.begin(), procCalls.end(), '}');
+	//cout << prevStmt << "\n";
+	for (size_t i = 0; i < n;i++) {
 		procCalls.replace(bracketPos, string("}").length(), "");
-
 	}
+
 	int procExist = pkb->getProcIndex(procCalls);
 
 	if (procExist == procNumInTble) {
