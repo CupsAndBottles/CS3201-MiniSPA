@@ -14,11 +14,10 @@ while orange{													\\4
 					rainbow = red + orange + yellow + green + blue + indigo + violet;	\\12
 					grey = black + white + 1;						\\13
 					call Home;								\\14
-						while grey {							\\15
-							grey = grey * 2;					\\16
-								}
-						}
-					}
+					while grey {								\\15
+						grey = grey * 2;						\\16
+							}
+					}}
 			else{
 				colours = rainbow * black + white;						\\17
 				}
@@ -60,17 +59,17 @@ if algebra then {												\\23
 		call Home;											\\44
 		}}
 else{
-while {
-call Shapes;													\\45
-geometry = triangle * 3 + square * 4 + polygon * (n - 2) * 180;}						\\46
-call Home;													\\47
-}}		
+while{														\\45
+call Shapes;													\\46
+geometry = triangle * 3 + square * 4 + polygon * (n - 2) * 180;}						\\47
+call Home;													\\48
+}}
 procedure Home{
-x = x + y;													\\48
+x = x + y;													\\49
 }
 procedure Shapes{
-triangle = 3 * 180;												\\49
-square = 4 * 90;												\\50
-polygon = (n-2) * 180;												\\51
-triangle = square - 180;											\\52
+triangle = 3 * 180;												\\50
+square = 4 * 90;												\\51
+polygon = (n-2) * 180;												\\52
+triangle = square - 180;											\\53
 }
