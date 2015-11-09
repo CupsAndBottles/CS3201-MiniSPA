@@ -330,20 +330,21 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 								}
 							}
 						}
-					}
-					int found = 0;
-					for (int k = 0; k < allPaths.size(); k++) {
-						if (exhaust[k] == false) {
-							found = 1;
-							break;
+						int found = 0;
+						for (int k = 0; k <= j ; k++) {
+							if (exhaust[k] == false) {
+								found = 1;
+								break;
+							}
+						}
+						if (found == 0) {
+							return 0;
+						}
+						else {
+							return 1;
 						}
 					}
-					if (found == 0) {
-						return 0;
-					}
-					else {
-						return 1;
-					}
+					
 				}
 				else {
 					
@@ -410,20 +411,21 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 								}
 							}
 						}
-					}
-
-					for (int k = 0; k < allPaths.size(); k++) {
-						if (exhaust[k] == false) {
-							found = 1;
-							break;
+						for (int k = 0; k <= j; k++) {
+							if (exhaust[k] == false) {
+								found = 1;
+								break;
+							}
+						}
+						if (found == 0) {
+							return 0;
+						}
+						else {
+							return 1;
 						}
 					}
-					if (found == 0) {
-						return 0;
-					}
-					else {
-						return 1;
-					}
+
+					
 
 				}
 
@@ -517,15 +519,16 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 											}
 										}
 									}
-								}
-
-
-								for (int k = 0; k < allPaths.size(); k++) {
-									if (exhaust[k] == false) {
-										results.push_back(make_pair(stmtNum1, stmtNum2));
-										break;
+									for (int k = 0; k <=j; k++) {
+										if (exhaust[k] == false) {
+											results.push_back(make_pair(stmtNum1, stmtNum2));
+											break;
+										}
 									}
 								}
+
+
+								
 						
 							}
 					}
@@ -614,15 +617,16 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 								}
 							}
 						}
-
-					}
-
-					for (int k = 0; k < allPaths.size(); k++) {
-						if (exhaust[k] == false) {
-							results.push_back(make_pair(stmtNum1, stmtNum2));
-							break;
+						for (int k = 0; k <=j; k++) {
+							if (exhaust[k] == false) {
+								results.push_back(make_pair(stmtNum1, stmtNum2));
+								break;
+							}
 						}
+
 					}
+
+					
 					
 					
 				}
