@@ -273,9 +273,9 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 			}
 
 			vector<int> path = cfg.DFSOriginal(stmtNum1);
-			//for (int i = 0; i < path.size(); i++) {
-				//cout << path.at(i) << " ";
-			//}
+			for (int i = 0; i < path.size(); i++) {
+				cout << path.at(i) << " ";
+			}
 			if ((stmtNum1 != stmtNum2) && (find(path.begin(), path.end(), stmtNum2) == path.end())) {
 				return 0;
 			}
@@ -290,7 +290,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 							break;
 						}
 						else if (type.at(stmtNum) == Enum::TYPE::WHILE || type.at(stmtNum) == Enum::TYPE::IF) {
-							if (type.at(stmtNum) == Enum::TYPE::IF && stmtNum>stmtNum1) {
+							/*if (type.at(stmtNum) == Enum::TYPE::IF && stmtNum>stmtNum1) {
 								vector<int> children = childrenCol.at(stmtNum);
 								if (find(children.begin(), children.end(), stmtNum2) == children.end()) {
 									int max = children.at(0);
@@ -350,7 +350,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 										}
 									}
 								}
-							}
+							}*/
 							continue;
 						}
 						else {
@@ -363,8 +363,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 									if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
 										continue;
 									}
-
-
+									
 									found = 1;
 									//cout << "This is it: " << stmtNum;
 									break;
