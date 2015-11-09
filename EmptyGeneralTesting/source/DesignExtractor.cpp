@@ -2,7 +2,7 @@
 #include "DesignExtractor.h"
 #include <list>
 #include <algorithm>
-
+#include <array>;
 using namespace std;
 
 DesignExtractor::DesignExtractor()
@@ -273,7 +273,6 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 			}
 
 			vector<int> singlePath = cfg.DFSOriginal(stmtNum1);
-			vector<vector<int>> allPaths = cfg.storeAllPaths(stmtNum1, stmtNum2);
 			//vector<int> path;
 			//for (int i = 0; i < allPaths.size(); i++) {
 				//path = allPaths.at(i);
@@ -290,104 +289,59 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 				return 0;
 			}
 			else {
+				vector<vector<int>> allPaths = cfg.storeAllPaths(stmtNum1, stmtNum2);
+				bool* exhaust = new bool[allPaths.size()];
+
+				for (int i = 0; i < allPaths.size(); i++) {
+					exhaust[i] = false;
+				}
 				int stmtNum;
 				vector<int> modifies;
-				int found = 0;
 				if (stmtNum1 != stmtNum2) {
-					for (int i = 1; i < singlePath.size(); i++) {
-						stmtNum = singlePath.at(i);
-						if (stmtNum == stmtNum2) {
-							break;
-						}
-						else if (type.at(stmtNum) == Enum::TYPE::WHILE || type.at(stmtNum) == Enum::TYPE::IF) {
-							/*if (type.at(stmtNum) == Enum::TYPE::IF && stmtNum>stmtNum1) {
-								vector<int> children = childrenCol.at(stmtNum);
-								if (find(children.begin(), children.end(), stmtNum2) == children.end()) {
-									int max = children.at(0);
-									for (int k = 1; k < children.size(); k++) {
-										if (children.at(k) > max) {
-											max = children.at(k);
-										}
-									}
-									vector<int> start = nextCol.at(stmtNum);
-									int elseStmtStart;
-									if (start.at(0) == stmtNum + 1) {
-										elseStmtStart = start.at(1);
+					vector<int> path;
+					for (int j = 0; j < allPaths.size(); j++) {
+						path = allPaths.at(j);
+						for (int i = 1; i < path.size(); i++) {
+							stmtNum = path.at(i);
+							if (stmtNum == stmtNum2) {
+								break;
+							}
+							else if (type.at(stmtNum) == Enum::TYPE::WHILE || type.at(stmtNum) == Enum::TYPE::IF) {
+								continue;
+							}
+							else {
+								modifies = modifiesCol.at(stmtNum);
+								if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+									if ((stmtNum < stmtNum1) && (stmtNum1 < stmtNum2)) {
 									}
 									else {
-										elseStmtStart = start.at(0);
-									}
-									bool check = false;
-									for (int j = stmtNum + 1; j < elseStmtStart; j++) {
-										if (type.at(j) != Enum::TYPE::IF || type.at(j)!= Enum::TYPE::WHILE) {
-											vector<int> modifies = modifiesCol.at(j);
-											if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-												check = true;
-											}
+										vector<int> betweenPath;
+										betweenPath = cfg.DFSOriginal(stmtNum);
+										if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
+											continue;
 										}
-										
+
+										exhaust[j] = true;
+										//cout << "This is it: " << stmtNum;
+										break;
 									}
-									bool check1 = false;
-									for (int j = elseStmtStart; j<=max; j++) {
-										if (type.at(j) != Enum::TYPE::IF || type.at(j) != Enum::TYPE::WHILE) {
-											vector<int> modifies = modifiesCol.at(j);
-											if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-												check = true;
-											}
-										}
-									}
-									if (check == true && check1 == true) {
-										return 0;
-									}
-									else if ((check == true && check1 == false) || (check== false && check1 == true)) {
-										vector<int> next = nextCol.at(max);
-										int num;
-										if (next.size() == 1) {
-											num = next.at(0);
-										}
-										else {
-											if (next.at(0) < next.at(1)) {
-												num = next.at(0);
-											}
-											else {
-												num = next.at(1);
-											}
-										}
-										for (int k = 0; k < path.size(); k++) {
-											if (path.at(k) >= num) {
-												i = k;
-											}
-										}
-									}
-								}
-							}*/
-							continue;
-						}
-						else {
-							modifies = modifiesCol.at(stmtNum);
-							if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-								if ((stmtNum < stmtNum1) && (stmtNum1 < stmtNum2)) {
-								} else {
-									vector<int> betweenPath;
-									betweenPath = cfg.DFSOriginal(stmtNum);
-									if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
-										continue;
-									}
-									
-									found = 1;
-									//cout << "This is it: " << stmtNum;
-									break;
 								}
 							}
 						}
 					}
-					if (found == 0) {
-						return 1;
+					int found = 0;
+					for (int k = 0; k < allPaths.size(); k++) {
+						if (exhaust[k] == false) {
+							found = 1;
+							break;
+						}
 					}
-					else {
+					if (found == 0) {
 						return 0;
 					}
-
+					else {
+						return 1;
+					}
 				}
 				else {
 					vector<int> parentT = parentTCol.at(stmtNum2);
@@ -414,10 +368,10 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 					}
 					
 					vector<int> children = childrenCol.at(max);
-					
+					int found = 0;
 					vector<int> modified;
 					for (int j = 0; j <children.size(); j++) {
-						if (type.at(children.at(j)) == Enum::TYPE::IF) {
+						if (type.at(children.at(j)) == Enum::TYPE::IF || type.at(children.at(j))==Enum::TYPE::WHILE) {
 							continue;
 						}
 						else {
