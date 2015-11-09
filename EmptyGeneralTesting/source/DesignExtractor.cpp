@@ -272,11 +272,21 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 				}
 			}
 
-			vector<int> path = cfg.DFSOriginal(stmtNum1);
-			for (int i = 0; i < path.size(); i++) {
-				cout << path.at(i) << " ";
-			}
-			if ((stmtNum1 != stmtNum2) && (find(path.begin(), path.end(), stmtNum2) == path.end())) {
+			vector<int> singlePath = cfg.DFSOriginal(stmtNum1);
+			vector<vector<int>> allPaths = cfg.storeAllPaths(stmtNum1, stmtNum2);
+			//vector<int> path;
+			//for (int i = 0; i < allPaths.size(); i++) {
+				//path = allPaths.at(i);
+				//cout << "Path " << i;
+				//for (int j = 0; j < path.size(); j++) {
+					//cout << path.at(j) << " ";
+				//}
+				//cout << "\n";
+			//}
+			//for (int i = 0; i < path.size(); i++) {
+				//cout << path.at(i) << " ";
+			//}
+			if ((stmtNum1 != stmtNum2) && (find(singlePath.begin(), singlePath.end(), stmtNum2) == singlePath.end())) {
 				return 0;
 			}
 			else {
@@ -284,8 +294,8 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 				vector<int> modifies;
 				int found = 0;
 				if (stmtNum1 != stmtNum2) {
-					for (int i = 1; i < path.size(); i++) {
-						stmtNum = path.at(i);
+					for (int i = 1; i < singlePath.size(); i++) {
+						stmtNum = singlePath.at(i);
 						if (stmtNum == stmtNum2) {
 							break;
 						}
@@ -411,7 +421,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 							continue;
 						}
 						else {
-							if ((find(path.begin(), path.end(), children.at(j)) != path.end()) && (children.at(j)!= stmtNum1)) {
+							if ((find(singlePath.begin(), singlePath.end(), children.at(j)) != singlePath.end()) && (children.at(j)!= stmtNum1)) {
 								modified = modifiesCol.at(children.at(j));
 								if (find(modified.begin(), modified.end(), modifiedVar) != modified.end()) {
 									found = 1;

@@ -10,6 +10,8 @@ class Graph {
 	void DFSRec(int, bool[]);
 	void DFSPath(int, bool[]);
 	vector<int> path;
+	vector<vector<int>> allSimplePaths;
+	void storeAllPathsRec(int, int, bool[], int[], int &);
 public:
 	Graph(int);
 	~Graph();
@@ -17,4 +19,5 @@ public:
 	vector<vector<int>> DFS(int);
 	vector<vector<int>> col;
 	vector<int> DFSOriginal(int);
+	vector<vector<int>> storeAllPaths(int, int);
 };
