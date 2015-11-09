@@ -289,16 +289,18 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 				return 0;
 			}
 			else {
-				vector<vector<int>> allPaths = cfg.storeAllPaths(stmtNum1, stmtNum2);
-				bool* exhaust = new bool[allPaths.size()];
-
-				for (int i = 0; i < allPaths.size(); i++) {
-					exhaust[i] = false;
-				}
-				int stmtNum;
-				vector<int> modifies;
+				
 				if (stmtNum1 != stmtNum2) {
+					vector<vector<int>> allPaths = cfg.storeAllPaths(stmtNum1, stmtNum2);
+					bool* exhaust = new bool[allPaths.size()];
+
+					for (int i = 0; i < allPaths.size(); i++) {
+						exhaust[i] = false;
+					}
+					int stmtNum;
+					vector<int> modifies;
 					vector<int> path;
+
 					for (int j = 0; j < allPaths.size(); j++) {
 						path = allPaths.at(j);
 						for (int i = 1; i < path.size(); i++) {
@@ -322,7 +324,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 										}
 
 										exhaust[j] = true;
-										//cout << "This is it: " << stmtNum;
+									
 										break;
 									}
 								}
@@ -344,6 +346,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 					}
 				}
 				else {
+					
 					vector<int> parentT = parentTCol.at(stmtNum2);
 					vector<int> whileStmt;
 					int stmt;
@@ -357,7 +360,6 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 						}
 					}
 					if (whileStmt.size() == 0) {
-						//cout << "Entered\n";
 						return 0;
 					}
 					int max = whileStmt.at(0);
@@ -370,26 +372,57 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 					vector<int> children = childrenCol.at(max);
 					int found = 0;
 					vector<int> modified;
-					for (int j = 0; j <children.size(); j++) {
-						if (type.at(children.at(j)) == Enum::TYPE::IF || type.at(children.at(j))==Enum::TYPE::WHILE) {
-							continue;
+					int last = children.at(0);
+					for (int k = 0; k < children.size(); k++) {
+						if (children.at(k) > last) {
+							last = children.at(k);
 						}
-						else {
-							if ((find(singlePath.begin(), singlePath.end(), children.at(j)) != singlePath.end()) && (children.at(j)!= stmtNum1)) {
-								modified = modifiesCol.at(children.at(j));
-								if (find(modified.begin(), modified.end(), modifiedVar) != modified.end()) {
-									found = 1;
+					}
+					vector<vector<int>> allPaths = cfg.storeAllPaths(max + 1, last);
+					vector<int> path;
+					bool* exhaust = new bool[allPaths.size()];
+
+					for (int i = 0; i < allPaths.size(); i++) {
+						exhaust[i] = false;
+					}
+
+					int betweenStmt;
+					for (int j = 0; j <allPaths.size(); j++) {
+						path = allPaths.at(j);
+						for (int k = 0; k < path.size(); k++) {
+							//cout << children.at(j) << " ";
+							betweenStmt = path.at(k);
+							if (type.at(betweenStmt) == Enum::TYPE::IF || type.at(betweenStmt) == Enum::TYPE::WHILE) {
+								continue;
+							}
+							else {
+								if (betweenStmt != stmtNum1) {
+									modified = modifiesCol.at(betweenStmt);
+									if (find(modified.begin(), modified.end(), modifiedVar) != modified.end()) {
+										vector<int> betweenPath = cfg.DFSOriginal(betweenStmt);
+										if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
+											continue;
+										}
+
+										exhaust[j] = true;
+										break;
+									}
 								}
 							}
 						}
-
 					}
 
-					if(found ==0) {
-						return 1;
+					for (int k = 0; k < allPaths.size(); k++) {
+						if (exhaust[k] == false) {
+							found = 1;
+							break;
+						}
+					}
+					if (found == 0) {
+						return 0;
 					}
 					else {
-						return 0;
+						return 1;
 					}
 
 				}
@@ -428,133 +461,75 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 	int stmtNum2;
 	int modifiedVar = modifiesCol.at(stmtNum1).at(0);
 	vector<int> usedVar;
-	int betweenStmt, found = 0;
 
-	vector<int> path = cfg.DFSOriginal(stmtNum1);
-	for (int i = 0; i < path.size(); i++) {
+	vector<int> singlePath = cfg.DFSOriginal(stmtNum1);
+	//for (int i = 0; i < path.size(); i++) {
 		//cout << path.at(i);
-	}
-	vector<int> stmts;
-	for (int i = 1; i < path.size(); i++) {
-		stmtNum2 = path.at(i);
-		if (type.at(stmtNum2) == Enum::TYPE::ASSIGN) {
-			usedVar = usesCol.at(stmtNum2);
-			if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
-				if (i == 1) {
-					results.push_back(make_pair(stmtNum1, stmtNum2));
-				}
-				else {
-					for (int j = 1; j < i; j++) {
-						betweenStmt = path.at(j);
-						if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
-							if (type.at(betweenStmt) == Enum::TYPE::IF && betweenStmt>stmtNum1) {
-								vector<int> children = childrenCol.at(betweenStmt);
-								if (find(children.begin(), children.end(), stmtNum2) == children.end()) {
-									int max = children.at(0);
-									for (int k = 1; k < children.size(); k++) {
-										if (children.at(k) > max) {
-											max = children.at(k);
-										}
-									}
-									vector<int> start = nextCol.at(betweenStmt);
-									int elseStmtStart;
-									if (start.at(0) == betweenStmt + 1) {
-										elseStmtStart = start.at(1);
-									}
-									else {
-										elseStmtStart = start.at(0);
-									}
-									bool check = false;
-									vector<int> ifModifies, elseModifies;
-									for (int j = betweenStmt + 1; j < elseStmtStart; j++) {
-										if (type.at(j) != Enum::TYPE::IF || type.at(j) != Enum::TYPE::WHILE) {
-											 ifModifies = modifiesCol.at(j);
-											if (find(ifModifies.begin(), ifModifies.end(), modifiedVar) != ifModifies.end()) {
-												check = true;
-											}
-										}
+	//}
+	//vector<int> stmts;
+	vector<vector<int>> allPaths;
+	bool* exhaust;
+	vector<int> path;
 
-									}
-									bool check1 = false;
-									for (int j = elseStmtStart; j <= max; j++) {
-										if (type.at(j) != Enum::TYPE::IF || type.at(j) != Enum::TYPE::WHILE) {
-											elseModifies = modifiesCol.at(j);
-											if (find(elseModifies.begin(), elseModifies.end(), modifiedVar) != elseModifies.end()) {
-												check = true;
-											}
+	for (int i = 1; i < singlePath.size(); i++) {
+			stmtNum2 = singlePath.at(i);
+					if (type.at(stmtNum2) == Enum::TYPE::ASSIGN) {
+						usedVar = usesCol.at(stmtNum2);
+						if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
+							if (i == 1) {
+								results.push_back(make_pair(stmtNum1, stmtNum2));
+							}
+							else {
+								allPaths = cfg.storeAllPaths(stmtNum1, stmtNum2);
+								exhaust = new bool[allPaths.size()];
+
+								for (int j = 0; j < allPaths.size(); j++) {
+									exhaust[j] = false;
+								}
+								int betweenStmt;
+								for (int j = 0; j < allPaths.size(); j++) {
+									path = allPaths.at(j);
+									for (int k = 1; k < path.size(); k++) {
+										betweenStmt = path.at(k);
+										if (betweenStmt == stmtNum2) {
+											break;
 										}
-									}
-									
-									if (check == true && check1 == true) {
-										//return results;
-									}
-									else if ((check == true && check1 == false) || (check == false && check1 == true)) {
-										if (check == true && check1 == false) {
-											for (int k = betweenStmt + 1; k < elseStmtStart; k++) {
-												stmts.push_back(k);
-											}
-											
+										if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
+
+											continue;
 										}
 										else {
-											for (int k = elseStmtStart; k <= max; k++) {
-												stmts.push_back(k);
-											}
-										}
-										vector<int> next = nextCol.at(max);
-										int num;
-										if (next.size() == 1) {
-											num = next.at(0);
-										}
-										else {
-											if (next.at(0) < next.at(1)) {
-												num = next.at(0);
-											}
-											else {
-												num = next.at(1);
-											}
-										}
-										for (int k = 0; k < path.size(); k++) {
-											if (path.at(k) >= num) {
-												i = k;
-											}
-										}
-									}
-								}
-							}
-							continue;
-						}
-						else {
-							modifies = modifiesCol.at(betweenStmt);
-							if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
-								if ((betweenStmt < stmtNum1) && (stmtNum1 < stmtNum2)) {
+											modifies = modifiesCol.at(betweenStmt);
+											if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
+												if ((betweenStmt < stmtNum1) && (stmtNum1 < stmtNum2)) {
 
-								}
-								else {
-									vector<int> betweenPath;
-									betweenPath = cfg.DFSOriginal(betweenStmt);
-									if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
-										continue;
-									} if (find(stmts.begin(), stmts.end(), betweenStmt) != stmts.end()) {
-										continue;
-									}
+												}
+												else {
+													vector<int> betweenPath;
+													betweenPath = cfg.DFSOriginal(betweenStmt);
+													if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
+														continue;
+													}
 
-									cout << "Start";
-									for (int k = 0; k < stmts.size(); k++) {
-										cout << stmts.at(k);
+													exhaust[j] = true;
+													break;
+												}
+											}
+										}
 									}
-									found = 1;
-									cout << "Stmt: " << betweenStmt;
-									break;
 								}
+
+
+								for (int k = 0; k < allPaths.size(); k++) {
+									if (exhaust[k] == false) {
+										results.push_back(make_pair(stmtNum1, stmtNum2));
+										break;
+									}
+								}
+						
 							}
-						}
-					}
-					if (found == 0) {
-						results.push_back(make_pair(stmtNum1, stmtNum2));
 					}
 				}
-			}
-		}
 	}
 
 	if (extractAffectsBothNum(stmtNum1, stmtNum1, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol)== 1) {
