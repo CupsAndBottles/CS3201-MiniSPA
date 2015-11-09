@@ -78,6 +78,8 @@ string PKB::setProcCalls(vector<pair<int, string>> procCalls)
 		pair<int, string> paired = procCalls.back();
 		int index = paired.first;
 		string procCalled = paired.second;
+	//	cout << "Index: " << index << "\n";
+	//	cout << "Proc called: " << procCalled << "\n";
 		int procIndex = getProcIndex(procCalled);
 		procCalls.pop_back();
 		if (procIndex != -1) {
