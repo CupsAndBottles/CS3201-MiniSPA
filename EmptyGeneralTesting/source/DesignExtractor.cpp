@@ -567,14 +567,28 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 	vector<int> usedVar = usesCol.at(stmtNum2);
 	int modifiedVar;
 	int betweenStmt, found = 0;
-	vector<int> path = cfg.DFSOriginal(stmtNum2);
-	for (int i = 1; i < path.size(); i++) {
-		stmtNum1 = path.at(i);
+	vector<int> singlePath = cfg.DFSOriginal(stmtNum2);
+	
+	for (int i = 1; i < singlePath.size(); i++) {
+		stmtNum1 = singlePath.at(i);
 			if (type.at(stmtNum1) == Enum::TYPE::ASSIGN) {
 				modifiedVar = modifiesCol.at(stmtNum1).at(0);
 				if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
-					for (int j = i -1; j > 0; j--) {
-							betweenStmt = path.at(j);
+					vector<vector<int>> allPaths = cfg.storeAllPaths(stmtNum2, stmtNum1);
+					bool* exhaust = new bool[allPaths.size()];
+					vector<int> path;
+					for (int j = 0; j < allPaths.size(); j++) {
+						exhaust[j] = false;
+					}
+
+					//cout << allPaths.size();
+					for (int j = 0; j<allPaths.size() ;j++ ) {
+						path = allPaths.at(j);
+						for (int k = 1; k < path.size(); k++) {
+							betweenStmt = path.at(k);
+							if (betweenStmt == stmtNum1) {
+								break;
+							}
 							if (type.at(betweenStmt) == Enum::TYPE::WHILE || type.at(betweenStmt) == Enum::TYPE::IF) {
 								continue;
 							}
@@ -584,65 +598,37 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 									if (betweenStmt < stmtNum1 && stmtNum1 < stmtNum2) {
 									}
 									else {
-									vector<int> betweenPath;
-									betweenPath = cfg.DFSOriginal(betweenStmt);
-									for (int k = 0; k < betweenPath.size(); k++) {
-										cout << betweenPath.at(k);
-									}
-									if (find(betweenPath.begin(), betweenPath.end(), stmtNum1) == betweenPath.end()) {
-										cout << "betweenStmt skipped " << betweenStmt << "for" << stmtNum1;
-										continue;
-									}
-										found = 1;
+										vector<int> betweenPath;
+										betweenPath = cfg.DFSOriginal(betweenStmt);
+										//for (int k = 0; k < betweenPath.size(); k++) {
+										//	cout << betweenPath.at(k);
+										//}
+										if (find(betweenPath.begin(), betweenPath.end(), stmtNum1) == betweenPath.end()) {
+											//	cout << "betweenStmt skipped " << betweenStmt << "for" << stmtNum1;
+											continue;
+										}
+										
+										exhaust[j] = true;
 										break;
 									}
 								}
 							}
+						}
+
 					}
-					if (found == 0){
-						results.push_back(make_pair(stmtNum1, stmtNum2));
+
+					for (int k = 0; k < allPaths.size(); k++) {
+						if (exhaust[k] == false) {
+							results.push_back(make_pair(stmtNum1, stmtNum2));
+							break;
+						}
 					}
-					found = 0;
+					
+					
 				}
 		}
 	}
-	/*
-	if (parentTCol.at(stmtNum2).size() != 0) {
-		vector<int> parentT = parentTCol.at(stmtNum2);
-		vector<int> whileStmt;
-		int stmt;
-
-		for (int i = 0; i < parentT.size(); i++) {
-			stmt = parentT.at(i);
-			if (type.at(stmt) == Enum::TYPE::WHILE) {
-				whileStmt.push_back(stmt);
-			}
-		}
-
-		if (whileStmt.size() > 0) {
-			int min = whileStmt.at(0);
-			for (int j = 1; j < whileStmt.size(); j++) {
-				if (whileStmt.at(j) < min) {
-					min = whileStmt.at(j);
-				}
-			}
-
-			vector<int> children = childrenCol.at(min);
-			sort(children.begin(), children.end());
-			size_t start = find(children.begin(), children.end(), stmtNum2) - children.begin();
-			for (size_t j = start; j < children.size(); j++) {
-				if (type.at(children.at(j)) == Enum::TYPE::IF) {
-					continue;
-				}
-				else {
-					if (extractAffectsBothNum(children.at(j), stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol) == 1) {
-						results.push_back(make_pair(children.at(j), stmtNum2));
-					}
-				}
-			}
-		}
-		}
-	*/
+	
 	if (extractAffectsBothNum(stmtNum2, stmtNum2, modifiesCol, usesCol, prevCol, startEndNum, type, parentTCol, childrenCol) == 1) {
 		results.push_back(make_pair(stmtNum2, stmtNum2));
 	}
