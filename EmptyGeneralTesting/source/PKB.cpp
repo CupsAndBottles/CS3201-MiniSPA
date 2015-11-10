@@ -1224,17 +1224,11 @@ vector<pair<int, int>> PKB::getNextT(Enum::TYPE type1, int stmtNum1, Enum::TYPE 
 		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				nextT = extractNextT(i);
-
 				for (size_t j = 0; j < nextT.size(); j++) {
 						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(nextT.at(j)).getType()) {
-							if (type1 == Enum::TYPE::STATEMENT && type2 == Enum::TYPE::STATEMENT) {
-								if (i == nextT.at(j)) {
-									results.push_back(make_pair(i, nextT.at(j)));
-								}
-							}
-							else {
+								
 								results.push_back(make_pair(i, nextT.at(j)));
-							}
+							
 						}
 				}
 			}

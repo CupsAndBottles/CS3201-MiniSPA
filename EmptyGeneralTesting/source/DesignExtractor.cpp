@@ -196,6 +196,7 @@ vector<vector<int>> DesignExtractor::extractProcModifiesUses(vector<vector<int>>
 
 std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmtNum) {
 	vector<int> next = col.at(stmtNum);
+	
 	int nextStmtNum = -1;
 
 	if (next.size() == 0) {
@@ -211,6 +212,8 @@ std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmt
 		}
 	}
 
+	
+	//cout << NextT.size();
 	return NextT;
 }
 
@@ -468,7 +471,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 		}
 		//cout << "\n";
 	}
-
+	
 	int stmtNum2 = -1;
 	int modifiedVar = modifiesCol.at(stmtNum1).at(0);
 	vector<int> usedVar;
@@ -479,7 +482,10 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 	bool* exhaust;
 	vector<int> path;
 	//cout << singlePath.size();
-	
+	vector<int> list = nextCol.at(stmtNum1);
+	for (int j = 0; j < list.size(); j++) {
+		cout << list.at(j);
+	}
 	for (int i = 1; i < singlePath.size(); i++) {
 			stmtNum2 = singlePath.at(i);
 			//cout << "StmtNum2 " << stmtNum2;
