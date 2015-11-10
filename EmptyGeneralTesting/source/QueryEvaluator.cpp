@@ -212,9 +212,9 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	}
 
 	if (!results.empty()) {
-		if (relationship == RELATIONSHIP_AFFECTS || relationship == RELATIONSHIP_AFFECTST) {
-			if (firstParamIndex == NOT_FOUND && secondParamIndex == NOT_FOUND) {
-				if (clause.getLeftCStringValue() == clause.getRightCStringValue()) {
+		if (firstParamIndex == NOT_FOUND && secondParamIndex == NOT_FOUND) {
+			if (clause.getLeftCStringValue() == clause.getRightCStringValue()) {
+				if (relationship == RELATIONSHIP_AFFECTS || relationship == RELATIONSHIP_AFFECTST || relationship == RELATIONSHIP_NEXTT) {
 					vector<pair<int, int>> temp = vector<pair<int, int>>();
 
 					for (size_t i = 0; i < results.size(); i++) {
@@ -230,7 +230,11 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 						return false;
 					}
 				}
+				else {
+					return false;
+				}
 			}
+
 		}
 		storeResultsForSyn(clause, results);
 		return true;
