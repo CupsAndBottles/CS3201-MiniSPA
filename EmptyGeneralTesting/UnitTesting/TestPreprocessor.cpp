@@ -58,6 +58,24 @@ namespace UnitTesting
 			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("s"));
 			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 1);
 			Assert::AreEqual(queryTree.getResultTree().at(0).getParentIsStmt(), true);
+
+			input = "call c; Select c.stmt#";
+			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
+			ParserForPQL parser5(input);
+			queryTree = parser5.getQueryTree();
+
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("c"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 8);
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentIsStmt(), true);
+
+			input = "call c; Select c";
+			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
+			ParserForPQL parser6(input);
+			queryTree = parser6.getQueryTree();
+
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("c"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 8);
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentIsStmt(), true);
 		}
 
 		TEST_METHOD(TestSuchThatTree)
