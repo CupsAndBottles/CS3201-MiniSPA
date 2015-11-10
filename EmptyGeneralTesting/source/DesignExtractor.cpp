@@ -15,7 +15,7 @@ DesignExtractor::~DesignExtractor() {
 vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
 	int index = stmtNum;
 	vector<int> parentCol = col;
-	int parent;
+	int parent = -1;
 
 	if (parentCol.size() == 0) {
 	}
@@ -36,7 +36,7 @@ vector<int> DesignExtractor::extractParentT(vector<int> col, int stmtNum) {
 
 vector<int> DesignExtractor::extractChildrenT(vector<vector<int>> col,int stmtNum) {
 	vector<int> children = col.at(stmtNum);
-	int child;
+	int child = -1;
 
 	if (children.size() == 0) {
 	}
@@ -102,7 +102,7 @@ void DesignExtractor::extractRecCallsTCalledByT(vector<int> row, vector<vector<i
 
 std::vector<int> DesignExtractor::extractFollowsT(vector<int> col, int stmtNum) {
 	int index = stmtNum;
-	int num;
+	int num = -1;
 
 	if (col.size() == 0) {
 	}
@@ -123,7 +123,7 @@ std::vector<int> DesignExtractor::extractFollowsT(vector<int> col, int stmtNum) 
 
 std::vector<int> DesignExtractor::extractFollowedByT(vector<int> col, int stmtNum) {
 	int index = stmtNum;
-	int num;
+	int num = -1;
 
 	if (col.size() == 0) {
 
@@ -196,7 +196,7 @@ vector<vector<int>> DesignExtractor::extractProcModifiesUses(vector<vector<int>>
 
 std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmtNum) {
 	vector<int> next = col.at(stmtNum);
-	int nextStmtNum;
+	int nextStmtNum = -1;
 
 	if (next.size() == 0) {
 		//cout << "zero size";
@@ -216,7 +216,7 @@ std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmt
 
 std::vector<int> DesignExtractor::extractPrevT(vector<vector<int>> col, int stmtNum) {
 	vector<int> prev = col.at(stmtNum);
-	int prevStmtNum;
+	int prevStmtNum = -1;
 
 	if (prev.size() == 0) {
 
@@ -233,8 +233,8 @@ return PrevT;
 }
 
 int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
-	int firstIndex;
-	int secondIndex;
+	int firstIndex = -1;
+	int secondIndex = 0;
 
 	for (int i = 0; i < startEndNum.size(); i++) {
 		int start = startEndNum.at(i).first;
@@ -369,24 +369,25 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 							max = whileStmt.at(j);
 						}
 					}
-					
+		
 					vector<int> children = childrenCol.at(max);
 					int found = 0;
 					vector<int> modified;
 					int last = children.at(0);
 					for (int k = 0; k < children.size(); k++) {
+						//cout << "Child: " <<children.at(k) << "\n";
 						if (children.at(k) > last) {
 							last = children.at(k);
-						}
+					}
 					}
 					vector<vector<int>> allPaths = cfg.storeAllPaths(max + 1, last);
 					vector<int> path;
 					bool* exhaust = new bool[allPaths.size()];
-
+					//cout << last;
 					for (int i = 0; i < allPaths.size(); i++) {
 						exhaust[i] = false;
 					}
-
+					
 					int betweenStmt;
 					for (int j = 0; j <allPaths.size(); j++) {
 						path = allPaths.at(j);
@@ -397,6 +398,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 								continue;
 							}
 							else {
+								
 								if (betweenStmt != stmtNum1) {
 									modified = modifiesCol.at(betweenStmt);
 									if (find(modified.begin(), modified.end(), modifiedVar) != modified.end()) {
@@ -404,7 +406,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 										if (find(betweenPath.begin(), betweenPath.end(), stmtNum2) == betweenPath.end()) {
 											continue;
 										}
-
+										
 										exhaust[j] = true;
 										break;
 									}
@@ -437,7 +439,7 @@ int DesignExtractor::extractAffectsBothNum(int stmtNum1, int stmtNum2, vector<ve
 
 vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
 
-	int procStart, procEnd;
+	int procStart, procEnd = -1;
 	vector<pair<int, int>> results;
 	vector<int> modifies;
 
@@ -446,21 +448,28 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 	}
 	for (int i = 0; i < startEndNum.size(); i++) {
 		procStart = startEndNum.at(i).first;
+		//cout << "Start" << procStart;
 		procEnd = startEndNum.at(i).second;
+		//cout << "End" <<procEnd;
 		if ((procStart <= stmtNum1) && (stmtNum1 <= procEnd)) {
 			break;
 		}
+		//cout << "\n";
 	}
-
+	//cout << procStart;
+	//cout << procEnd;
 	Graph cfg(procEnd+1);
 	for (int i = procStart; i <= procEnd; i++) {
+		//cout << "Stmt " << i;
 		vector<int> list = nextCol.at(i);
 		for (int j = 0; j < list.size(); j++) {
 			cfg.addEdge(i, list.at(j));
+			//cout << list.at(j) << " ";
 		}
+		//cout << "\n";
 	}
 
-	int stmtNum2;
+	int stmtNum2 = -1;
 	int modifiedVar = modifiesCol.at(stmtNum1).at(0);
 	vector<int> usedVar;
 
@@ -472,9 +481,14 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 	vector<vector<int>> allPaths;
 	bool* exhaust;
 	vector<int> path;
-
+	//cout << singlePath.size();
+	//vector<int> next = nextCol.at(stmtNum1+1);
+	//for (int i = 0; i < singlePath.size(); i++) {
+		//cout << singlePath.at(i);
+	//}
 	for (int i = 1; i < singlePath.size(); i++) {
 			stmtNum2 = singlePath.at(i);
+			//cout << "StmtNum2 " << stmtNum2;
 					if (type.at(stmtNum2) == Enum::TYPE::ASSIGN) {
 						usedVar = usesCol.at(stmtNum2);
 						if (find(usedVar.begin(), usedVar.end(), modifiedVar) != usedVar.end()) {
@@ -484,7 +498,13 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 							else {
 								allPaths = cfg.storeAllPaths(stmtNum1, stmtNum2);
 								exhaust = new bool[allPaths.size()];
-
+								//cout << stmtNum2 << " ";
+								for (int j = 0; j < allPaths.size(); j++) {
+									vector<int> list = allPaths.at(j);
+									//for (int k = 0; k < list.size(); k++) {
+										//cout << "ELEMENt: " << list.at(k) << "\n";
+									//}
+								}
 								for (int j = 0; j < allPaths.size(); j++) {
 									exhaust[j] = false;
 								}
@@ -501,7 +521,11 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 											continue;
 										}
 										else {
+											//cout << "Between stmt " << betweenStmt;
 											modifies = modifiesCol.at(betweenStmt);
+											for (int i = 0; i < modifies.size(); i++) {
+											//	cout << "Modifies" << modifies.at(i);
+											}
 											if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
 												if ((betweenStmt < stmtNum1) && (stmtNum1 < stmtNum2)) {
 
@@ -543,7 +567,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 }
 
 vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> prevCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
-	int procStart, procEnd;
+	int procStart, procEnd = -1;
 	vector<pair<int, int>> results;
 	vector<int> modifies;
 
@@ -566,7 +590,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsSecondNum(int stmtNum2, ve
 		}
 	}
 
-	int stmtNum1;
+	int stmtNum1 = 1;
 	vector<int> usedVar = usesCol.at(stmtNum2);
 	int modifiedVar;
 	int betweenStmt, found = 0;
@@ -661,8 +685,8 @@ vector<pair<int, int>> DesignExtractor::extractAffectsBothUnspecified(vector<vec
 }
 
 int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
-	int firstIndex;
-	int secondIndex;
+	int firstIndex = -1;
+	int secondIndex = 0;
 	
 	for (int i = 0; i < startEndNum.size(); i++) {
 		int start = startEndNum.at(i).first;
@@ -698,7 +722,7 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 		}
 		else {
 			
-				int check;
+			int check = -1;
 
 				check = extractAffectsBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
 				if (check == 1) {
@@ -720,7 +744,7 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 			}
 			
 			Graph affectsGraph(endNum+1);
-			int stmt;
+			int stmt = -1;
 			vector<int> stmts;
 			for (int j = 0; j < path.size(); j++) {
 					stmt = path.at(j);
@@ -733,7 +757,7 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 			vector<int> affectsPath = affectsGraph.DFSOriginal(stmtNum1);
 					
 			if (stmtNum1 == stmtNum2) {
-				int stmt;
+				int stmt = -1;
 				vector<int> nums;
 				for (int j = 0; j < affectsPath.size(); j++) {
 					stmt = affectsPath.at(j);
@@ -759,7 +783,7 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 
 vector<pair<int,int>> DesignExtractor::extractAffectsTFirstNum(int stmtNum1, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector<vector<int>> parentTCol, vector<vector<int>> childrenCol) {
 	vector<pair<int, int>> results;
-	int procStart, procEnd;
+	int procStart, procEnd = -1;
 	vector<int> modifies;
 
 	if (type.at(stmtNum1) != Enum::TYPE::ASSIGN) {
@@ -782,7 +806,7 @@ vector<pair<int,int>> DesignExtractor::extractAffectsTFirstNum(int stmtNum1, vec
 	}
 
 	vector<int> path = cfg.DFSOriginal(stmtNum1);
-	int check;
+	int check = -1;
 	for (int i = 0; i < path.size(); i++) {
 		if (type.at(path.at(i)) == Enum::TYPE::ASSIGN) {
 			check = extractAffectsTBothNum(stmtNum1, path.at(i), modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
@@ -797,7 +821,7 @@ vector<pair<int,int>> DesignExtractor::extractAffectsTFirstNum(int stmtNum1, vec
 vector<pair<int, int>> DesignExtractor::extractAffectsTSecondNum(int stmtNum2, vector<vector<int>> modifiesCol, vector<vector<int>> usesCol, vector<vector<int>> prevCol, vector<vector<int>> nextCol, vector<pair<int, int>> startEndNum, vector<int> type, vector < vector<int>> parentTCol, vector<vector<int>> childrenCol) {
 
 	vector<pair<int, int>> results;
-	int procStart, procEnd;
+	int procStart, procEnd = -1;
 	vector<int> modifies;
 
 	for (int i = 0; i < startEndNum.size(); i++) {
@@ -821,7 +845,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsTSecondNum(int stmtNum2, v
 	//	cout << path.at(i) << " ";
 	}
 	//cout << "\n";
-	int check;
+	int check = -1;
 	for (int i = 0; i < path.size(); i++) {
 		if (type.at(path.at(i)) == Enum::TYPE::ASSIGN) {
 			check = extractAffectsTBothNum(path.at(i), stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
