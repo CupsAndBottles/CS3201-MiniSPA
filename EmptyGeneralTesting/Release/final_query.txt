@@ -83,53 +83,218 @@ stmt s;
 Select s such that Parent(_, s)
 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66
 5000
-18 - ParentT
+18 - Parent
+stmt s;
+Select s such that Parent(s, s)
+
+5000
+19 - ParentT
 stmt s;
 Select s such that Parent*(s, 16)
 15, 11, 9, 7, 5, 4
 5000
-19 - ParentT
+20 - ParentT
 stmt s;
 Select s such that Parent*(23, s)
 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
 5000
-20 - ParentT
+21 - ParentT
 assign a;
 Select a such that Parent*(11 , a)
 12, 13, 16
 5000
-21 - ParentT
+22 - ParentT
 call c;
 Select c such that Parent*(24 , c)
 30, 34, 44
 5000
-22 - ParentT
+23 - ParentT
 if ifstat1, ifstat2;
 Select ifstat1 such that Parent*(ifstat1, ifstat2)
 5, 23, 24
 5000
-23 - ParentT
+24 - ParentT
 while w1, w2;
 Select w1 such that Parent*(w1, w2)
 4, 7, 11, 51, 55
 5000
-24 - ParentT
+25 - ParentT
 while w; if ifstat;
 Select ifstat such that Parent*(ifstat, w)
 5, 9
 5000
-25 - ParentT
+26 - ParentT
 while w; if ifstat;
 Select ifstat such that Parent*(w, ifstat)
 5, 9
 5000
-26 - ParentT
+27 - ParentT
 stmt s;
 Select s such that Parent*(s, _)
 4, 5, 7, 9, 11, 15, 23, 24, 25, 45, 51, 55, 59
 5000
-27 - ParentT
+28 - ParentT
 stmt s;
 Select s such that Parent*(_, s)
 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66
+5000
+29 = ParentT
+stmt s;
+Select s such that Parent*(s,s)
+
+5000
+30 - Follows
+stmt s;
+Select s such that Follows(s, 9)
+8
+5000
+31 - Follows
+stmt s;
+Select s such that Follows(51, s)
+65
+5000
+32 - Follows
+assign a;
+Select a such that Follows(51 ,a)
+65
+5000
+33 - Follows
+call c;
+Select c such that Follows(47 ,c)
+48
+5000
+34 - Follows
+if ifstat;
+Select ifstat such that Follows(22, ifstat)
+23
+5000
+35 - Follows
+stmt s1, s2;
+Select s1 such that Follows(s1,s2)
+1, 2, 3, 7, 8, 10, 12, 13, 14, 18, 19, 20, 22, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 45, 46, 47, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 65, 67, 68, 69, 70, 71
+5000
+36 - Follows
+stmt s1;
+Select s1 such that Follows(s1, _)
+1, 2, 3, 7, 8, 10, 12, 13, 14, 18, 19, 20, 22, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 45, 46, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 65, 67, 68, 69, 70, 71
+5000
+37 - Follows
+stmt red;
+Select red such that Follows(red, red)
+
+5000
+38 - FollowsT
+stmt s;
+Select s such that Follows*(s, 4)
+1, 2, 3
+5000
+39 - FollowsT 
+stmt s;
+Select s such that Follows*(4 ,s)
+18, 19, 20, 21
+5000
+40 - FollowsT
+assign a;
+Select a such that Follows*(49 ,a)
+65, 66
+5000
+41 - FollowsT
+call c;
+Select c such that Follows*(c, 66)
+50
+5000
+42 - FollowsT
+while w;
+Select w such that Follows*(w, 21)
+4
+5000
+43 - FollowsT
+if ifstat; stmt s;
+Select ifstat such that Follows*(ifstat, s)
+
+5000
+44 - FollowsT
+stmt s1,s2;
+Select s1 such that Follows*(s1, s2)
+1, 2, 3, 7, 8, 10, 12, 13, 14, 18, 19, 20, 22, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 45, 46, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 65, 67, 68, 69, 70, 71
+5000
+45 - FollowsT(s,s) 
+stmt s1;
+Select s1 such that Follows*(s1,s1)
+
+5000
+46 - FollowsT(defined, defined) True
+
+Select BOOLEAN such that Follows*(49, 66)
+true
+5000
+47 - FollowsT(defined, defined) False
+
+Select BOOLEAN such that Follows*(72, 64)
+false
+5000
+48 - Modifies(s, stated)
+stmt s;
+Select s such that Modifies(s, "live")
+21, 52
+5000
+49 - Modifies(if, stated)
+if ifstat;
+Select ifstat such that Modifies(ifstat, "x")
+23, 24, 25
+5000
+50 - Modifies(w, stated)
+while w;
+Select w such that Modifies(w, "live")
+45, 51
+5000
+51 - Modifies(p, stated)
+procedure p;
+Select p such that Modifies(p, "triangle")
+Math, Shapes
+5000
+52 - Modifies(c, stated)
+call c;
+Select c such that Modifies(c, "triangle")
+46, 50
+5000
+53 - Modifies(a, stated)
+assign a;
+Select a such that Modifies(a, "x")
+26, 33, 40, 49
+5000
+54 - Modifies(s, v)
+stmt s; variable v;
+Select v such that Modifies(s,v)
+red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, life, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, circle
+5000
+55 - Modifies(s, _)
+stmt s;
+Select v such that Modifies(s,_)
+red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, life, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, circle
+5000
+56 - Modifies  Boolean true
+if ifstat;
+Select BOOLEAN such that Modifies(ifstat, "x")
+true
+5000
+57 - Modifies Boolean false
+stmt s;
+Select BOOLEAN such that Modifies(s, "notFound")
+false
+5000
+58 - Modifies(stated, stated variable)
+
+Select BOOLEAN such that Modifies(12, "rainbow")
+true
+5000
+59 - Modifies(stated container, stated variable)
+
+Select BOOLEAN such that Modifies(4, grey)
+true
+5000
+60 - Modifies(stated procedure, stated variable)
+
+Select BOOLEAN such that Modifies("killerLoops", "morning")
+false
 5000
