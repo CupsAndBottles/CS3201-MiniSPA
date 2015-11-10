@@ -1488,8 +1488,16 @@ vector<Synonym> QueryEvaluator::getValuesOfSelectedSyns(vector<Synonym> groupedS
 vector<int> QueryEvaluator::getValuesOfNonCommonSyn(Clauses nonCommon) {
 	Enum::TYPE typeOfSyn = nonCommon.getParentType();
 
-	if (typeOfSyn == Enum::TYPE::VARIABLE || typeOfSyn == Enum::TYPE::PROCEDURE || typeOfSyn == Enum::TYPE::CALLS) {
+	if (typeOfSyn == Enum::TYPE::VARIABLE || typeOfSyn == Enum::TYPE::PROCEDURE) {
 		return getStringedAttrIndexes(typeOfSyn);
+	}
+	else if (typeOfSyn == Enum::TYPE::CALLS) {
+		if (nonCommon.getParentIsStmt()) {
+			return getAllAttrValues(typeOfSyn);
+		}
+		else {
+			return getStringedAttrIndexes(typeOfSyn);
+		}
 	}
 	else {
 		return getAllAttrValues(typeOfSyn);
