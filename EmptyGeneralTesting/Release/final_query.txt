@@ -451,7 +451,7 @@ Select n1 such that Next*(n1,n2)
 91 - Next*(stated prog_line, n)
 prog_line n;
 Select n such that Next*(16, n)
-11, 15, 7, 18, 12, 13, 14, 7, 8, 9, 10, 17, 18, 19, 20, 21
+11, 15, 7, 18, 12, 13, 14, 7, 8, 9, 10, 17, 18, 19, 20, 21, 16, 4, 5, 6
 5000
 92 - Next*(n, stated prog_line)
 prog_line n;
@@ -473,18 +473,23 @@ stmt s;
 Select s such that Next*(s, s)
 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 45, 46, 47, 48
 5000
-96 - Next(s1, s2)
+96 - Next*(s1, s2)
 stmt s1, s2;
-Select s1 such that Next(s1, s2)
+Select s1 such that Next*(s1, s2)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11 ,12 ,13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71
 5000
-97 - Next with while
+97 - NextT with while
 while w; prog_line n;
-Select w such that Next(w, n)
+Select w such that Next*(w, n)
 4, 7, 11, 15, 45, 51, 55, 59
 5000
-98 - Next with ifstat
+98 - Next* with ifstat
 if ifstat; prog_line n;
-Select ifstat such that Next(n, ifstat)
+Select ifstat such that Next*(n, ifstat)
 5, 9, 23, 24, 25
+5000
+99 - Next* invalid path
+
+Select BOOLEAN such that Next*(36, 24)
+false
 5000
