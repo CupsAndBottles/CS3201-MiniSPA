@@ -1,30 +1,310 @@
-1- Modifies
+1 -Parent:one synonym: testing for parent without container stmts
+stmt s;
+Select s such that Parent(1, s)
+
+5000
+2 -Parent:one synonym: testing for parent inside while loop
+while w;
+Select w such that Parent(w, 7)
+6
+5000
+3 -Parent:one synonym: testing for parent inside if loop
+if ifstat;
+Select ifstat such that Parent(ifstat, 28)
+26
+5000
+4 -Parent:both unknowns: testing to detect wrong attributes
+stmt s; variable v;
+Select s such that Parent(s, v)
+
+5000
+5 -Parent:both unknowns: testing for parent inside while loop
+while w; assign a;
+Select w such that Parent(w, a)
+6, 11, 15, 33, 45, 55
+5000
+6 -Parent:both known: testing boolean values
+
+Select BOOLEAN such that Parent(45, 46)
+true
+5000
+7 -Parent:both unknown: testing for parent 
+assign a; if ifstat;
+Select <ifstat, a> such that Parent(ifstat, a)
+26 27, 26 28, 26 29, 26 30, 26 31, 26 32, 49 50, 49 51, 49 52, 49 53, 49 54
+5000    
+8 -ParentT: one synonym: testing for ParentT without container stmts
+stmt s;
+Select s such that Parent*(41, s)
+
+5000
+9 -ParentT: one synonym: testing for ParentT with while loops
+while w;
+Select w such that Parent*(w, 48)
+45
+5000
+10 -ParentT: one synonym: testing for ParentT with if loops
+if ifstat;
+Select ifstat such that Parent*(ifstat, 54)
+49
+5000
+11 -ParentT: both synonyms unknown: testing for ParentT with loops
+stmt s1; if ifstat;
+Select s1 such that Parent*(ifstat, s1)
+27, 28, 29, 30, 31, 32, 50, 51, 52, 53, 54
+5000
+12 -ParentT: both synonyms known: testing for ParentT with loops
+
+Select BOOLEAN such that Parent*(26, 32)
+true
+5000
+13 -Follows: one synonym: testing for follows without loops
+stmt s;
+Select s such that Follows(s, 44)
+43
+5000
+14 -Follows: one synonym: testing for follows with assignment stmts
 assign a;
-Select a such that Modifies(a, "grape")
-2, 5, 9, 12
+Select a such that Follows(2, a)
+3
 5000
-2- Uses
+15 -Follows: one synonym: testing for follows with general stmts
+stmt s;
+Select s such that Follows(26, s)
+33
+5000
+16 -Follows: both synonyms unknown: testing for follows
+stmt s1; if ifstat;
+Select ifstat such that Follows(ifstat, s1)
+26, 49
+5000
+17 -Follows: both synonyms known: testing for follows
+
+Select BOOLEAN such that Follows(11, 15)
+true
+5000
+18 -FollowsT: one synonym: testing for follows* without loops
+stmt s;
+Select s such that Follows*(s, 4)
+1, 2, 3
+5000
+19 -FollowsT: one synonym: testing for follows* with assignment statements
 assign a;
-Select a such that Uses(a, "grape")
-5, 7, 9, 18, 21
+Select a such that Follows*(a, 20)
+1, 2, 3, 4, 5
 5000
-3 -Modifies,Uses
-assign a;
-Select a such that Modifies(a, "grape") and Uses(a, "grape")
-5, 9
+20 -FollowsT: both synonyms unknown: testing for follows* with while loop
+while w1, w2;
+Select <w1, w2> such that Follows*(w1, w2)
+11 15
 5000
-4 -Next 
-prog_line n;
-Select n such that Next(n, 6)
-5, 18
+21 -FollowsT: both synonyms unknown: testing for follows* with if loops
+if ifstat; stmt s;
+Select ifstat such that Follows*(ifstat, s)
+26, 49
 5000
-5 -Modifies
+22 -FollowsT: both synonyms known: testing for follows* 
+
+Select BOOLEAN such that Follows*(1, 40)
+false
+5000
+23 -FollowsT: both synonyms known: testing for follows*
+
+Select BOOLEAN such that Follows*(41, 43)
+true
+5000 
+24 -Calls: one synonym: testing for calls in proc
 procedure p;
-Select p such that Modifies(p, "mango")
+Select p such that Calls(p, "book")
 fruit
 5000
-6 -Modifies
+25 - Calls: one synonym: testing for calls in proc 
+procedure p; 
+Select p such that Calls("alpha, p)
+
+5000
+26 -Calls: both synonym: testing for calls in proc
+procedure p, q;
+Select p such that Calls(p, q)
+fruit
+5000
+27 -Calls: both synonym: testing for calls in proc
+procedure p, q;
+Select q such that Calls(p, q)
+book 
+5000
+28 -Calls: both synonym: testing both attributes for calls in proc
+procedure p, q;
+Select <p, q> such that Calls(p, q)
+fruit book
+5000
+29 -Calls: both synonym known: testing negative for calls in proc
+
+Select BOOLEAN such that Calls("fruit", "alpha")
+false
+5000
+30 -Calls*: one synonym: testing for Calls* in proc
+procedure p;
+Select p such that Calls*(p, "book")
+fruit
+5000
+31 -Calls*: one synonym: testing for Calls* in proc
+procedure p; 
+Select p such that Calls*("fruit", p) 
+book
+5000
+32 -Calls*: both synonym unknown: testing for Calls* in proc
+procedure p, q;
+Select <p, q> such that Calls*(p, q)
+fruit book
+5000
+33 -Calls*: both synonym known: testing positive for Calls* in proc
+
+Select BOOLEAN such that Calls*("fruit", "book")
+true
+5000 
+34 -Next: one synonym: testing next with prog_line
+prog_line n;
+Select n such that Next(n, 2)
+1
+5000
+35 -Next: one synonym: testing next with stmt no.
+stmt s;
+Select s such that Next(23, s)
+24
+5000
+36 -Next: both synonym known: testing next
+
+Select BOOLEAN such that Next(20, 21)
+true
+5000  
+37 -Next: both synonym known: testing next to ensure it is within the same procedure
+
+Select BOOLEAN such that Next(40, 41)
+false
+5000
+38 -NextT: both synonym known: testing next*
+
+Select BOOLEAN such that Next*(1, 31) 
+false
+5000
+39 -NextT: both synonym known: testing next*
+
+Select BOOLEAN such that Next*(58, 55) 
+true
+5000
+40 -NextT: one synonym known: testing next* with prog_line
+prog_line n;
+Select n such that Next*(n, 3)
+1, 2
+5000
+41 -NextT: one synonym known: testing next* with stmt
+stmt s;
+Select s such that Next*(s, 44)
+41, 42, 43
+5000 
+42 -Modifies: one synonym: testing modifies with assignment stmts
+assign a;
+Select a such that Modifies(a, "x")
+41, 47, 52, 58
+5000
+43 -Modifies: one synonym: testing modifies with variable
 variable v;
-Select v such that Modifies(13, v)
-apple
+Select v such that Modifies(37, v)
+chapter
+5000
+44 -Modifies: one synonym: testing modifies with ifstat stmt
+if ifstat;
+Select ifstat such that Modifies(ifstat, "chapter")
+26
+5000
+45 -Modifies: one synonym: testing modifies with procedure
+procedure p;
+Select p such that Modifies(p, "grape") 
+fruit
+5000
+46 -Modifies: one synonym: testing modifies with variable with procedure
+variable v;
+Select v such that Modifies("book", v)
+page, paper, title, chapter, note
+5000
+47 -Modifies: both synonyms known: testing modifies 
+
+Select BOOLEAN such that Modifies(4, "cherry")
+true
+5000 
+48 -Uses: one synonym: testing for uses with assignment stmts
+assign a;
+Select a such that Uses(a, "title")
+25, 27, 36
+5000
+49 -Uses: one synonym: testing for uses with variable
+variable v;
+Select v such that Uses(21, v)
+grape
+5000
+50 -Uses: one synonym: testing for uses with procedure
+procedure p;
+Select p such that Uses(p, "b")
+alpha
+5000
+51 -Uses: both synonyms unknown: testing for uses with general stmts
+variable v;
+Select v such that Uses(s, v)
+apple, grape, cherry, mango, paper, title, chapter, note, a, x, b, y
+5000
+52- Uses: both synonyms known: testing for uses
+
+Select BOOLEAN such that Uses(3, "orange")
+true
+5000
+53 -Affects:one synonym: testing for affects 
+prog_line n;
+Select n such that Affects(41, n)
+42, 47 
+5000
+54 -Affects:one synonym: testing for affects
+assign a;
+Select a such that Affects(a, 3)
+1
+5000
+55 -Affects: both synonyms unknown: testing for affects
+assign a1, a2;
+Select a1 such that Affects(a1, a2)
+1, 41, 52 
+5000
+56 -Affects: both synonyms known: testing for affects
+
+Select BOOLEAN such that Affects(24, 25)
+true
+5000
+57 -Affects: both synonyms known: testing negative for affects
+
+Select BOOLEAN such that Affects(44, 46)
+false 
+5000
+58 -Affects*: one synonym known: testing affects*
+prog_line n;
+Select n such that Affects*(1, n)
+3, 7, 17
+5000
+59 -Affects*: one synonym known: testing affects*
+prog_line n;
+Select n such that Affects*(n, 12)
+
+5000
+60 -Affects*: both synonym unknown: testing affects*
+assign a1, a2;
+Select a1 such that Affects*(a1, a2)
+1, 41, 52
+5000
+61 -Affects*:both synonym known: testing affects*
+
+Select BOOLEAN such that Affects*(41, 47)
+true
+5000
+62 -Affects*: both synonym knwon: testing negative for affects*
+
+Select BOOLEAN such that Affects*(40, 41)
+false
 5000
