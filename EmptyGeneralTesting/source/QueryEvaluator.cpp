@@ -921,6 +921,13 @@ vector<int> QueryEvaluator::getAllAttrValues(Enum::TYPE type) {
 			}
 		}
 		break;
+	case Enum::TYPE::CALLS:
+		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
+			if (pkb->getType(i) == Enum::TYPE::CALLS) {
+				allValues.push_back(i);
+			}
+		}
+		break;
 	default:
 		break;
 	}
@@ -1498,6 +1505,14 @@ vector<int> QueryEvaluator::getValuesOfNonCommonSyn(Clauses nonCommon) {
 		else {
 			return getStringedAttrIndexes(typeOfSyn);
 		}
+	}
+	else if (typeOfSyn == Enum::TYPE::CONSTANT) {
+		vector<int> constantIndexes = vector<int>();
+
+		for (int i = 0; i < pkb->getNoOfConstants(); i++) {
+			constantIndexes.push_back(i);
+		}
+		return constantIndexes;
 	}
 	else {
 		return getAllAttrValues(typeOfSyn);
