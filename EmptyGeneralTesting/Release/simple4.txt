@@ -1,0 +1,65 @@
+procedure fruit{
+apple = 4; //1
+grape = 10; //2
+orange = 3 + apple; //3
+cherry = 8; //4
+grape = grape + 5; //5
+while apple{  //6
+cherry = 4 * grape + apple; //7
+orange = 5; //8
+grape = 2 + grape; //9
+mango = 12; //10
+while orange{  //11
+grape = 8; //12
+apple = 10 + cherry; //13
+mango = mango + 1;} //14
+while grape{   //15
+orange = 2; //16
+apple = apple + 3; //17
+mango = 3 + grape + 5;}} //18
+call book; //19
+mango = 5; //20
+apple = 3 + grape * 4;} //21
+procedure book{ 
+page = 10; //22
+paper = 2 + paper; //23
+title = 7; //24
+chapter = 12 + title; //25
+if chapter then{ //26
+title = 2 + title; //27
+paper = 3; //28
+page = 4 * chapter;} //29
+else{ 
+page = 2; //30  
+title = 5 + paper; //31
+chapter = 8;} //32
+while paper{ //33 
+note = 4; //34
+page = note; //35
+paper = 12 * title; //36
+chapter = 5;} //37
+note = 2 * note; //38
+paper = 6; //39
+title = paper * 3;} //40
+procedure alpha{
+x = 2; //41
+y = 3 * x; //42
+a = 4; //43
+b = 2 * a; //44
+while x{ //45
+b = 7; //46
+x = 4 + x; //47
+a = 12; //48
+if a then{ //49
+y = 3 * b; //50
+a = 8 * a;} //51
+else{
+x = 1; //52
+y = y + 1; //53
+a = 10;} //54
+while b{ //55
+y = 5 + y; //56
+a = 9 * b; //57
+x = 8;} //58
+y = y + 4; //59
+b = b * 2;}} //60
