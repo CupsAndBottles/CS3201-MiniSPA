@@ -65,12 +65,12 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 
 
 	ParserOfType parserOfType;
-	for (int i = 0; i < selectSynonym.size(); i++) {
+	for (std::size_t i = 0; i < selectSynonym.size(); i++) {
 		std::size_t found = selectSynonym.at(i).find(".");
 		
 		if (found != std::string::npos) {
 			splitFullStopSyn = parser.split(selectSynonym.at(i), '.');
-			for (int k = 0; k < splitFullStopSyn.size(); k++) {
+			for (std::size_t k = 0; k < splitFullStopSyn.size(); k++) {
 			
 				if (k == 0) {
 
@@ -114,10 +114,6 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 	}
 }
 
-
-
-
-
 void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThatSynonym, vector<string> type, vector<string> synonym)
 {
 	suchThatSynAndType.push_back(vector <string>());
@@ -134,8 +130,7 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 			throw ParserException("unidentified such that synonym");
 		}
 		temp = parserOfType.setClauseType(1, suchThatSynonym[i].at(0), type, synonym);
-		//std::cout << "suchThatSynonym[i].at(0) = " << suchThatSynonym[i].at(0) << '\n';
-		//std::cout << "temp1 = " << temp.size() << '\n';
+		
 		if (temp.size() == 0) {
 			throw ParserException("SuchThat synonym unidentified");
 		}
@@ -183,7 +178,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			withSynonym[i] = arrangeSyn(withSynonym[i]);
 		}
 
-		for (int k = 0; k < withSynonym[i].size(); k++) {
+		for (std::size_t k = 0; k < withSynonym[i].size(); k++) {
 			if (k == 0 || (withSynonym[i].size() == 4 && k == 2)) {
 
 				pos = parserOfType.isBeingDeclared(withSynonym[i].at(k), synonym);
@@ -235,14 +230,11 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				withSynAndType[1].insert(withSynAndType[1].end(), temp[1].begin(), temp[1].end());
 				withSynAndType[2].insert(withSynAndType[2].end(), temp[2].begin(), temp[2].end());
 				withSynAndType[3].insert(withSynAndType[3].end(), temp[3].begin(), temp[3].end());
-				//std::cout << "withSynAndType[0]1 = " << withSynAndType[0].at(1) << '\n';
 			}
 		}
 		if (withSynonym[i].size() == 4) {
 			int size1 = withSynAndType[1].size() - 1;
 			int size2 = withSynAndType[1].size() - 2;
-//			std::cout << "withSynAndType[3]1 = " << withSynAndType[3].at(size1) << '\n';
-			//std::cout << "withSynAndType[3]2 = " << withSynAndType[3].at(size2) << '\n';
 			
 			if (withSynAndType[3].at(size1).compare("1") == 0 && withSynAndType[3].at(size2).compare("0") == 0 && withSynAndType[1].at(size2).compare("constant") != 0) {
 				throw ParserException("stmt# must be equal to stmt#, not equal to procName");
@@ -275,7 +267,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 			patternSynAndType[2].insert(patternSynAndType[2].end(), temp[2].begin(), temp[2].end());
 			patternSynAndType[3].insert(patternSynAndType[3].end(), temp[3].begin(), temp[3].end());
 
-		for (int k = 1; k < patternSynonym[i].size(); k++) {
+		for (std::size_t k = 1; k < patternSynonym[i].size(); k++) {
 			temp = parserOfType.setType(2, patternSynonym[i].at(k), type, synonym, "variable");
 			if (temp.size() == 0) {
 				throw ParserException("Pattern synonym unidentified");
@@ -294,8 +286,8 @@ void ParserTypeWithSyn::checkCommonSynonym()
 	int number = 0;
 	string temp = "";
 	if(suchThatSynAndType.size() > 0 && patternSynAndType.size() > 0) {
-		for (int i = 0; i < suchThatSynAndType[0].size(); i++) {
-			for (int j = 0; j < patternSynAndType[0].size(); j++) {
+		for (std::size_t i = 0; i < suchThatSynAndType[0].size(); i++) {
+			for (std::size_t j = 0; j < patternSynAndType[0].size(); j++) {
 				if (suchThatSynAndType[0].at(i).compare(patternSynAndType[0].at(j)) == 0 && temp.compare(suchThatSynAndType[0].at(i)) != 0 &&
 					suchThatSynAndType[0].at(i).compare("_") != 0) {
 					temp = suchThatSynAndType[0].at(i);
