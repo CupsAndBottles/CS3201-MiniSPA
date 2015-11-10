@@ -27,12 +27,12 @@ while orange{													\\4
 world = colours + black * white - people;									\\18
 people = 100000000;												\\19
 call Math;													\\20
-life = difficult + 99;												\\21
+live = hard + 99;												\\21
 }
 procedure Math{
 algebra = x + y * z + a - b * c;										\\22
 if algebra then {												\\23
-	if difficult then{											\\24
+	if hard then{											\\24
 		if fail then{											\\25
 			x = 0;											\\26
 			y = 0;											\\27
@@ -67,8 +67,8 @@ call Home;													\\48
 procedure Home{
 x = x + y;													\\49
 call Shapes;													\\50
-while life{													\\51
-	life = eat + sleep;											\\52
+while live {													\\51
+	live = eat + sleep;											\\52
 	sleep = z + z * 100000000 + z + z + z;									\\53
 	morning = 10;												\\54
 	while morning {												\\55
@@ -76,7 +76,7 @@ while life{													\\51
 		coffee = morning + 10;										\\57
 		morning = 11;											\\58
 		while afternoon {										\\59
-			test = difficult + program;								\\60
+			test = hard + program;								\\60
 			program = program - bugs;								\\61
 			bugs = 99 * program;									\\62
 			afternoon = night;									\\63										
