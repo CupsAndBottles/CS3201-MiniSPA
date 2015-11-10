@@ -211,3 +211,12 @@ int Stmt::getControlVarIndex()
 {
 	return controlVar;
 }
+
+void Stmt::removeDuplicates(vector<int> list, int value) {
+	sortVectors(list);
+	if (!binary_search(list.begin(), list.end(), value)) {
+		list.push_back(value);
+	}
+	list.erase(unique(list.begin(), list.end()), list.end());
+
+}

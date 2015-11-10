@@ -60,6 +60,7 @@ public:
 	vector<int> getNextT();
 	vector<int> getPrevT();
 	int getControlVarIndex();
+	void removeDuplicates(vector<int> list, int value);
 	int getFollows();
 
 	int getFollowedBy();

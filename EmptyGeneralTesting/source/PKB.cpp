@@ -135,7 +135,7 @@ void PKB::setProcUses(int index, vector<int> uses) {
 
 //G: check for existence, return index if exists else, set varname and return new index
 int PKB::setVarName(string varName){
-	
+	remove_if(varName.begin(), varName.end(), isspace);
 	int index = getVarIndex(varName);
 	if (index == -1) {
 		varTable.push_back(Variable());

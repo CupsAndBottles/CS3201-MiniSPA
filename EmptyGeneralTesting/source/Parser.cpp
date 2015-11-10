@@ -40,7 +40,9 @@ string Parser::openFile(string fileName) {
 			}
 		}
 		myfile.close();
+		allLines.erase(remove(allLines.begin(), allLines.end(), '\t'), allLines.end());
 		allLines.erase(remove_if(allLines.begin(), allLines.end(), isspace), allLines.end());
+
 		lines = splitLines(allLines);
 		output = linesSplitted(lines);
 		Procedure();
@@ -153,6 +155,7 @@ void Parser::Procedure() {
 		}
 
 	}
+//	cout << "End num: " << endIndex << "\n";
 	setProcEndNum(procNumInTble, endIndex);
 	setRelationsInTable();
 	pkb->setParentTChildrenT();
@@ -187,6 +190,7 @@ void Parser::addUses() {
 			vector<int> usesList = pkb->getUsesForParser(children.back());
 			while (!usesList.empty()) {
 				string varName = pkb->getVarName(usesList.back());
+
 				pkb->setUsedBy(varName, i);
 				pkb->setUsedVar(i, varName);
 				usesList.pop_back();
@@ -198,7 +202,7 @@ void Parser::addUses() {
 
 void Parser::setRelationsInTable() {
 	pkb->setChildren(parentLink);
-	pkb->setFollows(followLink);
+    pkb->setFollows(followLink);
 	string procName = pkb->setProcCalls(callsLink);
 	if (!procName.empty()) {
 		throw "ProcName: " + procName +" does not exist.\n";
@@ -353,6 +357,7 @@ void Parser::processProcedure(int index, string statement) {
 	string procName = statement.substr(statement.find("procedure") + 9);
 	currProcName = procName;
 	if (numOfProc >0) {
+		//cout << "End num: " << index-1 << "\n";
 		setProcEndNum(procNumInTble, index - 1);
 	}
 	procNumInTble = pkb->setProcNameInProcTable(procName);
@@ -535,7 +540,7 @@ void Parser::processExpressions(int index, string statement) {
 		{
 			if (charac == '=') {
 				output.clear();
-				handleModifyAndUses(index, statement);
+			//	handleModifyAndUses(index, statement);
 				if (!isConstant(s)) {
 					int index = pkb->setVarName(s);
 					pkb->setProcNames(index, currProcName);
@@ -572,6 +577,10 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 	if (!closeBracket.size()) {
 		bracket = closeBracket.size();
 	}
+	replace(stmt.begin(), stmt.end(), '(', ' ');
+	replace(stmt.begin(), stmt.end(), ')', ' ');
+	remove_if(stmt.begin(), stmt.end(), isspace);
+
 	//add while var into varTable uses
 	if (stmt.find("while") != std::string::npos) {
 		size_t bracketPos = stmt.find("{");
@@ -666,6 +675,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 						}
 
 						if (!isConstant(s)) {
+
 							pkb->setUsedBy(s, parentUse);
 							pkb->setUsedVar(parentUse, s);
 						}
@@ -751,7 +761,7 @@ void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 }
 
 void Parser::Error() {
-	cout << "Error Parsing";
+	throw "ProcName: " + procName + " does not exist.\n";
 }
 
 int Parser::isPriority(const char &c)
@@ -782,7 +792,7 @@ void Parser::pushCloseBracket(int stmtNum) {
 }
 
 void Parser::setProcEndNum(int procNum,int stmtNum) {
-
+	//cout << "size: " << containerElements.size();
 	if (containerElements.empty()) {
 		pkb->setProcModified(varModifiedInProc);
 		pkb->setProcUses(varUsedInProc);
