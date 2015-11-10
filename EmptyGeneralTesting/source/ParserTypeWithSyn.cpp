@@ -104,10 +104,15 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 			}
 			selectSynAndType[0].insert(selectSynAndType[0].end(), temp[0].begin(), temp[0].end());
 			selectSynAndType[1].insert(selectSynAndType[1].end(), temp[1].begin(), temp[1].end());
-			//	if(temp[1].at(0).compare("progline") == 0)
-			selectSynAndType[2].insert(selectSynAndType[2].end(), temp[3].begin(), temp[3].end());
-			//	selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
-		}
+			if (temp[1].at(0).compare("call") == 0) {
+				temp[3].at(0) = "1";
+				selectSynAndType[2].insert(selectSynAndType[2].end(), temp[3].begin(), temp[3].end());
+			}
+			else {
+				selectSynAndType[2].insert(selectSynAndType[2].end(), temp[3].begin(), temp[3].end());
+				//	selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
+			}
+			}
 	}
 		if (selectSynonym.size() == 0) {
 			throw ParserException("No Select condition");
@@ -226,6 +231,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 				if (withSynonym.size() == 4) {
 					temp[2].at(0) = string("-1");
 				}
+
 				withSynAndType[0].insert(withSynAndType[0].end(), temp[0].begin(), temp[0].end());
 				withSynAndType[1].insert(withSynAndType[1].end(), temp[1].begin(), temp[1].end());
 				withSynAndType[2].insert(withSynAndType[2].end(), temp[2].begin(), temp[2].end());
