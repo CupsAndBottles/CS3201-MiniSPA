@@ -23,3 +23,48 @@ if ifstat;
 Select ifstat
 5, 9, 23, 24, 25
 5000
+6 - All variables
+variable v;
+Select v
+red, yellow, orange, blue, purple, indigo, violet, rainbow, grey, black, white, colours, world, people, live, hard, algebra, a, b, c, x, y, z, fail, w, geometry, triangle, square, polygon, n, eat, sleep, morning, wake, coffee, afternoon, test, program, bugs, night, moon, project, start, end, infinity, circle
+5000
+7 - All procedures
+procedure p;
+Select p
+killerLoops, Math, Home, Shapes
+5000
+8 - Parent
+stmt s;
+Select s such that Parent(s, 10)
+9
+5000
+9 - Parent
+stmt s;
+Select s such that Parent(25, s)
+26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39
+5000
+10 - Parent
+assign a;
+Select a such that Parent(11 , a)
+12, 13
+5000
+11 - Parent
+call c;
+Select c such that Parent(24 , c)
+44
+5000
+12 - Parent
+if ifstat1, ifstat2;
+Select ifstat1 such that Parent(ifstat1, ifstat2)
+23, 24
+5000
+13 - Parent
+while w1, w2;
+Select w1 such that Parent(w1, w2)
+4, 11, 51, 55
+5000
+14 - Parent
+while w; if ifstat;
+Select ifstat such that Parent(ifstat, w)
+5, 9
+5000
