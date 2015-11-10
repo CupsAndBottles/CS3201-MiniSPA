@@ -8,35 +8,6 @@
 #include <list>
 #include "PKB.h"
 
-using namespace std;
-vector<int> ifIndex;
-vector<int> whileIndex;
-vector<int> ifIndexStmt;
-list<pair<int, string>> listOfStatements;
-vector<pair<int, int>> parentLink;
-vector<pair<int, int>> followLink;
-vector<pair<int, int>> indexAndType;
-vector<pair<int, string>> callsLink;
-list<pair<int, string>> stmtNoAndExpr;
-vector<pair<int, string>> stmtNoAndCalls;
-string currProcName;
-int currIndex = 0;
-int numOfProc = 0;
-int numOfElse = 0;
-int procNumInTble = 0;
-int currElse = 0;
-vector<pair<int,string>> varModifiedInProc;
-vector<pair<int,string>> varUsedInProc;
-vector<int> currFollows;
-stack<char> closeBracket;
-stack<char> openBracket;
-stack<pair<int, string>> ifStmtVec;
-list<pair<int, string>> containerElements;
-string prevStmt;
-string pStmt;
-int pStmtType = 0;
-int pStmtIndex = 0;
-
 Parser::Parser()
 {
 
@@ -72,7 +43,6 @@ string Parser::openFile(string fileName) {
 		allLines.erase(remove_if(allLines.begin(), allLines.end(), isspace), allLines.end());
 		lines = splitLines(allLines);
 		output = linesSplitted(lines);
-		//	cout << output;
 		Procedure();
 	}
 
@@ -138,6 +108,7 @@ void Parser::Procedure() {
 	int endIndex=0;
 	for (i = (lines).begin(); i != (lines).end(); ++i) {
 		string stmt = (*i).second;
+		//cout << stmt << "\n";
 		if (stmt.find("procedure") != std::string::npos) {
 			processProcedure((*i).first, (*i).second);
 			processNextPrev((*i).first, (*i).second);
@@ -231,8 +202,6 @@ void Parser::setRelationsInTable() {
 	string procName = pkb->setProcCalls(callsLink);
 	if (!procName.empty()) {
 		throw "ProcName: " + procName +" does not exist.\n";
-		//cout << "ProcName: " << procName << " does not exist.\n";
-		//exit(0);
 	}
 	pkb->setStmtNumProcCalled(stmtNoAndCalls);
 }
@@ -260,7 +229,7 @@ void Parser::processNextPrev(int index, string stmt)
 		}
 		if (stmt.find("procedure") == std::string::npos && !whileIndex.empty()) {
 			size_t n = count(pStmt.begin(), pStmt.end(), '}');
-			for (int i = 0; i < n;i++) {
+			for (size_t i = 0; i < n;i++) {
 				if (!whileIndex.empty()) {
 					pkb->setNext(whileIndex.back(), index - numOfProc - numOfElse);
 					pkb->setPrev(index - numOfProc - numOfElse, whileIndex.back());
@@ -297,7 +266,7 @@ void Parser::processNextPrev(int index, string stmt)
 		else {
 			if (stmt.find("}") != std::string::npos) {
 				size_t n = count(stmt.begin(), stmt.end(), '}');
-				for (int i = 0; i < n;i++) {
+				for (size_t i = 0; i < n;i++) {
 					if (!indexAndType.empty()) {
 						if (indexAndType.back().first == 1) {
 							pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
@@ -403,10 +372,12 @@ void Parser::processCalls(int index, string stmt)
 		procCalls.replace(semiColonPos, string(";").length(), "");
 	}
 	size_t bracketPos = procCalls.find("}");
-	if (bracketPos != std::string::npos) {
+	size_t n = count(procCalls.begin(), procCalls.end(), '}');
+	//cout << prevStmt << "\n";
+	for (size_t i = 0; i < n;i++) {
 		procCalls.replace(bracketPos, string("}").length(), "");
-
 	}
+
 	int procExist = pkb->getProcIndex(procCalls);
 
 	if (procExist == procNumInTble) {
@@ -864,7 +835,7 @@ void Parser::handleFollows(int index, string stmt) {
 			else {
 				size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
 				//cout << prevStmt << "\n";
-				for (int i = 0; i < n;i++) {
+				for (size_t i = 0; i < n;i++) {
 					if (!currFollows.empty()) {
 						currFollows.pop_back();
 					}

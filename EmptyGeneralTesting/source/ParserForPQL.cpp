@@ -154,7 +154,7 @@ void ParserForPQL::parseRespectively()
 	vector<vector<string>> patternSynonym;
 	vector<string> selectSynonym;
 
-	for (int i = 0; i < type[0].size(); i++) {
+	for (size_t i = 0; i < type[0].size(); i++) {
 		string oneType = type[0].at(i);
 		int tempCol = i - 1;
 		while (oneType.compare("and") == 0) {
@@ -205,6 +205,3 @@ void ParserForPQL::startValidate()
 	validation.grammarValidation(suchThatSynAndType);
 	validation.patternValidation(patternSynAndType);
 }
-
-
-

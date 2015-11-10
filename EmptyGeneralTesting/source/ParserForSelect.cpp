@@ -53,7 +53,7 @@ vector<string>& ParserForSelect::split(const string & s, char delim, vector<stri
 vector<string> ParserForSelect::removeUnwanted(vector<string> commaSubset)
 {
 	std::regex toBeRemove("<|>|\\s+|;|\\s");
-	for (int i = 0; i < commaSubset.size(); i++) {
+	for (size_t i = 0; i < commaSubset.size(); i++) {
 		commaSubset.at(i) = (std::regex_replace(commaSubset.at(i), toBeRemove, ""));
 		//	std::cout << "commasubset = " << commaSubset.at(i) << '\n';
 		if (commaSubset.at(i).compare("") == 0) {
@@ -67,8 +67,3 @@ vector<string> ParserForSelect::getSelectSynonym()
 {
 	return selectSynonym;
 }
-
-
-
-
-

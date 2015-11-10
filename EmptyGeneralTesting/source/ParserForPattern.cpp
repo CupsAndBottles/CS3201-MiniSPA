@@ -100,8 +100,3 @@ vector<string> ParserForPattern::getPatternSynonym()
 {
 	return patternSynonym;
 }
-
-
-
-
-

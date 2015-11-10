@@ -1,0 +1,97 @@
+procedure killerLoops{
+red = 99;													\\1
+yellow = 99; 													\\2
+orange = red + yellow;												\\3
+while orange{													\\4
+	if red then {												\\5
+		red = yellow * orange;}										\\6
+	else{
+		while blue{											\\7
+			purple = blue + red;									\\8
+			if purple then {									\\9
+				indigo = violet + blue;								\\10
+				while rainbow {									\\11
+					rainbow = red + orange + yellow + green + blue + indigo + violet;	\\12
+					grey = black + white + 1;						\\13
+					call Home;								\\14
+					while grey {								\\15
+						grey = grey * 2;						\\16
+							}
+					}}
+			else{
+				colours = rainbow * black + white;						\\17
+				}
+			}
+	}
+}
+world = colours + black * white - people;									\\18
+people = 100000000;												\\19
+call Math;													\\20
+live = hard + 99;												\\21
+}
+procedure Math{
+algebra = x + y * z + a - b * c;										\\22
+if algebra then {												\\23
+	if hard then{											\\24
+		if fail then{											\\25
+			x = 0;											\\26
+			y = 0;											\\27
+			z = 0;											\\28
+			a = 0;											\\29
+			call Home;										\\30
+			c = a * b + (x + y) * z + c;								\\31
+			b = 0;											\\32
+			}
+		else{
+			x = 99;											\\33
+			call Home;										\\34
+			z = 99;											\\35
+			a = 100;										\\36
+			b = 100;										\\37
+			c = a * b + (x + y) * z + c;								\\38
+			y = 99;											\\39
+		}}
+	else{
+		x = y + z;											\\40
+		a = b + c;											\\41
+		y = a * x;											\\42
+		z = y + a * (y + z) + x * (w + y * x);								\\43
+		call Home;											\\44
+		}}
+else{
+while{														\\45
+call Shapes;													\\46
+geometry = triangle * 3 + square * 4 + polygon * (n - 2) * 180;}						\\47
+call Home;													\\48
+}}
+procedure Home{
+x = x + y;													\\49
+call Shapes;													\\50
+while live {													\\51
+	live = eat + sleep;											\\52
+	sleep = z + z * 100000000 + z + z + z;									\\53
+	morning = 10;												\\54
+	while morning {												\\55
+		wake = 10 + z;											\\56
+		coffee = morning + 10;										\\57
+		morning = 11;											\\58
+		while afternoon {										\\59
+			test = hard + program;								\\60
+			program = program - bugs;								\\61
+			bugs = 99 * program;									\\62
+			afternoon = night;									\\63										
+		}
+		night = moon + 1;										\\64
+	}
+project = start - end;												\\65
+end = 100000000;												\\66
+}
+}
+procedure Shapes{
+triangle = 3 * 180;												\\67
+square = 4 * 90;												\\68
+polygon = (n-2) * 180;												\\69
+triangle = square - 180;											\\70
+infinity = 100000000;												\\71
+circle = infinity;												\\72
+}
