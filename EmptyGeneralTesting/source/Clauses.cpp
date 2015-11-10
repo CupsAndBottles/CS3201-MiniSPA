@@ -35,9 +35,19 @@ void Clauses::setParentType(string type)
 	parent.setType(type);
 }
 
+void Clauses::setParentIfStmt(string isStmt)
+{
+	parent.setIsStmt(isStmt);
+}
+
 string Clauses::getParentStringVal()
 {
 	return parent.getStringValue();
+}
+
+bool Clauses::getParentIsStmt()
+{
+	return parent.getIsStmt();
 }
 
 Enum::TYPE Clauses::getParentType()

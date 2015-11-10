@@ -25,7 +25,7 @@ QueryTree & QueryTree::return_created_Object()
 void QueryTree::startPlotting(vector<vector<string>> resultData, vector<vector<string>> suchThatData, vector<vector<string>> patternData, vector<vector<string>> withData)
 {
 	if (resultData.size() > 0) {
-		addResultTree(resultData[0], resultData[1]);
+		addResultTree(resultData[0], resultData[1], resultData[2]);
 	}
 	if (suchThatData.size() > 0) {
 		addSuchThatTree(suchThatData[0], suchThatData[1], suchThatData[2]);
@@ -85,12 +85,13 @@ bool QueryTree::getIsValid()
 	return isValid;
 }
 
-void QueryTree::addResultTree(vector<string> syn, vector<string> type)
+void QueryTree::addResultTree(vector<string> syn, vector<string> type, vector<string> ifStmt)
 {
 	for (std::size_t i = 0; i < syn.size(); i++) {
 		Clauses clause;
 		clause.setParentStringVal(syn.at(i));
 		clause.setParentType(type.at(i));
+		clause.setParentIfStmt(ifStmt.at(i));
 		setResultTree(clause);
 	}
 }

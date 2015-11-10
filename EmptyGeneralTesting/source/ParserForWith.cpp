@@ -9,20 +9,23 @@
 using namespace std;
 
 
-ParserForWith::ParserForWith(vector<vector<string> > type, vector<vector<string> > synonym, int index)
+ParserForWith::ParserForWith(vector<vector<string> > synonym, int index)
 {
-	parseWith(type, synonym, index);
+	parseWith(synonym, index);
 }
-
+ParserForWith::ParserForWith()
+{
+}
 
 ParserForWith::~ParserForWith()
 {
 }
 
-void ParserForWith::parseWith(vector<vector<string>> type, vector<vector<string>> synonym, int pos)
+void ParserForWith::parseWith(vector<vector<string>> synonym, int pos)
 { 
 	vector<string> withSubset;
 	std::string toBeSplit = synonym[0].at(pos);
+
 	for (std::size_t i = 0; i < 2; i++) {
 		char charSplitWith = toBeSplitWith[i];
 		std::size_t found = synonym[0].at(pos).find(charSplitWith);

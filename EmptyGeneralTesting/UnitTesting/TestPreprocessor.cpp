@@ -33,22 +33,35 @@ namespace UnitTesting
 
 			input = "while w1, w2, w3; stmt s, n; Select BOOLEAN pattern w1(\"x\", _) such that Follows(n, s)";
 			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
-			ParserForPQL parser2(input);
-			queryTree = parser2.getQueryTree();
+			ParserForPQL parser3(input);
+			queryTree = parser3.getQueryTree();
 
 			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("BOOLEAN"));
 			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 10);
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentIsStmt(), false);
+
+
+			input = "procedure p; Select p.procName";
+			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
+			ParserForPQL parser2(input);
+			queryTree = parser2.getQueryTree();
+
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("p"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 2);
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentIsStmt(), false);
+
+			input = "stmt s; Select s.stmt#";
+			//"while w1;prog_line n; stmt s; Select w1 such that Follows(n, s) pattern(\"x\", _)"
+			ParserForPQL parser4(input);
+			queryTree = parser4.getQueryTree();
+
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentStringVal(), string("s"));
+			Assert::AreEqual(int(queryTree.getResultTree().at(0).getParentType()), 1);
+			Assert::AreEqual(queryTree.getResultTree().at(0).getParentIsStmt(), true);
 		}
 
 		TEST_METHOD(TestSuchThatTree)
 		{
-			PKB *pkb = new PKB();
-			pkb->setVarName("x");
-			pkb->setVarName("y");
-			pkb->setProcNameInProcTable("Main");
-			pkb->setProcNameInProcTable("y");
-			pkb->setProcNameInProcTable("x");
-
 			string input = "while w1, w2, w3; assign a, s; prog_line n; Select <w1,w2, w3> with n = 10 pattern a(\"x\", _) such that Follows(n, s) ";
 			ParserForPQL parser2(input);
 			QueryTree queryTree = parser2.getQueryTree();

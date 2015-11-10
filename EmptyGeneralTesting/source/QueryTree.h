@@ -23,14 +23,14 @@ public:
 	void setWithTree(Clauses clause);
 	bool getIsValid();
 
+
 private:
 	vector<Clauses> suchThatTree;
 	vector<Clauses> patternTree;
 	vector <Clauses> resultTree;
 	vector <Clauses> withTree;
 	bool isValid;
-
-	void addResultTree(vector<string> syn, vector<string> type);
+	void addResultTree(vector<string> syn, vector<string> type, vector<string> ifStmt);
 	void addWithTree(vector<string> stringVal, vector<string> type, vector<string> intVal, vector<string> isStmt);
 	void addSuchThatTree(vector<string> stringVal, vector<string> type, vector<string> intVal);
 	void addPatternTree(vector<string> stringVal, vector<string> type, vector<string> intVal, vector<string> expression);

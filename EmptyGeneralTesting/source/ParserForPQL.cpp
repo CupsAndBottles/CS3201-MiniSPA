@@ -80,10 +80,6 @@ void ParserForPQL::getPosition(string input, int typeNo)
 			type[typeNo].push_back(match[0]);
 		}
 	}
-	
-//	if (type[typeNo].size() == 0) {
-	//	throw ParserException("Invalid input");
-//	}
 	addInFinalSyn(typeNo, input);
 	numberOfPos.push_back(j + 1);
 }
@@ -173,7 +169,7 @@ void ParserForPQL::parseRespectively()
 		
 		if (oneType.compare("Select") == 0) {
 
-			ParserForSelect parserForSelect(type, synonym, i);
+			ParserForSelect parserForSelect(synonym, i);
 			selectSynonym = parserForSelect.getSelectSynonym();
 		}
 		else if (oneType.compare("such that") == 0 || oneType.compare("and such that") == 0) {
@@ -181,7 +177,7 @@ void ParserForPQL::parseRespectively()
 			suchThatSynonym.push_back(parserForSuchThat.getSuchThatSynonym());
 		}
 		else if (oneType.compare("with") == 0 || oneType.compare("and with") == 0) {
-			ParserForWith parserForWith(type, synonym, i);
+			ParserForWith parserForWith(synonym, i);
 			withSynonym.push_back(parserForWith.getWithSynonym());
 		}
 		else if (oneType.compare("pattern") == 0 || oneType.compare("and pattern") == 0) {

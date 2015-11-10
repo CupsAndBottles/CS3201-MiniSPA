@@ -1,4 +1,5 @@
 #include "ParserTypeWithSyn.h"
+#include "ParserForWith.h"
 #include "ParserOfType.h"
 #include <regex>
 #include <string>
@@ -57,23 +58,65 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 	selectSynAndType.push_back(vector <string>());
 
 	vector<vector<string>> temp;
+	vector<string> splitFullStopSyn;
+	int pos;
+	ParserForWith parser;
+	Validation validation;
+
 
 	ParserOfType parserOfType;
 	for (int i = 0; i < selectSynonym.size(); i++) {
-		temp = parserOfType.setClauseType(0, selectSynonym.at(i), type, synonym);
-		if (temp.size() == 0) {
-			throw ParserException("Select synonym unidentified");
-		}
-		selectSynAndType[0].insert(selectSynAndType[0].end(), temp[0].begin(), temp[0].end());
-		selectSynAndType[1].insert(selectSynAndType[1].end(), temp[1].begin(), temp[1].end());
-		selectSynAndType[2].insert(selectSynAndType[2].end(), temp[2].begin(), temp[2].end());
-		selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
-	}
+		std::size_t found = selectSynonym.at(i).find(".");
+		
+		if (found != std::string::npos) {
+			splitFullStopSyn = parser.split(selectSynonym.at(i), '.');
+			for (int k = 0; k < splitFullStopSyn.size(); k++) {
+			
+				if (k == 0) {
 
-	if (selectSynonym.size() == 0) {
-		throw ParserException("No Select condition");
+					pos = parserOfType.isBeingDeclared(splitFullStopSyn.at(k), synonym);
+
+					if (pos == -1) {
+						throw ParserException("Select synonym unidentified");
+					}
+					else {
+						selectSynAndType[0].push_back(splitFullStopSyn.at(k));
+						selectSynAndType[1].push_back(type.at(pos));
+						if (splitFullStopSyn.at(k + 1).compare("stmt#") == 0) {
+							selectSynAndType[2].push_back("1");
+						}
+						else {
+							selectSynAndType[2].push_back("0");
+						}
+					}
+				}
+				else {
+					int size = selectSynAndType[1].size() - 1;
+					validation.withValidation(selectSynAndType[1].at(size), splitFullStopSyn.at(k));
+				}
+				
+			}
+		}
+		else {
+			temp = parserOfType.setClauseType(0, selectSynonym.at(i), type, synonym);
+			if (temp.size() == 0) {
+				throw ParserException("Select synonym unidentified");
+			}
+			selectSynAndType[0].insert(selectSynAndType[0].end(), temp[0].begin(), temp[0].end());
+			selectSynAndType[1].insert(selectSynAndType[1].end(), temp[1].begin(), temp[1].end());
+			//	if(temp[1].at(0).compare("progline") == 0)
+			selectSynAndType[2].insert(selectSynAndType[2].end(), temp[3].begin(), temp[3].end());
+			//	selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
+		}
+	}
+		if (selectSynonym.size() == 0) {
+			throw ParserException("No Select condition");
 	}
 }
+
+
+
+
 
 void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThatSynonym, vector<string> type, vector<string> synonym)
 {

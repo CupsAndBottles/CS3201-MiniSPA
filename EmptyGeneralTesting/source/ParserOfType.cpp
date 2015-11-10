@@ -246,6 +246,7 @@ bool ParserOfType::isSynDigit(string syn)
 int ParserOfType::isBeingDeclared(string syn, vector<string> synType)
 {
 	for (std::size_t j = 0; j < synType.size(); j++) {
+	
 		if (syn.compare(synType.at(j)) == 0) {
 			return j;
 		}
