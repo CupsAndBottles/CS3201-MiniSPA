@@ -697,14 +697,14 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 			return 0;
 		}
 		else {
-			if (stmtNum1 == stmtNum2) {
+			
 				int check;
 
 				check = extractAffectsBothNum(stmtNum1, stmtNum2, modifiesCol, usesCol, nextCol, startEndNum, type, parentTCol, childrenCol);
 				if (check == 1) {
 					return 1;
 				}
-			}
+
 			vector<pair<int,int>> affectsIntermediateResults;
 			vector<int> list;
 			vector <vector<int>> affects(endNum+1);
@@ -714,23 +714,11 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 					for (int j = 0; j < affectsIntermediateResults.size(); j++) {
 						list.push_back(affectsIntermediateResults.at(j).second);
 					}
-					for (int k = 0; k < list.size(); k++) {
-						//cout << list.at(k) << " ";
-					}
+					
 					affects.at(path.at(i)) = list;
 					list.clear();
 			}
-			if (stmtNum1 == stmtNum2) {
-				int stmt;
-				vector<int> nums;
-				for (int j = 0; j < path.size(); j++) {
-					stmt = path.at(j);
-					nums = affects.at(stmt);
-					if (find(nums.begin(), nums.end(), stmtNum1) != nums.end()) {
-
-					}
-				}
-			}
+			
 			Graph affectsGraph(endNum+1);
 			int stmt;
 			vector<int> stmts;
@@ -754,12 +742,15 @@ int DesignExtractor::extractAffectsTBothNum(int stmtNum1, int stmtNum2, vector<v
 						return 1;
 					}
 				}
-			}
-			if (find(affectsPath.begin()+1, affectsPath.end(), stmtNum2) != affectsPath.end()) {
-				return 1;
+				return 0;
 			}
 			else {
-				return 0;
+				if (find(affectsPath.begin() + 1, affectsPath.end(), stmtNum2) != affectsPath.end()) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
 			}
 		}
 	}
