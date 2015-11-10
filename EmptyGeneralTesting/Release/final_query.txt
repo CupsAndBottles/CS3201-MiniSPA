@@ -68,3 +68,13 @@ while w; if ifstat;
 Select ifstat such that Parent(ifstat, w)
 5, 9
 5000
+15 - Parent
+while w; if ifstat;
+Select ifstat such that Parent(w, ifstat)
+5, 9
+5000
+16 - Parent
+stmt s;
+Select s such that Parent(s, _)
+4, 5, 7, 9, 11, 15, 23, 24, 25, 45, 51, 55, 59
+5000
