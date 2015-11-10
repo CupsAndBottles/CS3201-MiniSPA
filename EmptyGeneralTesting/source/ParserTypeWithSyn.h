@@ -28,6 +28,5 @@ public:
 	void parsePatternTypeWithSyn(vector<vector<string>> patternSynonym, vector<string> type, vector<string> synonym);
 	void checkCommonSynonym();
 	vector<string> arrangeSyn(vector<string> syn);
-	PKB *pkb;
 };
 

@@ -7,11 +7,12 @@ using namespace std;
 class ParserForWith
 {
 public:
-	ParserForWith(vector<vector<string> > type, vector<vector<string> > synonym, int index);
+	ParserForWith(vector<vector<string>> synonym, int index);
+	ParserForWith();
 	~ParserForWith();
+	void parseWith(vector<vector<string>> synonym, int pos);
 	vector<string> withSynonym;
 
-	void parseWith(vector<vector<string> > type, vector<vector<string> > synonym, int pos);
 	string getToBeSplit(vector<string> patternSubset, int i);
 	vector<string> split(const string &s, char delim);
 	vector<string> &split(const string &s, char delim, vector<string> &elems);

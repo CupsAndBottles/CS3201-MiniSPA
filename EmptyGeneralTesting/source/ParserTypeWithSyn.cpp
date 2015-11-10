@@ -1,4 +1,5 @@
 #include "ParserTypeWithSyn.h"
+#include "ParserForWith.h"
 #include "ParserOfType.h"
 #include <regex>
 #include <string>
@@ -57,23 +58,65 @@ void ParserTypeWithSyn::parseSelectTypeWithSyn(vector<string> selectSynonym, vec
 	selectSynAndType.push_back(vector <string>());
 
 	vector<vector<string>> temp;
+	vector<string> splitFullStopSyn;
+	int pos;
+	ParserForWith parser;
+	Validation validation;
+
 
 	ParserOfType parserOfType;
-	for (size_t i = 0; i < selectSynonym.size(); i++) {
-		temp = parserOfType.setClauseType(0, selectSynonym.at(i), type, synonym);
-		if (temp.size() == 0) {
-			throw ParserException("Select synonym unidentified");
-		}
-		selectSynAndType[0].insert(selectSynAndType[0].end(), temp[0].begin(), temp[0].end());
-		selectSynAndType[1].insert(selectSynAndType[1].end(), temp[1].begin(), temp[1].end());
-		selectSynAndType[2].insert(selectSynAndType[2].end(), temp[2].begin(), temp[2].end());
-		selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
-	}
+	for (int i = 0; i < selectSynonym.size(); i++) {
+		std::size_t found = selectSynonym.at(i).find(".");
+		
+		if (found != std::string::npos) {
+			splitFullStopSyn = parser.split(selectSynonym.at(i), '.');
+			for (int k = 0; k < splitFullStopSyn.size(); k++) {
+			
+				if (k == 0) {
 
-	if (selectSynonym.size() == 0) {
-		throw ParserException("No Select condition");
+					pos = parserOfType.isBeingDeclared(splitFullStopSyn.at(k), synonym);
+
+					if (pos == -1) {
+						throw ParserException("Select synonym unidentified");
+					}
+					else {
+						selectSynAndType[0].push_back(splitFullStopSyn.at(k));
+						selectSynAndType[1].push_back(type.at(pos));
+						if (splitFullStopSyn.at(k + 1).compare("stmt#") == 0) {
+							selectSynAndType[2].push_back("1");
+						}
+						else {
+							selectSynAndType[2].push_back("0");
+						}
+					}
+				}
+				else {
+					int size = selectSynAndType[1].size() - 1;
+					validation.withValidation(selectSynAndType[1].at(size), splitFullStopSyn.at(k));
+				}
+				
+			}
+		}
+		else {
+			temp = parserOfType.setClauseType(0, selectSynonym.at(i), type, synonym);
+			if (temp.size() == 0) {
+				throw ParserException("Select synonym unidentified");
+			}
+			selectSynAndType[0].insert(selectSynAndType[0].end(), temp[0].begin(), temp[0].end());
+			selectSynAndType[1].insert(selectSynAndType[1].end(), temp[1].begin(), temp[1].end());
+			//	if(temp[1].at(0).compare("progline") == 0)
+			selectSynAndType[2].insert(selectSynAndType[2].end(), temp[3].begin(), temp[3].end());
+			//	selectSynAndType[3].insert(selectSynAndType[3].end(), temp[3].begin(), temp[3].end());
+		}
+	}
+		if (selectSynonym.size() == 0) {
+			throw ParserException("No Select condition");
 	}
 }
+
+
+
+
 
 void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThatSynonym, vector<string> type, vector<string> synonym)
 {
@@ -81,7 +124,7 @@ void ParserTypeWithSyn::parseSuchThatTypeWithSyn(vector<vector<string>> suchThat
 	suchThatSynAndType.push_back(vector <string>());
 	suchThatSynAndType.push_back(vector <string>());
 	suchThatSynAndType.push_back(vector <string>());
-//	int index;
+	int index;
 	vector<vector<string>> temp;
 	ParserOfType parserOfType;
 	string indication = "";
@@ -140,7 +183,7 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 			withSynonym[i] = arrangeSyn(withSynonym[i]);
 		}
 
-		for (size_t k = 0; k < withSynonym[i].size(); k++) {
+		for (int k = 0; k < withSynonym[i].size(); k++) {
 			if (k == 0 || (withSynonym[i].size() == 4 && k == 2)) {
 
 				pos = parserOfType.isBeingDeclared(withSynonym[i].at(k), synonym);
@@ -232,7 +275,7 @@ void ParserTypeWithSyn::parsePatternTypeWithSyn(vector<vector<string>> patternSy
 			patternSynAndType[2].insert(patternSynAndType[2].end(), temp[2].begin(), temp[2].end());
 			patternSynAndType[3].insert(patternSynAndType[3].end(), temp[3].begin(), temp[3].end());
 
-		for (size_t k = 1; k < patternSynonym[i].size(); k++) {
+		for (int k = 1; k < patternSynonym[i].size(); k++) {
 			temp = parserOfType.setType(2, patternSynonym[i].at(k), type, synonym, "variable");
 			if (temp.size() == 0) {
 				throw ParserException("Pattern synonym unidentified");
@@ -251,8 +294,8 @@ void ParserTypeWithSyn::checkCommonSynonym()
 	int number = 0;
 	string temp = "";
 	if(suchThatSynAndType.size() > 0 && patternSynAndType.size() > 0) {
-		for (size_t i = 0; i < suchThatSynAndType[0].size(); i++) {
-			for (size_t j = 0; j < patternSynAndType[0].size(); j++) {
+		for (int i = 0; i < suchThatSynAndType[0].size(); i++) {
+			for (int j = 0; j < patternSynAndType[0].size(); j++) {
 				if (suchThatSynAndType[0].at(i).compare(patternSynAndType[0].at(j)) == 0 && temp.compare(suchThatSynAndType[0].at(i)) != 0 &&
 					suchThatSynAndType[0].at(i).compare("_") != 0) {
 					temp = suchThatSynAndType[0].at(i);

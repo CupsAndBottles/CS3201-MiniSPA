@@ -25,6 +25,7 @@ const string RELATIONSHIP_USES = "Uses";
 const string STRING_BOOLEAN = "BOOLEAN";
 const string STRING_FALSE = "false";
 const string STRING_TRUE = "true";
+const string STRiNG_UNDERSCORE = "_";
 
 QueryEvaluator::QueryEvaluator()
 {
@@ -212,6 +213,32 @@ bool QueryEvaluator::evaluateSuchThat(Clauses clause) {
 	}
 
 	if (!results.empty()) {
+		if (firstParamIndex == NOT_FOUND && secondParamIndex == NOT_FOUND) {
+			if (clause.getLeftCStringValue() == clause.getRightCStringValue()) {
+				if (clause.getLeftCStringValue() != STRiNG_UNDERSCORE) {
+					if (relationship == RELATIONSHIP_AFFECTS || relationship == RELATIONSHIP_AFFECTST || relationship == RELATIONSHIP_NEXTT) {
+						vector<pair<int, int>> temp = vector<pair<int, int>>();
+
+						for (size_t i = 0; i < results.size(); i++) {
+							if (results[i].first == results[i].second) {
+								temp.push_back(make_pair(results[i].first, results[i].second));
+							}
+						}
+
+						if (!temp.empty()) {
+							results = temp;
+						}
+						else {
+							return false;
+						}
+					}
+					else {
+						return false;
+					}
+				}
+			}
+
+		}
 		storeResultsForSyn(clause, results);
 		return true;
 	}

@@ -18,7 +18,9 @@ public:
 
 	void setParentStringVal(string stringVal);
 	void setParentType(string type);
+	void setParentIfStmt(string type);
 	string getParentStringVal();
+	bool getParentIsStmt();
 	Enum::TYPE getParentType();
 
 	void setRightCIsExpression(bool isExpression);

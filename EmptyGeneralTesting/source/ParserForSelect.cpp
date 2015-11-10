@@ -8,9 +8,9 @@
 
 using namespace std;
 
-ParserForSelect::ParserForSelect(vector<vector<string> > type, vector<vector<string> > synonym, int index)
+ParserForSelect::ParserForSelect(vector<vector<string> > synonym, int index)
 {
-	parseSelect(type, synonym, index);
+	parseSelect(synonym, index);
 
 }
 
@@ -20,7 +20,7 @@ ParserForSelect::~ParserForSelect()
 }
 
 
-void ParserForSelect::parseSelect(vector<vector<string>> type, vector<vector<string>> synonym, int pos)
+void ParserForSelect::parseSelect(vector<vector<string>> synonym, int pos)
 {
 	vector<string> commaSubset;
 	std::size_t found = synonym[0].at(pos).find(",");
