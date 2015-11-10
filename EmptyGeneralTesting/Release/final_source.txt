@@ -59,7 +59,7 @@ if algebra then {												\\23
 		call Home;											\\44
 		}}
 else{
-while{														\\45
+while random{														\\45
 call Shapes;													\\46
 geometry = triangle * 3 + square * 4 + polygon * (n - 2) * 180;}						\\47
 call Home;													\\48
