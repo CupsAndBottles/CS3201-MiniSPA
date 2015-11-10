@@ -766,7 +766,22 @@ int QueryEvaluator::isPriority(const char &c)
 /**************************** With Clauses ****************************/
 bool QueryEvaluator::evaluateWith(Clauses clause) {
 	if (isGivenParam(clause, POSITION_SECONDPARAM)) {
-		int entityIndex = checkValidityOfEntities(clause, POSITION_SECONDPARAM);
+		int entityIndex = NOT_FOUND;
+
+		if (clause.getLeftCType() == Enum::TYPE::VARIABLE || clause.getLeftCType() == Enum::TYPE::PROCEDURE) {
+			entityIndex = checkValidityOfStringEntities(clause.getLeftCType(), clause.getRightCStringValue());
+		}
+		else if (clause.getLeftCType() == Enum::TYPE::CALLS) {
+			if (clause.getLeftCIsStmt()) {
+				entityIndex = checkValidityOfIntEntities(clause.getLeftCType(), clause.getRightCIntValue());
+			}
+			else {
+				entityIndex = checkValidityOfStringEntities(clause.getLeftCType(), clause.getRightCStringValue());
+			}
+		}
+		else {
+			entityIndex = checkValidityOfIntEntities(clause.getLeftCType(), clause.getRightCIntValue());
+		}
 
 		if (entityIndex == NOT_FOUND) {
 			return false;
