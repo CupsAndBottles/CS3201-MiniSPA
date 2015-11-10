@@ -1093,7 +1093,8 @@ void QueryEvaluator::storeResults(vector<Enum::TYPE> type, vector<string> synStr
 	this->results.push_back(syn);
 }
 
-string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
+string QueryEvaluator::convertToString(int index, Clauses syn) {
+	Enum::TYPE type = syn.getParentType();
 
 	// No UNDERSCORE TYPE / CONSTANT
 	switch (type) {
@@ -1116,7 +1117,12 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 		return this->pkb->getVarName(index);
 		break;
 	case Enum::TYPE::CALLS:
-		return to_string(index);
+		if (syn.getParentIsStmt()) {
+			return to_string(index);
+		}
+		else {
+			return this->pkb->getProcName(index);
+		}
 		break;
 	case Enum::TYPE::CONSTANT:
 		return to_string(this->pkb->getConstantValue(index));
@@ -1699,14 +1705,14 @@ vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::extractTypeAndIndexes(Syno
 }
 
 list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns) {
-	list<string> stringedResults;
+	list<string> stringedResults = list<string>();
+	vector<Clauses> select = tree.getResultTree();
 	int numOfValuesPerSyn = arrangedSyns.at(0).second.size();
-
 	for (int values = 0; values < numOfValuesPerSyn; values++) {
 		vector<int> valuesOfSyn = arrangedSyns[0].second;
-		string combinedValues = convertToString(valuesOfSyn.at(values), arrangedSyns.at(0).first);
+		string combinedValues = convertToString(valuesOfSyn.at(values), select[0]);
 		for (size_t syn = 1; syn < arrangedSyns.size(); syn++) {
-			combinedValues = combinedValues + " " + convertToString(arrangedSyns[syn].second.at(values), arrangedSyns[syn].first);
+			combinedValues = combinedValues + " " + convertToString(arrangedSyns[syn].second.at(values), select[syn]);
 		}
 
 		stringedResults.push_back(combinedValues);
