@@ -464,7 +464,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 		vector<int> list = nextCol.at(i);
 		for (int j = 0; j < list.size(); j++) {
 			cfg.addEdge(i, list.at(j));
-			cout << list.at(j) << " ";
+			//cout << list.at(j) << " ";
 		}
 		//cout << "\n";
 	}
@@ -521,10 +521,10 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 											continue;
 										}
 										else {
-											cout << "Between stmt " << betweenStmt;
+											//cout << "Between stmt " << betweenStmt;
 											modifies = modifiesCol.at(betweenStmt);
 											for (int i = 0; i < modifies.size(); i++) {
-												cout << "Modifies" << modifies.at(i);
+											//	cout << "Modifies" << modifies.at(i);
 											}
 											if (find(modifies.begin(), modifies.end(), modifiedVar) != modifies.end()) {
 												if ((betweenStmt < stmtNum1) && (stmtNum1 < stmtNum2)) {
