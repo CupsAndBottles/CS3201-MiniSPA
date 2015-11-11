@@ -1,0 +1,90 @@
+procedure Paper {
+	call Pencil;								\\1
+	while pen {								\\2
+		tables = 34;							\\3
+		chair = 4 * tables;						\\4
+		computer = tables + pen * cup - homework;			\\5
+		if hunger {							\\6
+			eat = food;						\\7
+			lunch = soup * rice + 2					\\8
+		} else {
+			call Sleep;						\\9
+			pen = sleep - 45;					\\10
+			while television {					\\11
+				if music {					\\12
+					pen = pen + book * write + 5;		\\13
+					television = tables * chair;		\\14
+				} else {
+					soup = rice - soup + rice;		\\15
+				}
+				homework = computer + paper;			\\16
+			}
+		}
+		dinner = pencil - paper - write;				\\17
+	}
+	wash = dinner + cup;							\\18
+}
+procedure Pencil {
+	if dinner {								\\19
+		rice = 8 + music;						\\20
+		call Sleep;							\\21
+	} else {
+		food = rice + music;						\\22
+		call Restaurant;						\\23
+	}
+	while cup {								\\24
+		if drink {							\\25
+			cup = wash;						\\26
+		} else {
+			cup = food;						\\27
+		}
+		homework = hunger;						\\28
+		while homework {						\\29
+			if hunger {						\\30
+				wash = cup;					\\31
+			} else {	
+				food = cup;					\\32
+			}
+			hunger = homework;					\\33
+		}
+		cup = wash * food;						\\34
+	}
+}
+procedure Sleep	{
+	homework = sleep;							\\35
+	if sleep {								\\36
+		book = write + pencil * pen;					\\37
+		while lunch {							\\38
+			computer = rice - soup;					\\39
+			call Restaurant;					\\40
+		}
+		if write {							\\41
+			wash = wash + 19;					\\42
+		} else {
+			hunger = wash * pen;					\\43
+		}
+	} else {
+		sleep = homework + homework;					\\44
+	}
+}
+procedure Restaurant {
+	while cup {								\\45
+		drink = rice;							\\46
+		rice = soup;							\\47
+		soup = drink + rice;						\\48
+		if homework {							\\49
+			television = lunch + rice;				\\50
+			rice = television + soup;				\\51
+		} else {
+			eat = write + drink - eat * 94;				\\52
+			if write {						\\53
+				tables = computer + wash;			\\54
+			} else {
+				soup = tables * 41;				\\55
+			}
+		}
+		book = computer - 30;						\\56
+		dinner = 30;							\\57
+	}
+}
+		
