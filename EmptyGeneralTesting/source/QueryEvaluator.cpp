@@ -845,6 +845,7 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 		}
 		break;
 	case Enum::TYPE::WHILE:
+		cout << clause.getRightCType();
 		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
 			|| clause.getRightCType() == Enum::TYPE::WHILE) {
 			return getCommonAttrValues(clause);
@@ -979,8 +980,7 @@ bool QueryEvaluator::getCommonAttrValues(Clauses clause) {
 	vector<int> rightSynResults;
 	vector<int> intermediateResults;
 
-	// other stmt types must either be equals to stmt num or constant num
-	if (clause.getLeftCType() == Enum::TYPE::CONSTANT) { // c.value = s.stmt#, a.stmt#, if.stmt#, w.stmt#, n
+	if (clause.getLeftCType() == Enum::TYPE::CONSTANT) { // c.value = c.value/s.stmt#/a.stmt#/if.stmt#/w.stmt#/n
 		intermediateResults = getAllAttrValues(clause.getLeftCType());
 		for (size_t i = 0; i < intermediateResults.size(); i++) {
 			if (checkValidityOfIntEntities(clause.getRightCType(), intermediateResults.at(i))) {
@@ -989,32 +989,27 @@ bool QueryEvaluator::getCommonAttrValues(Clauses clause) {
 			}
 		}
 	}
-
-	if (clause.getRightCType() == Enum::TYPE::CONSTANT) { // s.stmt#, a.stmt#, if.stmt#, w.stmt#, n = c.value
-		intermediateResults = getAllAttrValues(clause.getRightCType());
-		for (size_t i = 0; i < intermediateResults.size(); i++) {
-			if (checkValidityOfIntEntities(clause.getLeftCType(), intermediateResults.at(i))) {
-				rightSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
-				leftSynResults.push_back(intermediateResults.at(i));
+	else {
+		if(clause.getLeftCType() == Enum::TYPE::STATEMENT){ // s.stmt# = s.stmt#/a.stmt#/w.stmt#/if.stmt#/c.value/n
+			intermediateResults = getAllAttrValues(clause.getRightCType());
+			rightSynResults = intermediateResults;
+			leftSynResults = intermediateResults;
+		} else if (clause.getRightCType() == Enum::TYPE::CONSTANT) { // s.stmt#/a.stmt#/if.stmt#/w.stmt#/n/c.value = c.value
+			intermediateResults = getAllAttrValues(clause.getRightCType());
+			for (size_t i = 0; i < intermediateResults.size(); i++) {
+				if (checkValidityOfIntEntities(clause.getLeftCType(), intermediateResults.at(i))) {
+					rightSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
+					leftSynResults.push_back(intermediateResults.at(i));
+				}
 			}
 		}
-	}
-
-	if (clause.getLeftCType() == Enum::TYPE::STATEMENT) { // s.stmt# = a.stmt#, if.stmt#, w.stmt#, n
-		if (clause.getRightCType() != Enum::TYPE::CONSTANT) {
-			rightSynResults = getAllAttrValues(clause.getRightCType());
-			leftSynResults = rightSynResults;
+		else { // w.stmt# = w.stmt#/if.stmt#/s.stmt#/a.stmt#/n etc.
+			intermediateResults = getAllAttrValues(clause.getLeftCType());
+			rightSynResults = intermediateResults;
+			leftSynResults = intermediateResults;
 		}
 	}
-
-	if (clause.getRightCType() == Enum::TYPE::STATEMENT) { // a.stmt#, if.stmt#, w.stmt#, n = s.stmt#
-		if (clause.getLeftCType() != Enum::TYPE::CONSTANT) {
-			leftSynResults = getAllAttrValues(clause.getLeftCType());
-			rightSynResults = leftSynResults;
-		}
-	}
-
-
+	
 	vector<Enum::TYPE> type = { clause.getLeftCType(), clause.getRightCType() };
 	vector<string> synString = { clause.getLeftCStringValue(), clause.getRightCStringValue() };
 	if (leftSynResults.empty() || rightSynResults.empty()) {
