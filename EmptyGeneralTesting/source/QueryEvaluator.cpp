@@ -985,7 +985,7 @@ bool QueryEvaluator::getCommonAttrValues(Clauses clause) {
 	if (clause.getLeftCType() == Enum::TYPE::CONSTANT) { // c.value = c.value/s.stmt#/a.stmt#/if.stmt#/w.stmt#/n
 		intermediateResults = getAllAttrValues(clause.getLeftCType());
 		for (size_t i = 0; i < intermediateResults.size(); i++) {
-			if (checkValidityOfIntEntities(clause.getRightCType(), intermediateResults.at(i))) {
+			if (checkValidityOfIntEntities(clause.getRightCType(), intermediateResults.at(i)) != NOT_FOUND) {
 				leftSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
 				rightSynResults.push_back(intermediateResults.at(i));
 			}
@@ -999,7 +999,7 @@ bool QueryEvaluator::getCommonAttrValues(Clauses clause) {
 		} else if (clause.getRightCType() == Enum::TYPE::CONSTANT) { // s.stmt#/a.stmt#/if.stmt#/w.stmt#/n/c.value = c.value
 			intermediateResults = getAllAttrValues(clause.getRightCType());
 			for (size_t i = 0; i < intermediateResults.size(); i++) {
-				if (checkValidityOfIntEntities(clause.getLeftCType(), intermediateResults.at(i))) {
+				if (checkValidityOfIntEntities(clause.getLeftCType(), intermediateResults.at(i)) != NOT_FOUND) {
 					rightSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
 					leftSynResults.push_back(intermediateResults.at(i));
 				}
@@ -1039,8 +1039,14 @@ vector<int> QueryEvaluator::convertNamesToIndexes(vector<string> stringResults, 
 		break;
 	case Enum::TYPE::CALLS:
 		for (size_t i = 0; i < stringResults.size(); i++) {
-			indexes.push_back(pkb->getProcIndex(stringResults[i]));
+			vector<int> stmtsCalled = pkb->getStmtNumProcCalled(pkb->getProcIndex(stringResults[i]));
+			for (size_t c = 0; c < stmtsCalled.size(); c++) {
+				indexes.push_back(stmtsCalled.at(c));
+			}
 		}
+
+		sort(indexes.begin(), indexes.end());
+		indexes.erase(unique(indexes.begin(), indexes.end()), indexes.end());
 		break;
 	default:
 		break;
@@ -1133,7 +1139,16 @@ string QueryEvaluator::convertToString(int index, Clauses syn) {
 			return to_string(index);
 		}
 		else {
-			return this->pkb->getProcName(index);
+			for (int i = 0; i < pkb->getNoOfProc(); i++) {
+				vector<int> callStmts = pkb->getStmtNumProcCalled(i);
+				for (size_t s = 0; s < callStmts.size(); s++) {
+					if (callStmts.at(s) == index) {
+						return this->pkb->getProcName(i);
+					} 
+				}
+			}
+
+			return EMPTY_STRING;
 		}
 		break;
 	case Enum::TYPE::CONSTANT:
@@ -1517,12 +1532,7 @@ vector<int> QueryEvaluator::getValuesOfNonCommonSyn(Clauses nonCommon) {
 		return getStringedAttrIndexes(typeOfSyn);
 	}
 	else if (typeOfSyn == Enum::TYPE::CALLS) {
-		if (nonCommon.getParentIsStmt()) {
-			return getAllAttrValues(typeOfSyn);
-		}
-		else {
-			return getStringedAttrIndexes(typeOfSyn);
-		}
+		return getAllAttrValues(typeOfSyn);
 	}
 	else if (typeOfSyn == Enum::TYPE::CONSTANT) {
 		vector<int> constantIndexes = vector<int>();
@@ -1549,17 +1559,6 @@ vector<int> QueryEvaluator::getStringedAttrIndexes(Enum::TYPE type) {
 		for (int i = 0; i < pkb->getNoOfVar(); i++) {
 			stringedAttrIndexes.push_back(i);
 		}
-		break;
-	case Enum::TYPE::CALLS:
-		for (int i = 0; i < pkb->getNoOfProc(); i++) {
-			vector<int> procedureCalled = pkb->getProcCalls(i);
-			for (size_t c = 0; c < procedureCalled.size(); c++) {
-				stringedAttrIndexes.push_back(procedureCalled.at(c));
-			}
-		}
-
-		sort(stringedAttrIndexes.begin(), stringedAttrIndexes.end());
-		stringedAttrIndexes.erase(unique(stringedAttrIndexes.begin(), stringedAttrIndexes.end()), stringedAttrIndexes.end());
 		break;
 	default:
 		break;

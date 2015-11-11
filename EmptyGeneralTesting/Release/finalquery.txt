@@ -1,12 +1,12 @@
 1 - All procedures
 procedure p;
 Select p
-Paper, Pencil, Sleep, Restaurant
+paper, pencil, sleep, restaurant
 5000
 2 - All procedures attribute
 procedure p;
 Select p.procName
-Paper, Pencil, Sleep, Restaurant
+paper, pencil, sleep, restaurant
 5000
 3 - All variables
 variable v;
@@ -51,7 +51,7 @@ Select c.stmt#
 11 - All call procedures attribute
 call c;
 Select c.procName
-Pencil, Sleep, Restaurant
+pencil, sleep, restaurant
 5000
 12 - All program line
 prog_line n;
@@ -90,22 +90,22 @@ Select c.value
 5000
 19 - Boolean true with procedure names
 procedure p;
-Select BOOLEAN with p.procName = "Paper"
+Select BOOLEAN with p.procName = "paper"
 true
 5000
-20 - Boolean false with procedure names
+20 - Boolean false given variable name with procedure names
 procedure p;
-Select BOOLEAN with p.procName = "Computer"
+Select BOOLEAN with p.procName = "computer"
 false
 5000
 21 - Boolean true with call names
 call c;
-Select BOOLEAN with c.procName = "Restaurant"
+Select BOOLEAN with c.procName = "restaurant"
 true
 5000
-22 - Boolean false with call names
+22 - Boolean false given variable name with call names
 call c;
-Select BOOLEAN with c.procName = "Hawker"
+Select BOOLEAN with c.procName = "music"
 false
 5000
 23 - Boolean true with variable names
@@ -113,9 +113,9 @@ variable v;
 Select BOOLEAN with v.varName = "sleep"
 true
 5000
-24 - Boolean false with variable names
+24 - Boolean false given procedure name with variable names
 variable v;
-Select BOOLEAN with v.varName = "time"
+Select BOOLEAN with v.varName = "restaurant"
 false
 5000
 25 - Boolean true with given statement numbers
@@ -227,4 +227,59 @@ false
 while w;
 Select BOOLEAN with w.stmt# = 58
 false
+5000
+47 - Boolean true with procedure and variable names
+procedure p; variable v;
+Select BOOLEAN with p.procName = v.varName
+true
+5000
+48 - Boolean true with procedure and call names
+procedure p; call c;
+Select BOOLEAN with p.procName = c.procName
+true
+5000
+49 - Boolean true with variable and call names
+variable v; call c;
+Select BOOLEAN with c.procName = v.varName
+true
+5000
+50 - All equal, procedure names with procedure and variable names
+procedure p; variable v;
+Select p with p.procName = v.varName
+paper, sleep, pencil
+5000
+51 - All equal, call names with procedure and call names
+procedure p; call c;
+Select c with c.procName = p.procName
+1, 9, 21, 23, 40
+5000
+52 - All equal, variable names with variable and call names
+variable v; call c;
+Select v with v.varName = c.procName
+pencil, sleep
+5000
+53 - Boolean true with constant and statement
+constant c; stmt s;
+Select BOOLEAN with c.value = s.stmt#
+true
+5000
+54 - Boolean true with constant and assignment statement
+constant c; assign a;
+Select BOOLEAN with c.value = a.stmt#
+true
+5000
+55 - Boolean false with constant and call statement
+constant c; call c1;
+Select BOOLEAN with c.value = c1.stmt#
+false
+5000
+56 - Boolean true with constant and if statement
+constant c; if ifstat;
+Select BOOLEAN with c.value = ifstat.stmt#
+true
+5000
+57 - Boolean true with constant and while statement
+constant c; while w;
+Select BOOLEAN with c.value = w.stmt#
+true
 5000
