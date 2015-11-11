@@ -120,7 +120,7 @@ void Parser::Procedure() {
 			processWhile((*i).first, (*i).second);
 			handleModifyAndUses((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
-			addToParent((*i).first);
+			addToParent((*i).first-numOfElse-numOfProc);
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
 		}
@@ -326,25 +326,12 @@ void Parser::addToParent(int child) {
 	int parent = 0;
 	if (!containerElements.empty()) {
 		parentPair = containerElements.back();
-		//cout << "parent pair: " << parentPair.first << "\n";
-		//cout << "num of else: " << numOfElse << "\n";
-		//cout << "num of proc: " <<numOfProc << "\n";
 		string parentStmt = parentPair.second;
 		pair<int, int> pairs;
-		parent = parentPair.first - numOfProc - numOfElse;
+		parent = parentPair.first;
 
-		if (parentStmt.find("while") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
-			parent = parentPair.first - numOfProc;
-		}
-		if (parentStmt.find("if") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
-			//cout << "else: " <<currElse << "\n";
-			parent = parentPair.first - numOfProc - numOfElse + numOfElse;
-		}
-
-		int newChild = child - numOfProc - numOfElse;
+		int newChild = child;
 		if (parent != newChild) {
-			//cout << "if parent: " << parent << "\n";
-			//cout << "if child: " << newChild <<"\n";
 			pairs.first = parent;
 			pairs.second = newChild;
 			parentLink.push_back(pairs);
@@ -395,7 +382,7 @@ void Parser::processCalls(int index, string stmt)
 		exit(0);
 	}
 
-	addToParent(index);
+	addToParent(index-numOfElse-numOfProc);
 	callsPair.first = procNumInTble;
 	callsPair.second = procCalls;
 	callsLink.push_back(callsPair);
@@ -409,42 +396,42 @@ void Parser::processWhile(int index, string statement) {
 	pushOpenBracket();
 	pair <int, int> parentPair;
 	pair <int, string> pair;
-	pair.first = index;
+	pair.first = index - numOfProc - numOfElse;
 	pair.second = statement;
+
+	//checked - correct
 	if (!containerElements.empty()) {
-		parentPair.first = containerElements.back().first - numOfProc - numOfElse;
-		parentPair.second = index - numOfProc - numOfElse;
+		parentPair.first = containerElements.back().first;
+		parentPair.second = pair.first;
 		parentLink.push_back(parentPair);
 	}
 	containerElements.push_back(pair);
 
 }
 
-void Parser::processIf(int index, string statement)
-{
+void Parser::processIf(int index, string statement){
 	pushOpenBracket();
 	pair <int, string> ifPair;
 	pair <int, int> parentPair;
-	pair <int, string> pair;
-	pair.first = index;
-	pair.second = statement;
 
-	ifPair.first = index - numOfElse;
+	ifPair.first = index - numOfElse - numOfProc;
 	ifPair.second = statement;
 
+	//check again - correct
 	ifStmtVec.push(ifPair);
 	if (!containerElements.empty()) {
-		parentPair.first = containerElements.back().first - numOfProc - numOfElse;
-		parentPair.second = index - numOfProc - numOfElse;
+		parentPair.first = containerElements.back().first;
+		parentPair.second = ifPair.first;
 		parentLink.push_back(parentPair);
 		//containerElements.push_back(ifPair);
 	}
-	containerElements.push_back(pair);
-	addToParent(pair.first);
-	handleModifyAndUses(pair.first, pair.second);
-	handleFollows(pair.first, pair.second);
 
+	containerElements.push_back(ifPair);
+	addToParent(ifPair.first);
+	handleModifyAndUses(index, statement);
+	handleFollows(index, statement);
 }
+
 
 void Parser::processElse(int index, string statement) {
 	pushOpenBracket();
@@ -469,7 +456,7 @@ void Parser::processExpressions(int index, string statement) {
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
-			addToParent(index);
+			addToParent(index-numOfElse-numOfProc);
 			if (!isConstant(s)) {
 				int index = pkb->setVarName(s);
 				pkb->setProcNames(index, currProcName);
@@ -712,33 +699,6 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			}
 		}
 	}
-}
-
-string Parser::getExpression() {
-	list<pair<int, string >>::iterator i;
-	string output;
-	int counter = 0;
-	for (i = (stmtNoAndExpr).begin(); i != (stmtNoAndExpr).end(); ++i) {
-		counter++;
-		if ((*i).second != ";") {
-			output.append(to_string(counter) + ": " + (*i).second + " ");
-		}
-	}
-	return output;
-}
-
-string Parser::getFollow() {
-	string output;
-	while (!followLink.empty()) {
-		pair<int, int> followPair = followLink.back();
-		int firstNum = followPair.first;
-		int secondNum = followPair.second;
-		output.append(to_string(firstNum) + "->" + to_string(secondNum) + "|");
-		if (!followLink.empty()) {
-			followLink.pop_back();
-		}
-	}
-	return output;
 }
 
 void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
