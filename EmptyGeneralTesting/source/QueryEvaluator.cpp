@@ -419,12 +419,12 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				if (pkb->getControlVar(i) == controlVariable) {
-					cout << "push back" << endl;
+//					cout << "push back" << endl;
 					patternSyn.push_back(i);
-					cout << i << endl;
-					cout << "after push back" << endl;
+//					cout << i << endl;
+//					cout << "after push back" << endl;
 				}
-				cout << patternSyn.size() << endl;
+//				cout << patternSyn.size() << endl;
 			}
 		}
 		intermediateResult = { patternSyn };
@@ -484,12 +484,12 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
 				if (pkb->getControlVar(i) == controlVariable) {
-					cout << "push back" << endl;
+//					cout << "push back" << endl;
 					patternSyn.push_back(i);
-					cout << i << endl;
-					cout << "after push back" << endl;
+//					cout << i << endl;
+//					cout << "after push back" << endl;
 				}
-				cout << patternSyn.size() << endl;
+//				cout << patternSyn.size() << endl;
 			}
 		}
 		intermediateResult = { patternSyn };
@@ -766,7 +766,22 @@ int QueryEvaluator::isPriority(const char &c)
 /**************************** With Clauses ****************************/
 bool QueryEvaluator::evaluateWith(Clauses clause) {
 	if (isGivenParam(clause, POSITION_SECONDPARAM)) {
-		int entityIndex = checkValidityOfEntities(clause, POSITION_SECONDPARAM);
+		int entityIndex = NOT_FOUND;
+
+		if (clause.getLeftCType() == Enum::TYPE::VARIABLE || clause.getLeftCType() == Enum::TYPE::PROCEDURE) {
+			entityIndex = checkValidityOfStringEntities(clause.getLeftCType(), clause.getRightCStringValue());
+		}
+		else if (clause.getLeftCType() == Enum::TYPE::CALLS) {
+			if (clause.getLeftCIsStmt()) {
+				entityIndex = checkValidityOfIntEntities(clause.getLeftCType(), clause.getRightCIntValue());
+			}
+			else {
+				entityIndex = checkValidityOfStringEntities(clause.getLeftCType(), clause.getRightCStringValue());
+			}
+		}
+		else {
+			entityIndex = checkValidityOfIntEntities(clause.getLeftCType(), clause.getRightCIntValue());
+		}
 
 		if (entityIndex == NOT_FOUND) {
 			return false;
@@ -964,8 +979,7 @@ bool QueryEvaluator::getCommonAttrValues(Clauses clause) {
 	vector<int> rightSynResults;
 	vector<int> intermediateResults;
 
-	// other stmt types must either be equals to stmt num or constant num
-	if (clause.getLeftCType() == Enum::TYPE::CONSTANT) { // c.value = s.stmt#, a.stmt#, if.stmt#, w.stmt#, n
+	if (clause.getLeftCType() == Enum::TYPE::CONSTANT) { // c.value = c.value/s.stmt#/a.stmt#/if.stmt#/w.stmt#/n
 		intermediateResults = getAllAttrValues(clause.getLeftCType());
 		for (size_t i = 0; i < intermediateResults.size(); i++) {
 			if (checkValidityOfIntEntities(clause.getRightCType(), intermediateResults.at(i))) {
@@ -974,32 +988,27 @@ bool QueryEvaluator::getCommonAttrValues(Clauses clause) {
 			}
 		}
 	}
-
-	if (clause.getRightCType() == Enum::TYPE::CONSTANT) { // s.stmt#, a.stmt#, if.stmt#, w.stmt#, n = c.value
-		intermediateResults = getAllAttrValues(clause.getRightCType());
-		for (size_t i = 0; i < intermediateResults.size(); i++) {
-			if (checkValidityOfIntEntities(clause.getLeftCType(), intermediateResults.at(i))) {
-				rightSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
-				leftSynResults.push_back(intermediateResults.at(i));
+	else {
+		if(clause.getLeftCType() == Enum::TYPE::STATEMENT){ // s.stmt# = s.stmt#/a.stmt#/w.stmt#/if.stmt#/c.value/n
+			intermediateResults = getAllAttrValues(clause.getRightCType());
+			rightSynResults = intermediateResults;
+			leftSynResults = intermediateResults;
+		} else if (clause.getRightCType() == Enum::TYPE::CONSTANT) { // s.stmt#/a.stmt#/if.stmt#/w.stmt#/n/c.value = c.value
+			intermediateResults = getAllAttrValues(clause.getRightCType());
+			for (size_t i = 0; i < intermediateResults.size(); i++) {
+				if (checkValidityOfIntEntities(clause.getLeftCType(), intermediateResults.at(i))) {
+					rightSynResults.push_back(pkb->getConstantIndex(intermediateResults.at(i)));
+					leftSynResults.push_back(intermediateResults.at(i));
+				}
 			}
 		}
-	}
-
-	if (clause.getLeftCType() == Enum::TYPE::STATEMENT) { // s.stmt# = a.stmt#, if.stmt#, w.stmt#, n
-		if (clause.getRightCType() != Enum::TYPE::CONSTANT) {
-			rightSynResults = getAllAttrValues(clause.getRightCType());
-			leftSynResults = rightSynResults;
+		else { // w.stmt# = w.stmt#/if.stmt#/s.stmt#/a.stmt#/n etc.
+			intermediateResults = getAllAttrValues(clause.getLeftCType());
+			rightSynResults = intermediateResults;
+			leftSynResults = intermediateResults;
 		}
 	}
-
-	if (clause.getRightCType() == Enum::TYPE::STATEMENT) { // a.stmt#, if.stmt#, w.stmt#, n = s.stmt#
-		if (clause.getLeftCType() != Enum::TYPE::CONSTANT) {
-			leftSynResults = getAllAttrValues(clause.getLeftCType());
-			rightSynResults = leftSynResults;
-		}
-	}
-
-
+	
 	vector<Enum::TYPE> type = { clause.getLeftCType(), clause.getRightCType() };
 	vector<string> synString = { clause.getLeftCStringValue(), clause.getRightCStringValue() };
 	if (leftSynResults.empty() || rightSynResults.empty()) {
@@ -1093,7 +1102,8 @@ void QueryEvaluator::storeResults(vector<Enum::TYPE> type, vector<string> synStr
 	this->results.push_back(syn);
 }
 
-string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
+string QueryEvaluator::convertToString(int index, Clauses syn) {
+	Enum::TYPE type = syn.getParentType();
 
 	// No UNDERSCORE TYPE / CONSTANT
 	switch (type) {
@@ -1116,13 +1126,18 @@ string QueryEvaluator::convertToString(int index, Enum::TYPE type) {
 		return this->pkb->getVarName(index);
 		break;
 	case Enum::TYPE::CALLS:
-		return to_string(index);
+		if (syn.getParentIsStmt()) {
+			return to_string(index);
+		}
+		else {
+			return this->pkb->getProcName(index);
+		}
 		break;
 	case Enum::TYPE::CONSTANT:
 		return to_string(this->pkb->getConstantValue(index));
 		break;
 	default:
-		cout << "Convert to String, no TYPE matches" << endl;
+	//	cout << "Convert to String, no TYPE matches" << endl;
 		return EMPTY_STRING;
 		break;
 	}
@@ -1171,7 +1186,7 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 		for (size_t j = 1; j < group.at(i).size() ; j++) {
 			if (group.at(i).size() != 1) {
 				syn = mergeSyn(syn ,this->results.at(group[i][j]));
-				cout << "mergeSyn" << endl;
+	//			cout << "mergeSyn" << endl;
 			}
 			else {
 				syn = this->results.at(group[i][j]);
@@ -1699,14 +1714,14 @@ vector<pair<Enum::TYPE, vector<int>>> QueryEvaluator::extractTypeAndIndexes(Syno
 }
 
 list<string> QueryEvaluator::convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns) {
-	list<string> stringedResults;
+	list<string> stringedResults = list<string>();
+	vector<Clauses> select = tree.getResultTree();
 	int numOfValuesPerSyn = arrangedSyns.at(0).second.size();
-
 	for (int values = 0; values < numOfValuesPerSyn; values++) {
 		vector<int> valuesOfSyn = arrangedSyns[0].second;
-		string combinedValues = convertToString(valuesOfSyn.at(values), arrangedSyns.at(0).first);
+		string combinedValues = convertToString(valuesOfSyn.at(values), select[0]);
 		for (size_t syn = 1; syn < arrangedSyns.size(); syn++) {
-			combinedValues = combinedValues + " " + convertToString(arrangedSyns[syn].second.at(values), arrangedSyns[syn].first);
+			combinedValues = combinedValues + " " + convertToString(arrangedSyns[syn].second.at(values), select[syn]);
 		}
 
 		stringedResults.push_back(combinedValues);

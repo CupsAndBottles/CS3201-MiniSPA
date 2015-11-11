@@ -1,0 +1,205 @@
+1 - All procedures
+procedure p;
+Select p
+Paper, Pencil, Sleep, Restaurant
+5000
+2 - All procedures attribute
+procedure p;
+Select p.procName
+Paper, Pencil, Sleep, Restaurant
+5000
+3 - All variables
+variable v;
+Select v
+pen, tables, chair, computer, cup, homework, hunger, eat, food, lunch, soup, rice, sleep, television, music, book, write, paper, dinner, pencil, wash, drink
+5000
+4 - All variables attribute
+variable v;
+Select v.varName
+pen, tables, chair, computer, cup, homework, hunger, eat, food, lunch, soup, rice, sleep, television, music, book, write, paper, dinner, pencil, wash, drink
+5000
+5 - All statements
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57
+5000
+6 - All statements attribute
+stmt s;
+Select s.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57
+5000
+7 - All assignment statements
+assign a;
+Select a
+3, 4, 5, 7, 8, 10, 13, 14, 15, 16, 17, 18, 20, 22, 26, 27, 28, 31, 32, 33, 34, 35, 37, 39, 42, 43, 44, 46, 47, 48, 50, 51, 52, 54, 55, 56, 57
+5000
+8 - All assignment statements attribute
+assign a;
+Select a.stmt#
+3, 4, 5, 7, 8, 10, 13, 14, 15, 16, 17, 18, 20, 22, 26, 27, 28, 31, 32, 33, 34, 35, 37, 39, 42, 43, 44, 46, 47, 48, 50, 51, 52, 54, 55, 56, 57
+5000
+9 - All call statements
+call c;
+Select c
+1, 9, 21, 23, 40
+5000
+10 - All call statements attribute
+call c;
+Select c.stmt#
+1, 9, 21, 23, 40
+5000
+11 - All call procedures attribute
+call c;
+Select c.procName
+Pencil, Sleep, Restaurant
+5000
+12 - All program line
+prog_line n;
+Select n
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57
+5000
+13 - All if statements
+if ifstat;
+Select ifstat
+6, 12, 19, 25, 30, 36, 41, 49, 53
+5000
+14 - All if statements attribute
+if ifstat;
+Select ifstat.stmt#
+6, 12, 19, 25, 30, 36, 41, 49, 53
+5000
+15 - All while statements
+while w;
+Select w
+2, 11, 24, 29, 38, 45
+5000
+16 - All while statements attribute
+while w;
+Select w.stmt#
+2, 11, 24, 29, 38, 45
+5000
+17 - All constants
+constant c;
+Select c
+34, 4, 2, 45, 5, 8, 19, 94, 41, 30 
+5000
+18 - All constants attributes
+constant c;
+Select c.value
+34, 4, 2, 45, 5, 8, 19, 94, 41, 30 
+5000
+19 - Boolean true with procedure names
+procedure p;
+Select BOOLEAN with p.procName = "Paper"
+true
+5000
+20 - Boolean false with procedure names
+procedure p;
+Select BOOLEAN with p.procName = "Computer"
+false
+5000
+21 - Boolean true with call names
+call c;
+Select BOOLEAN with c.procName = "Restaurant"
+true
+5000
+22 - Boolean false with call names
+call c;
+Select BOOLEAN with c.procName = "Hawker"
+false
+5000
+23 - Boolean true with variable names
+variable v;
+Select BOOLEAN with v.varName = "sleep"
+true
+5000
+24 - Boolean false with variable names
+variable v;
+Select BOOLEAN with v.varName = "time"
+false
+5000
+25 - Boolean true with statement numbers
+stmt s;
+Select BOOLEAN with s.stmt# = 9
+true
+5000
+26 - Boolean false with statement numbers
+stmt s;
+Select BOOLEAN with s.stmt# = 88
+false
+5000
+27 - Boolean true with assignment statements
+assign a;
+Select BOOLEAN with a.stmt# = 18
+true
+5000
+28 - Boolean false given call with assignment statements
+assign a;
+Select BOOLEAN with a.stmt# = 1
+false
+5000
+29 - Boolean false given if with assignment statements
+assign a;
+Select BOOLEAN with a.stmt# =  19
+false
+5000
+30 - Boolean false given while with assignment statements
+assign a;
+Select BOOLEAN with a.stmt# = 45
+false
+5000
+31 - Boolean false given out of range with assignment statements
+assign a;
+Select BOOLEAN with a.stmt# = 90
+false
+5000
+32 - Boolean true with call statements
+call c;
+Select BOOLEAN with c.stmt# = 23
+true
+5000
+33 - Boolean false given assignment with call statements
+call c;
+Select BOOLEAN with c.stmt# = 10
+false
+5000
+34 - Boolean false given if with call statements
+call c;
+Select BOOLEAN with c.stmt# =  36
+false
+5000
+35 - Boolean false given while with call statements
+call c;
+Select BOOLEAN with c.stmt# = 11
+false
+5000
+36 - Boolean false given out of range with call statements
+call c;
+Select BOOLEAN with c.stmt# = 75
+false
+5000
+37 - Boolean true with if statements
+if ifstat;
+Select BOOLEAN with ifstat.stmt# = 6
+true
+5000
+38 - Boolean false given assignment with if statements
+if ifstat;
+Select BOOLEAN with ifstat.stmt# = 10
+false
+5000
+39 - Boolean false given call with if statements
+if ifstat;
+Select BOOLEAN with ifstat.stmt# =  9
+false
+5000
+40 - Boolean false given while with if statements
+if ifstat;
+Select BOOLEAN with ifstat.stmt# = 2
+false
+5000
+41 - Boolean false given out of range with if statements
+if ifstat;
+Select BOOLEAN with ifstat.stmt# = 100
+false
+5000

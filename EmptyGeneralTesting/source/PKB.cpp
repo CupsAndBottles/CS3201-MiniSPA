@@ -54,6 +54,8 @@ void PKB::setProcModified(vector<pair<int,string>> modifiedVar)
 		int index = modifiedVar.back().first;
 		int modifiedVarIndex = getVarIndex(modifiedVar.back().second);
 		procTable[index].setModifiedVar(modifiedVarIndex);
+		//cout << "name: " << modifiedVar.back().second << "\n";
+		//cout << "proc Index: " << index << "\n";
 		modifiedVar.pop_back();
 	}
 
@@ -78,8 +80,8 @@ string PKB::setProcCalls(vector<pair<int, string>> procCalls)
 		pair<int, string> paired = procCalls.back();
 		int index = paired.first;
 		string procCalled = paired.second;
-	//	cout << "Index: " << index << "\n";
-	//	cout << "Proc called: " << procCalled << "\n";
+		//cout << "Index: " << index << "\n";
+		//cout << "Proc called: " << procCalled << "\n";
 		int procIndex = getProcIndex(procCalled);
 		procCalls.pop_back();
 		if (procIndex != -1) {
@@ -135,15 +137,15 @@ void PKB::setProcUses(int index, vector<int> uses) {
 
 //G: check for existence, return index if exists else, set varname and return new index
 int PKB::setVarName(string varName){
-	
+	remove_if(varName.begin(), varName.end(), isspace);
 	int index = getVarIndex(varName);
 	if (index == -1) {
 		varTable.push_back(Variable());
 		int size = varTable.size() - OFFSET;
 		varTable[size].setVarName(varName);
 		index = getVarIndex(varName);
-	//	cout << "set varName: " << varName << "\n";
-	//	cout << "set varIndex: " << index << "\n";
+		//cout << "set varName: " << varName << "\n";
+		//cout << "set varIndex: " << index << "\n";
 	}
 	return index;
 }
@@ -325,8 +327,8 @@ void PKB::setChildren(vector<pair<int, int>> parentChildStmts)
 		parentChildStmts.pop_back();
 		stmtTable[index].setChildren(child);
 		setParent(child,index);
-		//cout << "Parent: " << index << "\n";
-		//cout << "Child: " << child << "\n\n";
+	//	cout << "Parent: " << index << "\n";
+	//	cout << "Child: " << child << "\n\n";
 	}
 }
 
@@ -1153,7 +1155,7 @@ vector<pair<int, int>> PKB::getNext(Enum::TYPE type1, int stmtNum1, Enum::TYPE t
 	}
 	else if (stmtNum2 != -1) { // Next(s/w,_/a/c/if, 4)
 		prevStmtNos = stmtTable.at(stmtNum2).getPrev();
-		cout << prevStmtNos.size();
+		//cout << prevStmtNos.size();
 		for(size_t i = 0; i < prevStmtNos.size(); i++) {
 			if (prevStmtNos.at(i) > 0) { 
 				if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(prevStmtNos.at(i)).getType()) {
@@ -1224,17 +1226,11 @@ vector<pair<int, int>> PKB::getNextT(Enum::TYPE type1, int stmtNum1, Enum::TYPE 
 		for (size_t i = 1; i < stmtTable.size(); i++) {
 			if (type1 == Enum::TYPE::STATEMENT || type1 == Enum::TYPE::UNDERSCORE || type1 == stmtTable.at(i).getType()) {
 				nextT = extractNextT(i);
-
 				for (size_t j = 0; j < nextT.size(); j++) {
 						if (type2 == Enum::TYPE::STATEMENT || type2 == Enum::TYPE::UNDERSCORE || type2 == stmtTable.at(nextT.at(j)).getType()) {
-							if (type1 == Enum::TYPE::STATEMENT && type2 == Enum::TYPE::STATEMENT) {
-								if (i == nextT.at(j)) {
-									results.push_back(make_pair(i, nextT.at(j)));
-								}
-							}
-							else {
+								
 								results.push_back(make_pair(i, nextT.at(j)));
-							}
+							
 						}
 				}
 			}

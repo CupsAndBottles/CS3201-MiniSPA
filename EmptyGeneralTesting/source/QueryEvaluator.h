@@ -37,7 +37,7 @@ private:
 	vector<int> convertNamesToIndexes(vector<string> stringResults, Enum::TYPE type);
 	list<string> convertResultsToString(vector<pair<Enum::TYPE, vector<int>>> arrangedSyns);
 	string convertToShuntingYard(string statement);
-	string convertToString(int index, Enum::TYPE type);
+	string convertToString(int index, Clauses syn);
 	bool evaluateAssign(Clauses clause);
 	bool evaluateIf(Clauses clause);
 	bool evaluatePattern(Clauses clause);

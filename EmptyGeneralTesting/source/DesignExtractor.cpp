@@ -196,6 +196,7 @@ vector<vector<int>> DesignExtractor::extractProcModifiesUses(vector<vector<int>>
 
 std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmtNum) {
 	vector<int> next = col.at(stmtNum);
+	
 	int nextStmtNum = -1;
 
 	if (next.size() == 0) {
@@ -211,6 +212,8 @@ std::vector<int> DesignExtractor::extractNextT(vector<vector<int>> col, int stmt
 		}
 	}
 
+	
+	//cout << NextT.size();
 	return NextT;
 }
 
@@ -468,24 +471,21 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 		}
 		//cout << "\n";
 	}
-
+	
 	int stmtNum2 = -1;
 	int modifiedVar = modifiesCol.at(stmtNum1).at(0);
 	vector<int> usedVar;
 
 	vector<int> singlePath = cfg.DFSOriginal(stmtNum1);
-	//for (int i = 0; i < path.size(); i++) {
-		//cout << path.at(i);
-	//}
-	//vector<int> stmts;
+	
 	vector<vector<int>> allPaths;
 	bool* exhaust;
 	vector<int> path;
 	//cout << singlePath.size();
-	//vector<int> next = nextCol.at(stmtNum1+1);
-	//for (int i = 0; i < singlePath.size(); i++) {
-		//cout << singlePath.at(i);
-	//}
+	vector<int> list = nextCol.at(stmtNum1);
+	for (int j = 0; j < list.size(); j++) {
+		cout << list.at(j);
+	}
 	for (int i = 1; i < singlePath.size(); i++) {
 			stmtNum2 = singlePath.at(i);
 			//cout << "StmtNum2 " << stmtNum2;
@@ -501,9 +501,7 @@ vector<pair<int, int>> DesignExtractor::extractAffectsFirstNum(int stmtNum1, vec
 								//cout << stmtNum2 << " ";
 								for (int j = 0; j < allPaths.size(); j++) {
 									vector<int> list = allPaths.at(j);
-									//for (int k = 0; k < list.size(); k++) {
-										//cout << "ELEMENt: " << list.at(k) << "\n";
-									//}
+									
 								}
 								for (int j = 0; j < allPaths.size(); j++) {
 									exhaust[j] = false;

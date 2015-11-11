@@ -1,215 +1,215 @@
 procedure tree{
-leaf = 2;  
-bark = 3;  
-root = 10; 
-flower = bark + 2;  
-stem = 2 * stem;  
-if flower then{  \\6
-leaf = 3 * leaf + flower; \\7  
-stem = 2; 
-tree = 1;}  
+leaf = 2; //1  
+bark = 3;  //2
+root = 10; //3
+flower = bark + 2; //4 
+stem = 2 * stem;  //5
+if flower then{  //6
+leaf = 3 * leaf + flower; //7  
+stem = 2; //8 
+tree = 1;}  //9
 else{
-bark = 4 * bark; 
-flower = 8 + flower; \\11 
-root = 9 + root;} 
-leaf = 5 * bark; \\13  
-while root{  \\14
-flower = 4; \\15
-nectar = 6 * root; 
-stem = bark + 5 * stem; 
-root = 2 + root; 
-bark = bark + 9;} \\19 
-while leaf{  \\20
-root = 12; \\21
-nectar = 5 * nectar; \\22 
+bark = 4 * bark; //10
+flower = 8 + flower; //11 
+root = 9 + root;} //12
+leaf = 5 * bark; //13  
+while root{  //14
+flower = 4; //15
+nectar = 6 * root;//16 
+stem = bark + 5 * stem; //17
+root = 2 + root; //18
+bark = bark + 9;} //19 
+while leaf{  //20
+root = 12; //21
+nectar = 5 * nectar; //22 
 stem = 2 * stem; 
-flower = leaf * 4;} \\24 
-bark = 8 + bark;} \\25
+flower = leaf * 4;} //24 
+bark = 8 + bark;} //25
 procedure air{ 
-plane = 4; \\26 
-cloud = 2;  
-rain = 7; \\28
-thunder = 10;  
-light = 1; 
-while light{ \\31
-rain = rain + 2; \\32  
-plane = 3 * plane; 
-bird = 4; 
-if rain then{ \\35  
-thunder = 2 * light; \\36
-light = 8 * cloud; \\37
-cloud = rain + 4;} \\38 
+plane = 4; //26 
+cloud = 2; //27 
+rain = 7; //28
+thunder = 10; //29  
+light = 1; //30 
+while light{ //31
+rain = rain + 2; //32  
+plane = 3 * plane; //33
+bird = 4; //34
+if rain then{ //35  
+thunder = 2 * light; //36
+light = 8 * cloud; //37
+cloud = rain + 4;} //38 
 else{  
-thunder = 11; 
-bird = 6 * bird; 
-rain = rain + plane + 3; \\41 
-cloud = 7 + cloud;} \\42
-plane = 10 + plane; \\43
-light = 7;} \\44
-bird = 12; \\45
-thunder = 8 * thunder;} \\46  
+thunder = 11; //39 
+bird = 6 * bird; //40
+rain = rain + plane + 3; //41 
+cloud = 7 + cloud;} //42
+plane = 10 + plane; //43
+light = 7;} //44
+bird = 12; //45
+thunder = 8 * thunder;} //46  
 procedure earth{ 
-while human{ \\47
-animal = 4 * human + 2 + animal; \\48 
-water = 3; \\49
-sky = 2 * sky; \\50
-while sky{ \\51
-ground = 5; 
-human = 8 * human; \\53 
-animal = 14; \\54
-water = 9 + water;} \\55 
-ground = 2;  \\56
-sky = sky * 9;}} \\57
+while human{ //47
+animal = 4 * human + 2 + animal; //48 
+water = 3; //49
+sky = 2 * sky; //50
+while sky{ //51
+ground = 5; //52 
+human = 8 * human; //53 
+animal = 14; //54
+water = 9 + water;} //55 
+ground = 2;  //56
+sky = sky * 9;}} //57
 procedure farm{ 
-chick = 3; \\58
-hen = 10 + chick; 
-goat = 12; 
-pig = 8; \\61
+chick = 3; //58
+hen = 10 + chick; //59
+goat = 12; //60
+pig = 8; //61
 rabbit = 5; 
-horse = pig; \\63  
-wolf = 10; 
-while horse{ 
-chick = 3 * goat; 
-pig = 4 + pig; \\67 
-hen = 10; 
-rabbit = rabbit + 2;} 
-while goat{ 
-horse = 9; \\71
-chick = 2 * chick; \\72
-if pig then{ \\73 
-rabbit = 5 + wolf;} 
+horse = pig; //63  
+wolf = 10; //64
+while horse{ //65 
+chick = 3 * goat; //66
+pig = 4 + pig; //67 
+hen = 10; //68
+rabbit = rabbit + 2;} //69
+while goat{ //70
+horse = 9; //71
+chick = 2 * chick; //72
+if pig then{ //73 
+rabbit = 5 + wolf;} //74 
 else{ 
-goat = 7 + horse; \\75 
-chick = 22;} \\76
-wolf = 4 * wolf; \\77
-hen = 3 * chick;} \\78
-rabbit = 12 + rabbit;} \\79 
+goat = 7 + horse; //75 
+chick = 22;} //76
+wolf = 4 * wolf; //77
+hen = 3 * chick;} //78
+rabbit = 12 + rabbit;} //79 
 procedure cake{ 
-butter = 6; \\80
-flour = 2; \\81 
-egg = 12; 
-oven = 4; 
-milk = 8; 
-while egg{\\85 
-oven = oven * 3; \\86
-butter = 2 * butter + 5; 
-flour = 9; 
-milk = 8 * milk;}\\89 
-egg = 2; \\90
-butter = 4 * butter; 
-oven = 9 + oven;} \\92 
+butter = 6; //80
+flour = 2; //81 
+egg = 12; //82
+oven = 4; //83
+milk = 8; //84
+while egg{//85 
+oven = oven * 3; //86
+butter = 2 * butter + 5; //87
+flour = 9; //88
+milk = 8 * milk;}//89 
+egg = 2; //90
+butter = 4 * butter; //91
+oven = 9 + oven;} //92 
 procedure place{ 
-room = 2; \\93
-garden = 3 + garden; 
-class = 9; \\95 
-lab = 14; 
-shop = 4 * class; 
-if shop then{ \\98
-shop = 5 * shop; \\99
-room = 2 * room; \\100 
-lab = 12 + lab;} \\101
+room = 2; //93
+garden = 3 + garden; //94
+class = 9; //95 
+lab = 14; //96
+shop = 4 * class; //97 
+if shop then{ //98
+shop = 5 * shop; //99
+room = 2 * room; //100 
+lab = 12 + lab;} //101
 else{ 
-class = class + 2; \\102 
-room = 1 + room;}  \\103
-garden = 8;  \\104
-shop = garden + 5; \\105 
+class = class + 2; //102 
+room = 1 + room;}  //103
+garden = 8;  //104
+shop = garden + 5; //105 
 lab = 6; 
-class = 30;} \\107 
+class = 30;} //107 
 procedure river{ 
-g = 2;  \\108
-m = 4 + g; \\109
-x = 3; \\110
-y = y * 2; \\111
-z = 12; \\112
-k = 11; \\113
-if g then{ \\114 
-x = 5; \\115
-y = 3 * m + 2;
+g = 2;  //108
+m = 4 + g; //109
+x = 3; //110
+y = y * 2; //111
+z = 12; //112
+k = 11; //113
+if g then{ //114 
+x = 5; //115
+y = 3 * m + 2; //116
 z = 1; 
 x = z + 1; 
-m = 5 * m; \\119 
-while m{ \\120
-y = y + 2; \\121
-x = 45; \\122
-k = 9 * k; \\123
-g = 2;}} \\124
+m = 5 * m; //119 
+while m{ //120
+y = y + 2; //121
+x = 45; //122
+k = 9 * k; //123
+g = 2;}} //124
 else{ 
-k = 3; \\125 
-x = 6 * x; \\126
-z = 10; \\127
-g = g + 8;} \\128
-while y{ \\129
-z = z + 6 * x; \\130 
+k = 3; //125 
+x = 6 * x; //126
+z = 10; //127
+g = g + 8;} //128
+while y{ //129
+z = z + 6 * x; //130 
 m = 7; 
 m = m + 1;
-k = 15; \\133 
-while z{ \\134
-y = 7 * y; \\135
-g = 2 + g; \\136
-x = x * 9;} \\137
-k = k * 4; \\138
-m = 20;} 
-z = 13; \\140
-y = 4 * m;} \\141
+k = 15; //133 
+while z{ //134
+y = 7 * y; //135
+g = 2 + g; //136
+x = x * 9;} //137
+k = k * 4; //138
+m = 20;} //139
+z = 13; //140
+y = 4 * m;} //141
 procedure good{ 
-nice = 2;  \\142
-best = 10; \\143 
-wow = 5; 
-best = best + 1; \\145 
+nice = 2;  //142
+best = 10; //143 
+wow = 5; //144
+best = best + 1; //145 
 great = 8; 
 right = 14; 
-fine = fine * 2; \\148 
-while nice{ \\149
-best = nice + 6; 
-wow = 4 * wow; 
-great = 9; 
-fine = 12; 
+fine = fine * 2; //148 
+while nice{ //149
+best = nice + 6; //150 
+wow = 4 * wow; //151
+great = 9; //152
+fine = 12; //153
 nice = nice * 9; 
-while fine{ \\155 
-best = 11; 
-wow = 6 + wow * 3; \\157
-right = 7 + right; \\158 
-fine = 16;} 
-while great{ \\160 
-right = 5 + right; \\161 
-wow = wow + 19; \\162 
-nice = 3 * nice; 
-best = 10;} 
-while wow{ \\165
-fine = 23; \\166
-fine = fine + 1; \\167 
-great = 22; \\168
-best = 15 + best;} \\169 
-nice = 7; \\170
-right = 18 + right; 
-wow = 5 * wow;} \\172 
-nice = nice + 12; \\173
-call see;} \\174
+while fine{ //155 
+best = 11; //156
+wow = 6 + wow * 3; //157
+right = 7 + right; //158 
+fine = 16;} //159 
+while great{ //160 
+right = 5 + right; //161 
+wow = wow + 19; //162 
+nice = 3 * nice; //163
+best = 10;} //164
+while wow{ //165
+fine = 23; //166
+fine = fine + 1; //167 
+great = 22; //168
+best = 15 + best;} //169 
+nice = 7; //170
+right = 18 + right; //171 
+wow = 5 * wow;} //172 
+nice = nice + 12; //173
+call see;} //174
 procedure see{ 
-look = 14; \\175
-spot = 5; \\176
+look = 14; //175
+spot = 5; //176
 sight = 6; 
-view = view + 1; \\178
-spy = 4; \\179
-if look then{ \\180
-spy = 4 + spy; 
-look = look * 10; 
-sight = 2 + sight; 
-spot = 12 * spot;} \\184 
+view = view + 1; //178
+spy = 4; //179
+if look then{ //180
+spy = 4 + spy; //181  
+look = look * 10; //182
+sight = 2 + sight; //183
+spot = 12 * spot;} //184 
 else{ 
-view = 2 + view;  \\185
-look = 3; \\186
-sight = sight * 8 + spy;} \\187
-if spot then{ 
+view = 2 + view;  //185
+look = 3; //186
+sight = sight * 8 + spy;} //187
+if spot then{ //188
 view = 11; 
-spy = spy * 6 + look; \\190 
-sight = 5;} \\191
+spy = spy * 6 + look; //190 
+sight = 5;} //191
 else{
-spot = 16; \\192 
-look = look * 5;} 
-sight = 1; \\194
-spy = spy * 80; 
-view = view + 23; 
-call river;
-sight = 7 + sight; \\198 
-look = 17 + look;} 
+spot = 16; //192 
+look = look * 5;} //193
+sight = 1; //194
+spy = spy * 80; //195
+view = view + 23; //196
+call river; //197
+sight = 7 + sight; //198 
+look = 17 + look;} //199
