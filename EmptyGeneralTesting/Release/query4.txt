@@ -253,147 +253,142 @@ variable v;
 Select v such that Uses(s, v)
 apple, grape, cherry, mango, paper, title, chapter, note, a, x, b, y
 5000
-52- Uses: both synonyms known: testing for uses
-
-Select BOOLEAN such that Uses(3, "orange")
-true
-5000
-53 -Affects:one synonym: testing for affects 
+52 -Affects:one synonym: testing for affects 
 prog_line n;
 Select n such that Affects(41, n)
 42, 47 
 5000
-54 -Affects:one synonym: testing for affects
+53 -Affects:one synonym: testing for affects
 assign a;
 Select a such that Affects(a, 3)
 1
 5000
-55 -Affects: both synonyms unknown: testing for affects
+54 -Affects: both synonyms unknown: testing for affects
 assign a1, a2;
 Select a1 such that Affects(a1, a2)
 1, 41, 52 
 5000
-56 -Affects: both synonyms known: testing for affects
+55 -Affects: both synonyms known: testing for affects
 
 Select BOOLEAN such that Affects(24, 25)
 true
 5000
-57 -Affects: both synonyms known: testing negative for affects
+56 -Affects: both synonyms known: testing negative for affects
 
 Select BOOLEAN such that Affects(44, 46)
 false 
 5000
-58 -Affects*: one synonym known: testing affects*
+57 -Affects*: one synonym known: testing affects*
 prog_line n;
 Select n such that Affects*(1, n)
 3, 7, 17
 5000
-59 -Affects*: one synonym known: testing affects*
+58 -Affects*: one synonym known: testing affects*
 prog_line n;
 Select n such that Affects*(n, 12)
 
 5000
-60 -Affects*: both synonym unknown: testing affects*
+59 -Affects*: both synonym unknown: testing affects*
 assign a1, a2;
 Select a1 such that Affects*(a1, a2)
 1, 41, 52
 5000
-61 -Affects*:both synonym known: testing affects*
+60 -Affects*:both synonym known: testing affects*
 
 Select BOOLEAN such that Affects*(41, 47)
 true
 5000
-62 -Affects*: both synonym knwon: testing negative for affects*
+61 -Affects*: both synonym knwon: testing negative for affects*
 
 Select BOOLEAN such that Affects*(40, 41)
 false
 5000
-63 -Pattern: one synonym: testing assignment in pattern
+62 -Pattern: one synonym: testing assignment in pattern
 assign a;
 Select a pattern a("grape", _)
 2, 5, 9, 12,
 5000
-64 -Pattern: one synonym: testing assignment in pattern
+63 -Pattern: one synonym: testing assignment in pattern
 assign a;
 Select a pattern a(_, _"3 * b"_)
 50
 5000 
-65 - Pattern: both synonym known: testing assignment in pattern
+64 - Pattern: both synonym known: testing assignment in pattern
 assign a;
 Select a pattern a("paper", _"12 * title"_)
 36
 5000
-66 -Pattern: both synonym: testing incorrect pattern declaration
+65 -Pattern: both synonym: testing incorrect pattern declaration
 assign a;
 Select a pattern a("y", _"y + 1")
 
 5000
-67 -Pattern: one synonym: testing while in pattern
+66 -Pattern: one synonym: testing while in pattern
 while w;
 Select w pattern w("orange", _)
 11
 5000
-68 -Pattern: one synonym: testing if in pattern
+67 -Pattern: one synonym: testing if in pattern
 if ifstat;
 Select ifstat pattern ifstat("chapter" ,_,_)
 26
 5000
-69 -Pattern: one synonym: testing proc in pattern
+68 -Pattern: one synonym: testing proc in pattern
 assign a; procedure p;
 Select p pattern a("cherry", _)
 fruit
 5000
-70 -Modifies,Uses: Multiple queries
+69 -Modifies,Uses: Multiple queries
 assign a;
 Select a such that Modifies(a, "grape") and Uses(a, "grape")
 5, 9
 5000
-71 -Calls* and Modifies: Multiple queries
+70 -Calls* and Modifies: Multiple queries
 procedure p; assign a;
 Select p such that Calls*(p, "book") and Modifies(a, "apple")
 fruit
 5000 
-72 -Pattern, Parent: Multiple queries
+71 -Pattern, Parent: Multiple queries
 while w; assign a;
 Select w pattern a("apple", _) such that Parent(w, 9)
 6
 5000
-73 -Follows, Modifies, Next: Multiple queries
+72 -Follows, Modifies, Next: Multiple queries
 stmt s; assign a;
 Select s such that Next(s, a) such that Modifies(a, "apple") and Follows(s, 3)   
 2
 5000
-74 -Parent, Modifies, Uses, Follows, Next, Calls with 3 false clauses: follows,next,calls: Multiple queries  
+73 -Parent, Modifies, Uses, Follows, Next, Calls with 3 false clauses: follows,next,calls: Multiple queries  
 assign a; while w; if ifstat; prog_line n; procedure q;
 Select a such that Parent(26, a) and Modifies(a, "title") and Uses(a, "paper") and Follows(ifstat, w) such that Next(30, n) and Calls(alpha, q) with q.procName = "book"
 
 5000
-75 -Pattern, Parent*, Modifies, Uses) with duple results returned with no false clauses: Multiple queries 
+74 -Pattern, Parent*, Modifies, Uses) with duple results returned with no false clauses: Multiple queries 
 while w; variable v; assign a; constant c;
 Select <w, v> pattern w("b", _) such that Parent*(w, 56) and Modifies(w, v) and Uses(w, v) 
 55 y 
 5000
-76 -Follows*, Pattern: Multiple queries
+75 -Follows*, Pattern: Multiple queries
 stmt s; assign a;
 Select s such that Follows*(s, 24) pattern a("paper", _)
 23
 5000
-77 -Follows, Pattern, Next, Uses, Procedure with no false clauses: Multiple queries
+76 -Follows, Pattern, Next, Uses, Procedure with no false clauses: Multiple queries
 stmt s; assign a; prog_line n; procedure q;
 Select s such that Follows(s, 24) pattern a("paper", _) such that Next(22, n) such that Uses(a, "paper") with q.procName = "book" 
 23
 5000
-78 -Calls,Uses: Multiple queries
+77 -Calls,Uses: Multiple queries
 procedure p; 
 Select p such that Calls(p, "book") and Uses(p, "mango")
 fruit
 5000
-79-Parent and Uses: Multiple queries
+78-Parent and Uses: Multiple queries
 assign a1; stmt s; prog_line n;
 Select s such that Parent(s, a1) and Uses(a1, "title") 
 26, 33
 5000
-80 -Parent, Uses, Next,Procedure: Multiple queries
+79 -Parent, Uses, Next,Procedure: Multiple queries
 assign a1; stmt s; prog_line n; procedure p;
 Select a1 such that Parent(s, a1) and Uses(a1, "title") and Next(n, a1) with p.procName = "book"
 27, 36
