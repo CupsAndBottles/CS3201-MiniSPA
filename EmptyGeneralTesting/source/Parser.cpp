@@ -133,7 +133,7 @@ void Parser::Procedure() {
 		else if (stmt.find("else") != std::string::npos) {
 			processElse((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
-			currElse = (*i).first - numOfProc;
+			currElse = (*i).first - numOfProc-numOfElse+1;
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
 		}
@@ -155,7 +155,6 @@ void Parser::Procedure() {
 		}
 
 	}
-//	cout << "End num: " << endIndex << "\n";
 	setProcEndNum(procNumInTble, endIndex);
 	setRelationsInTable();
 	pkb->setParentTChildrenT();
@@ -327,6 +326,9 @@ void Parser::addToParent(int child) {
 	int parent = 0;
 	if (!containerElements.empty()) {
 		parentPair = containerElements.back();
+		//cout << "parent pair: " << parentPair.first << "\n";
+		//cout << "num of else: " << numOfElse << "\n";
+		//cout << "num of proc: " <<numOfProc << "\n";
 		string parentStmt = parentPair.second;
 		pair<int, int> pairs;
 		parent = parentPair.first - numOfProc - numOfElse;
@@ -335,11 +337,14 @@ void Parser::addToParent(int child) {
 			parent = parentPair.first - numOfProc;
 		}
 		if (parentStmt.find("if") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
-			parent = parentPair.first - numOfProc - numOfElse+1;
+			//cout << "else: " <<currElse << "\n";
+			parent = parentPair.first - numOfProc - numOfElse+numOfElse;
 		}
 
 		int newChild = child - numOfProc - numOfElse;
 		if (parent != newChild) {
+			//cout << "if parent: " << parent << "\n";
+			//cout << "if child: " << newChild <<"\n";
 			pairs.first = parent;
 			pairs.second = newChild;
 			parentLink.push_back(pairs);
@@ -349,7 +354,7 @@ void Parser::addToParent(int child) {
 
 void Parser::processProcedure(int index, string statement) {
 	//	currFollows.clear();
-
+	containerElements.clear();
 	prevStmt = "";
 	size_t bracketPos = statement.find("{");
 	statement.replace(bracketPos, string("{").length(), "");
@@ -424,14 +429,15 @@ void Parser::processIf(int index, string statement)
 	pair.first = index;
 	pair.second = statement;
 
-	ifPair.first = index;
+	ifPair.first = index-numOfElse;
 	ifPair.second = statement;
-
+	
 	ifStmtVec.push(ifPair);
 	if (!containerElements.empty()) {
 		parentPair.first = containerElements.back().first - numOfProc - numOfElse;
 		parentPair.second = index - numOfProc - numOfElse;
 		parentLink.push_back(parentPair);
+		//containerElements.push_back(ifPair);
 	}
 	containerElements.push_back(pair);
 	addToParent(pair.first);
@@ -612,7 +618,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		string varInIf = stmt.substr(ifstmt, thenstmt);
 		int index = pkb->setVarName(varInIf);
 		pkb->setControlVar(i - numOfProc - numOfElse, index);
-		//error found here
+		
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
 			int parentUse = pairedParent.first - numOfProc - numOfElse;
@@ -643,6 +649,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			}
 			if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
 				parentMod = pairedParent.first - numOfProc - numOfElse + 1;
+			//	cout << "added\n";
 			}
 
 			if (!isConstant(modified)) {
@@ -787,6 +794,8 @@ int Parser::isPriority(const char &c)
 void Parser::pushCloseBracket(int stmtNum) {
 	closeBracket.push('}');
 	if (!containerElements.empty()) {
+		//cout << "Container index: " << containerElements.back().first << "\n\n";
+		//cout << "Container: " << containerElements.back().second<< "\n\n";
 		containerElements.pop_back();
 	}
 }
