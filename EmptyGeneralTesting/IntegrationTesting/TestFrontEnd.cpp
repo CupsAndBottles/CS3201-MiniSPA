@@ -134,7 +134,7 @@ namespace IntegrationTesting
 			parser.openFile("simpleTestFrontend.txt");
 			pkb = parser.getPkb();
 
-			string expected = " stamps h beads x x";
+			string expected = " stamps h beads x";
 			string actual = "";
 			vector<int> modifiedVar = pkb->getProcModified(1);
 	

@@ -37,12 +37,21 @@ void Procedure::setEndNo(int stmtNum)
 }
 
 void Procedure::setModifiedVar(int modify) {
-	varModifiedList.push_back(modify);
+	sortVectors(varModifiedList);
+	if (!binary_search(varModifiedList.begin(), varModifiedList.end(), modify)) {
+		varModifiedList.push_back(modify);
+	}
+	varModifiedList.erase(unique(varModifiedList.begin(), varModifiedList.end()), varModifiedList.end());
 
 }
 
 void Procedure::setUsedVar(int use) {
-	varUsedList.push_back(use);
+	sortVectors(varUsedList);
+	if (!binary_search(varUsedList.begin(), varUsedList.end(), use)) {
+		varUsedList.push_back(use);
+	}
+	varUsedList.erase(unique(varUsedList.begin(), varUsedList.end()), varUsedList.end());
+
 }
 
 void Procedure::setCalls(int procIndex)
