@@ -493,3 +493,153 @@ Select ifstat such that Next*(n, ifstat)
 Select BOOLEAN such that Next*(36, 24)
 false
 5000
+100 - Pattern assign
+assign a;
+Select a pattern a(_,_"program"_)
+60, 61, 62
+5000
+101 - Pattern assign
+assign a;
+Select a pattern a("rainbow", _"blue"_)
+12
+5000
+102 - Pattern assign
+assign a; variable v;
+Select a pattern a(v, _"x + y"_)
+31, 38, 49
+5000
+103 - Pattern assign
+assign a;
+Select a pattern a(" z", _)
+28, 35, 43
+5000
+104 - Pattern assign: free expression
+assign a;
+Select a pattern a(_,_)
+1, 2, 3, 6, 8, 10, 12, 13, 16, 17, 18, 19, 21, 22, 26, 27, 28, 29, 31, 32, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 47, 49, 52, 53, 54, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72
+5000
+105 - Pattern assign: exact expression
+assign a;
+Select a pattern a("grey", "black + white + 1")
+13
+5000
+106 - Pattern assign
+assign a;
+Select a pattern a(_, _"a * b"_)
+31, 38
+5000
+107 - Pattern assign
+assign a;
+Select a pattern a(_,_"w + y"_)
+
+5000
+108 - Pattern assign
+assign a;
+Select a pattern a(_, _"99"_)
+1, 2, 21, 33, 35, 39, 62
+5000
+109 - Pattern if
+if ifstat;
+Select ifstat pattern ifstat(_,_,_)
+5, 9, 23, 24, 25
+5000
+110 - Pattern if
+if ifstat; variable v;
+Select v pattern ifstat(v,_,_)
+red, purple, algebra, hard, fail
+5000
+111 - Pattern if(stated variable, _, _)
+if ifstat;
+Select BOOLEAN pattern ifstat("red",_, _)
+true
+5000
+112 - Pattern select a instead of if
+if ifstat;assign a;
+Select a pattern ifstat("algebra",_,_)
+1, 2, 3, 6, 8, 10, 12, 13, 16, 17, 18, 19, 21, 22, 26, 27, 28, 29, 31, 32, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 47, 49, 52, 53, 54, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72
+5000
+113 - Pattern while
+while w;
+Select BOOLEAN pattern w(_,_)
+true
+5000
+114 - Pattern while
+while w; variable v;
+Select v pattern w(v,_)
+orange, blue, rainbow, live, morning, afternoon, grey, random
+5000
+115 - Pattern while
+while w; variable v;
+Select v.varName pattern w("afternoon", _)
+red, yellow, orange, blue, purple, indigo, violet, rainbow, grey, black, white, colours, world, people, live, hard, algebra, a, b, c, x, y, z, fail, w, geometry, triangle, square, polygon, n, eat, sleep, morning, wake, coffee, afternoon, test, program, bugs, night, moon, project, start, end, infinity, circle, green, random
+5000
+116 - Pattern while
+if ifstat; while w;
+Select ifstat.stmt# pattern w("live", _)
+5, 9, 23, 24, 25
+5000
+117 - Pattern while
+while w;
+Select w pattern w("rainbow",_)
+11
+5000
+118 - With
+assign a; stmt s;
+Select s with a.stmt# = s.stmt#
+1, 2, 3, 6, 8, 10, 12, 13, 16, 17, 18, 19, 21, 22, 26, 27, 28, 29, 31, 32, 33, 35, 36, 37, 38, 39, 40, 41, 42, 43, 47, 49, 52, 53, 54, 56, 57, 58, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72
+5000
+119 - With
+assign a; constant c;
+Select a with a.stmt# = c.value
+1, 2, 3, 4, 10, 11
+5000
+120 - With
+if ifstat;
+Select BOOLEAN with ifstat.stmt# = 25
+true
+5000
+121 - With:Impossible
+assign ASsign;
+Select BOOLEAN with ASsign.stmt# = 10000000;
+false
+5000
+122 - With:Impossible
+assign a; while w;
+Select a with a.stmt# = w.stmt#
+false
+5000
+123 - With while
+while w; stmt s;
+Select w with w.stmt# = s.stmt#
+4, 7, 11, 15, 45, 51, 55, 59
+5000
+124 - With while
+while w;
+Select w with w.stmt# = 59
+59
+5000
+125 - With while
+while w;
+Select BOOLEAN with w.stmt# = 1000000
+false
+5000
+126 - With If
+if ifstat; assign a;
+Select BOOLEAN with ifstat.stmt# = a.stmt#
+false
+5000
+127 - With If
+if ifstat;
+Select ifstat with ifstat.stmt# = ifstat.stmt#
+5, 9, 23, 24, 25
+5000
+128 - With If
+if ifstat; while w;
+Select ifstat with ifstat.stmt# = w.stmt#
+
+5000
+129 - With If
+if ifstat; call c;
+Select BOOLEAN with ifstat.stmt# = c.stmt#
+false
+5000

@@ -283,3 +283,12 @@ constant c; while w;
 Select BOOLEAN with c.value = w.stmt#
 true
 5000
+58 - All equal, constant with constant and statement
+constant c; stmt s;
+Select c with c.value = s.stmt#
+34, 4, 2, 45, 5, 8, 19, 41, 30
+5000
+59 - All equal, constant with constant and assignment statement
+assign a; constant c;
+Select c with c.value = a.stmt#
+34, 4, 5, 8

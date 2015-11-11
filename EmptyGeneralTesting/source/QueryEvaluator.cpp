@@ -994,8 +994,8 @@ bool QueryEvaluator::getCommonAttrNames(vector<string> leftResults, vector<strin
 				}
 			}
 			else {
-				resultsForLeftParam = convertNamesToIndexes(mergedResults, clause.getLeftCType());
-				resultsForRightParam = convertNamesToIndexes(mergedResults, clause.getRightCType());
+				resultsForRightParam.insert(resultsForRightParam.end(), resultsForRightParamName.begin(), resultsForRightParamName.end());
+				resultsForLeftParam.insert(resultsForLeftParam.end(), resultsForLeftParamName.begin(), resultsForLeftParamName.end());
 			}
 		}
 
