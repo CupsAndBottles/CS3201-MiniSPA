@@ -152,7 +152,7 @@ namespace IntegrationTesting
 			parser.openFile("simpleTestFrontend.txt");
 			pkb = parser.getPkb();
 
-			string expected = " dream beads coffee d y s i u command a x a x a";
+			string expected = " dream beads coffee d y s i u command x a x a";
 			string actual = "";
 			vector<int> usedVar = pkb->getProcUsed(1);
 
