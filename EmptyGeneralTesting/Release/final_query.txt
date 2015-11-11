@@ -61,7 +61,7 @@ Select ifstat1 such that Parent(ifstat1, ifstat2)
 13 - Parent
 while w1, w2;
 Select w1 such that Parent(w1, w2)
-4, 11, 51, 55
+11, 51, 55
 5000
 14 - Parent
 while w; if ifstat;
@@ -121,7 +121,7 @@ Select w1 such that Parent*(w1, w2)
 25 - ParentT
 while w; if ifstat;
 Select ifstat such that Parent*(ifstat, w)
-5, 9
+5, 9, 23
 5000
 26 - ParentT
 while w; if ifstat;
