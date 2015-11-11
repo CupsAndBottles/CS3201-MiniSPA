@@ -160,7 +160,7 @@ Select a such that Follows(51 ,a)
 5000
 33 - Follows
 call c;
-Select c such that Follows(47 ,c)
+Select c such that Follows(45 ,c)
 48
 5000
 34 - Follows
@@ -171,7 +171,7 @@ Select ifstat such that Follows(22, ifstat)
 35 - Follows
 stmt s1, s2;
 Select s1 such that Follows(s1,s2)
-1, 2, 3, 7, 8, 10, 12, 13, 14, 18, 19, 20, 22, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 45, 46, 47, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 65, 67, 68, 69, 70, 71
+1, 2, 3, 7, 8, 10, 12, 13, 14, 18, 19, 20, 22, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 42, 43, 45, 46, 49, 50, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 65, 67, 68, 69, 70, 71
 5000
 36 - Follows
 stmt s1;
@@ -195,13 +195,13 @@ Select s such that Follows*(4 ,s)
 5000
 40 - FollowsT
 assign a;
-Select a such that Follows*(49 ,a)
-65, 66
+Select a such that Follows*(60 ,a)
+61, 62, 63
 5000
 41 - FollowsT
 call c;
 Select c such that Follows*(c, 66)
-50
+
 5000
 42 - FollowsT
 while w;
@@ -226,7 +226,7 @@ Select s1 such that Follows*(s1,s1)
 46 - FollowsT(defined, defined) True
 
 Select BOOLEAN such that Follows*(49, 66)
-true
+false
 5000
 47 - FollowsT(defined, defined) False
 
@@ -236,27 +236,27 @@ false
 48 - Modifies(s, stated)
 stmt s;
 Select s such that Modifies(s, "live")
-21, 51, 52
+21, 51, 52, 11, 14, 20, 23, 24, 25, 30, 34, 4, 44, 48, 7, 9
 5000
 49 - Modifies(if, stated)
 if ifstat;
 Select ifstat such that Modifies(ifstat, "x")
-23, 24, 25
+9, 23, 24, 25
 5000
 50 - Modifies(w, stated)
 while w;
 Select w such that Modifies(w, "live")
-45, 51
+51, 4, 7, 11
 5000
 51 - Modifies(p, stated)
 procedure p;
 Select p such that Modifies(p, "triangle")
-Math, Shapes
+killerLoops, Home, Math, Shapes
 5000
 52 - Modifies(c, stated)
 call c;
 Select c such that Modifies(c, "triangle")
-20, 46, 50
+20, 46, 50, 14, 30, 34, 44, 48
 5000
 53 - Modifies(a, stated)
 assign a;
@@ -271,7 +271,7 @@ red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, alge
 55 - Modifies(s, v)
 stmt s; variable v;
 Select v such that Modifies(s, v)
-red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, circle, end
+red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, circle, end, black,blue,eat,fail,green,hard,moon,n,random,start,violet,w,white
 5000
 56 - Modifies  Boolean true
 if ifstat;
@@ -296,7 +296,7 @@ true
 60 - Modifies(stated procedure, stated variable)
 
 Select BOOLEAN such that Modifies("killerLoops", "morning")
-false
+true
 5000
 61 - Uses(s, stated variable)
 stmt s;
@@ -326,7 +326,7 @@ Select c such that Uses(c, "afternoon")
 66 - Uses(a, stated variable)
 assign a;
 Select a such that Uses(a, "x")
-22, 42, 43, 49
+22, 42, 43, 49, 31, 38
 5000
 67 - Uses(s, v)
 stmt s; variable v;
@@ -336,12 +336,12 @@ Select s such that Uses(s, v)
 68 - Uses(s, _)
 stmt s;
 Select BOOLEAN such that Uses(s, _)
-true;
+true
 5000
 69 - Uses(s, stated variable)
 stmt s;
 Select s such that Uses(s, "x")
-22, 23, 24, 25, 30, 31, 34, 38, 42, 43, 44, 45, 48, 49
+22, 23, 24, 25, 30, 31, 34, 38, 42, 43, 44, 45, 48, 49, 11,14,20,21,4,7,9
 5000
 70 - Uses(stated stmt, stated variable)
 
