@@ -292,3 +292,4 @@ Select c with c.value = s.stmt#
 assign a; constant c;
 Select c with c.value = a.stmt#
 34, 4, 5, 8
+5000
