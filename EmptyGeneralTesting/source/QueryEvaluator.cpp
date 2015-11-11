@@ -680,12 +680,12 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 		}
 		else if (charac == ')')
 		{	
-			output.push_back(' ');
 			char topCharac = stack.top();
 
 			while (topCharac != '(')
 			{
 				if (topCharac != '}') {
+					output.push_back(' ');
 					output.push_back(topCharac);
 					stack.pop();
 				}
