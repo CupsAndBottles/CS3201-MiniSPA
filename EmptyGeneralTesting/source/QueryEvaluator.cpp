@@ -568,6 +568,7 @@ bool QueryEvaluator::evaluateAssign(Clauses clause) {
 			else {
 				// a(v, "_x + y_")
 				for (size_t i = 0; i < stmtLst.size(); i++) {
+					cout << pkb->getRightExpr(stmtLst[i].first) << endl;
 					if (this->pkb->getRightExpr(stmtLst[i].first).find(expr) != NOT_FOUND) {
 						assignResult.push_back(stmtLst[i].first);
 						varResult.push_back(stmtLst[i].second);
@@ -660,6 +661,7 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 					}
 					else if (o2 != '}') {
 						output.push_back(o2);
+						output.push_back(' ');
 					}
 
 
@@ -677,12 +679,13 @@ string QueryEvaluator::convertToShuntingYard(string statement) {
 			stack.push(charac);
 		}
 		else if (charac == ')')
-		{
+		{	
 			char topCharac = stack.top();
 
 			while (topCharac != '(')
 			{
 				if (topCharac != '}') {
+					output.push_back(' ');
 					output.push_back(topCharac);
 					stack.pop();
 				}
