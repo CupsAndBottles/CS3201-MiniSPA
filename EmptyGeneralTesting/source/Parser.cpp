@@ -148,7 +148,7 @@ void Parser::Procedure() {
 		else {
 			pkb->setType(Enum::ASSIGN);
 			processExpressions((*i).first, (*i).second);
-			handleModifyAndUses((*i).first, (*i).second);
+		//	handleModifyAndUses((*i).first, (*i).second);
 			handleFollows((*i).first, (*i).second);
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
@@ -474,6 +474,7 @@ void Parser::processExpressions(int index, string statement) {
 				int index = pkb->setVarName(s);
 				pkb->setProcNames(index, currProcName);
 			}
+			handleModifyAndUses(index, statement);
 			s = "";		
 		}
 		if (c == '}') {
@@ -648,7 +649,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 				parentMod = pairedParent.first - numOfProc;
 			}
 			if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-				parentMod = pairedParent.first - numOfProc - numOfElse + 1;
+				parentMod = pairedParent.first - numOfProc - numOfElse + numOfElse;
 			//	cout << "added\n";
 			}
 
@@ -678,7 +679,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 							parentUse = pairedParent.first - numOfProc;
 						}
 						if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-							parentUse = pairedParent.first - numOfProc - numOfElse + 1;
+							parentUse = pairedParent.first - numOfProc - numOfElse + numOfElse;
 						}
 
 						if (!isConstant(s)) {
@@ -706,21 +707,6 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			}
 		}
 	}
-}
-
-//method for testing
-string Parser::getParentChild() {
-	string output;
-	while (!parentLink.empty()) {
-		pair<int, int> parentChild = parentLink.back();
-		int parent = parentChild.first;
-		int child = parentChild.second;
-		output.append("Parent: " + to_string(parent) + " Child: " + to_string(child) + "| ");
-		if (!parentLink.empty()) {
-			parentLink.pop_back();
-		}
-	}
-	return output;
 }
 
 string Parser::getExpression() {
