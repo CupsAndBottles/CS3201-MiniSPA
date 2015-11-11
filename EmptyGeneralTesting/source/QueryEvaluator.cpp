@@ -419,12 +419,12 @@ bool QueryEvaluator::evaluateWhile(Clauses clause) {
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::WHILE) {
 				if (pkb->getControlVar(i) == controlVariable) {
-					cout << "push back" << endl;
+//					cout << "push back" << endl;
 					patternSyn.push_back(i);
-					cout << i << endl;
-					cout << "after push back" << endl;
+//					cout << i << endl;
+//					cout << "after push back" << endl;
 				}
-				cout << patternSyn.size() << endl;
+//				cout << patternSyn.size() << endl;
 			}
 		}
 		intermediateResult = { patternSyn };
@@ -484,12 +484,12 @@ bool QueryEvaluator::evaluateIf(Clauses clause) {
 		for (int i = 1; i <= pkb->getNoOfStmt(); i++) {
 			if (pkb->getType(i) == Enum::TYPE::IF) {
 				if (pkb->getControlVar(i) == controlVariable) {
-					cout << "push back" << endl;
+//					cout << "push back" << endl;
 					patternSyn.push_back(i);
-					cout << i << endl;
-					cout << "after push back" << endl;
+//					cout << i << endl;
+//					cout << "after push back" << endl;
 				}
-				cout << patternSyn.size() << endl;
+//				cout << patternSyn.size() << endl;
 			}
 		}
 		intermediateResult = { patternSyn };
@@ -845,7 +845,6 @@ bool QueryEvaluator::evaluateValidityOfIntLeftRef(Clauses clause) {
 		}
 		break;
 	case Enum::TYPE::WHILE:
-		cout << clause.getRightCType();
 		if (clause.getRightCType() == Enum::TYPE::STATEMENT || clause.getRightCType() == Enum::TYPE::CONSTANT
 			|| clause.getRightCType() == Enum::TYPE::WHILE) {
 			return getCommonAttrValues(clause);
@@ -1138,7 +1137,7 @@ string QueryEvaluator::convertToString(int index, Clauses syn) {
 		return to_string(this->pkb->getConstantValue(index));
 		break;
 	default:
-		cout << "Convert to String, no TYPE matches" << endl;
+	//	cout << "Convert to String, no TYPE matches" << endl;
 		return EMPTY_STRING;
 		break;
 	}
@@ -1187,7 +1186,7 @@ vector<Synonym> QueryEvaluator::mergeWithinGroup(vector<vector<int>> group) {
 		for (size_t j = 1; j < group.at(i).size() ; j++) {
 			if (group.at(i).size() != 1) {
 				syn = mergeSyn(syn ,this->results.at(group[i][j]));
-				cout << "mergeSyn" << endl;
+	//			cout << "mergeSyn" << endl;
 			}
 			else {
 				syn = this->results.at(group[i][j]);
