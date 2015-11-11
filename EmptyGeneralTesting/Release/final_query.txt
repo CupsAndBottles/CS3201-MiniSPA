@@ -26,7 +26,7 @@ Select ifstat
 6 - All variables
 variable v;
 Select v
-red, yellow, orange, blue, purple, indigo, violet, rainbow, grey, black, white, colours, world, people, live, hard, algebra, a, b, c, x, y, z, fail, w, geometry, triangle, square, polygon, n, eat, sleep, morning, wake, coffee, afternoon, test, program, bugs, night, moon, project, start, end, infinity, circle
+red, yellow, orange, blue, purple, indigo, violet, rainbow, grey, black, white, colours, world, people, live, hard, algebra, a, b, c, x, y, z, fail, w, geometry, triangle, square, polygon, n, eat, sleep, morning, wake, coffee, afternoon, test, program, bugs, night, moon, project, start, end, infinity, circle, green, random
 5000
 7 - All procedures
 procedure p;
