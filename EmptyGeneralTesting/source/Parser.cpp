@@ -586,7 +586,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 	}
 	replace(stmt.begin(), stmt.end(), '(', ' ');
 	replace(stmt.begin(), stmt.end(), ')', ' ');
-	remove_if(stmt.begin(), stmt.end(), isspace);
+	stmt.erase(remove_if(stmt.begin(), stmt.end(), isspace), stmt.end());
 
 	//add while var into varTable uses
 	if (stmt.find("while") != std::string::npos) {
