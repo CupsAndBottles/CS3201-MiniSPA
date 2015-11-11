@@ -6,7 +6,7 @@ procedure Paper {
 		computer = tables + pen * cup - homework;			\\5
 		if hunger {							\\6
 			eat = food;						\\7
-			lunch = soup * rice + 2					\\8
+			lunch = soup * rice + 2;				\\8
 		} else {
 			call Sleep;						\\9
 			pen = sleep - 45;					\\10

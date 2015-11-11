@@ -118,17 +118,17 @@ variable v;
 Select BOOLEAN with v.varName = "time"
 false
 5000
-25 - Boolean true with statement numbers
+25 - Boolean true with given statement numbers
 stmt s;
 Select BOOLEAN with s.stmt# = 9
 true
 5000
-26 - Boolean false with statement numbers
+26 - Boolean false given out of range with statement numbers
 stmt s;
 Select BOOLEAN with s.stmt# = 88
 false
 5000
-27 - Boolean true with assignment statements
+27 - Boolean true with given assignment statements
 assign a;
 Select BOOLEAN with a.stmt# = 18
 true
@@ -153,7 +153,7 @@ assign a;
 Select BOOLEAN with a.stmt# = 90
 false
 5000
-32 - Boolean true with call statements
+32 - Boolean true with given call statements
 call c;
 Select BOOLEAN with c.stmt# = 23
 true
@@ -178,7 +178,7 @@ call c;
 Select BOOLEAN with c.stmt# = 75
 false
 5000
-37 - Boolean true with if statements
+37 - Boolean true with given if statements
 if ifstat;
 Select BOOLEAN with ifstat.stmt# = 6
 true
@@ -201,5 +201,30 @@ false
 41 - Boolean false given out of range with if statements
 if ifstat;
 Select BOOLEAN with ifstat.stmt# = 100
+false
+5000
+42 - Boolean true with given while statements
+while w;
+Select BOOLEAN with w.stmt# = 45
+true
+5000
+43 - Boolean false given assignment with while statements
+while w;
+Select BOOLEAN with w.stmt# = 57
+false
+5000
+44 - Boolean false given call with while statements
+while w;
+Select BOOLEAN with w.stmt# =  40
+false
+5000
+45 - Boolean false given if with while statements
+while w;
+Select BOOLEAN with w.stmt# = 41
+false
+5000
+46 - Boolean false given out of range with while statements
+while w;
+Select BOOLEAN with w.stmt# = 58
 false
 5000
