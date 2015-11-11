@@ -50,8 +50,7 @@ string Parser::openFile(string fileName) {
 
 	else
 	{
-		output = "Unable to open file";
-		cout << output;
+		throw "Unable to open file.\n";
 	}
 	return output;
 }
@@ -119,7 +118,7 @@ void Parser::Procedure() {
 			pkb->setType(Enum::WHILE);
 			processWhile((*i).first, (*i).second);
 			handleModifyAndUses((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
 			addToParent((*i).first-numOfElse-numOfProc);
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
@@ -127,12 +126,13 @@ void Parser::Procedure() {
 		else if (stmt.find("if") != std::string::npos) {
 			pkb->setType(Enum::IF);
 			processIf((*i).first, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
 		}
 		else if (stmt.find("else") != std::string::npos) {
 			processElse((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
 			currElse = (*i).first - numOfProc - numOfElse + 1;
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
@@ -140,16 +140,15 @@ void Parser::Procedure() {
 		else if (stmt.find("call") != std::string::npos) {
 			pkb->setType(Enum::CALLS);
 			processCalls((*i).first, (*i).second);
-			//handleModifyAndUses((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
 		}
 		else {
 			pkb->setType(Enum::ASSIGN);
 			processExpressions((*i).first, (*i).second);
-			//	handleModifyAndUses((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
+			handleModifyAndUses((*i).first, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
 			processNextPrev((*i).first, (*i).second);
 			endIndex = (*i).first;
 		}
@@ -429,7 +428,6 @@ void Parser::processIf(int index, string statement){
 	containerElements.push_back(ifPair);
 	addToParent(ifPair.first);
 	handleModifyAndUses(index, statement);
-	handleFollows(index, statement);
 }
 
 
@@ -461,7 +459,7 @@ void Parser::processExpressions(int index, string statement) {
 				int index = pkb->setVarName(s);
 				pkb->setProcNames(index, currProcName);
 			}
-			handleModifyAndUses(index, statement);
+		//	handleModifyAndUses(index, statement);
 			s = "";
 		}
 		if (c == '}') {
@@ -589,7 +587,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		pkb->setControlVar(i - numOfProc - numOfElse, index);
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentUse = pairedParent.first - numOfProc - numOfElse;
+			int parentUse = pairedParent.first;
 			if (!isConstant(varInWhile)) {
 				pkb->setUsedBy(varInWhile, parentUse);
 				pkb->setUsedVar(parentUse, varInWhile);
@@ -614,7 +612,7 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentUse = pairedParent.first - numOfProc - numOfElse;
+			int parentUse = pairedParent.first;
 			if (!isConstant(varInIf)) {
 				pkb->setUsedBy(varInIf, parentUse);
 				pkb->setUsedVar(parentUse, varInIf);
@@ -634,17 +632,8 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		string s;
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentMod = pairedParent.first - numOfProc - numOfElse;
-
+			int parentMod = pairedParent.first;
 			string parentStmt = pairedParent.second;
-			if (parentStmt.find("while") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-				parentMod = pairedParent.first - numOfProc;
-			}
-			if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-				parentMod = pairedParent.first - numOfProc - numOfElse + numOfElse;
-				//	cout << "added\n";
-			}
-
 			if (!isConstant(modified)) {
 				pkb->setModifiedBy(modified, parentMod);
 				pkb->setModifies(parentMod, modified);
@@ -664,16 +653,9 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 				if (!s.empty()) {
 					if (!containerElements.empty()) {
 						pair<int, string> pairedParent = containerElements.back();
-						int parentUse = pairedParent.first - numOfProc - numOfElse;
+						int parentUse = pairedParent.first;
 
 						string parentStmt = pairedParent.second;
-						if (parentStmt.find("while") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-							parentUse = pairedParent.first - numOfProc;
-						}
-						if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-							parentUse = pairedParent.first - numOfProc - numOfElse + numOfElse;
-						}
-
 						if (!isConstant(s)) {
 
 							pkb->setUsedBy(s, parentUse);
@@ -719,7 +701,7 @@ void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 }
 
 void Parser::Error() {
-	throw "ProcName: " + procName + " does not exist.\n";
+	throw "Error parsing.\n";
 }
 
 int Parser::isPriority(const char &c)
@@ -788,23 +770,26 @@ void Parser::handleFollows(int index, string stmt) {
 	pair<int, int> paired;
 	if (prevStmt.empty()) {
 		prevStmt = stmt;
-		currFollows.push_back(index - numOfProc - numOfElse);
+		currFollows.push_back(index);
 	}
 	else
 	{
 		if (prevStmt.find("{") != std::string::npos) {
-			currFollows.push_back(index - numOfProc - numOfElse);
+			currFollows.push_back(index);
 			prevStmt = currStmt;
 		}
 		else if (prevStmt.find("}") != std::string::npos) {
 			if (currStmt.find("else") != std::string::npos) {
+				size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
+				for (size_t i = 0; i < n;i++) {
+					if (!currFollows.empty()) {
+						currFollows.pop_back();
+					}
+				}
 				prevStmt = currStmt;
-				currFollows.pop_back();
 			}
-
 			else {
 				size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
-				//cout << prevStmt << "\n";
 				for (size_t i = 0; i < n;i++) {
 					if (!currFollows.empty()) {
 						currFollows.pop_back();
@@ -812,25 +797,24 @@ void Parser::handleFollows(int index, string stmt) {
 				}
 
 				paired.first = currFollows.back();
-				paired.second = index - numOfProc - numOfElse;
+				paired.second = index;
 
 				if (!currFollows.empty()) {
 					currFollows.pop_back();
 				}
-				currFollows.push_back(index - numOfProc - numOfElse);
+				currFollows.push_back(index);
 				followLink.push_back(paired);
 				prevStmt = currStmt;
 			}
 		}
 		else {
-
 			paired.first = currFollows.back();
-			paired.second = index - numOfProc - numOfElse;
+			paired.second = index;
 
 			if (!currFollows.empty()) {
 				currFollows.pop_back();
 			}
-			currFollows.push_back(index - numOfProc - numOfElse);
+			currFollows.push_back(index);
 			followLink.push_back(paired);
 			prevStmt = currStmt;
 		}

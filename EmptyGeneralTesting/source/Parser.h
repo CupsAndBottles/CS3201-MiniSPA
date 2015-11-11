@@ -61,9 +61,6 @@ public:
 	void processIf(int index, string statement);
 	void processElse(int index, string statement);
 	void handleModifyAndUses(int i, string stmt);
-	string getParentChild();
-	string getExpression();
-	string getFollow();
 	void setExprInStmtTable(int index, list<char> exprOutput);
 	void Error();
 	int isPriority(const char & c);
@@ -73,7 +70,6 @@ public:
 	void setProcEndNum(int procNum, int stmtNum);
 	void pushOpenBracket();
 	bool isVariable(char c);
-	//	void insertIntoVarTable(int stmtNum, char var);
 	bool constantValue;
 
 	string userInput;
