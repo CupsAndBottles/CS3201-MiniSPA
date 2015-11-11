@@ -98,9 +98,9 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 
 	vector<vector<int>> syn = groupSynonym(this->results);
 	
-//	cout << "after grouping" << endl;
+/*	cout << "after grouping" << endl;
 
-/*	for (size_t i = 0; i < syn.size(); i++) {
+	for (size_t i = 0; i < syn.size(); i++) {
 		for (size_t j = 0; j < syn[i].size(); j++) {
 			cout << syn[i][j] << " ";
 		}
@@ -124,9 +124,9 @@ list<string> QueryEvaluator::evaluateQuery(QueryTree tree)
 */
 	vector<Synonym> afterMerging = mergeWithinGroup(synGroup);
 
-//	cout << "After merging" << endl; 
+/*	cout << "After merging" << endl; 
 
-/*	for (size_t i = 0; i < afterMerging.size(); i++) {
+	for (size_t i = 0; i < afterMerging.size(); i++) {
 		afterMerging.at(i).printSyn();
 	}
 */
@@ -966,8 +966,36 @@ bool QueryEvaluator::getCommonAttrNames(vector<string> leftResults, vector<strin
 		return false;
 	}
 	else {
-		vector<int> resultsForLeftParam = convertNamesToIndexes(mergedResults, clause.getLeftCType());
-		vector<int> resultsForRightParam = convertNamesToIndexes(mergedResults, clause.getRightCType());
+		vector<int> resultsForLeftParam = vector<int>();
+		vector<int> resultsForRightParam = vector<int>();
+
+		for (size_t i = 0; i < mergedResults.size(); i++) {
+			vector<string> name = vector<string>{ mergedResults.at(i) };
+			vector<int> resultsForLeftParamName = convertNamesToIndexes(name, clause.getLeftCType());
+			vector<int> resultsForRightParamName = convertNamesToIndexes(name, clause.getRightCType());
+				
+			if (resultsForLeftParamName.size() != resultsForRightParamName.size()) { // can only happen when call in present
+				vector<int> temp = vector<int>();
+				if (clause.getLeftCType() == Enum::TYPE::CALLS) {
+					resultsForLeftParam.insert(resultsForLeftParam.end(), resultsForLeftParamName.begin(), resultsForLeftParamName.end());
+					temp.assign(resultsForLeftParamName.size(), resultsForRightParamName.front());
+					resultsForRightParam.insert(resultsForRightParam.end(), temp.begin(), temp.end());
+				}
+				else if (clause.getRightCType() == Enum::TYPE::CALLS){
+					resultsForRightParam.insert(resultsForRightParam.end(), resultsForRightParamName.begin(), resultsForRightParamName.end());
+					temp.assign(resultsForRightParamName.size(), resultsForLeftParamName.front());
+					resultsForLeftParam.insert(resultsForLeftParam.end(), temp.begin(), temp.end());
+				}
+				else {
+
+				}
+			}
+			else {
+				resultsForLeftParam = convertNamesToIndexes(mergedResults, clause.getLeftCType());
+				resultsForRightParam = convertNamesToIndexes(mergedResults, clause.getRightCType());
+			}
+		}
+
 		vector<vector<int>> resultsToStore = { resultsForLeftParam, resultsForRightParam };
 		storeResults(type, synString, resultsToStore);
 		return true;
@@ -1443,7 +1471,6 @@ list<string> QueryEvaluator::evaluateSelect(vector<Synonym> groupedSyns, vector<
 	}
 
 	vector<Synonym> selectedSyns = getValuesOfSelectedSyns(groupedSyns, select);
-	
 	if (!this->nonCommonSyn.empty()) {
 		for (size_t syn = 0; syn < this->nonCommonSyn.size(); syn++) {
 			vector<vector<int>> resultsToStore;
