@@ -266,12 +266,12 @@ Select a such that Modifies(a, "x")
 54 - Modifies(s, _)
 stmt s; variable v;
 Select v such that Modifies(s, _)
-red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, circle, end
+red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, black, blue, eat, fail, green, hard, moon, n, random, start, violet, w, white, circle, end
 5000
 55 - Modifies(s, v)
 stmt s; variable v;
 Select v such that Modifies(s, v)
-red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, circle, end, black,blue,eat,fail,green,hard,moon,n,random,start,violet,w,white
+red, yellow, orange, purple, indigo, rainbow, grey, colours, world, people, algebra, x, y, z, a, b, c, geometry, live, sleep, morning, wake, coffee, test, program, bugs, afternoon, night, project, triangle, square, polygon, infinity, circle, end
 5000
 56 - Modifies  Boolean true
 if ifstat;
