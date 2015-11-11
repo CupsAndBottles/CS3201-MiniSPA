@@ -135,7 +135,7 @@ vector<vector<string>> ParserOfType::setClauseType(int clauseType, string synony
 }
 
 //0 -> progLine, 1 -> constant
-vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, string synonym) {
+vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, string synonym, vector<string> type, vector<string> synType) {
 	vector<vector<string>> synAndType;
 
 	synAndType.push_back(vector <string>()); //stringVal
@@ -156,6 +156,16 @@ vector<vector<string>> ParserOfType::setDigitTypeAndSyn(string clauseType, strin
 		synAndType[2].push_back(synonym);
 		synAndType[3].push_back("0");
 		return synAndType;
+	}
+	else if (isBeingDeclared(synonym, synType) != -1) {
+		int pos = isBeingDeclared(synonym, synType);
+		if (type.at(pos).compare("prog_line") == 0 || type.at(pos).compare("constant") == 0 || type.at(pos).compare("stmt") == 0) {
+			synAndType[0].push_back(synonym);
+			synAndType[1].push_back(type.at(pos));
+			synAndType[2].push_back(synonym);
+			synAndType[3].push_back("0");
+			return synAndType;
+		}
 	}
 	else {
 		throw ParserException("2nd argument in with clauses should be integer since 1st argument take in an integer");

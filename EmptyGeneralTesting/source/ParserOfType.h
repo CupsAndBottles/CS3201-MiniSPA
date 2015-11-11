@@ -14,7 +14,8 @@ public:
 
 	vector<vector<string>> setType(int clauseType, string synonym, vector<string> type, vector<string> synonymType, string indication);
 	vector<vector<string>> setClauseType(int clauseType, string synonym, vector<string> type, vector<string> synonymType);
-	vector<vector<string>> setDigitTypeAndSyn(string clauseType, string synonym);
+	vector<vector<string>> setDigitTypeAndSyn(string clauseType, string synonym, vector<string> type);
+	vector<vector<string>> setDigitTypeAndSyn(string clauseType, string synonym, vector<string> type, vector<string> synType);
 	vector<vector<string>> setVariableTypeAndSyn(string synonym);
 	vector<vector<string>> setProcedureTypeAndSyn(string synonym, string clauseType);
 	vector<vector<string>> setDeclaredSynAndType(string synonym, vector<string> type, vector<string> synonymType);
