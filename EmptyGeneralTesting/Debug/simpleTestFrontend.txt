@@ -1,0 +1,24 @@
+procedure Dream {
+beads = command + 10;				\\1
+while coffee {					\\2
+	if dream then{				\\3
+         stamps = beads+ coffee;		\\4						
+	}else{					
+	x = x * y + d + y * a; }		\\5
+h=s+i*u;}					\\6
+beads = command + 10;				\\7
+}	
+
+procedure Hope {
+call Dream;					\\8
+if a then {					\\9
+	x = x * a; }				\\10
+else {
+	x = x + a; }}				\\11
+
+procedure School{
+dreams=work+2;					\\12
+while t {					\\13			
+x = d + 5 * y + z;				\\14
+t = t - 1; }					\\15
+d = x + d;}					\\16
