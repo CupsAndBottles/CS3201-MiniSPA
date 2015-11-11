@@ -219,10 +219,10 @@ void ParserTypeWithSyn::parseWithTypeWithSyn(vector<vector<string>> withSynonym,
 					temp = parserOfType.setVariableTypeAndSyn(withSynonym[i].at(k));
 				}
 				else if (withSynonym[i].at(k - 1).compare("value") == 0 || withSynonym[i].at(k - 1).compare("stmt#") == 0) {
-					temp = parserOfType.setDigitTypeAndSyn(withSynonym[i].at(k - 1),  withSynonym[i].at(k));
+					temp = parserOfType.setDigitTypeAndSyn(withSynonym[i].at(k - 1), withSynonym[i].at(k), type, synonym);
 				}
 				else if (withSynAndType[1].at(size).compare("prog_line") == 0) {
-					temp = parserOfType.setDigitTypeAndSyn(withSynAndType[1].at(size), withSynonym[i].at(k));
+					temp = parserOfType.setDigitTypeAndSyn(withSynAndType[1].at(size), withSynonym[i].at(k), type, synonym);
 				}
 				
 				if (temp.size() == 0) {
