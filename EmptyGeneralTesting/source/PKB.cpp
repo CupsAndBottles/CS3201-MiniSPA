@@ -1108,11 +1108,15 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 				//extractFollowedByT(stmt1);
 			//}
 			followedByT = stmtTable.at(stmt1).getFollowedByT();
+			
 			if (followedByT.size() > 0) {
 				for (size_t i = 0; i < followedByT.size(); i++) {
-					if(stmtTable.at(followedByT.at(i)).getType()== type2)
+					//cout << followedByT.at(i);
+					if (stmtTable.at(followedByT.at(i)).getType() == type2 || type2 == Enum::TYPE::STATEMENT)
 					results.push_back(make_pair(stmt1, followedByT.at(i)));
+
 				}
+				
 			}
 		}
 		else {
@@ -1131,6 +1135,7 @@ std::vector<pair<int, int>> PKB::getFollowsT(Enum::TYPE type1, int stmt1, Enum::
 			}
 		}
 	}
+
 	return results;
 
 }

@@ -140,7 +140,7 @@ std::vector<int> DesignExtractor::extractFollowedByT(vector<int> col, int stmtNu
 			}
 		}
 	}
-
+	
 	return FollowedByT;
 }
 
