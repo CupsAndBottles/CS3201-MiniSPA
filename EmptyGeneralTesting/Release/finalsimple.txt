@@ -1,5 +1,5 @@
-procedure Paper {
-	call Pencil;								\\1
+procedure paper{
+	call pencil;								\\1
 	while pen {								\\2
 		tables = 34;							\\3
 		chair = 4 * tables;						\\4
@@ -8,7 +8,7 @@ procedure Paper {
 			eat = food;						\\7
 			lunch = soup * rice + 2;				\\8
 		} else {
-			call Sleep;						\\9
+			call sleep;						\\9
 			pen = sleep - 45;					\\10
 			while television {					\\11
 				if music {					\\12
@@ -24,13 +24,13 @@ procedure Paper {
 	}
 	wash = dinner + cup;							\\18
 }
-procedure Pencil {
+procedure pencil{
 	if dinner {								\\19
 		rice = 8 + music;						\\20
-		call Sleep;							\\21
+		call sleep;							\\21
 	} else {
 		food = rice + music;						\\22
-		call Restaurant;						\\23
+		call restaurant;						\\23
 	}
 	while cup {								\\24
 		if drink {							\\25
@@ -50,13 +50,13 @@ procedure Pencil {
 		cup = wash * food;						\\34
 	}
 }
-procedure Sleep	{
+procedure sleep{
 	homework = sleep;							\\35
 	if sleep {								\\36
 		book = write + pencil * pen;					\\37
 		while lunch {							\\38
 			computer = rice - soup;					\\39
-			call Restaurant;					\\40
+			call restaurant;					\\40
 		}
 		if write {							\\41
 			wash = wash + 19;					\\42
@@ -67,7 +67,7 @@ procedure Sleep	{
 		sleep = homework + homework;					\\44
 	}
 }
-procedure Restaurant {
+procedure restaurant{
 	while cup {								\\45
 		drink = rice;							\\46
 		rice = soup;							\\47
@@ -87,4 +87,3 @@ procedure Restaurant {
 		dinner = 30;							\\57
 	}
 }
-		

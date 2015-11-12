@@ -50,8 +50,7 @@ string Parser::openFile(string fileName) {
 
 	else
 	{
-		output = "Unable to open file";
-		cout << output;
+		throw "Unable to open file.\n";
 	}
 	return output;
 }
@@ -107,50 +106,51 @@ list<pair<int, string>> Parser::splitLines(string lines)
 
 void Parser::Procedure() {
 	list<pair<int, string >>::iterator i;
-	int endIndex=0;
+	int endIndex = 0;
 	for (i = (lines).begin(); i != (lines).end(); ++i) {
 		string stmt = (*i).second;
 		//cout << stmt << "\n";
 		if (stmt.find("procedure") != std::string::npos) {
 			processProcedure((*i).first, (*i).second);
-			processNextPrev((*i).first, (*i).second);
+			processNextPrev((*i).first - numOfProc - numOfElse, (*i).second);
 		}
 		else if (stmt.find("while") != std::string::npos) {
 			pkb->setType(Enum::WHILE);
 			processWhile((*i).first, (*i).second);
-			handleModifyAndUses((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
-			addToParent((*i).first);
-			processNextPrev((*i).first, (*i).second);
+			handleModifyAndUses((*i).first- numOfProc - numOfElse, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
+			addToParent((*i).first-numOfElse-numOfProc);
+			processNextPrev((*i).first - numOfProc - numOfElse, (*i).second);
 			endIndex = (*i).first;
 		}
 		else if (stmt.find("if") != std::string::npos) {
 			pkb->setType(Enum::IF);
 			processIf((*i).first, (*i).second);
-			processNextPrev((*i).first, (*i).second);
+			handleModifyAndUses((*i).first - numOfProc - numOfElse, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
+			processNextPrev((*i).first - numOfProc - numOfElse, (*i).second);
 			endIndex = (*i).first;
 		}
 		else if (stmt.find("else") != std::string::npos) {
 			processElse((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
-			currElse = (*i).first - numOfProc-numOfElse+1;
-			processNextPrev((*i).first, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
+			currElse = (*i).first - numOfProc - numOfElse + 1;
+			processNextPrev((*i).first - numOfProc - numOfElse, (*i).second);
 			endIndex = (*i).first;
 		}
 		else if (stmt.find("call") != std::string::npos) {
 			pkb->setType(Enum::CALLS);
 			processCalls((*i).first, (*i).second);
-			//handleModifyAndUses((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
-			processNextPrev((*i).first, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
+			processNextPrev((*i).first - numOfProc - numOfElse, (*i).second);
 			endIndex = (*i).first;
 		}
 		else {
 			pkb->setType(Enum::ASSIGN);
 			processExpressions((*i).first, (*i).second);
-		//	handleModifyAndUses((*i).first, (*i).second);
-			handleFollows((*i).first, (*i).second);
-			processNextPrev((*i).first, (*i).second);
+			handleModifyAndUses((*i).first - numOfProc - numOfElse, (*i).second);
+			handleFollows((*i).first - numOfProc - numOfElse, (*i).second);
+			processNextPrev((*i).first - numOfProc - numOfElse, (*i).second);
 			endIndex = (*i).first;
 		}
 
@@ -201,10 +201,10 @@ void Parser::addUses() {
 
 void Parser::setRelationsInTable() {
 	pkb->setChildren(parentLink);
-    pkb->setFollows(followLink);
+	pkb->setFollows(followLink);
 	string procName = pkb->setProcCalls(callsLink);
 	if (!procName.empty()) {
-		throw "ProcName: " + procName +" does not exist.\n";
+		throw "ProcName: " + procName + " does not exist.\n";
 	}
 	pkb->setStmtNumProcCalled(stmtNoAndCalls);
 }
@@ -213,95 +213,95 @@ void Parser::processNextPrev(int index, string stmt)
 {
 	if (pStmt.empty()) {
 		pStmt = stmt;
-		pStmtIndex = index - numOfProc - numOfElse;
+		pStmtIndex = index;
 	}
 	else {
 
 		if (pStmt.find("}") != std::string::npos && !ifIndex.empty() && stmt.find("else") == std::string::npos) {
 			while (!ifIndex.empty()) {
-				pkb->setNext(ifIndex.back(), index - numOfProc - numOfElse);
-				pkb->setPrev(index - numOfProc - numOfElse,ifIndex.back());
+				pkb->setNext(ifIndex.back(), index);
+				pkb->setPrev(index, ifIndex.back());
 				ifIndex.pop_back();
 			}
 		}
 
 		if (pStmt.find("else") != std::string::npos) {
-			pkb->setPrev(index - numOfProc - numOfElse, ifIndexStmt.back());
-			pkb->setNext(ifIndexStmt.back(), index - numOfProc - numOfElse );
-
+			pkb->setPrev(index, ifIndexStmt.back());
+			pkb->setNext(ifIndexStmt.back(), index);
 		}
+
 		if (stmt.find("procedure") == std::string::npos && !whileIndex.empty()) {
 			size_t n = count(pStmt.begin(), pStmt.end(), '}');
 			for (size_t i = 0; i < n;i++) {
 				if (!whileIndex.empty()) {
-					pkb->setNext(whileIndex.back(), index - numOfProc - numOfElse);
-					pkb->setPrev(index - numOfProc - numOfElse, whileIndex.back());
+					pkb->setNext(whileIndex.back(), index);
+					pkb->setPrev(index, whileIndex.back());
 					whileIndex.pop_back();
 				}
 			}
 		}
 		if (stmt.find("procedure") != std::string::npos) {
 			pStmt = stmt;
-			pStmtIndex = index - numOfProc - numOfElse;
+			pStmtIndex = index;
 			whileIndex.clear();
 		}
 		else if (stmt.find("while") != std::string::npos) {
-			indexAndType.push_back(make_pair(1, index - numOfProc - numOfElse));
+			indexAndType.push_back(make_pair(1, index));
 			pStmt = stmt;
-			pStmtIndex = index - numOfProc - numOfElse;
-			pkb->setNext(index - numOfProc - numOfElse, index - numOfProc - numOfElse+1);
+			pStmtIndex = index;
+			pkb->setNext(index, index + 1);
 		}
 		else if (stmt.find("if") != std::string::npos) {
-			indexAndType.push_back(make_pair(2, index - numOfProc - numOfElse));
-			ifIndexStmt.push_back(index - numOfProc - numOfElse);
-			pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+			indexAndType.push_back(make_pair(2, index));
+			ifIndexStmt.push_back(index);
+			pkb->setPrev(index, pStmtIndex);
 			pStmt = stmt;
-			pStmtIndex = index - numOfProc - numOfElse;
-			pkb->setNext(index - numOfProc - numOfElse, index - numOfProc - numOfElse + 1);
-		
+			pStmtIndex = index;
+			pkb->setNext(index, index + 1);
+
 		}
 		else if (stmt.find("else") != std::string::npos) {
-			indexAndType.push_back(make_pair(3, index - numOfProc - numOfElse));
+			indexAndType.push_back(make_pair(3, index));
 			pStmt = stmt;
-			pStmtIndex = index - numOfProc - numOfElse;
+			pStmtIndex = index;
 
 		}
 		else {
 			if (stmt.find("}") != std::string::npos) {
 				size_t n = count(stmt.begin(), stmt.end(), '}');
-				for (size_t i = 0; i < n;i++) {
+				for (int i = 0; i < n;i++) {
 					if (!indexAndType.empty()) {
 						if (indexAndType.back().first == 1) {
-							pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
-							pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
-							pkb->setNext(index - numOfProc - numOfElse, indexAndType.back().second);
-							pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
+							pkb->setPrev(index, pStmtIndex);
+							pkb->setNext(pStmtIndex, index);
+							pkb->setNext(index, indexAndType.back().second);
+							pkb->setPrev(indexAndType.back().second, index);
 							whileIndex.push_back(indexAndType.back().second);
 						}
 						else if (indexAndType.back().first == 2) {
-							ifIndex.push_back(index - numOfProc - numOfElse);
-							pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+							ifIndex.push_back(index);
+							pkb->setPrev(index, pStmtIndex);
 							pair<int, int> currIf = indexAndType.back();
 							indexAndType.pop_back();
 							if (!indexAndType.empty()) {
-								pkb->setNext(index-numOfProc-numOfElse,indexAndType.back().second);
-								pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
+								pkb->setNext(index, indexAndType.back().second);
+								pkb->setPrev(indexAndType.back().second, index);
 
 							}
 							indexAndType.push_back(currIf);
 						}
 						else if (indexAndType.back().first == 3) {
-							ifIndex.push_back(index - numOfProc - numOfElse);
+							ifIndex.push_back(index);
 							ifIndexStmt.pop_back();
 							if (!indexAndType.empty() && indexAndType.size()>1) {
 								indexAndType.pop_back();
-								pkb->setNext(index - numOfProc - numOfElse, indexAndType.back().second);
-								pkb->setPrev(indexAndType.back().second, index - numOfProc - numOfElse);
+								pkb->setNext(index, indexAndType.back().second);
+								pkb->setPrev(indexAndType.back().second, index);
 							}
 						}
 						indexAndType.pop_back();
 					}
-				/*	else {
+					/*	else {
 					pkb->setNext(pStmtIndex, index - numOfProc - numOfElse);
 					pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
 					}*/
@@ -310,13 +310,13 @@ void Parser::processNextPrev(int index, string stmt)
 			else {
 				if (pStmt.find("procedure") == std::string::npos) {
 					if (pStmt.find("}") == std::string::npos && pStmt.find("else") == std::string::npos) {
-						pkb->setPrev(index - numOfProc - numOfElse, pStmtIndex);
+						pkb->setPrev(index, pStmtIndex);
 					}
 				}
-				pkb->setNext(index - numOfProc - numOfElse, index - numOfProc - numOfElse + 1);
+				pkb->setNext(index, index + 1);
 			}
 			pStmt = stmt;
-			pStmtIndex = index - numOfProc - numOfElse;
+			pStmtIndex = index;
 		}
 	}
 }
@@ -326,30 +326,17 @@ void Parser::addToParent(int child) {
 	int parent = 0;
 	if (!containerElements.empty()) {
 		parentPair = containerElements.back();
-		//cout << "parent pair: " << parentPair.first << "\n";
-		//cout << "num of else: " << numOfElse << "\n";
-		//cout << "num of proc: " <<numOfProc << "\n";
 		string parentStmt = parentPair.second;
 		pair<int, int> pairs;
-		parent = parentPair.first - numOfProc - numOfElse;
+		parent = parentPair.first;
 
-		if (parentStmt.find("while") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
-			parent = parentPair.first - numOfProc;
-		}
-		if (parentStmt.find("if") != std::string::npos && currElse >(parentPair.first - numOfProc)) {
-			//cout << "else: " <<currElse << "\n";
-			parent = parentPair.first - numOfProc - numOfElse+numOfElse;
-		}
-
-		int newChild = child - numOfProc - numOfElse;
+		int newChild = child;
 		if (parent != newChild) {
-			//cout << "if parent: " << parent << "\n";
-			//cout << "if child: " << newChild <<"\n";
 			pairs.first = parent;
 			pairs.second = newChild;
 			parentLink.push_back(pairs);
 		}
-		}
+	}
 }
 
 void Parser::processProcedure(int index, string statement) {
@@ -366,7 +353,7 @@ void Parser::processProcedure(int index, string statement) {
 		setProcEndNum(procNumInTble, index - 1);
 	}
 	procNumInTble = pkb->setProcNameInProcTable(procName);
-	pkb->setStartNum(procNumInTble, index-numOfElse-numOfProc);
+	pkb->setStartNum(procNumInTble, index - numOfElse - numOfProc);
 
 	numOfProc++;
 
@@ -395,7 +382,7 @@ void Parser::processCalls(int index, string stmt)
 		exit(0);
 	}
 
-	addToParent(index);
+	addToParent(index-numOfElse-numOfProc);
 	callsPair.first = procNumInTble;
 	callsPair.second = procCalls;
 	callsLink.push_back(callsPair);
@@ -409,42 +396,40 @@ void Parser::processWhile(int index, string statement) {
 	pushOpenBracket();
 	pair <int, int> parentPair;
 	pair <int, string> pair;
-	pair.first = index;
+	pair.first = index - numOfProc - numOfElse;
 	pair.second = statement;
+
+	//checked - correct
 	if (!containerElements.empty()) {
-		parentPair.first = containerElements.back().first - numOfProc - numOfElse;
-		parentPair.second = index - numOfProc - numOfElse;
+		parentPair.first = containerElements.back().first;
+		parentPair.second = pair.first;
 		parentLink.push_back(parentPair);
 	}
 	containerElements.push_back(pair);
 
 }
 
-void Parser::processIf(int index, string statement)
-{
+void Parser::processIf(int index, string statement){
 	pushOpenBracket();
 	pair <int, string> ifPair;
 	pair <int, int> parentPair;
-	pair <int, string> pair;
-	pair.first = index;
-	pair.second = statement;
 
-	ifPair.first = index-numOfElse;
+	ifPair.first = index - numOfElse - numOfProc;
 	ifPair.second = statement;
-	
+
+	//check again - correct
 	ifStmtVec.push(ifPair);
 	if (!containerElements.empty()) {
-		parentPair.first = containerElements.back().first - numOfProc - numOfElse;
-		parentPair.second = index - numOfProc - numOfElse;
+		parentPair.first = containerElements.back().first;
+		parentPair.second = ifPair.first;
 		parentLink.push_back(parentPair);
 		//containerElements.push_back(ifPair);
 	}
-	containerElements.push_back(pair);
-	addToParent(pair.first);
-	handleModifyAndUses(pair.first, pair.second);
-	handleFollows(pair.first, pair.second);
 
+	containerElements.push_back(ifPair);
+	addToParent(ifPair.first);
 }
+
 
 void Parser::processElse(int index, string statement) {
 	pushOpenBracket();
@@ -469,13 +454,13 @@ void Parser::processExpressions(int index, string statement) {
 	for (char c : statement) {
 		char charac = c;
 		if (c == ';') {
-			addToParent(index);
+			addToParent(index-numOfElse-numOfProc);
 			if (!isConstant(s)) {
 				int index = pkb->setVarName(s);
 				pkb->setProcNames(index, currProcName);
 			}
-			handleModifyAndUses(index, statement);
-			s = "";		
+		//	handleModifyAndUses(index, statement);
+			s = "";
 		}
 		if (c == '}') {
 			pushCloseBracket(index);
@@ -498,17 +483,20 @@ void Parser::processExpressions(int index, string statement) {
 					stack.pop();
 
 					if (isOperator(o2)) {
-
 						output.push_back(o2);
 						output.push_back(' ');
 					}
 					else if (o2 != '}') {
 						output.push_back(o2);
+						output.push_back(' ');
 					}
-					if (!stack.empty())
+					if (!stack.empty()) {
 						o2 = stack.top();
-					else
+
+					}
+					else {
 						break;
+					}
 				}
 			}
 
@@ -521,10 +509,11 @@ void Parser::processExpressions(int index, string statement) {
 		else if (charac == ')')
 		{
 			char topCharac = stack.top();
-
+		//	output.push_back(' ');
 			while (topCharac != '(')
 			{
 				if (topCharac != '}') {
+					output.push_back(' ');
 					output.push_back(topCharac);
 					stack.pop();
 				}
@@ -547,7 +536,7 @@ void Parser::processExpressions(int index, string statement) {
 		{
 			if (charac == '=') {
 				output.clear();
-			//	handleModifyAndUses(index, statement);
+				//	handleModifyAndUses(index, statement);
 				if (!isConstant(s)) {
 					int index = pkb->setVarName(s);
 					pkb->setProcNames(index, currProcName);
@@ -573,6 +562,7 @@ void Parser::processExpressions(int index, string statement) {
 			output.push_back(' ');
 			output.push_back(stackTop);
 		}
+
 		stack.pop();
 	}
 	setExprInStmtTable(index, output);
@@ -594,10 +584,10 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		stmt.replace(bracketPos, string("{").length(), "");
 		string varInWhile = stmt.substr(stmt.find("while") + 5);
 		int index = pkb->setVarName(varInWhile);
-		pkb->setControlVar(i - numOfProc - numOfElse, index);
+		pkb->setControlVar(i, index);
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentUse = pairedParent.first - numOfProc - numOfElse;
+			int parentUse = pairedParent.first;
 			if (!isConstant(varInWhile)) {
 				pkb->setUsedBy(varInWhile, parentUse);
 				pkb->setUsedVar(parentUse, varInWhile);
@@ -605,10 +595,10 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		}
 		pkb->setProcNames(index, currProcName);
 		if (!isConstant(varInWhile)) {
-			
-			pkb->setUsedBy(varInWhile, i - numOfProc - numOfElse);
-			pkb->setUsedVar(i - numOfProc - numOfElse, varInWhile);
-			varUsedInProc.push_back(make_pair(procNumInTble,varInWhile));
+
+			pkb->setUsedBy(varInWhile, i);
+			pkb->setUsedVar(i, varInWhile);
+			varUsedInProc.push_back(make_pair(procNumInTble, varInWhile));
 		}
 	}
 	else if (stmt.find("if") != std::string::npos) {
@@ -618,11 +608,11 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		size_t thenstmt = stmt.find("then") - 2;
 		string varInIf = stmt.substr(ifstmt, thenstmt);
 		int index = pkb->setVarName(varInIf);
-		pkb->setControlVar(i - numOfProc - numOfElse, index);
-		
+		pkb->setControlVar(i, index);
+
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentUse = pairedParent.first - numOfProc - numOfElse;
+			int parentUse = pairedParent.first;
 			if (!isConstant(varInIf)) {
 				pkb->setUsedBy(varInIf, parentUse);
 				pkb->setUsedVar(parentUse, varInIf);
@@ -630,8 +620,8 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		}
 		pkb->setProcNames(index, currProcName);
 		if (!isConstant(varInIf)) {
-			pkb->setUsedBy(varInIf, i - numOfProc - numOfElse);
-			pkb->setUsedVar(i - numOfProc - numOfElse, varInIf);
+			pkb->setUsedBy(varInIf, i);
+			pkb->setUsedVar(i, varInIf);
 			varUsedInProc.push_back(make_pair(procNumInTble, varInIf));
 		}
 	}
@@ -642,17 +632,8 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 		string s;
 		if (!containerElements.empty()) {
 			pair<int, string> pairedParent = containerElements.back();
-			int parentMod = pairedParent.first - numOfProc - numOfElse;
-
+			int parentMod = pairedParent.first;
 			string parentStmt = pairedParent.second;
-			if (parentStmt.find("while") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-				parentMod = pairedParent.first - numOfProc;
-			}
-			if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-				parentMod = pairedParent.first - numOfProc - numOfElse + numOfElse;
-			//	cout << "added\n";
-			}
-
 			if (!isConstant(modified)) {
 				pkb->setModifiedBy(modified, parentMod);
 				pkb->setModifies(parentMod, modified);
@@ -662,8 +643,8 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			pair<int, string> varAndProc;
 			varAndProc.first = procNumInTble;
 			varAndProc.second = modified;
-			pkb->setModifiedBy(modified, i - numOfProc - numOfElse);
-			pkb->setModifies(i - numOfProc - numOfElse, modified);
+			pkb->setModifiedBy(modified, i);
+			pkb->setModifies(i, modified);
 			varModifiedInProc.push_back(varAndProc);
 		}
 
@@ -672,16 +653,9 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 				if (!s.empty()) {
 					if (!containerElements.empty()) {
 						pair<int, string> pairedParent = containerElements.back();
-						int parentUse = pairedParent.first - numOfProc - numOfElse;
+						int parentUse = pairedParent.first;
 
 						string parentStmt = pairedParent.second;
-						if (parentStmt.find("while") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-							parentUse = pairedParent.first - numOfProc;
-						}
-						if (parentStmt.find("if") != std::string::npos && currElse >(pairedParent.first - numOfProc)) {
-							parentUse = pairedParent.first - numOfProc - numOfElse + numOfElse;
-						}
-
 						if (!isConstant(s)) {
 
 							pkb->setUsedBy(s, parentUse);
@@ -691,11 +665,11 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 					if (isConstant(s)) {
 						int constant = atoi(s.c_str());
 						int constantInd = pkb->setConstant(constant);
-						pkb->setStmtUsed(constantInd, i - numOfProc - numOfElse);
+						pkb->setStmtUsed(constantInd, i);
 					}
 					if (!isConstant(s)) {
-						pkb->setUsedBy(s, i - numOfProc - numOfElse);
-						pkb->setUsedVar(i - numOfProc - numOfElse, s);
+						pkb->setUsedBy(s, i);
+						pkb->setUsedVar(i, s);
 						varUsedInProc.push_back(make_pair(procNumInTble, s));
 					}
 				}
@@ -707,33 +681,6 @@ void Parser::handleModifyAndUses(int i, string stmt) {
 			}
 		}
 	}
-}
-
-string Parser::getExpression() {
-	list<pair<int, string >>::iterator i;
-	string output;
-	int counter = 0;
-	for (i = (stmtNoAndExpr).begin(); i != (stmtNoAndExpr).end(); ++i) {
-		counter++;
-		if ((*i).second != ";") {
-			output.append(to_string(counter) + ": " + (*i).second + " ");
-		}
-	}
-	return output;
-}
-
-string Parser::getFollow() {
-	string output;
-	while (!followLink.empty()) {
-		pair<int, int> followPair = followLink.back();
-		int firstNum = followPair.first;
-		int secondNum = followPair.second;
-		output.append(to_string(firstNum) + "->" + to_string(secondNum) + "|");
-		if (!followLink.empty()) {
-			followLink.pop_back();
-		}
-	}
-	return output;
 }
 
 void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
@@ -754,7 +701,7 @@ void Parser::setExprInStmtTable(int index, list<char> exprOutput) {
 }
 
 void Parser::Error() {
-	throw "ProcName: " + procName + " does not exist.\n";
+	throw "Error parsing.\n";
 }
 
 int Parser::isPriority(const char &c)
@@ -786,7 +733,7 @@ void Parser::pushCloseBracket(int stmtNum) {
 	}
 }
 
-void Parser::setProcEndNum(int procNum,int stmtNum) {
+void Parser::setProcEndNum(int procNum, int stmtNum) {
 	//cout << "size: " << containerElements.size();
 	if (containerElements.empty()) {
 		pkb->setProcModified(varModifiedInProc);
@@ -823,23 +770,26 @@ void Parser::handleFollows(int index, string stmt) {
 	pair<int, int> paired;
 	if (prevStmt.empty()) {
 		prevStmt = stmt;
-		currFollows.push_back(index - numOfProc - numOfElse);
+		currFollows.push_back(index);
 	}
 	else
 	{
 		if (prevStmt.find("{") != std::string::npos) {
-			currFollows.push_back(index - numOfProc - numOfElse);
+			currFollows.push_back(index);
 			prevStmt = currStmt;
 		}
 		else if (prevStmt.find("}") != std::string::npos) {
 			if (currStmt.find("else") != std::string::npos) {
+				size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
+				for (size_t i = 0; i < n;i++) {
+					if (!currFollows.empty()) {
+						currFollows.pop_back();
+					}
+				}
 				prevStmt = currStmt;
-				currFollows.pop_back();
 			}
-
 			else {
 				size_t n = count(prevStmt.begin(), prevStmt.end(), '}');
-				//cout << prevStmt << "\n";
 				for (size_t i = 0; i < n;i++) {
 					if (!currFollows.empty()) {
 						currFollows.pop_back();
@@ -847,25 +797,24 @@ void Parser::handleFollows(int index, string stmt) {
 				}
 
 				paired.first = currFollows.back();
-				paired.second = index - numOfProc - numOfElse;
+				paired.second = index;
 
 				if (!currFollows.empty()) {
 					currFollows.pop_back();
 				}
-				currFollows.push_back(index - numOfProc - numOfElse);
+				currFollows.push_back(index);
 				followLink.push_back(paired);
 				prevStmt = currStmt;
 			}
 		}
 		else {
-
 			paired.first = currFollows.back();
-			paired.second = index - numOfProc - numOfElse;
+			paired.second = index;
 
 			if (!currFollows.empty()) {
 				currFollows.pop_back();
 			}
-			currFollows.push_back(index - numOfProc - numOfElse);
+			currFollows.push_back(index);
 			followLink.push_back(paired);
 			prevStmt = currStmt;
 		}
